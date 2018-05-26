@@ -1,0 +1,56 @@
+<resources>
+
+  <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
+  </style>
+
+  <style name="TitleStyle">
+    <item name="android:textSize">22sp</item>
+    <item name="android:textColor">@color/bgAccent</item>
+    <item name="android:gravity">center_horizontal</item>
+  </style>
+
+  <style name="SubtitleStyle" parent="TitleStyle">
+    <item name="android:textSize">18sp</item>
+  </style>
+
+  <style name="KimlicEditText">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">40dp</item>
+    <item name="android:textColor">@color/lightBlue</item>
+    <item name="android:textColorHint">@color/lightBlue</item>
+    <item name="android:textSize">14sp</item>
+    <item name="android:backgroundTint">@color/lightBlue</item>
+
+    <item name="android:inputType">text</item>
+    <item name="android:lines">1</item>
+    <item name="android:paddingStart">5dp</item>
+    <item name="android:paddingEnd">15dp</item>
+    <item name="android:max">30</item>
+  </style>
+
+  <style name="MnemonicStyle">
+    <item name="android:layout_height">35dp</item>
+    <item name="android:layout_width">match_parent</item>
+  </style>
+
+  <style name="DigitHolderStyle">
+    <item name="android:layout_width">45dp</item>
+    <item name="android:layout_height">60dp</item>
+    <item name="android:layout_marginStart">8dp</item>
+    <item name="android:layout_marginEnd">8dp</item>
+    <item name="android:textColor">@color/lightBlue</item>
+    <item name="android:textSize">35sp</item>
+    <item name="android:gravity">center</item>
+    <item name="android:maxLength">1</item>
+    <item name="android:background">@drawable/square_edittext_background</item>
+    <item name="android:cursorVisible">true</item>
+    <item name="android:longClickable">false</item>
+
+    <item name="android:inputType">numberDecimal</item>
+  </style>
+
+
+</resources>

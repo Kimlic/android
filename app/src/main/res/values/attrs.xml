@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <declare-styleable name="mnemonic_phrase_attributes">
+    <attr name="mnemonic_phrase_number" format="reference"  />
+  </declare-styleable>
+
+</resources>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/bgLight">
+
+  <Button
+    android:id="@+id/btBackArrow"
+    android:layout_width="30dp"
+    android:layout_height="30dp"
+    android:layout_margin="16dp"
+    android:background="@mipmap/ic_launcher"
+    android:contentDescription="BackArrow"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
+
+  <ImageView
+    android:id="@+id/ivUpper"
+    android:layout_width="150dp"
+    android:layout_height="150dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="8dp"
+    android:background="@drawable/ic_launcher_background"
+    android:contentDescription="@string/kimlic_logo"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
+
+  <LinearLayout
+    android:id="@+id/llRootMiddle"
+    android:layout_width="310dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="36dp"
+    android:orientation="vertical"
+    app:layout_constraintBottom_toTopOf="@id/btNext"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/ivUpper">
+
+    <TextView
+      android:id="@+id/tvPhone"
+      android:layout_width="310dp"
+      android:layout_height="match_parent"
+      android:layout_marginBottom="8dp"
+      android:gravity="center"
+      android:text="@string/phone_number"
+      android:textColor="@color/lightBlue"
+      android:textSize="22sp"/>
+
+    <EditText
+      android:id="@+id/etPhone"
+      style="@style/KimlicEditText"
+      android:focusable="true"
+      android:inputType="phone"
+      android:longClickable="false"
+      android:maxLength="20"
+      tools:ignore="LabelFor"/>
+
+    <TextView
+      android:id="@+id/tvPhoneSubText"
+      android:layout_width="310dp"
+      android:layout_height="match_parent"
+      android:layout_marginTop="16dp"
+      android:gravity="center"
+      android:text="You will receive text message with your verification code"
+      android:textColor="@color/lightBlue"
+      android:textSize="14sp"/>
+  </LinearLayout>
+
+  <Button
+    android:id="@+id/btPhoneNext"
+    android:layout_width="310dp"
+    android:layout_height="50dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/button_rounded"
+    android:text="Next"
+    android:textColor="@color/lightBlue"
+    android:textSize="16sp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"/>
+</android.support.constraint.ConstraintLayout>

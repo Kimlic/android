@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/bgLight"
+  tools:context="com.kimlic.auth.CreateTouchIdActivity">
+
+  <LinearLayout
+    android:id="@+id/llLoot"
+    android:layout_width="310dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="24dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <TextView
+      android:id="@+id/tvCreateIdTitle"
+      android:layout_width="310dp"
+      android:layout_height="match_parent"
+      android:layout_marginBottom="16dp"
+      android:gravity="center"
+      android:text="@string/place_your_finger"
+      android:textColor="@color/lightBlue"
+      android:textSize="22sp"/>
+
+    <TextView
+      android:id="@+id/tvCreateIdSubtitle"
+      android:layout_width="310sp"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="16dp"
+      android:gravity="center"
+      android:text="@string/lift_and_rest_the_edge_of_your_finger_on_the_home_button_repeatedly"
+      android:textColor="@color/lightBlue"
+      android:textSize="18sp"/>
+
+    <ImageView
+      android:layout_width="200dp"
+      android:layout_height="200dp"
+      android:layout_marginBottom="16dp"
+      android:background="@drawable/ic_baseline_fingerprint_dark"
+      android:contentDescription="@string/fingerprint_logo"/>
+
+    <TextView
+      android:id="@+id/tvCheking"
+      android:layout_width="310dp"
+      android:layout_height="match_parent"
+      android:layout_marginBottom="16dp"
+      android:gravity="center"
+      android:text="@string/cheking"
+      android:textColor="@color/lightBlue"
+      android:textSize="22sp"/>
+  </LinearLayout>
+
+  <LinearLayout
+    android:layout_width="310dp"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:orientation="vertical"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent">
+
+    <Button
+      android:id="@+id/btSkip"
+      android:layout_width="match_parent"
+      android:layout_height="50dp"
+      android:layout_marginTop="8dp"
+      android:padding="4dp"
+      android:background="@drawable/button_rounded"
+      android:text="@string/skip"
+      android:textColor="@color/lightBlue"/>
+  </LinearLayout>
+</android.support.constraint.ConstraintLayout>

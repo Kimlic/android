@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/bgLight"
+  tools:context="com.kimlic.profile_details.UserNameFragment">
+
+  <ImageView
+    android:id="@+id/ivUpper"
+    android:layout_width="150dp"
+    android:layout_height="150dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginEnd="16dp"
+    android:background="@drawable/ic_launcher_background"
+    android:contentDescription="Kimlic logo"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
+
+  <Button
+    android:id="@+id/btBackArrow"
+    android:layout_width="30dp"
+    android:layout_height="30dp"
+    android:layout_margin="16dp"
+    android:background="@mipmap/ic_launcher"
+    android:contentDescription="BackArrow"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
+
+  <LinearLayout
+    android:id="@+id/llRootMiddle"
+    android:layout_width="310dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_constraintBottom_toTopOf="@id/btNext"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/ivUpper"
+    app:layout_constraintVertical_bias="0.3">
+
+
+    <TextView
+      android:id="@+id/tvYourName"
+      android:layout_width="310dp"
+      android:layout_height="match_parent"
+      android:layout_marginBottom="16dp"
+      android:gravity="center"
+      android:text="Your Name"
+      android:textColor="@color/lightBlue"
+      android:textSize="22sp"/>
+
+    <EditText
+      android:id="@+id/etFirstName"
+      style="@style/KimlicEditText"
+      android:hint="Firs tName"
+      android:maxLength="20"/>
+
+    <android.support.design.widget.TextInputLayout
+      android:id="@+id/tilLastName"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="Last Name">
+
+      <EditText
+        android:id="@+id/etLastName"
+        style="@style/KimlicEditText"
+        android:maxLength="20"
+        tools:ignore="LabelFor"/>
+    </android.support.design.widget.TextInputLayout>
+  </LinearLayout>
+
+  <Button
+    android:id="@+id/btNext"
+    android:layout_width="310dp"
+    android:layout_height="50dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/button_rounded"
+    android:text="Next"
+    android:textColor="@color/lightBlue"
+    android:textSize="16sp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"/>
+</android.support.constraint.ConstraintLayout>

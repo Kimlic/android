@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="com.kimlic">
+
+  <uses-feature
+    android:name="android.permission.USE_FINGERPRINT"
+    android:required="true"/>
+
+  <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
+  <uses-permission android:name="android.permission.CAMERA"/>
+
+  <application
+    android:allowBackup="true"
+    android:icon="@mipmap/ic_launcher"
+    android:label="@string/app_name"
+    android:name="com.kimlic.KimlicApp"
+    android:roundIcon="@mipmap/ic_launcher_round"
+    android:supportsRtl="true"
+    android:theme="@style/AppTheme">
+
+    <activity android:name="com.kimlic.MainActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+        <category android:name="android.intent.category.LAUNCHER"/>
+      </intent-filter>
+    </activity>
+
+    <activity
+      android:label="Splash Screen"
+      android:name="com.kimlic.splash_screen.SplashScreenActivity"
+      android:screenOrientation="portrait"/>
+
+    <activity
+      android:label="Passcode"
+      android:name="com.kimlic.passcode.PasscodeActivity"
+      android:screenOrientation="portrait"/>
+
+    <activity
+      android:label="Tutorial"
+      android:name="com.kimlic.tutorial.TutorialActivity"
+      android:screenOrientation="portrait"/>
+
+    <activity
+      android:label="Login"
+      android:name="com.kimlic.auth.LoginActivity"
+      android:screenOrientation="portrait"/>
+
+    <activity
+      android:label="Touch ID"
+      android:name="com.kimlic.auth.CreateTouchIdActivity"
+      android:screenOrientation="portrait"/>
+
+    <activity
+      android:label="Verify"
+      android:name="com.kimlic.phrase.VerifyPassPhraseActivity"
+      android:screenOrientation="portrait"/>
+
+    <activity
+      android:label="Mnemonic Phrase"
+      android:name="com.kimlic.phrase.MnemonicPhraseActivity"
+      android:screenOrientation="portrait"/>
+
+    <activity
+      android:label="UserProfile"
+      android:name="com.kimlic.profile_details.UserProfileActivity"/>
+
+    <activity
+      android:label="Video Verification"
+      android:name=".video_id_verification.VideoIdActivity"/>
+  </application>
+</manifest>
