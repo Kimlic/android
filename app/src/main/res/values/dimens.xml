@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="title_text_size">22sp</dimen>
+    <dimen name="subtitle_text_size">14sp</dimen>
+    <dimen name="small_text_size">10sp</dimen>
+    <dimen name="button_text_size">16sp</dimen>
+    <dimen name="content_width">310dp</dimen>
+
+    <dimen name="menu_element_square_size">32dp</dimen>
+
+    <dimen name="popup_fragment_width">280dp</dimen>
+
+
+</resources>

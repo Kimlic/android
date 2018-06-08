@@ -14,18 +14,4 @@
     </shape>
   </item>
 
-  <!--<item  android:state_enabled="true">-->
-  <!--<shape android:shape="oval">-->
-  <!--<solid android:color="@android:color/holo_red_dark" />-->
-  <!--<stroke android:color="@android:color/holo_red_dark" android:width="1dip" />-->
-  <!--</shape>-->
-  <!--</item>-->
-
-  <!--<item android:state_enabled="false">-->
-  <!--<shape android:shape="oval">-->
-  <!--<solid android:color="@color/bgAccent" />-->
-  <!--<stroke android:color="@color/bgAccent" android:width="1dip" />-->
-  <!--</shape>-->
-  <!--</item>-->
-
 </selector>

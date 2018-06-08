@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgLight">
+
+    <ImageView
+        android:id="@+id/mailIv"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/ic_launcher_background"
+        android:contentDescription="@string/phone_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="@dimen/content_width"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/saveBt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mailIv">
+
+        <TextView
+            android:id="@+id/titleTv"
+            android:layout_width="@dimen/content_width"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:text="@string/verify_your_number"
+            android:textColor="@color/lightBlue"
+            android:textSize="@dimen/title_text_size" />
+
+        <TextView
+            android:id="@+id/subtitleTv"
+            android:layout_width="@dimen/content_width"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:text="@string/code_sent_to_555_495_34_40"
+            android:textColor="@color/lightBlue"
+            android:textSize="@dimen/subtitle_text_size" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            tools:ignore="LabelFor">
+
+            <EditText
+                android:id="@+id/digit1Et"
+                style="@style/DigitHolderStyle" />
+
+            <EditText
+                android:id="@+id/digit2Et"
+                style="@style/DigitHolderStyle" />
+
+            <EditText
+                android:id="@+id/digit3Et"
+                style="@style/DigitHolderStyle" />
+
+            <EditText
+                android:id="@+id/digit4Et"
+                style="@style/DigitHolderStyle" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/changeTv"
+        android:layout_width="@dimen/content_width"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:text="@string/change_number"
+        android:textColor="@color/lightBlue"
+        android:textSize="@dimen/subtitle_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/verifyBt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/verifyBt"
+        android:layout_width="@dimen/content_width"
+        android:layout_height="48dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/button_rounded"
+        android:gravity="center"
+        android:text="@string/verify"
+        android:paddingStart="48dp"
+        android:paddingEnd="16dp"
+
+        android:textColor="@color/lightBlue"
+        android:textSize="@dimen/button_text_size"
+        android:drawableEnd="@drawable/ic_lock_open_dark_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

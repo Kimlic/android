@@ -1,71 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.kimlic">
+    package="com.kimlic">
 
-  <uses-feature
-    android:name="android.permission.USE_FINGERPRINT"
-    android:required="true"/>
+    <uses-feature
+        android:name="android.permission.USE_FINGERPRINT"
+        android:required="true" />
 
-  <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
-  <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-  <application
-    android:allowBackup="true"
-    android:icon="@mipmap/ic_launcher"
-    android:label="@string/app_name"
-    android:name="com.kimlic.KimlicApp"
-    android:roundIcon="@mipmap/ic_launcher_round"
-    android:supportsRtl="true"
-    android:theme="@style/AppTheme">
+    <application
+        android:name=".KimlicApp"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-    <activity android:name="com.kimlic.MainActivity">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
-        <category android:name="android.intent.category.LAUNCHER"/>
-      </intent-filter>
-    </activity>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".splash_screen.SplashScreenActivity"
+            android:label="Splash Screen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".passcode.PasscodeActivity"
+            android:label="Passcode"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".tutorial.TutorialActivity"
+            android:label="Tutorial"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".auth.LoginActivity"
+            android:label="Login"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".auth.TouchIdActivity"
+            android:label="Touch ID"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".phrase.PhraseVerifyActivity"
+            android:label="Verify"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".phrase.PhraseGenerateActivity"
+            android:label="Mnemonic Phrase"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".profile_details.UserProfileActivity"
+            android:label="UserProfile" />
+        <activity
+            android:name=".video_id_verification.VideoIdActivity"
+            android:label="Video identification" />
+        <activity
+            android:name=".recovery.AccountRecoveryActivity"
+            android:label="Account recovery" />
+        <activity
+            android:name=".terms.TermsActivity"
+            android:label="Terms &amp; Privacy" />
+        <activity
+            android:name=".SignupRecoveryActivity"
+            android:label="Signup Recovery" />
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:label="Settings" />
+        <activity
+            android:name=".stage.StageActivity"
+            android:label="Profile Stage" />
+        <activity
+            android:name=".phone.PhoneActivity"
+            android:label="Phone" />
+        <activity
+            android:name=".phone.PhoneVerifyActivity"
+            android:label="Phone Verify" />
+        <activity
+            android:name=".profile_details.NameActivity"
+            android:label="Name" />
+        <activity
+            android:name=".video_id_verification.DocumentVerifyChooseActivity"
+            android:label="Verify ID document" />
+        <activity android:name=".video_id_verification.DocumentVerifyActivity"></activity>
+    </application>
 
-    <activity
-      android:label="Splash Screen"
-      android:name="com.kimlic.splash_screen.SplashScreenActivity"
-      android:screenOrientation="portrait"/>
-
-    <activity
-      android:label="Passcode"
-      android:name="com.kimlic.passcode.PasscodeActivity"
-      android:screenOrientation="portrait"/>
-
-    <activity
-      android:label="Tutorial"
-      android:name="com.kimlic.tutorial.TutorialActivity"
-      android:screenOrientation="portrait"/>
-
-    <activity
-      android:label="Login"
-      android:name="com.kimlic.auth.LoginActivity"
-      android:screenOrientation="portrait"/>
-
-    <activity
-      android:label="Touch ID"
-      android:name="com.kimlic.auth.CreateTouchIdActivity"
-      android:screenOrientation="portrait"/>
-
-    <activity
-      android:label="Verify"
-      android:name="com.kimlic.phrase.VerifyPassPhraseActivity"
-      android:screenOrientation="portrait"/>
-
-    <activity
-      android:label="Mnemonic Phrase"
-      android:name="com.kimlic.phrase.MnemonicPhraseActivity"
-      android:screenOrientation="portrait"/>
-
-    <activity
-      android:label="UserProfile"
-      android:name="com.kimlic.profile_details.UserProfileActivity"/>
-
-    <activity
-      android:label="Video Verification"
-      android:name=".video_id_verification.VideoIdActivity"/>
-  </application>
 </manifest>

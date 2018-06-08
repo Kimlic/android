@@ -1,136 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:background="@color/bgLight">
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgLight">
 
-  <LinearLayout
-    android:id="@+id/llRootUpperVerify"
-    android:layout_width="310dp"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="24dp"
-    android:gravity="center"
-    android:orientation="vertical"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent">
+    <LinearLayout
+        android:id="@+id/rootUpper"
+        android:layout_width="@dimen/content_width"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-      android:id="@+id/tvVerifyTitle"
-      android:layout_width="310dp"
-      android:layout_height="match_parent"
-      android:layout_marginBottom="16dp"
-      android:gravity="center"
-      android:text="@string/verify_passphrase"
-      android:textColor="@color/lightBlue"
-      android:textSize="22sp"/>
+        <TextView
+            android:id="@+id/titleTv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:text="@string/verify_passphrase"
+            android:textColor="@color/lightBlue"
+            android:textSize="@dimen/title_text_size" />
 
-    <TextView
-      android:id="@+id/tvVerifySubtitle"
-      android:layout_width="310sp"
-      android:layout_height="wrap_content"
-      android:layout_marginBottom="16dp"
-      android:gravity="center"
-      android:text="@string/please_enter_the_missing_words_from_your_mnemonic_passphrase"
-      android:textColor="@color/lightBlue"
-      android:textSize="14sp"/>
-  </LinearLayout>
+        <TextView
+            android:id="@+id/subtitleTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:text="@string/please_enter_the_missing_words_from_your_mnemonic_passphrase"
+            android:textColor="@color/lightBlue"
+            android:textSize="@dimen/subtitle_text_size" />
 
-  <LinearLayout
-    android:id="@+id/llRootMiddle"
-    android:layout_width="310dp"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    app:layout_constraintBottom_toTopOf="@id/llRootLowerVerify"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/llRootUpperVerify"
-    app:layout_constraintVertical_bias="0.2">
+    </LinearLayout>
 
-    <android.support.design.widget.TextInputLayout
-      android:id="@+id/tilPhrase1"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/rootMiddle"
+        android:layout_width="@dimen/content_width"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/backTv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rootUpper"
+        app:layout_constraintVertical_bias="0.2"
+        tools:ignore="LabelFor">
 
-      <EditText
-        android:id="@+id/etPhrase1"
-        style="@style/KimlicEditText"
-        tools:hint="5th word"
-        tools:ignore="LabelFor"/>
-    </android.support.design.widget.TextInputLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/phrase1Til"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/lightBlue">
 
-    <android.support.design.widget.TextInputLayout
-      android:id="@+id/tilPhrase2"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/phrase1Et"
+                style="@style/KimlicEditText"
+                tools:hint="5th word" />
 
-      <EditText
-        android:id="@+id/etPhrase2"
-        style="@style/KimlicEditText"
-        tools:hint="7th word"
-        tools:ignore="LabelFor"/>
-    </android.support.design.widget.TextInputLayout>
+        </android.support.design.widget.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
-      android:id="@+id/tilPhrase3"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      tools:hint="12th word">
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/phrase2Til"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/lightBlue">
 
-      <EditText
-        android:id="@+id/etPhrase3"
-        style="@style/KimlicEditText"
-        tools:ignore="LabelFor"
-        tools:text="perfect"/>
-    </android.support.design.widget.TextInputLayout>
+            <EditText
+                android:id="@+id/phrase2Et"
+                style="@style/KimlicEditText"
+                tools:hint="7th word" />
 
-    <android.support.design.widget.TextInputLayout
-      android:id="@+id/tilPhrase4"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+        </android.support.design.widget.TextInputLayout>
 
-      <EditText
-        android:id="@+id/etPhrase4"
-        style="@style/KimlicEditText"
-        tools:hint="17th word"
-        tools:ignore="LabelFor"
-        tools:text="epizode"/>
-    </android.support.design.widget.TextInputLayout>
-  </LinearLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/phrase3Til"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/lightBlue"
+            tools:hint="12th word">
 
-  <LinearLayout
-    android:id="@+id/llRootLowerVerify"
-    android:layout_width="310dp"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="16dp"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp"
-    android:orientation="vertical"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent">
+            <EditText
+                android:id="@+id/phrase3Et"
+                style="@style/KimlicEditText"
+                tools:text="perfect" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/phrase4Til"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/lightBlue">
+
+            <EditText
+                android:id="@+id/phrase4Et"
+                style="@style/KimlicEditText"
+                tools:hint="17th word"
+                tools:text="epizode" />
+
+        </android.support.design.widget.TextInputLayout>
+
+    </LinearLayout>
 
     <TextView
-      android:id="@+id/tvCancel"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginBottom="16dp"
-      android:layout_gravity="center"
-      android:text="@string/cancel_and_return"
-      android:textColor="@color/lightBlue"
-      android:textSize="16sp"/>
+        android:id="@+id/backTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/go_back"
+        android:textColor="@color/lightBlue"
+        android:textSize="@dimen/subtitle_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/verifyBt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-      android:id="@+id/btVerifyPhrase"
-      android:layout_width="match_parent"
-      android:layout_height="50dp"
-      android:layout_marginTop="8dp"
-      android:background="@drawable/button_rounded"
-      android:text="@string/virify"
-      android:textColor="@color/lightBlue"
-      android:textSize="16sp"/>
-  </LinearLayout>
+        android:id="@+id/verifyBt"
+        android:layout_width="@dimen/content_width"
+        android:layout_height="48dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/button_rounded"
+        android:text="@string/virify"
+        android:textColor="@color/lightBlue"
+        android:textSize="@dimen/button_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </android.support.constraint.ConstraintLayout>

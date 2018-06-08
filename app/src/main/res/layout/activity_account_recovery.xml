@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".recovery.AccountRecoveryActivity">
+
+    <LinearLayout
+        android:id="@+id/upperRoot"
+        android:layout_width="@dimen/content_width"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:text="@string/account_recovery"
+            android:textColor="@color/lightBlue"
+            android:textSize="@dimen/title_text_size" />
+
+        <TextView
+            android:layout_width="236dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:text="@string/please_paste_type_your_mnemonic_passphrase_to_recover_your_identity"
+            android:textColor="@color/lightBlue"
+            android:textSize="@dimen/subtitle_text_size" />
+
+        <EditText
+            android:id="@+id/phraseEt"
+            android:layout_width="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_height="200dp"
+            android:background="@drawable/rounded_edittext"
+            android:gravity="top"
+            android:hint="@string/paste_type_here"
+            android:inputType="text"
+            android:padding="8dp"
+            android:textColorHint="@color/lightBlue"
+            android:textColor="@color/lightBlue"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/backTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginBottom="16dp"
+        android:text="@string/cancel_and_return"
+        android:textColor="@color/lightBlue"
+        android:textSize="@dimen/subtitle_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/verifyBt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/verifyBt"
+        android:layout_width="@dimen/content_width"
+        android:layout_height="48dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/button_rounded"
+        android:text="@string/virify"
+        android:textColor="@color/lightBlue"
+        android:textSize="@dimen/button_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

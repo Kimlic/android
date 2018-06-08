@@ -1,18 +1,24 @@
 package com.kimlic.tutorial
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
-import android.widget.Toast
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
+import com.kimlic.terms.TermsActivity
 import kotlinx.android.synthetic.main.activity_tutorial.*
 
 class TutorialActivity : BaseActivity() {
 
     // Constants content
+
+    private val TERMS_ACCEPT_REQUEST_CODE = 101
+
+    // Mocks
 
     private val mContent: List<String> = listOf("Tutorial 1", "Tutorial 2", "Tutorial 3", "Tutorial 4")
 
@@ -31,6 +37,18 @@ class TutorialActivity : BaseActivity() {
         setupUI()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            TERMS_ACCEPT_REQUEST_CODE -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    Prefs.termsAccepted = true
+                    showToast("Terms accepted!!!")
+                    PresentationManager.phoneNumber(this)
+                }
+            }
+        }
+    }
+
     override fun onBackPressed() {
         if (mPager.currentItem == 0)
             super.onBackPressed()
@@ -41,14 +59,16 @@ class TutorialActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        mPager = vpPager
-        mTabLayout = tlTabs
+        mPager = pagerVp
+        mTabLayout = tabsTL
 
         mPager.adapter = mAdapter
         mAdapter.setContent(mContent)
 
         mTabLayout.setupWithViewPager(mPager, true)
         setupPageChangeListner(mPager)
+
+        skipTv.setOnClickListener { termsToAccept(TERMS_ACCEPT_REQUEST_CODE) }
     }
 
     private fun setupPageChangeListner(pager: ViewPager) {
@@ -62,8 +82,10 @@ class TutorialActivity : BaseActivity() {
                 if (position == pager.adapter!!.count - 1 && positionOffset == 0f && !isLastPageSwiped) {
                     if (counterPageScroll != 0) {
                         isLastPageSwiped = true
-                        Toast.makeText(applicationContext, "go to the next activity", Toast.LENGTH_LONG).show()
-                        PresentationManager.loginActivity(this@TutorialActivity)
+                        //Go next activity
+                        Prefs.isTutorialShown = true
+                        termsToAccept(TERMS_ACCEPT_REQUEST_CODE)
+                        //PresentationManager.loginActivity(this@TutorialActivity)
                     }
                     counterPageScroll++
                 } else
@@ -72,14 +94,20 @@ class TutorialActivity : BaseActivity() {
                 if (position == 0 && positionOffset == 0f && !isFirstPageSwiped) {
                     if (counterPageScrollL != 0) {
                         isFirstPageSwiped = true
-                        Toast.makeText(applicationContext, "go to the previous activity", Toast.LENGTH_LONG).show()
-                        Prefs.isTutorialShown = true
+                        //Go previous activity
+                        //Prefs.isTutorialShown = true
                     }
                     counterPageScrollL++
                 } else
                     counterPageScrollL = 0
             }
         })
+    }
 
+    private fun termsToAccept(requestCode: Int) {
+        val intent = Intent(this, TermsActivity::class.java)
+        intent.putExtra("action", "accept")
+        intent.putExtra("content", "terms")
+        startActivityForResult(intent, requestCode)
     }
 }

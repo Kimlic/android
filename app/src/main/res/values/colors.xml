@@ -10,4 +10,10 @@
 
   <color name="darkRed">#b71c1c</color>
   <color name="lightBlue">#9bb5de</color>
+
+  <color name="grayLight">#a3a3a3</color>
+
+  <color name="grayDark">#797979</color>
+
+
 </resources>

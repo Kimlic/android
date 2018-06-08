@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgLight">
+
+    <ImageView
+        android:id="@+id/mailIv"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/ic_launcher_background"
+        android:contentDescription="@string/phone_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/root"
+        android:layout_width="@dimen/content_width"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/saveBt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mailIv">
+
+        <TextView
+            android:id="@+id/phoneTv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:text="@string/enter_your_number"
+            android:textColor="@color/lightBlue"
+            android:textSize="@dimen/title_text_size">
+
+            <requestFocus />
+        </TextView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:text="@string/why_we_need_your_phone_number"
+            android:textColor="@color/lightBlue"
+            android:textSize="@dimen/subtitle_text_size" />
+
+        <EditText
+            android:id="@+id/countryEt"
+            style="@style/KimlicEditText"
+            android:layout_marginTop="40dp"
+            android:clickable="false"
+            android:editable="false"
+            android:focusable="false"
+            android:hint="Country"
+            android:inputType="textNoSuggestions"
+            android:longClickable="false"
+            android:maxLength="20"
+
+            tools:ignore="LabelFor" />
+
+        <EditText
+            android:id="@+id/phoneEt"
+            style="@style/KimlicEditText"
+            android:layout_marginTop="16dp"
+            android:digits="0123456789+"
+            android:focusable="true"
+            android:inputType="phone"
+            android:longClickable="false"
+            android:maxLength="20"
+            tools:ignore="LabelFor" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/nextBt"
+        android:layout_width="@dimen/content_width"
+        android:layout_height="48dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/button_rounded"
+        android:text="@string/next"
+        android:textColor="@color/lightBlue"
+        android:textSize="@dimen/button_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

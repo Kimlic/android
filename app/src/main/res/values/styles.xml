@@ -1,56 +1,100 @@
 <resources>
 
-  <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="colorPrimary">@color/colorPrimary</item>
-    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-    <item name="colorAccent">@color/colorAccent</item>
-  </style>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorHint">@color/lightBlue</item>
+    </style>
 
-  <style name="TitleStyle">
-    <item name="android:textSize">22sp</item>
-    <item name="android:textColor">@color/bgAccent</item>
-    <item name="android:gravity">center_horizontal</item>
-  </style>
+    <style name="TitleStyle">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/lightBlue</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
 
-  <style name="SubtitleStyle" parent="TitleStyle">
-    <item name="android:textSize">18sp</item>
-  </style>
+    <style name="SubtitleStyle" parent="TitleStyle">
+        <item name="android:textSize">14sp</item>
+    </style>
 
-  <style name="KimlicEditText">
-    <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">40dp</item>
-    <item name="android:textColor">@color/lightBlue</item>
-    <item name="android:textColorHint">@color/lightBlue</item>
-    <item name="android:textSize">14sp</item>
-    <item name="android:backgroundTint">@color/lightBlue</item>
 
-    <item name="android:inputType">text</item>
-    <item name="android:lines">1</item>
-    <item name="android:paddingStart">5dp</item>
-    <item name="android:paddingEnd">15dp</item>
-    <item name="android:max">30</item>
-  </style>
+    <style name="KimlicTilStyle">
+        <item name="android:textColorHint">@color/lightBlue</item>
+        <item name="colorControlNormal">@color/lightBlue</item>
+        <item name="colorControlActivated">@color/lightBlue</item>
+        <item name="colorControlHighlight">@color/lightBlue</item>
 
-  <style name="MnemonicStyle">
-    <item name="android:layout_height">35dp</item>
-    <item name="android:layout_width">match_parent</item>
-  </style>
+    </style>
 
-  <style name="DigitHolderStyle">
-    <item name="android:layout_width">45dp</item>
-    <item name="android:layout_height">60dp</item>
-    <item name="android:layout_marginStart">8dp</item>
-    <item name="android:layout_marginEnd">8dp</item>
-    <item name="android:textColor">@color/lightBlue</item>
-    <item name="android:textSize">35sp</item>
-    <item name="android:gravity">center</item>
-    <item name="android:maxLength">1</item>
-    <item name="android:background">@drawable/square_edittext_background</item>
-    <item name="android:cursorVisible">true</item>
-    <item name="android:longClickable">false</item>
+    <!--EditText Style -> passphrases-->
+    <style name="KimlicEditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@color/lightBlue</item>
+        <item name="android:textColorHint">@color/lightBlue</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:backgroundTint">@color/lightBlue</item>
+        <item name="android:inputType">text</item>
+        <item name="android:lines">1</item>
+        <item name="android:paddingStart">5dp</item>
+        <item name="android:paddingEnd">15dp</item>
+        <item name="android:max">30</item>
 
-    <item name="android:inputType">numberDecimal</item>
-  </style>
+        <item name="colorControlNormal">@color/lightBlue</item>
+        <item name="colorControlActivated">@color/lightBlue</item>
+        <item name="colorControlHighlight">@color/lightBlue</item>
+
+
+    </style>
+
+    <style name="DigitHolderStyle">
+        <item name="android:layout_width">45dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:textColor">@color/lightBlue</item>
+        <item name="android:textSize">35sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLength">1</item>
+        <item name="android:background">@drawable/square_edittext_background</item>
+        <item name="android:cursorVisible">true</item>
+        <item name="android:longClickable">false</item>
+        <item name="android:inputType">numberDecimal</item>
+    </style>
+
+    <!---->
+
+    <style name="KimlicSettingSwitch">
+        <item name="android:colorControlNormal">@android:color/white</item>
+        <item name="android:colorControlActivated">@color/lightBlue</item>
+        <item name="android:colorControlHighlight">@color/colorAccent</item>
+    </style>
+
+    <style name="FullScreenDialog" parent="android:Theme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowIsFloating">false</item>
+    </style>
+
+
+    <style name="DetailsItemShevron">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:background">@drawable/ic_chevron_right_24dp</item>
+        <item name="android:contentDescription">@string/shevron_right</item>
+    </style>
+
+    <style name="DetailsItemTextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentStart">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textSize">@dimen/subtitle_text_size</item>
+        <item name="android:textColor">@color/lightBlue</item>
+    </style>
 
 
 </resources>
