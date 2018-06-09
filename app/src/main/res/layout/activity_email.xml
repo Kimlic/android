@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgLight">
+
+    <ImageView
+        android:id="@+id/mailIv"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/ic_launcher_background"
+        android:contentDescription="@string/kimlic_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/rootMiddle"
+        android:layout_width="@dimen/content_width"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/saveBt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mailIv">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/email_address"
+            android:textColor="@color/lightBlue"
+            android:textSize="@dimen/title_text_size" />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_marginTop="48dp"
+            android:id="@+id/emailTil"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/email_address">
+
+            <EditText
+                android:id="@+id/emailEt"
+                android:inputType="textEmailAddress"
+                style="@style/KimlicEditText"
+                tools:ignore="LabelFor" />
+
+        </android.support.design.widget.TextInputLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/backTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:text="@string/cancel"
+        android:textColor="@color/lightBlue"
+        android:textSize="@dimen/subtitle_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/nextBt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/nextBt"
+        android:layout_width="@dimen/content_width"
+        android:layout_height="48dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_rounded"
+        android:text="@string/next"
+        android:textColor="@color/lightBlue"
+        android:textSize="@dimen/button_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

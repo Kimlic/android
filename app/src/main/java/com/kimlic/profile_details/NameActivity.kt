@@ -2,7 +2,6 @@ package com.kimlic.profile_details
 
 import android.os.Bundle
 import android.text.InputFilter
-import android.widget.Button
 import android.widget.EditText
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -17,9 +16,9 @@ class NameActivity : BaseActivity() {
 
     // Binding
 
-    @BindView(R.id.etFirstName)
+    @BindView(R.id.nameEt)
     lateinit var firstNameField: EditText
-    @BindView(R.id.etLastName)
+    @BindView(R.id.lastNameEt)
     lateinit var lastNameField: EditText
 
 

@@ -47,15 +47,10 @@ class UserStageFragment : BaseFragment() {
 
     private fun setupListners() {
         settingsBt.setOnClickListener { PresentationManager.settings(activity!!) }
-        nameItem.setOnClickListener {
-            PresentationManager.name(activity!!)
-            showToast("name item is clicked")
-        }
+        nameItem.setOnClickListener { PresentationManager.name(activity!!) }
         phoneItem.setOnClickListener { showToast("phone item is clicked") }
-        emailItem.setOnClickListener { showToast("email item is clicked") }
-        verifyItem.setOnClickListener {
-            PresentationManager.documentChooseVerify(activity!!)
-            showToast("verify item is clicked") }
+        emailItem.setOnClickListener { PresentationManager.email(activity!!) }
+        verifyItem.setOnClickListener { PresentationManager.documentChooseVerify(activity!!) }
         addressItem.setOnClickListener { showToast("addres item is clicked") }
     }
 

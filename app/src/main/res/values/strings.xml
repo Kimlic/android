@@ -142,5 +142,6 @@
     <string name="drivers_license">Drivers License</string>
     <string name="document">Document</string>
     <string name="choose_your_document_type">Choose your Document type</string>
+    <string name="name">Name</string>
 
 </resources>

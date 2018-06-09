@@ -14,6 +14,8 @@ import com.kimlic.phone.PhoneActivity
 import com.kimlic.phone.PhoneVerifyActivity
 import com.kimlic.phrase.PhraseGenerateActivity
 import com.kimlic.phrase.PhraseVerifyActivity
+import com.kimlic.profile_details.EmailActivity
+import com.kimlic.profile_details.EmailVerifyActivity
 import com.kimlic.profile_details.NameActivity
 import com.kimlic.profile_details.UserProfileActivity
 import com.kimlic.recovery.AccountRecoveryActivity
@@ -106,15 +108,26 @@ object PresentationManager {
         present(presenter = presenter, className = NameActivity::class.java, isStarting = false)
     }
 
+    // TODO check this flow
+    fun email(presenter: BaseActivity) {
+        present(presenter = presenter, className = EmailActivity::class.java, isStarting = false)
+    }
+
+    // TODO check this flow
+    fun emailVerify(presenter: BaseActivity) {
+        present(presenter = presenter, className = EmailVerifyActivity::class.java, isStarting = false)
+
+    }
+
     fun recovery(presenter: BaseActivity) {
         present(presenter = presenter, className = AccountRecoveryActivity::class.java, isStarting = true)
     }
 
-    fun documentChooseVerify(presenter: BaseActivity){
+    fun documentChooseVerify(presenter: BaseActivity) {
         present(presenter = presenter, className = DocumentVerifyChooseActivity::class.java, isStarting = false)
     }
 
-    fun documentVerify(presenter: BaseActivity){
+    fun documentVerify(presenter: BaseActivity) {
         present(presenter = presenter, className = DocumentVerifyActivity::class.java, isStarting = false)
     }
 
