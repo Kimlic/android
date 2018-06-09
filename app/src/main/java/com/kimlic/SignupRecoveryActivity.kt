@@ -29,7 +29,6 @@ class SignupRecoveryActivity : BaseActivity() {
             TERMS_ACCEPT_RECOVERY_REQUEST_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
                     Prefs.termsAccepted = true
-                    showToast("Terms accepted!!!")
                     PresentationManager.recovery(this)
                 }
             }

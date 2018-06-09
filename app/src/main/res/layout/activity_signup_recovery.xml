@@ -1,47 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/bgLight"
-    tools:context=".SignupRecoveryActivity">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="#027ad4"
+  tools:context=".SignupRecoveryActivity">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="298dp"
-        android:layout_height="298dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/ic_baseline_fingerprint_dark"
-        android:contentDescription="@string/kimlic_logo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+  <ImageView
+    android:id="@+id/imageView"
+    android:layout_width="136dp"
+    android:layout_height="184dp"
+    android:layout_marginTop="32dp"
+    android:background="@drawable/ic_kimlic_logo_with_text"
+    android:contentDescription="@string/kimlic_logo"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
 
-    <Button
-        android:id="@+id/createBt"
-        android:layout_width="@dimen/content_width"
-        android:layout_height="48dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/button_rounded"
-        android:text="@string/create_new_identity"
-        android:textColor="@color/lightBlue"
-        android:textSize="@dimen/button_text_size"
-        app:layout_constraintBottom_toTopOf="@+id/recoverBt"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+  <Button
+    android:id="@+id/createBt"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="48dp"
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/button_rounded_blue"
+    android:elevation="@dimen/button_elevation"
+    android:text="@string/create_new_identity"
+    android:textColor="@color/lightBlue"
+    android:textSize="@dimen/button_text_size"
+    app:layout_constraintBottom_toTopOf="@+id/recoverBt"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"/>
 
-    <Button
-        android:id="@+id/recoverBt"
-        android:layout_width="@dimen/content_width"
-        android:layout_height="48dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/button_rounded"
-        android:text="@string/recover_my_identity"
-        android:textColor="@color/lightBlue"
-        android:textSize="@dimen/button_text_size"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+  <Button
+    android:id="@+id/recoverBt"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="48dp"
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/button_rounded_transparent_blue_stroke"
+    android:elevation="@dimen/button_elevation"
+    android:text="@string/recover_my_identity"
+    android:textColor="@color/lightBlueStroke"
+    android:textSize="@dimen/button_text_size"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

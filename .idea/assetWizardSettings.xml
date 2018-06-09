@@ -19,8 +19,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_tutorial_1_illustration" />
-                            <entry key="sourceFile" value="I:\My Documents\K I M L I C K\App_UI_SVG_assets\tutorial_1_illustration.svg" />
+                            <entry key="outputName" value="ic_kimlic_logo_with_text" />
+                            <entry key="sourceFile" value="I:\My Documents\K I M L I C K\App_UI_SVG_assets\kimlic_logo_with_text.svg" />
                           </map>
                         </option>
                       </PersistentState>
