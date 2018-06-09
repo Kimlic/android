@@ -10,13 +10,17 @@ import kotlinx.android.synthetic.main.fragment_tutorial_placeholder.view.*
 
 class TutorialPlaceholderFragment : Fragment() {
 
+    //Variables
+
+    private var layout: Int = 0
+
     // Companion
 
     companion object {
-        fun newInstance(bundle: Bundle?): TutorialPlaceholderFragment {
+        fun newInstance(bundle: Bundle = Bundle() , layout: Int): TutorialPlaceholderFragment {
             val fragment = TutorialPlaceholderFragment()
             fragment.arguments = bundle
-
+            fragment.layout = layout
             return fragment
         }
     }
@@ -24,10 +28,7 @@ class TutorialPlaceholderFragment : Fragment() {
     // Life
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val content: String = arguments!!.getString("string")
-        val fragment = inflater.inflate(R.layout.fragment_tutorial_placeholder, container, false)
-        assigneContent(content, fragment)
-        return fragment
+        return inflater.inflate(layout, container, false)
     }
 
     // Private

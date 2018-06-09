@@ -1,65 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/bgLight"
-    tools:context="com.kimlic.phrase.PhraseGenerateActivity">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="#0082DB"
+  tools:context="com.kimlic.phrase.PhraseGenerateActivity">
 
-    <LinearLayout
-        android:id="@+id/rootUpper"
-        android:layout_width="@dimen/content_width"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+  <LinearLayout
+    android:id="@+id/rootUpper"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="24dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="16dp"
-            android:gravity="center"
-            android:text="@string/mnemonic_passphrase"
-            android:textColor="@color/lightBlue"
-            android:textSize="@dimen/title_text_size" />
+    <TextView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginBottom="16dp"
+      android:gravity="center"
+      android:text="@string/mnemonic_passphrase"
+      android:textColor="@android:color/white"
+      android:textSize="@dimen/title_text_size"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:gravity="center"
-            android:text="@string/please_write_down_these_words_and_store_them_in_a_safe_place_as_they_can_t_be_recovered"
-            android:textColor="@color/lightBlue"
-            android:textSize="@dimen/subtitle_text_size" />
+    <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="8dp"
+      android:gravity="center"
+      android:text="@string/please_write_down_these_words_and_store_them_in_a_safe_place_as_they_can_t_be_recovered"
+      android:textColor="@android:color/white"
+      android:textSize="@dimen/subtitle_text_size"/>
 
-    </LinearLayout>
+  </LinearLayout>
 
-    <ListView
-        android:id="@+id/listView"
-        android:layout_width="@dimen/content_width"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/phraseBt"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:dividerHeight="0dp"
-        android:divider="@null"
-        app:layout_constraintTop_toBottomOf="@id/rootUpper"
-   />
+  <ListView
+    android:id="@+id/listView"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="wrap_content"
+    android:divider="@null"
+    android:dividerHeight="0dp"
+    app:layout_constraintBottom_toTopOf="@id/phraseBt"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/rootUpper"
+    />
 
-    <Button
-        android:id="@+id/phraseBt"
-        android:layout_width="@dimen/content_width"
-        android:layout_height="48dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/button_rounded"
-        android:text="@string/import_"
-        android:textColor="@color/lightBlue"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+  <Button
+    android:id="@+id/phraseBt"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="48dp"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/button_rounded_blue"
+    android:text="@string/import_"
+    android:textColor="@android:color/white"
+    app:layout_constraintBottom_toTopOf="@id/cancelTv"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"/>
+
+  <TextView
+    android:id="@+id/cancelTv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:text="@string/cancel"
+    android:textColor="@android:color/white"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+
+    app:layout_constraintStart_toStartOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

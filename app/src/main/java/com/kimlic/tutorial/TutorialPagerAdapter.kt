@@ -9,22 +9,20 @@ class TutorialPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
     // Variables
 
-    private var contentList: List<String> = listOf()
+    private var contentList: List<Int> = listOf()
 
     // Life
 
     override fun getItem(position: Int): Fragment {
         val bundle = Bundle()
-        bundle.putString("string", contentList[position])
-
-        return TutorialPlaceholderFragment.newInstance(bundle)
+        return TutorialPlaceholderFragment.newInstance(bundle, contentList[position])
     }
 
     override fun getCount() = contentList.size
 
     // Public
 
-    fun setContent(content: List<String>) {
+    fun setContent(content: List<Int>) {
         contentList = content
         notifyDataSetChanged()
     }

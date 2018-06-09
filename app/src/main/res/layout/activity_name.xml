@@ -4,7 +4,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@color/lightBlue"
+  android:background="#0082DB"
   tools:context="com.kimlic.profile_details.NameActivity">
 
   <ImageView

@@ -18,15 +18,12 @@ class TutorialActivity : BaseActivity() {
 
     private val TERMS_ACCEPT_REQUEST_CODE = 101
 
-    // Mocks
-
-    private val mContent: List<String> = listOf("Tutorial 1", "Tutorial 2", "Tutorial 3", "Tutorial 4")
-
     // Variables
 
-    private lateinit var mPager: ViewPager
-    private lateinit var mTabLayout: TabLayout
-    private var mAdapter: TutorialPagerAdapter = TutorialPagerAdapter(supportFragmentManager)
+    private lateinit var pager: ViewPager
+    private lateinit var tabLayout: TabLayout
+    private var adapter: TutorialPagerAdapter = TutorialPagerAdapter(supportFragmentManager)
+    private val content: List<Int> = listOf(R.layout.fragment_tutorial1, R.layout.fragment_tutorial2, R.layout.fragment_tutorial3)
 
     // Life
 
@@ -50,23 +47,23 @@ class TutorialActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-        if (mPager.currentItem == 0)
+        if (pager.currentItem == 0)
             super.onBackPressed()
         else
-            mPager.setCurrentItem(mPager.getCurrentItem() - 1)
+            pager.setCurrentItem(pager.getCurrentItem() - 1)
     }
 
     // Private
 
     private fun setupUI() {
-        mPager = pagerVp
-        mTabLayout = tabsTL
+        pager = pagerVp
+        tabLayout = tabsTL
 
-        mPager.adapter = mAdapter
-        mAdapter.setContent(mContent)
+        pager.adapter = adapter
+        adapter.setContent(content)
 
-        mTabLayout.setupWithViewPager(mPager, true)
-        setupPageChangeListner(mPager)
+        tabLayout.setupWithViewPager(pager, true)
+        setupPageChangeListner(pager)
 
         skipTv.setOnClickListener { termsToAccept(TERMS_ACCEPT_REQUEST_CODE) }
     }
@@ -85,7 +82,6 @@ class TutorialActivity : BaseActivity() {
                         //Go next activity
                         Prefs.isTutorialShown = true
                         termsToAccept(TERMS_ACCEPT_REQUEST_CODE)
-                        //PresentationManager.loginActivity(this@TutorialActivity)
                     }
                     counterPageScroll++
                 } else
@@ -95,7 +91,6 @@ class TutorialActivity : BaseActivity() {
                     if (counterPageScrollL != 0) {
                         isFirstPageSwiped = true
                         //Go previous activity
-                        //Prefs.isTutorialShown = true
                     }
                     counterPageScrollL++
                 } else
