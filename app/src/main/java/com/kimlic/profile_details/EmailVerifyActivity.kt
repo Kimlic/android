@@ -1,34 +1,37 @@
 package com.kimlic.profile_details
 
 import android.os.Bundle
-import android.view.LayoutInflater
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
+import android.view.KeyEvent
 import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
 import butterknife.BindViews
 import butterknife.ButterKnife
-import butterknife.OnClick
 import com.kimlic.BaseActivity
-import com.kimlic.BaseFragment
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
-import com.kimlic.passcode.PasscodeSuccessfullFragment
 import com.kimlic.phone.PhoneSuccessfullFragment
 import com.kimlic.utils.BaseCallback
-import kotlinx.android.synthetic.main.fragment_email_verify.*
+import kotlinx.android.synthetic.main.activity_email_verify.*
 
 class EmailVerifyActivity : BaseActivity() {
 
     // Binding
 
     @BindViews(R.id.digit1Et, R.id.digit2Et, R.id.digit3Et, R.id.digit4Et)
-    lateinit var mDigitListE: List<@JvmSuppressWildcards EditText>
+    lateinit var digitsList: List<@JvmSuppressWildcards EditText>
+
+    // Variables
+
+    private var currentHolder = 0
 
     // Life
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_email_verify)
+        setContentView(R.layout.activity_email_verify)
 
         ButterKnife.bind(this)
         setupUI()
@@ -37,22 +40,22 @@ class EmailVerifyActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
+        digitsList[currentHolder].requestFocus()
         verifyBt.setOnClickListener {
             if (pinEntered())
                 successfull()
-
             else
                 showToast("Pins are NOT entered")
         }
 
-        changeTv.setOnClickListener { showToast("Cancel") }
-
+        changeTv.setOnClickListener { showToast("change Email") }
+        setupDigitListner()
         showSoftKeyboard(digit1Et)
     }
 
     private fun pinEntered(): Boolean {
         var count = 0
-        mDigitListE.forEach { it -> if (!it.text.isEmpty()) count++ }
+        digitsList.forEach { it -> if (!it.text.isEmpty()) count++ }
 
         return (count == 4)
     }
@@ -65,5 +68,49 @@ class EmailVerifyActivity : BaseActivity() {
             }
         })
         fragment.show(supportFragmentManager, PhoneSuccessfullFragment.FRAGMENT_KEY)
+    }
+
+    private fun setupDigitListner() {
+        digitsList.forEach {
+
+            it.setOnKeyListener(object : View.OnKeyListener {
+                val position = Integer.valueOf(it.tag.toString())
+
+                override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
+                    if (event!!.getAction() != KeyEvent.ACTION_DOWN)
+                        return true
+
+                    when (keyCode) {
+                        KeyEvent.KEYCODE_0 -> moveNext(0)
+                        KeyEvent.KEYCODE_1 -> moveNext(1)
+                        KeyEvent.KEYCODE_2 -> moveNext(2)
+                        KeyEvent.KEYCODE_3 -> moveNext(3)
+                        KeyEvent.KEYCODE_4 -> moveNext(4)
+                        KeyEvent.KEYCODE_5 -> moveNext(5)
+                        KeyEvent.KEYCODE_6 -> moveNext(6)
+                        KeyEvent.KEYCODE_7 -> moveNext(7)
+                        KeyEvent.KEYCODE_8 -> moveNext(8)
+                        KeyEvent.KEYCODE_9 -> moveNext(9)
+                        KeyEvent.KEYCODE_DEL -> moveBack()
+                    }
+                    return false
+                }
+
+                private fun moveNext(keyCode: Int) {
+                    if (position < 4) {
+                        digitsList.elementAt(position).text = Editable.Factory.getInstance().newEditable(keyCode.toString())
+                        digitsList.elementAt(position).background = resources.getDrawable(R.drawable.square_edittext_background_dark)
+                        if (position < 3) digitsList.elementAt(position + 1).requestFocus()
+                    }
+                }
+
+                private fun moveBack() {
+                    digitsList.elementAt(position).background = resources.getDrawable(R.drawable.square_edittext_background_trasparent)
+                    digitsList.elementAt(position).text = Editable.Factory.getInstance().newEditable("")
+
+                    if (position > 0) digitsList.elementAt(position - 1).requestFocus()
+                }
+            })
+        }
     }
 }

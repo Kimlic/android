@@ -12,6 +12,7 @@
   <dimen name="menu_element_square_size">32dp</dimen>
 
   <dimen name="popup_fragment_width">280dp</dimen>
+  <dimen name="image_elevation">8dp</dimen>
 
 
 </resources>

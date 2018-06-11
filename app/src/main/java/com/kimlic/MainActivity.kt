@@ -32,8 +32,8 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setupUI() {
-        if (true) splshScreenFragment()
-        //PresentationManager.documentChooseVerify(this)
+        //if (true) splshScreenFragment()
+        PresentationManager.emailVerify(this)
     }
 
     private fun splshScreenActivity() {

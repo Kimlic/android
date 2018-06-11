@@ -64,14 +64,16 @@
     <item name="android:layout_height">60dp</item>
     <item name="android:layout_marginStart">8dp</item>
     <item name="android:layout_marginEnd">8dp</item>
-    <item name="android:textColor">@color/lightBlue</item>
+    <item name="android:textColor">@android:color/white</item>
     <item name="android:textSize">35sp</item>
     <item name="android:gravity">center</item>
     <item name="android:maxLength">1</item>
-    <item name="android:background">@drawable/square_edittext_background</item>
-    <item name="android:cursorVisible">true</item>
+    <item name="android:background">@drawable/square_edittext_background_trasparent</item>
+    <item name="android:cursorVisible">false</item>
     <item name="android:longClickable">false</item>
     <item name="android:inputType">numberDecimal</item>
+    <item name="android:digits">0123456789</item>
+
   </style>
 
   <!---->

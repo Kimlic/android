@@ -54,8 +54,8 @@ open class PhoneActivity : BaseActivity() {
                 super.onTextChanged(s, start, before, count)
 
                 handler?.post(Runnable {
-                    var country: String = getString(R.string.country)
-                    var stringtoCheck = if(s!!.startsWith("+")) s.substring(1) else s
+                    var country: String = "" //getString(R.string.country)
+                    var stringtoCheck = if (s!!.startsWith("+")) s.substring(1) else s
                     countriesList.forEach { if (stringtoCheck.startsWith(it.code.toString())) country = it.country }
                     runOnUiThread { countryEt.text = Editable.Factory.getInstance().newEditable(country) }
                 })

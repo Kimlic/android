@@ -150,5 +150,7 @@
   <string name="fast_secure_access">Fast, Secure Access</string>
   <string name="manage_your_accounts">Manage your Accounts</string>
   <string name="verify_passphrase">Verify Passphrase</string>
+  <string name="verify_email">Verify email</string>
+  <string name="verify_number">Verify number</string>
 
 </resources>

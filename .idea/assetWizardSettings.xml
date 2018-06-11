@@ -19,10 +19,11 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="height" value="32" />
-                            <entry key="outputName" value="ic_verify_lock_icon" />
+                            <entry key="height" value="365" />
+                            <entry key="outputName" value="ic_white_phone_success_icon" />
                             <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="I:\My Documents\K I M L I C K\App_UI_SVG_assets\verify_lock_icon.svg" />
+                            <entry key="sourceFile" value="I:\My Documents\K I M L I C K\App_UI_SVG_assets\white_phone_success_icon.svg" />
+                            <entry key="width" value="384" />
                           </map>
                         </option>
                       </PersistentState>
