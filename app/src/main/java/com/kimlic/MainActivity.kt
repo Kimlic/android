@@ -33,7 +33,7 @@ class MainActivity : BaseActivity() {
 
     private fun setupUI() {
         //if (true) splshScreenFragment()
-        PresentationManager.passcode(this)
+        PresentationManager.email(this)
     }
 
     private fun splshScreenActivity() {
