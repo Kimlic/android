@@ -25,20 +25,21 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
     @BindViews(R.id.passcode0Bt, R.id.passcodeBt1, R.id.passcodeBt2, R.id.passcodeBt3, R.id.passcodeBt4, R.id.passcodeBt5, R.id.passcodeBt6, R.id.passcodeBt7, R.id.passcodeBt8, R.id.passcodeBt9)
     lateinit var mBtnList: List<@JvmSuppressWildcards Button>
 
-    @BindViews(R.id.dot1Bt, R.id.dot2Bt, R.id.dot3Bt, R.id.dot4Bt) lateinit var mDotList: List<@JvmSuppressWildcards Button>
+    @BindViews(R.id.dot1Bt, R.id.dot2Bt, R.id.dot3Bt, R.id.dot4Bt)
+    lateinit var mDotList: List<@JvmSuppressWildcards Button>
 
     // Variables
 
-    private var mPasscode: String
-    private lateinit var mPasscodeConfirm: String
-    private lateinit var mAction: String
-    private var mFirstInput: Boolean
+    private var passcode: String
+    private lateinit var passcodeConfirm: String
+    private lateinit var action: String
+    private var firstInput: Boolean
 
     // Init
 
     init {
-        mPasscode = ""
-        mFirstInput = false
+        passcode = ""
+        firstInput = false
     }
 
     // Life
@@ -53,7 +54,7 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun onBackPressed() {
-        if (mPasscode.isNotEmpty()) deletePasscode() else super.onBackPressed()
+        if (passcode.isNotEmpty()) deletePasscode() else super.onBackPressed()
     }
 
     // OnClick
@@ -61,10 +62,9 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         val digit: String = (v as Button).text.toString()
 
-        if (mPasscode.length < 4) mPasscode = mPasscode.plus(digit)
+        if (passcode.length < 4) passcode = passcode.plus(digit)
 
-        showDots(mPasscode)
-        passcodeOkBt.isEnabled = mPasscode.length == 4
+        showDots(passcode)
     }
 
     // Private
@@ -73,9 +73,9 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
         mBtnList.forEach { it.setOnClickListener(this) }
         setupTextSwitcher()
 
-        mAction = intent.extras.getString("action")
+        action = intent.extras.getString("action")
 
-        when (mAction) {
+        when (action) {
             "unlock" -> setupUIUnlock()
             "set" -> setupUIPasscode()
             "change" -> setupUIChange()
@@ -83,19 +83,20 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
         }
 
         passcodeDeleteBt.setOnClickListener { deletePasscode() }
-        passcodeOkBt.setOnClickListener { usePasscode(mAction) }
+        cancelTv.setOnClickListener { finish(); showToast("Cancel is pressed"); }
+        passcodeOkBt.setOnClickListener { usePasscode(action) }
     }
 
 
     private fun deletePasscode() {
-        if (mPasscode.isEmpty()) return
+        if (passcode.isEmpty()) return
 
-        mPasscode = mPasscode.substring(0, mPasscode.length - 1)
-        showDots(mPasscode)
+        passcode = passcode.substring(0, passcode.length - 1)
+        showDots(passcode)
     }
 
     private fun setupDefaults() {
-        mPasscode = ""
+        passcode = ""
     }
 
     // Setup UI
@@ -127,7 +128,7 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
     private fun setupUITryAgain() {
         titleTs.setText(getString(R.string.passcode_didnt_match))
         passcodeOkBt.isEnabled = false
-        mFirstInput = false
+        firstInput = false
         blinkDots()
     }
 
@@ -149,34 +150,34 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun unlock() {
-        if (Prefs.passcode == mPasscode) {
+        if (Prefs.passcode == passcode) {
             PresentationManager.stage(this@PasscodeActivity)
         } else
             setupUIUnlock()
     }
 
     private fun set() {
-        if (!mFirstInput) {
-            mFirstInput = true
-            mPasscodeConfirm = mPasscode
+        if (!firstInput) {
+            firstInput = true
+            passcodeConfirm = passcode
             setupUISeconPasscode()
-        } else if (mPasscodeConfirm == mPasscode) {
-            Prefs.passcode = mPasscode
+        } else if (passcodeConfirm == passcode) {
+            Prefs.passcode = passcode
             Prefs.isPasscodeEnabled = true
             successfull()
         } else setupUITryAgain()
     }
 
     private fun change() {
-        if (mPasscode == Prefs.passcode) {
-            mAction = "set"
+        if (passcode == Prefs.passcode) {
+            action = "set"
             setupUIPasscode()
         } else
             setupUITryAgain()
     }
 
     private fun disable() {
-        if (mPasscode == Prefs.passcode) {
+        if (passcode == Prefs.passcode) {
             Prefs.isPasscodeEnabled = false
             finish()
         } else
@@ -199,7 +200,7 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun showDots(passcode: String = "") {
-        if (passcode == "") mPasscode = passcode
+        if (passcode == "") this.passcode = passcode
         val passLength = passcode.length
 
         for (dot in mDotList) {
@@ -208,6 +209,7 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
         }
 
         passcodeDeleteBt.visibility = if (passLength > 0) View.VISIBLE else View.INVISIBLE
+        passcodeOkBt.isEnabled = this.passcode.length == 4
     }
 
     // Text switcher

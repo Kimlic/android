@@ -7,14 +7,42 @@
     <item name="android:textColorHint">@color/lightBlue</item>
   </style>
 
+  <!--Themes for textSwitcher Passcode-->
   <style name="TitleStyle">
     <item name="android:textSize">22sp</item>
-    <item name="android:textColor">@color/lightBlue</item>
+    <item name="android:textColor">@android:color/white</item>
     <item name="android:gravity">center_horizontal</item>
   </style>
 
   <style name="SubtitleStyle" parent="TitleStyle">
     <item name="android:textSize">14sp</item>
+  </style>
+
+  <!--Passcode circle button-->
+
+  <style name="PasscodeCircleButtonOk" parent="PasscodeCircleButton">
+    <item name="android:background">@drawable/button_shape_circle_ok</item>
+  </style>
+
+  <style name="PasscodeCircleButton">
+    <item name="android:layout_width">64dp</item>
+    <item name="android:layout_height">64dp</item>
+    <item name="android:textColor">@android:color/white</item>
+    <item name="android:textSize">@dimen/circle_button_digit</item>
+    <item name="android:background">@drawable/button_shape_circle</item>
+    <item name="android:elevation">@dimen/button_elevation</item>
+  </style>
+
+  <!--Passcode dots -->
+  <style name="PasscodeDot">
+    <item name="android:layout_width">16dp</item>
+    <item name="android:layout_height">16dp</item>
+    <item name="android:layout_margin">8dp</item>
+    <item name="android:background">@drawable/button_dots_shape_oval</item>
+    <item name="android:elevation">@dimen/button_elevation</item>
+    <item name="android:visibility">visible</item>
+    <item name="android:clickable">false</item>
+
   </style>
 
 
