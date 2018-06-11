@@ -43,18 +43,16 @@ class PhoneVerifyActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-
-        // OnClick
         verifyBt.setOnClickListener {
             if (pinEntered()) {
-
                 if (true) {// If pin is accepted
                     successfull()
                 }
             } else showToast("Pin is not entered")
         }
-        changeTv.setOnClickListener { PresentationManager.phoneNumber(this) }
+        cancelTv.setOnClickListener { PresentationManager.phoneNumber(this) }
         showSoftKeyboard(digit1Et)
+        setupDigitListner()
     }
 
     private fun pinEntered(): Boolean {
@@ -68,6 +66,7 @@ class PhoneVerifyActivity : BaseActivity() {
         fragment = PhoneSuccessfullFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
+                finishAffinity()
                 PresentationManager.stage(this@PhoneVerifyActivity)
             }
         })
@@ -82,7 +81,7 @@ class PhoneVerifyActivity : BaseActivity() {
 
                 override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
                     if (event!!.getAction() != KeyEvent.ACTION_DOWN)
-                        return true
+                        return false
 
                     when (keyCode) {
                         KeyEvent.KEYCODE_0 -> moveNext(0)

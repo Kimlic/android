@@ -42,6 +42,7 @@ class AccountRecoveryActivity : BaseActivity() {
         val fragment = RecoverySuccesfullFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
+                finishAffinity()
                 PresentationManager.stage(this@AccountRecoveryActivity)
             }
         })

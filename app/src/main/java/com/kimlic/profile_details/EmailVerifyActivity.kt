@@ -2,8 +2,6 @@ package com.kimlic.profile_details
 
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.widget.EditText
@@ -48,7 +46,7 @@ class EmailVerifyActivity : BaseActivity() {
                 showToast("Pins are NOT entered")
         }
 
-        changeTv.setOnClickListener { showToast("change Email") }
+        cancelTv.setOnClickListener { showToast("change Email") }
         setupDigitListner()
         showSoftKeyboard(digit1Et)
     }
@@ -78,7 +76,7 @@ class EmailVerifyActivity : BaseActivity() {
 
                 override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
                     if (event!!.getAction() != KeyEvent.ACTION_DOWN)
-                        return true
+                        return false
 
                     when (keyCode) {
                         KeyEvent.KEYCODE_0 -> moveNext(0)

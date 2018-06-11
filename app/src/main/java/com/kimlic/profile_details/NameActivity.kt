@@ -39,7 +39,6 @@ class NameActivity : BaseActivity() {
             if (validFields())
             // Process fielsd
                 finish()
-            showToast("Go to the next Activity!!! ")
         }
 
         cancelTv.setOnClickListener { finish() }

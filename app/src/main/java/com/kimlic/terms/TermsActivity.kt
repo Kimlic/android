@@ -4,11 +4,13 @@ import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
+import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.ProgressBar
 import com.kimlic.BaseActivity
 import com.kimlic.R
+import com.kimlic.managers.PresentationManager
 import kotlinx.android.synthetic.main.activity_terms.*
 
 class TermsActivity : BaseActivity() {
@@ -25,6 +27,11 @@ class TermsActivity : BaseActivity() {
         setContentView(R.layout.activity_terms)
 
         setupUI()
+    }
+
+    override fun onBackPressed() {
+        setResult(Activity.RESULT_CANCELED)
+        finish()
     }
 
     // Private
@@ -44,6 +51,8 @@ class TermsActivity : BaseActivity() {
                     setResult(Activity.RESULT_OK)
                     finish()
                 }
+                cancelTv.visibility = View.VISIBLE
+                cancelTv.setOnClickListener { setResult(Activity.RESULT_CANCELED); finish() }
             }
             "review" -> {
                 acceptBt.text = getString(R.string.close)
@@ -51,7 +60,6 @@ class TermsActivity : BaseActivity() {
             }
             else -> throw RuntimeException("Invalid document type")
         }
-
     }
 
     private fun fillWebView() {

@@ -61,7 +61,7 @@
     android:layout_marginBottom="16dp"
     android:gravity="center"
     android:text="@string/cancel"
-    android:textColor="@color/lightBlue"
+    android:textColor="@android:color/white"
     android:textSize="@dimen/subtitle_text_size"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"

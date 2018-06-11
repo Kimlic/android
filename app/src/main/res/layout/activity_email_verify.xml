@@ -85,7 +85,7 @@
   </LinearLayout>
 
   <TextView
-    android:id="@+id/changeTv"
+    android:id="@+id/cancelTv"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginBottom="16dp"

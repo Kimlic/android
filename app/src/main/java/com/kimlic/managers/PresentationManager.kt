@@ -36,7 +36,7 @@ object PresentationManager {
     }
 
     fun tutorials(presenter: BaseActivity) {
-        present(presenter = presenter, className = TutorialActivity::class.java, isStarting = true)
+        present(presenter = presenter, className = TutorialActivity::class.java, isStarting = false)
     }
 
     fun passcode(presenter: BaseActivity) {
@@ -97,7 +97,7 @@ object PresentationManager {
     }
 
     fun phoneNumber(presenter: BaseActivity) {
-        present(presenter = presenter, className = PhoneActivity::class.java, isStarting = true)
+        present(presenter = presenter, className = PhoneActivity::class.java, isStarting = false)
     }
 
     fun phoneNumberVerify(presenter: BaseActivity) {
@@ -120,7 +120,7 @@ object PresentationManager {
     }
 
     fun recovery(presenter: BaseActivity) {
-        present(presenter = presenter, className = AccountRecoveryActivity::class.java, isStarting = true)
+        present(presenter = presenter, className = AccountRecoveryActivity::class.java, isStarting = false)
     }
 
     fun documentChooseVerify(presenter: BaseActivity) {

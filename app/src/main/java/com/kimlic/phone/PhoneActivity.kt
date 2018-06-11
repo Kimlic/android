@@ -44,6 +44,11 @@ open class PhoneActivity : BaseActivity() {
         handler = null
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        PresentationManager.signupRecovery(this)
+    }
+
     // Private
 
     private fun setupUI() {
@@ -66,7 +71,7 @@ open class PhoneActivity : BaseActivity() {
             if (isPhoneValid()) {
                 phoneEt.setError(null)
                 // TODO use phone number
-                PresentationManager.phoneNumberVerify(this)
+                PresentationManager.phoneNumberVerify(this@PhoneActivity)
             } else
                 phoneEt.setError(getString(R.string.phone_is_not_valid))
         }

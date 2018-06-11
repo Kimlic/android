@@ -26,14 +26,13 @@ class MainActivity : BaseActivity() {
             SPLASH_SCREEN_REQUEST_CODE -> {
                 // check if user is authentocated
                 PresentationManager.signupRecovery(this)
-
             }
         }
     }
 
     private fun setupUI() {
-        //if (true) splshScreenFragment()
-        PresentationManager.email(this)
+        if (true) splshScreenFragment()
+        //PresentationManager.termsAccept(this)
     }
 
     private fun splshScreenActivity() {

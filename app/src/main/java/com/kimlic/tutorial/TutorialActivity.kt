@@ -40,8 +40,9 @@ class TutorialActivity : BaseActivity() {
                 if (resultCode == Activity.RESULT_OK) {
                     Prefs.termsAccepted = true
                     showToast("Terms accepted!!!")
-                    PresentationManager.phoneNumber(this)
-                }
+                    PresentationManager.phoneNumber(this@TutorialActivity)
+                } else
+                    PresentationManager.signupRecovery(this@TutorialActivity)
             }
         }
     }

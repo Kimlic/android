@@ -62,13 +62,13 @@ class RisksFragment : BasePopupFragment() {
         if (!recoveryOffered) {
             views[count].visibility = View.VISIBLE
             buttons[count].text = getString(R.string.enable_account_recovery)
-            buttons[count++].setOnClickListener { Prefs.isRecoveryOffered = true; dismiss(); PresentationManager.recovery(activity!!) }
+            buttons[count++].setOnClickListener { Prefs.isRecoveryOffered = true; dismiss(); PresentationManager.passhraseCreate(activity!!) }
         }
 
         if (!passcodeOffered) {
             views[count].visibility = View.VISIBLE
             buttons[count].text = getString(R.string.create_passcode)
-            buttons[count++].setOnClickListener { Prefs.isPasscodeOffered = true; dismiss(); PresentationManager.passhraseCreate(activity!!) }
+            buttons[count++].setOnClickListener { Prefs.isPasscodeOffered = true; dismiss(); PresentationManager.passcode(activity!!) }
         }
 
         riscsTv.text = resources.getString(R.string.you_have_main_risks, count)

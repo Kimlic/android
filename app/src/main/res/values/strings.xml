@@ -112,8 +112,8 @@
   <string name="enable_touch_id">Enable Touch ID</string>
   <string name="backed_up_kimlic_id">Backed up Kimlic ID to iCloud or Google</string>
   <string name="terms_and_conditions"><![CDATA[Terms & Conditions]]></string>
-  <string name="accept_">accept</string>
-  <string name="close">close</string>
+  <string name="accept_">Accept</string>
+  <string name="close">Close</string>
   <string name="privacy_policy">Privacy Policy</string>
   <string name="change_passcode">Change passcode</string>
   <string name="touch_id">Touch ID</string>
