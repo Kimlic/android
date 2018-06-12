@@ -78,18 +78,22 @@
       android:hint="@string/phone_number"
       android:textColorHint="@android:color/white"
       app:hintTextAppearance="@style/WhiteTextInputLayout"
+      android:clickable="false"
       tools:ignore="LabelFor">
 
       <EditText
         android:id="@+id/phoneEt"
         style="@style/KimlicEditText"
         android:layout_marginTop="16dp"
-        android:digits="0123456789+"
+        android:digits="0123456789 ()+"
         android:focusable="true"
         android:inputType="phone"
         android:longClickable="false"
+        android:clickable="false"
         android:maxLength="20"
+        android:text="@string/plus_character"
         android:textCursorDrawable="@null"
+        android:cursorVisible="false"
         tools:ignore="LabelFor"/>
     </android.support.design.widget.TextInputLayout>
 

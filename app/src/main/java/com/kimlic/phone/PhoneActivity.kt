@@ -12,12 +12,13 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 
-open class PhoneActivity : BaseActivity() {
+class PhoneActivity : BaseActivity() {
 
     // Variables
 
     private lateinit var countriesList: List<Country>
     private var handler: Handler?
+    private var countryCode = 0
 
     // Init
 
@@ -58,14 +59,23 @@ open class PhoneActivity : BaseActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 super.onTextChanged(s, start, before, count)
 
+                if (!s!!.startsWith("+") && !s.contains("+")) {
+                    phoneEt.text = Editable.Factory.getInstance().newEditable("+" + phoneEt.text)
+                    phoneEt.setSelection(phoneEt.text.length)
+                }
+
                 handler?.post(Runnable {
-                    var country: String = "" //getString(R.string.country)
-                    var stringtoCheck = if (s!!.startsWith("+")) s.substring(1) else s
+                    var country: String = ""
+                    countryCode = 0
+                    val stringtoCheck = if (s.startsWith("+")) s.substring(1) else s
+
                     countriesList.forEach { if (stringtoCheck.startsWith(it.code.toString())) country = it.country }
+
                     runOnUiThread { countryEt.text = Editable.Factory.getInstance().newEditable(country) }
                 })
             }
         })
+        phoneEt.setOnClickListener { phoneEt.setSelection(phoneEt.text.length) }
 
         nextBt.setOnClickListener {
             if (isPhoneValid()) {
@@ -77,7 +87,12 @@ open class PhoneActivity : BaseActivity() {
         }
     }
 
-    private fun isPhoneValid() = phoneEt.text.toString().matches("^[+]?[0-9]{10,13}\$".toRegex())
+    private fun isPhoneValid(): Boolean {
+        val list = phoneEt.text.toString().split(" ")
+        var phone: String = ""
+        list.forEach { phone = phone + it }
+        return phone.matches("^[+]?[0-9]{10,13}\$".toRegex())
+    }
 
     private fun readCountries(): List<Country> {
         val countries = mutableListOf<Country>()

@@ -153,5 +153,6 @@
   <string name="verify_email">Verify email</string>
   <string name="verify_number">Verify number</string>
   <string name="_90">+90</string>
+  <string name="plus_character">+</string>
 
 </resources>

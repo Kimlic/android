@@ -18,7 +18,6 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("MainActivity", savedInstanceState.toString())
         setupUI()
     }
 
@@ -34,7 +33,7 @@ class MainActivity : BaseActivity() {
     private fun setupUI() {
 
         if (true) splshScreenFragment()
-        //PresentationManager.termsAccept(this)
+        //PresentationManager.phoneNumber(this)
     }
 
     private fun splshScreenActivity() {
