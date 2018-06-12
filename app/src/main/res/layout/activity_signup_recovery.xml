@@ -26,7 +26,7 @@
     android:background="@drawable/button_rounded_blue"
     android:elevation="@dimen/button_elevation"
     android:text="@string/create_new_identity"
-    android:textColor="@color/lightBlue"
+    android:textColor="@android:color/white"
     android:textSize="@dimen/button_text_size"
     app:layout_constraintBottom_toTopOf="@+id/recoverBt"
     app:layout_constraintEnd_toEndOf="parent"

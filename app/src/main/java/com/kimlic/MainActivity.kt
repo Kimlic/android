@@ -2,6 +2,7 @@ package com.kimlic
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import com.kimlic.managers.PresentationManager
 import com.kimlic.splash_screen.SplashScreenActivity
 import com.kimlic.splash_screen.SplashScreenFragment
@@ -17,7 +18,7 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        Log.d("MainActivity", savedInstanceState.toString())
         setupUI()
     }
 
@@ -31,6 +32,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setupUI() {
+
         if (true) splshScreenFragment()
         //PresentationManager.termsAccept(this)
     }

@@ -26,10 +26,23 @@ abstract class BaseActivity : AppCompatActivity() {
         setupUI()
     }
 
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount > 0)
+            supportFragmentManager.popBackStack()
+        else
+            super.onBackPressed()
+    }
+
     // Public
 
     fun showToast(text: String) {
         if (text.length > 0) Toast.makeText(applicationContext, text, Toast.LENGTH_SHORT).show()
+    }
+
+    fun showSoftKeyboard(view: View) {
+        view.requestFocus()
+        val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
     }
 
     fun getStringValue(resId: Int): String = KimlicApp.applicationContext().getString(resId)
@@ -50,16 +63,5 @@ abstract class BaseActivity : AppCompatActivity() {
         transaction.replace(containerViewId, fragment, tag)
         transaction.addToBackStack(tag)
         transaction.commit()
-    }
-
-    fun showSoftKeyboard(view: View) {
-//        if (view.requestFocus()) {
-//            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//            imm.showSoftInput(view, InputMethodManager.SHOW_FORCED)
-//        }
-
-        view.requestFocus()
-        val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
     }
 }

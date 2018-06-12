@@ -86,7 +86,8 @@
       android:name=".settings.SettingsActivity"/>
 
     <activity
-      android:label="Profile Stage"
+      android:label="Main Stage"
+      android:launchMode="singleTask"
       android:name=".stage.StageActivity"/>
 
     <activity

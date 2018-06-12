@@ -39,7 +39,6 @@ class SettingsActivity : BaseActivity() {
         super.onResume()
         initSettingsList()
         adapter.setSettingsList(settingsList)
-        //adapter.notifyDataSetChanged()
     }
 
     // Private
@@ -49,8 +48,6 @@ class SettingsActivity : BaseActivity() {
         signoutBt.setOnClickListener {
             Prefs.clear()
             PresentationManager.signupRecovery(this)
-
-            showToast("signOut clicked")
         }
         deleteBt.setOnClickListener { showToast("delete id Clicked") }
         backBt.setOnClickListener { finish() }
@@ -74,7 +71,7 @@ class SettingsActivity : BaseActivity() {
                     "recovery" ->
                         // Vill be changed
                         if (!Prefs.isRecoveryEnabled) PresentationManager.recoveryEnable(this@SettingsActivity)
-                        //else PresentationManager.recoveryEnable(this@SettingsActivity)
+                //else PresentationManager.recoveryEnable(this@SettingsActivity)
 
                     "terms" -> PresentationManager.termsReview(this@SettingsActivity)
                     "privacy" -> PresentationManager.privacyReview(this@SettingsActivity)
