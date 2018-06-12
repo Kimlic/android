@@ -89,7 +89,6 @@
         android:inputType="phone"
         android:longClickable="false"
         android:maxLength="20"
-        android:text="@string/_90"
         android:textCursorDrawable="@null"
         tools:ignore="LabelFor"/>
     </android.support.design.widget.TextInputLayout>
