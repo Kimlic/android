@@ -30,6 +30,10 @@ class StageActivity : BaseActivity() {
         risks()
     }
 
+    override fun onBackPressed() {
+        moveTaskToBack(true)
+    }
+
     // Private
 
     private fun setupUI() {
@@ -46,7 +50,8 @@ class StageActivity : BaseActivity() {
         }
         accountsBt.setOnClickListener {
             accountsBt.isSelected = true; profileBt.isSelected = false
-            replaceFragment(accountsStageFragment, AccountsStageFragment.FRAGMENT_KEY) }
+            replaceFragment(accountsStageFragment, AccountsStageFragment.FRAGMENT_KEY)
+        }
     }
 
     private fun initFragments() {
@@ -57,6 +62,8 @@ class StageActivity : BaseActivity() {
     private fun risks() {
         if (!Prefs.isPasscodeOffered || !Prefs.isRecoveryOffered) {
             val bundle = Bundle()
+
+            if (Prefs.isPasscodeEnabled) Prefs.isPasscodeOffered = true
 
             bundle.putBoolean("passcode", Prefs.isPasscodeOffered)
             bundle.putBoolean("recovery", Prefs.isRecoveryOffered)

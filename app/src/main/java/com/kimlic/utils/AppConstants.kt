@@ -3,6 +3,8 @@ package com.kimlic.utils
 enum class AppConstants(val key: String, val intKey: Int = -1) {
     appPreferences("KIMLIC_PREFERENCES"),
 
+    auth("AUTH"),
+
     passcode("PASSCODE"),
 
     isPasscodeEnabled("IS_PASSCODE_ENABLED"),

@@ -1,5 +1,6 @@
 package com.kimlic.auth
 
+import android.app.Presentation
 import android.os.Bundle
 import android.view.animation.AccelerateDecelerateInterpolator
 import com.daimajia.androidanimations.library.Techniques
@@ -14,6 +15,10 @@ import com.kimlic.utils.BaseCallback
 import kotlinx.android.synthetic.main.activity_touch_id.*
 
 class TouchIdActivity : BaseActivity() {
+
+    // Variables
+
+    private var fingerprintService: FingerprintService? = null
 
     // Life
 
@@ -32,15 +37,19 @@ class TouchIdActivity : BaseActivity() {
 
         when (action) {
             "create" -> {
-                val fingerprintService = FingerprintService(this, { create() }, { showToast(it); finish() })
+                fingerprintService = FingerprintService(this, { create() }, { showToast(it); finish() })
             }
             "disable" -> {
-                val fingerprintService = FingerprintService(this, { disable() }, { showToast(it); finish() })
+                fingerprintService = FingerprintService(this, { disable() }, { showToast(it); finish() })
+            }
+            "unlock" -> {
+                propouseTouch()
+                fingerprintService = FingerprintService(this, { unlock() }, {  fingerprintService = null; showToast(it); passcodeUnlock() })
             }
             else -> throw RuntimeException("Invalid action")
         }
 
-        cancelBt.setOnClickListener { finish() }
+        cancelTv.setOnClickListener { finish() }
     }
 
     private fun create() {
@@ -51,6 +60,25 @@ class TouchIdActivity : BaseActivity() {
     private fun disable() {
         Prefs.isTouchEnabled = false
         finish()
+    }
+
+    private fun unlock() {
+        PresentationManager.stage(this)
+    }
+
+    fun propouseTouch() {
+        val touchFragment = TouchIDFragment.newInstance()
+        touchFragment.setCallback(object : BaseCallback {
+            override fun callback() {
+                passcodeUnlock()
+            }
+        })
+        touchFragment.show(supportFragmentManager, TouchIDFragment.FRAGMENT_KEY)
+    }
+
+    private fun passcodeUnlock() {
+        fingerprintService = null
+        PresentationManager.passcodeUnlock(this)
     }
 
     private fun animation() {

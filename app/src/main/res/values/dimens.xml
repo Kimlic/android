@@ -17,5 +17,19 @@
   <dimen name="popup_fragment_width">280dp</dimen>
   <dimen name="image_elevation">8dp</dimen>
 
+  <!--Rounded logo dimens-->
+  <dimen name="circle_one">144dp</dimen>
+  <dimen name="circle_two">120dp</dimen>
+  <dimen name="circle_three">96dp</dimen>
+  <dimen name="circle_four">72dp</dimen>
+  <dimen name="logo_size">64dp</dimen>
+
+  <!--Rounded logo touchID-->
+  <dimen name="circle_one_id">240dp</dimen>
+  <dimen name="circle_two_id">196dp</dimen>
+  <dimen name="circle_three_id">156dp</dimen>
+  <dimen name="circle_four_id">120dp</dimen>
+  <dimen name="logo_size_id">96dp</dimen>
+
 
 </resources>

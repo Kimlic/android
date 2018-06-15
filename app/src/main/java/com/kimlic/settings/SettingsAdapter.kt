@@ -1,6 +1,7 @@
 package com.kimlic.settings
 
 import android.support.v7.widget.RecyclerView
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -65,6 +66,11 @@ class SettingsAdapter : RecyclerView.Adapter<SettingsAdapter.SettingsViewHolder>
                         warningIv.visibility = if (!itemSetting.state) ImageView.VISIBLE else ImageView.INVISIBLE
                     }
                     AppConstants.settingIntent.intKey -> {
+                        if (!itemSetting.summary.equals("")) {
+                            summaryITv.visibility = View.VISIBLE
+                            summaryITv.text = Editable.Factory.getInstance().newEditable(itemSetting.summary)
+                        }
+
                         titleTv.text = itemSetting.title
                         tag = itemSetting.tag
                     }

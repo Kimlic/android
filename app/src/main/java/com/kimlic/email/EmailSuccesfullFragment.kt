@@ -1,12 +1,10 @@
-package com.kimlic.profile_details
+package com.kimlic.email
 
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kimlic.BaseDialogFragment
-import com.kimlic.BaseFragment
 import com.kimlic.R
 
 class EmailSuccesfullFragment : BaseDialogFragment() {

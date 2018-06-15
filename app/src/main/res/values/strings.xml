@@ -27,6 +27,7 @@
   <string name="_11">11</string>
   <string name="_12">12</string>
   <string name="ok">Ok</string>
+  <string name="OK">OK</string>
   <string name="place_your_finger">Place Your Finger</string>
   <string name="lift_and_rest_the_edge_of_your_finger_on_the_home_button_repeatedly">Lift and rest the edge of your finger on the Home button repeatedly</string>
   <string name="fingerprint_logo">FingerPrint logo</string>
@@ -97,7 +98,7 @@
   <string name="verify_your_number">Verify your number</string>
   <string name="code_sent_to_555_495_34_40">Code sent to 555 495 34 40</string>
   <string name="change_number">Change number</string>
-  <string name="email_address">Email Address</string>
+  <string name="email_address">Email address</string>
   <string name="enter_your_number">Enter Your Number</string>
   <string name="why_we_need_your_phone_number">Why we need your phone number?</string>
   <string name="your_id_have_been_verified">Your ID have been verified</string>
@@ -154,5 +155,9 @@
   <string name="verify_number">Verify number</string>
   <string name="_90">+90</string>
   <string name="plus_character">+</string>
+  <string name="sign_in_with_your_touch_id">Sign in with your Touch ID</string>
+  <string name="touch_id_for_quot_kimlic_quot">touch id for \"Kimlic\"</string>
+  <string name="about_kimlic">About Kimlic</string>
+  <string name="signup_recovery">Signup recovery</string>
 
 </resources>

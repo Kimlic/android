@@ -5,7 +5,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@color/lightBlue"
+  android:background="@drawable/background_gradient_blue"
   tools:context="com.kimlic.auth.LoginActivity">
 
   <LinearLayout
@@ -39,67 +39,73 @@
       android:textColor="@android:color/white"
       android:textSize="18sp"/>
 
-    <ImageView
-      android:layout_width="200dp"
-      android:layout_height="200dp"
-      android:layout_marginBottom="96dp"
-      android:background="@drawable/ic_baseline_fingerprint_light"
-      android:contentDescription="@string/fingerprint_logo"/>
   </LinearLayout>
 
+  <ImageView
+    android:padding="16dp"
+    android:layout_width="300dp"
+    android:layout_height="300dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/rounded_logo_touch_id"
+    android:contentDescription="@string/fingerprint_logo"
+    android:scaleType="center"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/llLoot"/>
 
   <LinearLayout
-      android:id="@+id/llOrLayout"
-      android:layout_width="@dimen/content_width"
-      android:layout_height="wrap_content"
-      android:layout_marginBottom="8dp"
-      android:layout_marginEnd="8dp"
-      android:layout_marginStart="8dp"
-      android:weightSum="12"
-      app:layout_constraintBottom_toTopOf="@+id/usePasscodeBt"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent">
+    android:id="@+id/llOrLayout"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:weightSum="12"
+    app:layout_constraintBottom_toTopOf="@+id/usePasscodeBt"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent">
 
     <View
-        android:layout_width="0dp"
-        android:layout_height="2dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="4dp"
-        android:layout_weight="5"
-        android:background="@android:color/white" />
+      android:layout_width="0dp"
+      android:layout_height="2dp"
+      android:layout_weight="5"
+      android:layout_marginStart="4dp"
+      android:layout_gravity="center_vertical"
+      android:background="@android:color/white"/>
 
     <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_weight="2"
-        android:gravity="center"
-        android:text="@string/or"
-        android:textColor="@android:color/white"
-        android:textSize="18sp" />
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="2"
+      android:layout_marginStart="10dp"
+      android:layout_marginEnd="10dp"
+      android:gravity="center"
+      android:text="@string/or"
+      android:textColor="@android:color/white"
+      android:textSize="18sp"/>
 
     <View
-        android:layout_width="0dp"
-        android:layout_height="2dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginEnd="4dp"
-        android:layout_weight="5"
-        android:background="@android:color/white" />
+      android:layout_width="0dp"
+      android:layout_height="2dp"
+      android:layout_weight="5"
+      android:layout_marginEnd="4dp"
+      android:layout_gravity="center_vertical"
+      android:background="@android:color/white"/>
   </LinearLayout>
 
   <Button
-      android:id="@+id/usePasscodeBt"
-      android:layout_width="@dimen/content_width"
-      android:layout_height="48dp"
-      android:layout_marginBottom="16dp"
-      android:layout_marginEnd="8dp"
-      android:layout_marginStart="8dp"
-      android:background="@drawable/button_rounded"
-      android:text="@string/use_passcode"
-      android:textColor="@color/lightBlue"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent" />
+    android:id="@+id/usePasscodeBt"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="48dp"
+    android:layout_marginBottom="16dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:background="@drawable/button_rounded"
+    android:text="@string/use_passcode"
+    android:textColor="@color/lightBlue"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

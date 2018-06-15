@@ -4,7 +4,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="#0082DB">
+  android:background="@drawable/background_fingerprint_texture">
 
   <LinearLayout
     android:id="@+id/rootUpper"
@@ -146,11 +146,12 @@
     android:layout_width="@dimen/content_width"
     android:layout_height="48dp"
     android:layout_marginBottom="16dp"
-    android:paddingStart="45dp"
-    android:paddingEnd="45dp"
+    android:paddingStart="64dp"
+    android:paddingEnd="64dp"
     android:background="@drawable/button_rounded_green"
     android:drawableStart="@drawable/ic_verify_lock_icon"
     android:elevation="@dimen/button_elevation"
+    android:textAllCaps="false"
     android:text="@string/verify_passphrase"
     android:textColor="@android:color/white"
     android:textSize="@dimen/button_text_size"

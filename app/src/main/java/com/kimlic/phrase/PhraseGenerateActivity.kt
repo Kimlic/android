@@ -63,7 +63,7 @@ class PhraseGenerateActivity : BaseActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle(title)
                 .setMessage(message)
-                .setPositiveButton(getString(R.string.ok), object : DialogInterface.OnClickListener {
+                .setPositiveButton(getString(R.string.OK), object : DialogInterface.OnClickListener {
                     override fun onClick(dialog: DialogInterface?, which: Int) {
                         dialog?.dismiss()
                     }

@@ -1,68 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="48dp"
-    android:layout_weight="10"
-    android:background="@color/bgLight"
-    android:clickable="true"
-    android:focusableInTouchMode="false"
-    android:orientation="horizontal">
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="48dp"
+  android:layout_weight="10"
+  android:background="@android:color/transparent"
+  android:clickable="true"
+  android:focusableInTouchMode="false"
+  android:orientation="horizontal"
+  tools:background="@color/redLight"
+  tools:ignore="KeyboardInaccessibleWidget">
+
+  <LinearLayout
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="9"
+    android:layout_gravity="center"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="0dp"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_marginBottom="4dp"
+      android:orientation="horizontal"
+      tools:ignore="UseCompoundDrawables">
+
+      <TextView
+        android:id="@+id/titleSwitchTv"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_weight="9"
-        android:orientation="vertical">
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/subtitle_text_size"
+        tools:text="Passcode"/>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="4dp"
-            android:orientation="horizontal"
-            tools:ignore="UseCompoundDrawables">
-
-            <TextView
-                android:id="@+id/titleSwitchTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/lightBlue"
-                android:textSize="@dimen/subtitle_text_size"
-                tools:text="Passcode" />
-
-            <ImageView
-                android:id="@+id/warningIv"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_marginEnd="4dp"
-                android:layout_marginStart="4dp"
-                android:background="@drawable/ic_warning_24dp"
-                android:contentDescription="@string/warning" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/summaryTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/grayLight"
-            android:textSize="@dimen/small_text_size"
-            tools:text="@string/enter_your_passcode_to_proceed" />
+      <ImageView
+        android:id="@+id/warningIv"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:background="@drawable/ic_profile_warning_icon"
+        android:contentDescription="@string/warning"/>
 
     </LinearLayout>
 
-    <Switch
-        android:checked="true"
-        android:id="@+id/selector"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:theme="@style/KimlicSettingSwitch"
-        android:layout_weight="1"
-        android:clickable="false"
-        android:focusable="false"
+    <TextView
+      android:id="@+id/summaryTv"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textColor="@android:color/white"
+      android:textSize="@dimen/small_text_size"
+      tools:text="@string/enter_your_passcode_to_proceed"/>
 
-        android:focusableInTouchMode="false" />
+  </LinearLayout>
+
+  <Switch
+    android:id="@+id/selector"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:layout_gravity="center_vertical"
+    android:checked="true"
+    android:clickable="false"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+
+    android:thumb="@drawable/switch_selector"
+    android:track="@drawable/switch_track"/>
 
 </LinearLayout>
+

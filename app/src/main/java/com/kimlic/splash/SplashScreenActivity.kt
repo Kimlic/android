@@ -1,4 +1,4 @@
-package com.kimlic.splash_screen
+package com.kimlic.splash
 
 import android.os.Bundle
 import com.kimlic.BaseActivity
@@ -10,7 +10,7 @@ class SplashScreenActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash_screen)
+        setContentView(R.layout.fragment_splash_screen)
 
         setupUI()
     }

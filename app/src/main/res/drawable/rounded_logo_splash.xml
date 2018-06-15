@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <item>
+    <layer-list>
+
+      <item android:gravity="center" android:height="768dp" android:width="768dp">
+        <shape android:shape="oval">
+          <solid android:color="@color/lightBlueRounded"/>
+        </shape>
+      </item>
+
+      <item android:gravity="center" android:height="512dp" android:width="512dp">
+        <shape android:shape="oval">
+          <solid android:color="@color/lightBlueRounded"/>
+        </shape>
+      </item>
+
+      <item android:gravity="center" android:height="308dp" android:width="308dp">
+        <shape android:shape="oval">
+          <solid android:color="@color/lightBlueRounded"/>
+        </shape>
+      </item>
+
+      <item
+        android:drawable="@drawable/ic_kimlic_logo_with_text"
+        android:gravity="center"
+        android:height="228dp"
+        android:width="168dp"
+        >
+      </item>
+
+    </layer-list>
+  </item>
+
+
+</selector>

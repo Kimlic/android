@@ -1,30 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="48dp"
-    android:layout_weight="10"
-    android:background="@color/bgLight"
-    android:clickable="true"
-    android:focusable="false"
-    android:orientation="horizontal">
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="48dp"
+  android:layout_weight="10"
+  android:background="@android:color/transparent"
+  android:clickable="true"
+  android:focusable="false"
+  android:orientation="horizontal"
+  tools:background="@color/redLight">
+
+  <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_weight="9"
+    android:layout_gravity="center"
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/titleTv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_weight="9"
-        android:textColor="@color/lightBlue"
-        android:textSize="@dimen/subtitle_text_size"
-        tools:text="Terms &amp; Conditions" />
+      android:id="@+id/titleTv"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="start"
+      android:textColor="@android:color/white"
+      android:textSize="@dimen/subtitle_text_size"
+      tools:text="Terms &amp; Conditions"/>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="0"
-        android:background="@drawable/ic_chevron_right_24dp"
-        android:contentDescription="@string/arrow" />
+    <TextView
+      android:id="@+id/summaryITv"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="start"
+      android:textColor="@android:color/white"
+      android:textSize="@dimen/small_text_size"
+      android:visibility="gone"
+      tools:text="Terms &amp; Conditions"/>
+
+
+  </LinearLayout>
+
+
+  <ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_weight="0"
+    android:layout_gravity="center_vertical"
+    android:background="@drawable/ic_chevron_right_24dp"
+    android:contentDescription="@string/arrow"/>
 
 </LinearLayout>

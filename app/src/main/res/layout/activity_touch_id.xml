@@ -4,60 +4,62 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lightBlue"
+    android:background="#0061C4"
     tools:context="com.kimlic.auth.TouchIdActivity">
 
     <LinearLayout
-        android:layout_width="@dimen/content_width"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+      android:id="@+id/linearLayout2"
+      android:layout_width="@dimen/content_width"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="24dp"
+      android:gravity="center"
+      android:orientation="vertical"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/titleTv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="16dp"
-            android:gravity="center"
-            android:text="@string/place_your_finger"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/title_text_size" />
+          android:id="@+id/titleTv"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_marginBottom="16dp"
+          android:gravity="center"
+          android:text="@string/place_your_finger"
+          android:textColor="@android:color/white"
+          android:textSize="@dimen/title_text_size"/>
 
         <TextView
-            android:id="@+id/subtitleTv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:gravity="center"
-            android:text="@string/lift_and_rest_the_edge_of_your_finger_on_the_home_button_repeatedly"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/subtitle_text_size" />
-
-        <ImageView
-
-            android:id="@+id/image"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/ic_baseline_fingerprint_light"
-            android:contentDescription="@string/fingerprint_logo" />
+          android:id="@+id/subtitleTv"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="16dp"
+          android:gravity="center"
+          android:text="@string/lift_and_rest_the_edge_of_your_finger_on_the_home_button_repeatedly"
+          android:textColor="@android:color/white"
+          android:textSize="@dimen/subtitle_text_size"/>
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/cancelBt"
-        android:layout_width="@dimen/content_width"
-        android:layout_height="48dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/button_rounded"
-        android:text="@string/cancel"
-        android:textColor="@color/lightBlue"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    <ImageView
+      android:id="@+id/image"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="28dp"
+      android:background="@drawable/rounded_logo_touch_id"
+      android:contentDescription="@string/fingerprint_logo"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/linearLayout2"/>
+
+    <TextView
+      android:id="@+id/cancelTv"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="16dp"
+      android:text="@string/cancel"
+      android:textColor="@android:color/white"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

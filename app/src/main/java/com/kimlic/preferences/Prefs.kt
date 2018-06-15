@@ -10,6 +10,8 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
     // Clear
 
     fun clear() {
+
+        authenticated = false
         passcode = ""
         useFingerprint = false
         isPasscodeEnabled = false
@@ -23,6 +25,10 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
     }
 
     // Preferences
+
+    var authenticated: Boolean
+        get() = getBoolean(AppConstants.auth.key)
+        set(value) = setBoolean(AppConstants.auth.key, value)
 
     var passcode: String
         get() = getString(AppConstants.passcode.key)

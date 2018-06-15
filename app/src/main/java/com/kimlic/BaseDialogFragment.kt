@@ -65,11 +65,18 @@ abstract class BaseDialogFragment : DialogFragment() {
         this.callback = callback
     }
 
+    fun getCallback() = this.callback
+
     // Private
 
     private fun setupUI() {
         isCancelable = false
-        val targetAnimation = view?.findViewById<ImageView>(R.id.image)
+        playAnimation()
+
+    }
+
+    open fun playAnimation() {
+        val targetAnimation = view?.findViewById<ImageView>(R.id.logoIv)
 
         YoYo
                 .with(Techniques.FadeIn)

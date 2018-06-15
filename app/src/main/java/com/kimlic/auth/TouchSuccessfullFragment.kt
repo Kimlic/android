@@ -9,6 +9,8 @@ import com.kimlic.R
 
 class TouchSuccessfullFragment : BaseDialogFragment() {
 
+    // Companion
+
     companion object {
         val FRAGMENT_KEY = this::class.java.simpleName
 
@@ -16,6 +18,8 @@ class TouchSuccessfullFragment : BaseDialogFragment() {
             return TouchSuccessfullFragment()
         }
     }
+
+    // Life
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_touch_successfull, container, false)

@@ -1,5 +1,6 @@
 package com.kimlic.passcode
 
+import android.app.Activity
 import android.graphics.drawable.Animatable
 import android.os.Bundle
 import android.os.Handler
@@ -179,6 +180,7 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
     private fun disable() {
         if (passcode == Prefs.passcode) {
             Prefs.isPasscodeEnabled = false
+            Prefs.isTouchEnabled = false
             finish()
         } else
             setupUITryAgain()
@@ -235,7 +237,9 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
         val fragment = PasscodeSuccessfullFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
-                PresentationManager.stage(this@PasscodeActivity)
+                setResult(Activity.RESULT_OK)
+                finish()
+                //PresentationManager.stage(this@PasscodeActivity)
             }
         })
         fragment.show(supportFragmentManager, PhoneSuccessfullFragment.FRAGMENT_KEY)

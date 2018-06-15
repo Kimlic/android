@@ -23,7 +23,7 @@ abstract class BasePopupFragment : DialogFragment(){
     * */
     override fun onResume() {
         super.onResume()
-        dialog.window.setBackgroundDrawableResource(R.drawable.rounded_fragment)
+        dialog.window.setBackgroundDrawableResource(R.drawable.rounded_background_fragment)
     }
 
     override fun onDetach() {

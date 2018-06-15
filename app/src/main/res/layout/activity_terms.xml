@@ -4,7 +4,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="#0061C4"
+  android:background="@drawable/background_fingerprint_texture"
   tools:context=".terms.TermsActivity">
 
   <LinearLayout
@@ -70,10 +70,10 @@
     android:id="@+id/acceptBt"
     android:layout_width="@dimen/content_width"
     android:layout_height="48dp"
-    android:layout_marginBottom="8dp"
+    android:layout_marginBottom="16dp"
     android:background="@drawable/button_rounded_green"
     android:gravity="center"
-    android:text="@string/photo"
+    android:text="@string/accept"
     android:textAllCaps="false"
     android:textColor="@android:color/white"
     android:textSize="@dimen/button_text_size"

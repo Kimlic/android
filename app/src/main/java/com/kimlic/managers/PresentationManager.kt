@@ -4,23 +4,22 @@ import android.app.Activity
 import android.content.Intent
 import android.support.v4.app.Fragment
 import com.kimlic.BaseActivity
-import com.kimlic.stage.StageActivity
 import com.kimlic.R
 import com.kimlic.SignupRecoveryActivity
-import com.kimlic.auth.LoginActivity
 import com.kimlic.auth.TouchIdActivity
+import com.kimlic.email.EmailActivity
+import com.kimlic.email.EmailVerifyActivity
 import com.kimlic.passcode.PasscodeActivity
 import com.kimlic.phone.PhoneActivity
 import com.kimlic.phone.PhoneVerifyActivity
 import com.kimlic.phrase.PhraseGenerateActivity
 import com.kimlic.phrase.PhraseVerifyActivity
-import com.kimlic.profile_details.EmailActivity
-import com.kimlic.profile_details.EmailVerifyActivity
 import com.kimlic.profile_details.NameActivity
 import com.kimlic.profile_details.UserProfileActivity
 import com.kimlic.recovery.AccountRecoveryActivity
 import com.kimlic.settings.SettingsActivity
-import com.kimlic.splash_screen.SplashScreenActivity
+import com.kimlic.splash.SplashScreenActivity
+import com.kimlic.stage.StageActivity
 import com.kimlic.terms.TermsActivity
 import com.kimlic.tutorial.TutorialActivity
 import com.kimlic.video_id_verification.DocumentVerifyActivity
@@ -63,6 +62,13 @@ object PresentationManager {
         present(presenter = presenter, className = PasscodeActivity::class.java, isStarting = false, params = params)
     }
 
+    fun login(presenter: BaseActivity) {
+        val params = HashMap<String, String>()
+        params.put("action", "unlock")
+        present(presenter = presenter, className = TouchIdActivity::class.java, isStarting = true, params = params)
+        //present(presenter = presenter, className = LoginActivity::class.java, isStarting = true)
+    }
+
     fun touchCreate(presenter: BaseActivity) {
         val params = HashMap<String, String>()
         params.put("action", "create")
@@ -90,10 +96,6 @@ object PresentationManager {
         params.put("action", "disable")
         params.put("content", "terms")
         present(presenter = presenter, className = PhraseVerifyActivity::class.java, params = params)
-    }
-
-    fun loginActivity(presenter: BaseActivity) {
-        present(presenter = presenter, className = LoginActivity::class.java, isStarting = true)
     }
 
     fun phoneNumber(presenter: BaseActivity) {
@@ -171,6 +173,11 @@ object PresentationManager {
         params.put("action", "review")
         params.put("content", "privacy")
         present(presenter = presenter, className = TermsActivity::class.java, isStarting = false, params = params)
+    }
+
+    fun about(presenter: BaseActivity) {
+        //present(presenter = presenter, className = ...)
+        presenter.showToast("About activity")
     }
 
     fun privacyAccept(presenter: BaseActivity) {

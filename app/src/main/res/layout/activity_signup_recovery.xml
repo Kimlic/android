@@ -4,19 +4,31 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="#027ad4"
+  android:background="@drawable/background_gradient_blue"
   tools:context=".SignupRecoveryActivity">
 
-  <ImageView
-    android:id="@+id/imageView"
-    android:layout_width="136dp"
-    android:layout_height="184dp"
-    android:layout_marginTop="32dp"
-    android:background="@drawable/ic_kimlic_logo_with_text"
-    android:contentDescription="@string/kimlic_logo"
+  <Space
+    android:id="@+id/spacer"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="124dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"/>
+
+  <ImageView
+    android:id="@+id/logoIv"
+    android:layout_width="wrap_content"
+    android:layout_height="1600dp"
+    android:background="@drawable/rounded_logo_signup_recovery"
+    android:contentDescription="@string/signup_recovery"
+    app:layout_constraintBottom_toBottomOf="@id/spacer"
+    app:layout_constraintBottom_toTopOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.0"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="@id/spacer"
+    app:layout_constraintVertical_bias="0.435"/>
 
   <Button
     android:id="@+id/createBt"

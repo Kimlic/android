@@ -2,10 +2,10 @@ package com.kimlic
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import com.kimlic.managers.PresentationManager
-import com.kimlic.splash_screen.SplashScreenActivity
-import com.kimlic.splash_screen.SplashScreenFragment
+import com.kimlic.preferences.Prefs
+import com.kimlic.splash.SplashScreenActivity
+import com.kimlic.splash.SplashScreenFragment
 import com.kimlic.utils.BaseCallback
 
 class MainActivity : BaseActivity() {
@@ -24,16 +24,14 @@ class MainActivity : BaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (resultCode) {
             SPLASH_SCREEN_REQUEST_CODE -> {
-                // check if user is authentocated
-                PresentationManager.signupRecovery(this)
+                // in case SplashActivity
             }
         }
     }
 
     private fun setupUI() {
-
         if (true) splshScreenFragment()
-        //PresentationManager.phoneNumber(this)
+        //PresentationManager.phoneNumberVerify(this)
     }
 
     private fun splshScreenActivity() {
@@ -45,8 +43,17 @@ class MainActivity : BaseActivity() {
         val fragment = SplashScreenFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
-                //PresentationManager.stage(this@MainActivity)
-                PresentationManager.signupRecovery(this@MainActivity)
+                if (Prefs.authenticated) {
+                    if (Prefs.isPasscodeEnabled) {
+                        if (Prefs.isTouchEnabled) {
+                            PresentationManager.login(this@MainActivity)
+                        } else {
+                            PresentationManager.passcodeUnlock(this@MainActivity)
+                        }
+                    } else
+                        PresentationManager.stage(this@MainActivity)
+                } else
+                    PresentationManager.signupRecovery(this@MainActivity)
             }
         })
         fragment.show(supportFragmentManager, SplashScreenFragment.FRAGMENT_KEY)

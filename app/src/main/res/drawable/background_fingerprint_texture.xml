@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+  <item>
+    <layer-list>
+      <item android:drawable="@drawable/background_gradient_blue"/>
+      <item android:drawable="@drawable/ic_finger_print_background_texture"/>
+    </layer-list>
+  </item>
+</selector>

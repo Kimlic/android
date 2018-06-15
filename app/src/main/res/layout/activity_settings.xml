@@ -1,67 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/bgLight">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@drawable/background_profile_settings">
 
-    <TextView
-        android:id="@+id/titleTV"
-        android:layout_width="@dimen/content_width"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:gravity="center"
-        android:text="@string/profile_settings"
-        android:textColor="@color/lightBlue"
-        android:textSize="@dimen/title_text_size"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+  <TextView
+    android:id="@+id/titleTV"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="24dp"
+    android:gravity="center"
+    android:text="@string/profile_settings"
+    android:textColor="@android:color/white"
+    android:textSize="@dimen/title_text_size"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler"
-        android:layout_width="@dimen/content_width"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:overScrollMode="never"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleTV" />
+  <android.support.v7.widget.RecyclerView
+    android:id="@+id/recycler"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="24dp"
+    android:overScrollMode="never"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/titleTV"/>
 
-    <Button
-        android:id="@+id/backBt"
-        android:layout_width="@dimen/menu_element_square_size"
-        android:layout_height="@dimen/menu_element_square_size"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/ic_chevron_left_36dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+  <Button
+    android:id="@+id/backBt"
+    android:layout_width="@dimen/menu_element_square_size"
+    android:layout_height="@dimen/menu_element_square_size"
+    android:layout_marginTop="24dp"
+    android:layout_marginStart="16dp"
+    android:background="@drawable/ic_chevron_left_36dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
 
-    <Button
-        android:id="@+id/signoutBt"
-        android:layout_width="@dimen/content_width"
-        android:layout_height="48dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/button_rounded"
-        android:text="@string/sign_out"
-        android:textColor="@color/lightBlue"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@id/deleteBt"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+  <Button
+    android:id="@+id/signoutBt"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="48dp"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/button_rounded_blue"
+    android:text="@string/sign_out"
+    android:textAllCaps="false"
+    android:textColor="@android:color/white"
+    android:textSize="16sp"
+    app:layout_constraintBottom_toTopOf="@id/deleteBt"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"/>
 
-    <Button
-        android:id="@+id/deleteBt"
-        android:layout_width="@dimen/content_width"
-        android:layout_height="48dp"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/button_rounded"
-        android:text="@string/delete_identity"
-        android:textColor="@color/lightBlue"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+  <Button
+    android:id="@+id/deleteBt"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="48dp"
+    android:layout_marginBottom="12dp"
+    android:background="@drawable/button_rounded_red"
+    android:text="@string/delete_identity"
+    android:textAllCaps="false"
+    android:textColor="@android:color/white"
+    android:textSize="16sp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

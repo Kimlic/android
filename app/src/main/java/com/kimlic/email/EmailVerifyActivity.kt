@@ -1,4 +1,4 @@
-package com.kimlic.profile_details
+package com.kimlic.email
 
 import android.os.Bundle
 import android.text.Editable

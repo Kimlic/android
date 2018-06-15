@@ -1,5 +1,6 @@
 package com.kimlic.terms
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -10,7 +11,6 @@ import android.webkit.WebViewClient
 import android.widget.ProgressBar
 import com.kimlic.BaseActivity
 import com.kimlic.R
-import com.kimlic.managers.PresentationManager
 import kotlinx.android.synthetic.main.activity_terms.*
 
 class TermsActivity : BaseActivity() {
@@ -62,7 +62,9 @@ class TermsActivity : BaseActivity() {
         }
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private fun fillWebView() {
+        webView.settings.javaScriptEnabled = true
         webView.webViewClient = object : WebViewClient() {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
@@ -71,6 +73,7 @@ class TermsActivity : BaseActivity() {
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
+                view!!.loadUrl("javascript:document.body.style.setProperty(\"color\", \"white\");")
                 progressBar.visibility = ProgressBar.INVISIBLE
             }
         }

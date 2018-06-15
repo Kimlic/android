@@ -11,6 +11,7 @@ import com.kimlic.BaseActivity
 import com.kimlic.BaseDialogFragment
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
+import com.kimlic.preferences.Prefs
 import com.kimlic.utils.BaseCallback
 import kotlinx.android.synthetic.main.activity_phone_verify.*
 
@@ -46,6 +47,7 @@ class PhoneVerifyActivity : BaseActivity() {
         verifyBt.setOnClickListener {
             if (pinEntered()) {
                 if (true) {// If pin is accepted
+                    Prefs.authenticated = true
                     successfull()
                 }
             } else showToast("Pin is not entered")

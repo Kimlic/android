@@ -28,7 +28,7 @@
 
     <activity
       android:label="Splash Screen"
-      android:name=".splash_screen.SplashScreenActivity"
+      android:name=".splash.SplashScreenActivity"
       android:screenOrientation="portrait"/>
 
     <activity
@@ -41,10 +41,10 @@
       android:name=".tutorial.TutorialActivity"
       android:screenOrientation="portrait"/>
 
-    <activity
-      android:label="Login"
-      android:name=".auth.LoginActivity"
-      android:screenOrientation="portrait"/>
+    <!--<activity-->
+      <!--android:label="Login"-->
+      <!--android:name=".auth.LoginActivity"-->
+      <!--android:screenOrientation="portrait"/>-->
 
     <activity
       android:label="Touch ID"
@@ -108,11 +108,11 @@
 
     <activity
       android:label="Email"
-      android:name=".profile_details.EmailActivity"/>
+      android:name=".email.EmailActivity"/>
 
     <activity
       android:label="Email verify"
-      android:name=".profile_details.EmailVerifyActivity"/>
+      android:name=".email.EmailVerifyActivity"/>
 
     <activity
       android:label="Document Verify"

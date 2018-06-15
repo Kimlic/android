@@ -4,30 +4,39 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="#2daaff">
+  android:background="@drawable/background_fingerprint_texture">
 
-  <ImageView
-    android:id="@+id/mailIv"
-    android:layout_width="116dp"
-    android:layout_height="116dp"
-    android:layout_marginTop="16dp"
-    android:background="@drawable/ic_white_email_success_icon"
-    android:contentDescription="@string/email"
-    android:elevation="@dimen/image_elevation"
+  <Space
+    android:id="@+id/spacer"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="124dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"/>
+
+  <ImageView
+    android:id="@+id/logoIv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_logo_email"
+    android:contentDescription="@string/phone_logo"
+    app:layout_constraintBottom_toBottomOf="@id/spacer"
+    app:layout_constraintBottom_toTopOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="@id/spacer"/>
 
   <LinearLayout
     android:id="@+id/llRootMiddle"
     android:layout_width="@dimen/content_width"
     android:layout_height="wrap_content"
-    android:layout_marginTop="36dp"
+    android:layout_marginTop="8dp"
     android:orientation="vertical"
     app:layout_constraintBottom_toTopOf="@id/saveBt"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/mailIv">
+    app:layout_constraintTop_toBottomOf="@id/logoIv">
 
     <TextView
       android:layout_width="match_parent"

@@ -9,10 +9,20 @@
   <color name="bgAccentDark">#a1abb3</color>
 
   <color name="darkRed">#b71c1c</color>
+  <color name="redLight">#FE1212</color>
+
   <color name="lightBlue">#9bb5de</color>
 
 
   <color name="lightBlueStroke">#4bc1ff</color>
+
+  <!--Rounded logo color-->
+  <color name="lightBlueRounded">#3c0057c2</color>
+  <!--Gradient colors-->
+  <color name="startEndBlue">#f3005ab7</color>
+  <color name="centerBlue">#0785db</color>
+
+
   <color name="darkBlue">#1576D3</color>
 
 
