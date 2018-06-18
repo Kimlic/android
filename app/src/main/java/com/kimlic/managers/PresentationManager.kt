@@ -6,16 +6,16 @@ import android.support.v4.app.Fragment
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.SignupRecoveryActivity
+import com.kimlic.address.AddressActivity
 import com.kimlic.auth.TouchIdActivity
 import com.kimlic.email.EmailActivity
 import com.kimlic.email.EmailVerifyActivity
+import com.kimlic.name.NameActivity
 import com.kimlic.passcode.PasscodeActivity
 import com.kimlic.phone.PhoneActivity
 import com.kimlic.phone.PhoneVerifyActivity
 import com.kimlic.phrase.PhraseGenerateActivity
 import com.kimlic.phrase.PhraseVerifyActivity
-import com.kimlic.profile_details.NameActivity
-import com.kimlic.profile_details.UserProfileActivity
 import com.kimlic.recovery.AccountRecoveryActivity
 import com.kimlic.settings.SettingsActivity
 import com.kimlic.splash.SplashScreenActivity
@@ -142,9 +142,9 @@ object PresentationManager {
     }
 
     // Not used?
-    fun userProfile(presenter: BaseActivity) {
-        present(presenter = presenter, className = UserProfileActivity::class.java)
-    }
+//    fun userProfile(presenter: BaseActivity) {
+//        present(presenter = presenter, className = UserProfileActivity::class.java)
+//    }
 
     fun settings(presenter: BaseActivity) {
         present(presenter = presenter, className = SettingsActivity::class.java, isStarting = false)
@@ -180,8 +180,8 @@ object PresentationManager {
         presenter.showToast("About activity")
     }
 
-    fun privacyAccept(presenter: BaseActivity) {
-
+    fun address(presenter: BaseActivity){
+        present(presenter = presenter, className = AddressActivity::class.java, isStarting = false)
     }
 
     // private

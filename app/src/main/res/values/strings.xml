@@ -1,5 +1,7 @@
 <resources>
   <string name="app_name">Kimlic</string>
+  <string name="google_maps_API_key">AIzaSyDSjiySTrfkIkTwZhim9aroVIb7r5_CUlU</string>
+
   <string name="kimlic_logo">Kimlic Logo</string>
   <string name="create_your_passcode">Create your Passcode</string>
   <string name="textplaceholder">...</string>
@@ -159,5 +161,24 @@
   <string name="touch_id_for_quot_kimlic_quot">touch id for \"Kimlic\"</string>
   <string name="about_kimlic">About Kimlic</string>
   <string name="signup_recovery">Signup recovery</string>
+  <string name="top_texture">Top texture</string>
+  <string name="updating">Updating…</string>
+  <string name="your_information_updating_on_kimlic_blockchain">Your information updating on \n  Kimlic Blockchain</string>
+  <string name="verify_your_number_">Verify Your Number!</string>
+  <string name="change_number_">Change Number</string>
+  <string name="number_is_not_verified">555 458 39 40 is not verified</string>
+  <string name="send_verification_code">Send Verification Code</string>
+  <string name="add_your_email">Add your email</string>
+  <string name="add_your_full_name">Add your full name</string>
+  <string name="add_your_phone">Add your phone</string>
+  <string name="verify_your_id">Verify your ID</string>
+  <string name="addrerss_logo">Addrerss logo</string>
+  <string name="your_address">Your Address</string>
+  <string name="add_your_address">Add your address</string>
+  <string name="submit">Submit</string>
+  <string name="search_logo">Search logo</string>
+  <string name="add_your_name">Add your name</string>
+  <string name="id_assurance">ID assurance 15%</string>
+
 
 </resources>

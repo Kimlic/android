@@ -19,11 +19,12 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="height" value="402" />
-                            <entry key="outputName" value="ic_touch_id_success_icon" />
+                            <entry key="autoMirrored" value="true" />
+                            <entry key="height" value="207" />
+                            <entry key="outputName" value="ic_white_location_icon_sml" />
                             <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="I:\My Documents\K I M L I C K\App_UI_SVG_assets\touch_ID_success_icon.svg" />
-                            <entry key="width" value="402" />
+                            <entry key="sourceFile" value="I:\My Documents\K I M L I C K\App_UI_SVG_assets\white_location_icon_sml.svg" />
+                            <entry key="width" value="155" />
                           </map>
                         </option>
                       </PersistentState>

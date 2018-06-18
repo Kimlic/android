@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.kimlic.BasePopupFragment
 import com.kimlic.R
+import com.kimlic.managers.PresentationManager
 import com.kimlic.utils.BaseCallback
+import kotlinx.android.synthetic.main.touch_id_fragment.*
 
 class TouchIDFragment : BasePopupFragment() {
 
@@ -47,5 +49,6 @@ class TouchIDFragment : BasePopupFragment() {
 
     private fun setupUI() {
         isCancelable = false
+        cancelBt.setOnClickListener{dismiss(); PresentationManager.passcodeUnlock(activity!!)}
     }
 }

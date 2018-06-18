@@ -1,4 +1,4 @@
-package com.kimlic.profile_details
+package com.kimlic.name
 
 import android.os.Bundle
 import android.text.InputFilter

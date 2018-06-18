@@ -15,7 +15,6 @@ class StageActivity : BaseActivity() {
     private lateinit var userStageFragment: UserStageFragment
     private lateinit var accountsStageFragment: AccountsStageFragment
 
-
     // Life
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +27,7 @@ class StageActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         risks()
+        //phoneVirify()
     }
 
     override fun onBackPressed() {
@@ -71,6 +71,11 @@ class StageActivity : BaseActivity() {
             val risksFragment = RisksFragment.newInstance(bundle)
             risksFragment.show(supportFragmentManager, RisksFragment.FRAGMENT_KEY)
         }
+    }
+
+    private fun phoneVirify(){
+        val phoneVerify = PhoneVerifyFragment.newInstance()
+        phoneVerify.show(supportFragmentManager, PhoneVerifyFragment.FRAGMENT_KEY)
     }
 
     // Helpers

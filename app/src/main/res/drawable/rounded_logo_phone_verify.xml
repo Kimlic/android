@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <item>
+    <layer-list>
+      <item android:gravity="top" android:height="@dimen/circle_one_medium" android:width="@dimen/circle_one_medium">
+        <shape android:shape="oval">
+          <solid android:color="@color/grayLightRounded"/>
+        </shape>
+      </item>
+
+      <item android:gravity="center" android:height="@dimen/circle_two_medium" android:width="@dimen/circle_two_medium">
+        <shape android:shape="oval">
+          <solid android:color="@color/grayLightRounded"/>
+        </shape>
+      </item>
+
+      <item android:gravity="center" android:height="@dimen/circle_three_medium" android:width="@dimen/circle_three_medium">
+        <shape android:shape="oval">
+          <solid android:color="@color/grayLightRounded"/>
+        </shape>
+      </item>
+
+      <item android:gravity="center" android:height="@dimen/circle_four_medium" android:width="@dimen/circle_four_medium">
+        <shape android:shape="oval">
+          <solid android:color="@color/grayLightRounded"/>
+        </shape>
+      </item>
+
+      <item
+        android:drawable="@drawable/ic_phone_warning_icon"
+        android:gravity="center"
+        android:height="@dimen/logo_size_large"
+        android:width="@dimen/logo_size_large">
+      </item>
+
+    </layer-list>
+  </item>
+
+
+</selector>

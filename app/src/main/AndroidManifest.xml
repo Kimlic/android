@@ -2,10 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="com.kimlic">
 
-  <uses-feature
-    android:name="android.permission.USE_FINGERPRINT"
-    android:required="true"/>
+  <uses-feature android:name="android.permission.USE_FINGERPRINT" android:required="true"/>
 
+  <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
   <uses-permission android:name="android.permission.CAMERA"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -18,6 +17,15 @@
     android:roundIcon="@mipmap/ic_launcher_round"
     android:supportsRtl="true"
     android:theme="@style/AppTheme">
+
+    <meta-data
+      android:name="com.google.android.geo.API_KEY"
+      android:value="AIzaSyDSjiySTrfkIkTwZhim9aroVIb7r5_CUlU"/>
+
+    <meta-data
+      android:name="com.google.android.gms.version"
+      android:value="@integer/google_play_services_version" />
+
     <activity android:name=".MainActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
@@ -41,11 +49,6 @@
       android:name=".tutorial.TutorialActivity"
       android:screenOrientation="portrait"/>
 
-    <!--<activity-->
-      <!--android:label="Login"-->
-      <!--android:name=".auth.LoginActivity"-->
-      <!--android:screenOrientation="portrait"/>-->
-
     <activity
       android:label="Touch ID"
       android:name=".auth.TouchIdActivity"
@@ -60,10 +63,6 @@
       android:label="Mnemonic Phrase"
       android:name=".phrase.PhraseGenerateActivity"
       android:screenOrientation="portrait"/>
-
-    <activity
-      android:label="UserProfile"
-      android:name=".profile_details.UserProfileActivity"/>
 
     <activity
       android:label="Video identification"
@@ -100,7 +99,7 @@
 
     <activity
       android:label="Name"
-      android:name=".profile_details.NameActivity"/>
+      android:name=".name.NameActivity"/>
 
     <activity
       android:label="Verify ID document"
@@ -118,6 +117,8 @@
       android:label="Document Verify"
       android:name=".video_id_verification.DocumentVerifyActivity"/>
 
-  </application>
+    <activity
+      android:name=".address.AddressActivity"/>
 
+  </application>
 </manifest>

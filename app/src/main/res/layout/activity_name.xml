@@ -5,7 +5,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="@drawable/background_fingerprint_texture"
-  tools:context="com.kimlic.profile_details.NameActivity">
+  tools:context="com.kimlic.name.NameActivity">
 
   <Space
     android:id="@+id/spacer"

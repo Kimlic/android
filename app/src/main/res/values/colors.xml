@@ -13,6 +13,9 @@
 
   <color name="lightBlue">#9bb5de</color>
 
+  <color name="transparent">#00ffffff</color>
+
+
 
   <color name="lightBlueStroke">#4bc1ff</color>
 
@@ -21,6 +24,11 @@
   <!--Gradient colors-->
   <color name="startEndBlue">#f3005ab7</color>
   <color name="centerBlue">#0785db</color>
+
+  <!--Rounded logo risks color-->
+  <color name="grayLightRounded">#5dd7d7d7</color>
+
+
 
 
   <color name="darkBlue">#1576D3</color>
