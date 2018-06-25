@@ -5,6 +5,7 @@ import android.text.Editable
 import android.view.KeyEvent
 import android.view.View
 import android.widget.EditText
+import android.widget.TextView
 import butterknife.BindViews
 import butterknife.ButterKnife
 import com.kimlic.BaseActivity
@@ -35,20 +36,34 @@ class EmailVerifyActivity : BaseActivity() {
         setupUI()
     }
 
+    override fun onResume() {
+        super.onResume()
+        showSoftKeyboard(digit1Et)
+    }
+
     // Private
 
     private fun setupUI() {
         digitsList[currentHolder].requestFocus()
         verifyBt.setOnClickListener {
-            if (pinEntered())
-                successfull()
-            else
-                showToast("Pins are NOT entered")
+            managePins()
         }
 
         cancelTv.setOnClickListener { showToast("change Email") }
         setupDigitListner()
-        showSoftKeyboard(digit1Et)
+
+        digitsList[3].setOnEditorActionListener(object : TextView.OnEditorActionListener {
+            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+                if (event!!.keyCode == KeyEvent.KEYCODE_ENTER) {
+                    managePins(); hideKeyboard(); return true
+                }
+                return false
+            }
+        })
+    }
+
+    private fun managePins() {
+        if (pinEntered()) successfull() else showToast("Pins are NOT entered")
     }
 
     private fun pinEntered(): Boolean {

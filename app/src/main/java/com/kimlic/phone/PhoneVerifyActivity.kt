@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.text.Editable
 import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.TextView
 import butterknife.BindViews
 import butterknife.ButterKnife
 import com.kimlic.BaseActivity
@@ -45,16 +47,30 @@ class PhoneVerifyActivity : BaseActivity() {
 
     private fun setupUI() {
         verifyBt.setOnClickListener {
-            if (pinEntered()) {
-                if (true) {// If pin is accepted
-                    Prefs.authenticated = true
-                    successfull()
-                }
-            } else showToast("Pin is not entered")
+            managePin()
         }
         cancelTv.setOnClickListener { PresentationManager.phoneNumber(this) }
         showSoftKeyboard(digit1Et)
         setupDigitListner()
+
+        digitsList[3].setOnEditorActionListener(object : TextView.OnEditorActionListener {
+            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+
+                if (event!!.keyCode == KeyEvent.KEYCODE_ENTER) {
+                    managePin(); hideKeyboard(); return true
+                }
+                return false
+            }
+        })
+    }
+
+    private fun managePin() {
+        if (pinEntered()) {
+            if (true) {// If pin is accepted
+                Prefs.authenticated = true
+                successfull()
+            }
+        } else showToast("Pin is not entered")
     }
 
     private fun pinEntered(): Boolean {

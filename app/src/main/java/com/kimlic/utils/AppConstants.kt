@@ -13,6 +13,9 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
     isRecoveryEnabled("IS_RECOVERY_ENABLED"),
     isRecoveryOffered("IS_RECOVERY_OFFERED"),
 
+    // UserPortraitPhoto
+    isUserPhotoTaken("IS_USER_PHOTO_TAKEN"),
+
     terms("TERMS"),
     privacy("PRIVACY"),
 
@@ -28,5 +31,9 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
     // Settings type
 
     settingSwitch("SETTING_SWITCH", 1),
-    settingIntent("SETTING_INFO", 2)
+    settingIntent("SETTING_INFO", 2),
+
+    // User photo files
+
+    userPortraitFileName("portrait.jpg")
 }

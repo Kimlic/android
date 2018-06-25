@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.text.Editable
+import android.view.KeyEvent
+import android.widget.TextView
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
@@ -47,7 +49,7 @@ class PhoneActivity : BaseActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        PresentationManager.signupRecovery(this)
+        PresentationManager.signupRecovery(this)// finish?????
     }
 
     // Private
@@ -77,14 +79,29 @@ class PhoneActivity : BaseActivity() {
         })
         phoneEt.setOnClickListener { phoneEt.setSelection(phoneEt.text.length) }
 
+        phoneEt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
+            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+                if (event!!.keyCode == KeyEvent.KEYCODE_ENTER) {
+                    managePhone(); hideKeyboard(); return true
+                }
+                return false
+            }
+        })
+
         nextBt.setOnClickListener {
-            if (isPhoneValid()) {
-                phoneEt.setError(null)
-                // TODO use phone number
-                PresentationManager.phoneNumberVerify(this@PhoneActivity)
-            } else
-                phoneEt.setError(getString(R.string.phone_is_not_valid))
+            managePhone()
         }
+
+
+    }
+
+    private fun managePhone() {
+        if (isPhoneValid()) {
+            phoneEt.setError(null)
+            // TODO use phone number
+            PresentationManager.phoneNumberVerify(this@PhoneActivity)
+        } else
+            phoneEt.setError(getString(R.string.phone_is_not_valid))
     }
 
     private fun isPhoneValid(): Boolean {

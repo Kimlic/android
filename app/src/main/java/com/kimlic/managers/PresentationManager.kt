@@ -141,11 +141,6 @@ object PresentationManager {
         present(presenter = presenter, className = PhraseGenerateActivity::class.java)
     }
 
-    // Not used?
-//    fun userProfile(presenter: BaseActivity) {
-//        present(presenter = presenter, className = UserProfileActivity::class.java)
-//    }
-
     fun settings(presenter: BaseActivity) {
         present(presenter = presenter, className = SettingsActivity::class.java, isStarting = false)
     }

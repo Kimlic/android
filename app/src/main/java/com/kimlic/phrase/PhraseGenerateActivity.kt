@@ -57,6 +57,7 @@ class PhraseGenerateActivity : BaseActivity() {
                 }
             }
         }
+        cancelTv.setOnClickListener{finish()}
     }
 
     private fun showPopup(title: String = "", message: String) {

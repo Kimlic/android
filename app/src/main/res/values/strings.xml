@@ -78,8 +78,8 @@
   <string name="your_email_have_been_verified">Your email have been verified.</string>
   <string name="email">Email</string>
   <string name="photo">Photo</string>
-  <string name="create_new_identity">Create new Identity</string>
-  <string name="recover_my_identity">Recover My Identity</string>
+  <string name="create_new_identity">Create new identity</string>
+  <string name="recover_my_identity">Recover my identity</string>
   <string name="accept">Accept</string>
   <string name="terms_amp_conditions"><![CDATA[Terms & Conditions]]></string>
   <string name="last_modified_december_5_2017">Last modified December 5, 2017</string>
@@ -179,6 +179,8 @@
   <string name="search_logo">Search logo</string>
   <string name="add_your_name">Add your name</string>
   <string name="id_assurance">ID assurance 15%</string>
+  <string name="photo_camera_image">Photo camera Image</string>
+  <string name="add_your_photo">Add Your Photo</string>
 
 
 </resources>

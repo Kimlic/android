@@ -25,8 +25,8 @@
       <item
         android:drawable="@drawable/ic_kimlic_logo_with_text"
         android:gravity="center"
-        android:height="228dp"
-        android:width="168dp"
+        android:height="200dp"
+        android:width="148dp"
         >
       </item>
 

@@ -2,7 +2,9 @@ package com.kimlic.name
 
 import android.os.Bundle
 import android.text.InputFilter
+import android.view.KeyEvent
 import android.widget.EditText
+import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 
@@ -32,14 +34,25 @@ class NameActivity : BaseActivity() {
         setupUI()
     }
 
+    override fun onResume() {
+        super.onResume()
+        showSoftKeyboard(nameEt)
+    }
+
     // Private
 
     private fun setupUI() {
         saveBt.setOnClickListener {
-            if (validFields())
-            // Process fielsd
-                finish()
+            manageInput()
         }
+        nameEt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
+            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+                if (event!!.keyCode == KeyEvent.KEYCODE_ENTER) {
+                    manageInput(); hideKeyboard(); return true
+                }
+                return false
+            }
+        })
 
         cancelTv.setOnClickListener { finish() }
         firstNameField.filters = arrayOf(filter(), lengthFilter(20))
@@ -47,6 +60,12 @@ class NameActivity : BaseActivity() {
     }
 
     // Filters
+
+    private fun manageInput() {
+        if (validFields())
+        // Process fielsd
+            finish()
+    }
 
     private fun validFields(): Boolean {
         var noError = true

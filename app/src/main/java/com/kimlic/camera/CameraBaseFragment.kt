@@ -86,7 +86,6 @@ open class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
     }
 
     private fun takePicture() {
-        showToast("captureBt pressed")
         camera.takePicture(null, null, null, this)
     }
 
@@ -143,7 +142,7 @@ open class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
         // send file URI to activity
 
         val fos: FileOutputStream?
-        val filepath = "morning.jpg"
+        val filepath = AppConstants.userPortraitFileName.key // temporary
         try {
             fos = KimlicApp.applicationContext().openFileOutput(filepath, Context.MODE_PRIVATE)
             fos.write(data)

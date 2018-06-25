@@ -10,7 +10,6 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
     // Clear
 
     fun clear() {
-
         authenticated = false
         passcode = ""
         useFingerprint = false
@@ -22,6 +21,7 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
         isTutorialShown = false
         isPasscodeOffered = false
         isRecoveryOffered = false
+        isUserPhotoTaken = false
     }
 
     // Preferences
@@ -54,7 +54,6 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
         get() = getBoolean(AppConstants.isRecoveryOffered.key)
         set(value) = setBoolean(AppConstants.isRecoveryOffered.key, value)
 
-
     var termsAccepted: Boolean
         get() = getBoolean(AppConstants.terms.key)
         set(value) = setBoolean(AppConstants.terms.key, value)
@@ -70,4 +69,10 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
     var useFingerprint: Boolean
         get() = getBoolean(AppConstants.fingerprint.key)
         set(value) = setBoolean(AppConstants.fingerprint.key, value)
+
+    // User photo
+    var isUserPhotoTaken: Boolean
+        get() = getBoolean(AppConstants.isUserPhotoTaken.key)
+        set(value) = setBoolean(AppConstants.isUserPhotoTaken.key, value)
+
 }

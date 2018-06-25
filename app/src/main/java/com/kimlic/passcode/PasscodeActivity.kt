@@ -3,6 +3,7 @@ package com.kimlic.passcode
 import android.app.Activity
 import android.graphics.drawable.Animatable
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
 import android.view.ContextThemeWrapper
 import android.view.View
@@ -212,6 +213,15 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
 
         passcodeDeleteBt.visibility = if (passLength > 0) View.VISIBLE else View.INVISIBLE
         passcodeOkBt.isEnabled = this.passcode.length == 4
+
+        if (this.passcode.length == 4)
+            object : CountDownTimer(250, 250) {
+                override fun onFinish() {
+                    usePasscode(action)
+                }
+
+                override fun onTick(millisUntilFinished: Long) {}
+            }
     }
 
     // Text switcher

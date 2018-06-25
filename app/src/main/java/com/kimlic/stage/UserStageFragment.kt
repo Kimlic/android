@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import com.kimlic.BaseFragment
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
+import com.kimlic.preferences.Prefs
+import com.kimlic.utils.AppConstants
 import kotlinx.android.synthetic.main.fragment_stage_user.*
 
 class UserStageFragment : BaseFragment() {
@@ -14,6 +16,7 @@ class UserStageFragment : BaseFragment() {
     // Variables
 
     private lateinit var uaserName: String
+
     // Companion
 
     companion object {
@@ -37,12 +40,36 @@ class UserStageFragment : BaseFragment() {
         setupUI()
     }
 
+    override fun onResume() {
+        super.onResume()
+        userPhotoIv.invalidate()
+    }
+
     // Private
 
     private fun setupUI() {
+        setUserPhoto()
         setupListners()
         setupFielsds()
         setupTitles()
+        setProgress(35)
+    }
+
+    private fun setUserPhoto() {
+        if (!Prefs.isUserPhotoTaken) {
+            takePhotoLl.visibility = View.INVISIBLE
+        }
+
+        (userPhotoIv as UserPhotoView).showUserPhoto(AppConstants.userPortraitFileName.key)
+
+    }
+
+    private fun setProgress(progress: Int = 0) {
+        (userPhotoIv as UserPhotoView).setProgress(progress)
+    }
+
+    private fun setBlueScreen() {
+        (userPhotoIv as UserPhotoView).showBlueScreen()
     }
 
     private fun setupListners() {
@@ -52,6 +79,16 @@ class UserStageFragment : BaseFragment() {
         emailItem.setOnClickListener { PresentationManager.email(activity!!) }
         idItem.setOnClickListener { PresentationManager.documentChooseVerify(activity!!) }
         addressItem.setOnClickListener { showToast("addres item is clicked"); PresentationManager.address(activity!!) }
+
+        titleTv.setOnClickListener { setProgress(90); setUserPhoto() }
+        subtitleTv.setOnClickListener { setProgress(20); setBlueScreen() }
+
+
+        takePhotoLl.setOnClickListener {
+            // Todo creare call to photo
+            it.visibility = View.INVISIBLE
+            showToast("TakePortrait photo is clicked")
+        }
     }
 
     // Mocks
@@ -100,6 +137,7 @@ class UserStageFragment : BaseFragment() {
         addressArrow.background = resources.getDrawable(if (address.equals("")) Icons.ARROW_BLUE.icon else Icons.ARROW_WHITE.icon, null)
         addressTv.text = if (address.equals("")) getString(R.string.add_your_address) else address
     }
+
 }
 
 internal enum class Icons(val icon: Int) {
