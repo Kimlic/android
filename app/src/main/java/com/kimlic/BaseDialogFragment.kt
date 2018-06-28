@@ -1,6 +1,5 @@
 package com.kimlic
 
-import android.animation.Animator
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
@@ -11,7 +10,9 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.ImageView
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
+import com.kimlic.utils.AppDuration
 import com.kimlic.utils.BaseCallback
+import kotlinx.android.synthetic.main.fragment_phone_successfull.*
 
 
 abstract class BaseDialogFragment : DialogFragment() {
@@ -19,7 +20,7 @@ abstract class BaseDialogFragment : DialogFragment() {
     // Constants
 
     private val DEFAULT_ANIMATION_DURATION = 2000L
-    private val DEFSULT_ANIMATION_REPEAT = 1
+    private val DEFAULT_ANIMATION_REPEAT = 1
 
     // Variables
 
@@ -76,26 +77,33 @@ abstract class BaseDialogFragment : DialogFragment() {
     }
 
     open fun playAnimation() {
-        val targetAnimation = view?.findViewById<ImageView>(R.id.logoIv)
+        YoYo
+                .with(Techniques.FadeOut)
+                .duration(AppDuration.SUCCESSFULL_DURATION.duration)
+                .onEnd { secondAnimation() }
+                .playOn(logoRoundedIv)
 
+        logoAnimation()
+    }
+
+    // Private
+
+    private fun secondAnimation() {
         YoYo
                 .with(Techniques.FadeIn)
-                .repeat(DEFSULT_ANIMATION_REPEAT)
-                .duration(DEFAULT_ANIMATION_DURATION)
-                .interpolate(AccelerateDecelerateInterpolator())
+                .duration(AppDuration.SUCCESSFULL_DURATION.duration)
+                .onEnd { getCallback().callback() }
+                .playOn(logoRoundedIv)
+    }
+
+    private fun logoAnimation() {
+        YoYo
+                .with(Techniques.Shake)
+                .duration(AppDuration.LOGO_DURATION.duration)
+                .repeat(YoYo.INFINITE)
                 .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
-                .withListener(object : Animator.AnimatorListener {
-                    override fun onAnimationRepeat(animation: Animator?) {}
-
-                    override fun onAnimationEnd(animation: Animator?) {
-                        callback.callback()
-                    }
-
-                    override fun onAnimationCancel(animation: Animator?) {}
-
-                    override fun onAnimationStart(animation: Animator?) {}
-                })
-                .playOn(targetAnimation)
+                .interpolate(AccelerateDecelerateInterpolator())
+                .playOn(logoIv)
     }
 
 }

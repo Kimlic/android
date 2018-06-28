@@ -85,7 +85,7 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
         }
 
         passcodeDeleteBt.setOnClickListener { deletePasscode() }
-        cancelTv.setOnClickListener { finish(); showToast("Cancel is pressed"); }
+        cancelTv.setOnClickListener { finish() }
         passcodeOkBt.setOnClickListener { usePasscode(action) }
     }
 
@@ -254,6 +254,6 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
                 //PresentationManager.stage(this@PasscodeActivity)
             }
         })
-        fragment.show(supportFragmentManager, PhoneSuccessfullFragment.FRAGMENT_KEY)
+        fragment.show(supportFragmentManager, PasscodeSuccessfullFragment.FRAGMENT_KEY)
     }
 }

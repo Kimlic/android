@@ -1,5 +1,6 @@
 package com.kimlic.name
 
+import android.app.Activity
 import android.os.Bundle
 import android.text.InputFilter
 import android.view.KeyEvent
@@ -11,6 +12,9 @@ import butterknife.ButterKnife
 
 import com.kimlic.BaseActivity
 import com.kimlic.R
+import com.kimlic.passcode.PasscodeSuccessfullFragment
+import com.kimlic.phone.PhoneSuccessfullFragment
+import com.kimlic.utils.BaseCallback
 
 import kotlinx.android.synthetic.main.activity_name.*
 
@@ -68,7 +72,17 @@ class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
     private fun manageInput() {
         if (validFields())
         // Process fielsd
-            finish()
+            succesfull()
+    }
+
+    private fun succesfull() {
+        val fragment = NameSuccessfullFragment.newInstance()
+        fragment.setCallback(object : BaseCallback {
+            override fun callback() {
+                finish()
+            }
+        })
+        fragment.show(supportFragmentManager, NameSuccessfullFragment.FRAGMENT_KEY.name)
     }
 
     private fun validFields(): Boolean {

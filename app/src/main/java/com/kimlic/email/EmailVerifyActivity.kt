@@ -45,11 +45,9 @@ class EmailVerifyActivity : BaseActivity() {
 
     private fun setupUI() {
         digitsList[currentHolder].requestFocus()
-        verifyBt.setOnClickListener {
-            managePins()
-        }
+        verifyBt.setOnClickListener { managePins() }
 
-        cancelTv.setOnClickListener { showToast("change Email") }
+        cancelTv.setOnClickListener { finish(); showToast("change Email") }
         setupDigitListner()
 
         digitsList[3].setOnEditorActionListener(object : TextView.OnEditorActionListener {

@@ -8,8 +8,8 @@
     android:id="@+id/imageView2"
     android:layout_width="64dp"
     android:layout_height="64dp"
-    android:layout_marginTop="32dp"
-    android:background="@drawable/ic_touch_id_success_icon"
+    android:layout_marginTop="8dp"
+    android:background="@drawable/ic_fingerprint_red"
     android:contentDescription="@string/secureid"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
@@ -19,7 +19,7 @@
     android:id="@+id/titleTv"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="16dp"
+    android:layout_marginTop="8dp"
     android:text="@string/touch_id_for_quot_kimlic_quot"
     android:textColor="@color/grayDark"
     android:textSize="@dimen/title_text_size"
@@ -44,7 +44,7 @@
     android:id="@+id/rootLower"
     android:layout_width="@dimen/popup_fragment_width"
     android:layout_height="wrap_content"
-    android:layout_marginTop="24dp"
+    android:layout_marginTop="8dp"
     android:orientation="vertical"
     app:layout_constraintTop_toBottomOf="@id/subtitleTv">
 

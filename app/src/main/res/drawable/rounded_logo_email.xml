@@ -28,7 +28,7 @@
       </item>
 
       <item
-        android:drawable="@drawable/ic_white_email_success_icon"
+        android:drawable="@drawable/ic_white_email_icon_sml"
         android:gravity="center"
         android:height="@dimen/logo_size"
         android:width="@dimen/logo_size">

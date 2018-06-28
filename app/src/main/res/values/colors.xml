@@ -20,7 +20,14 @@
   <color name="lightBlueStroke">#4bc1ff</color>
 
   <!--Rounded logo color-->
-  <color name="lightBlueRounded">#2d0064c2</color>
+  <color name="lightBlueRounded">#3d0064c2</color>
+
+  <!--Rounded background successfull fragment-->
+  <color name="lightBlueSuccessfull">#6f055bae</color>
+
+  <!--tutorials Background-->
+  <color name="blueCloudBackground">#0273D0</color>
+
   <!--Gradient colors-->
   <color name="startEndBlue">#f30068b7</color>
   <color name="centerBlue">#0d9dff</color>

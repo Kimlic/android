@@ -28,7 +28,7 @@
       </item>
 
       <item
-        android:drawable="@drawable/ic_white_name_icon_sml"
+        android:drawable="@drawable/ic_white_name_icon"
         android:gravity="center"
         android:height="72dp"
         android:width="56dp">

@@ -28,7 +28,7 @@
       </item>
 
       <item
-        android:drawable="@drawable/ic_white_phone_success_icon"
+        android:drawable="@drawable/ic_white_phone_icon_small"
         android:gravity="center"
         android:height="@dimen/logo_size"
         android:width="@dimen/logo_size">

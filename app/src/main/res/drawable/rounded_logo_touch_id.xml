@@ -28,7 +28,7 @@
       </item>
 
       <item
-        android:drawable="@drawable/ic_touch_id_success_icon"
+        android:drawable="@drawable/ic_fingerprint_white"
         android:gravity="center"
         android:height="@dimen/logo_size_large"
         android:width="@dimen/logo_size_large">

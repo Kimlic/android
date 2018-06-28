@@ -68,13 +68,13 @@
   <string name="the_back_side_your_drivers_license">the Back side your Drivers License</string>
   <string name="congratulations">Congratulations</string>
   <string name="congratulations_">Congratulations !</string>
-  <string name="your_decentralized_identity_successfully_created">Your decentralized identity successfully created</string>
+  <string name="your_phone_number_have_been_verified">Your Phone Number have \n been verified</string>
   <string name="lock">Lock</string>
   <string name="vetify">Vetify</string>
   <string name="verify">Verify</string>
   <string name="verification_code">Verification Code</string>
   <string name="your_id_secured">Your ID Secured !</string>
-  <string name="your_accont_passcode_created_successfully">Your account passcode created successfully</string>
+  <string name="your_account_passcode_is_created">Your account Passcode is created.</string>
   <string name="your_email_have_been_verified">Your email have been verified.</string>
   <string name="email">Email</string>
   <string name="photo">Photo</string>
@@ -120,7 +120,7 @@
   <string name="privacy_policy">Privacy Policy</string>
   <string name="change_passcode">Change passcode</string>
   <string name="touch_id">Touch ID</string>
-  <string name="your_touch_id_enabled">Your Touch ID Enabled</string>
+  <string name="your_touch_id_enabled">Your Touch ID is Enabled</string>
   <string name="your_mnemonic_passphrase_matched">Your mnemonic passphrase matched</string>
   <string name="go_back">Go Back</string>
   <string name="copy_to_buffer">Copy to buffer</string>
@@ -184,6 +184,13 @@
   <string name="rounded_background">Rounded Background</string>
   <string name="all_your_credentials_stored_in_private_blockch">All your credentials stored \n in private blockchain</string>
   <string name="forget_your_password_use_kimlic_connect_to_login">Forget your password, use Kimlic \n connect to login</string>
+  <string name="rounded_logo">Rounded logo</string>
+  <string name="your_identity_is_secured">Your Identity is Secured!</string>
+  <string name="mnemonic_passphrase_created">Mnemonic Passphrase created.</string>
+  <string name="now_you_can_use_your_touchid_to_open_kimlic_app">Now, You can use your touchID \n to open Kimlic app</string>
+  <string name="full_name_added_to_your_identity_successfully">Full name added to your \n Identity successfully</string>
+  <string name="logo">Logo</string>
+  <string name="your_address_added_successfully">Your address added successfully</string>
 
 
 </resources>
