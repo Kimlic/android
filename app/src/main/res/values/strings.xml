@@ -191,6 +191,7 @@
   <string name="full_name_added_to_your_identity_successfully">Full name added to your \n Identity successfully</string>
   <string name="logo">Logo</string>
   <string name="your_address_added_successfully">Your address added successfully</string>
+  <string name="your_identity_have_been_verified">Your identity have been verified</string>
 
 
 </resources>
