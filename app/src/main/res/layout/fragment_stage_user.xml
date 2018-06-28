@@ -6,11 +6,11 @@
   android:layout_height="match_parent"
   android:background="@drawable/background_gradient_blue">
 
-  <ImageView
-    android:layout_width="match_parent"
-    android:layout_height="150dp"
-    android:background="@drawable/ic_profile_top_texture"
-    android:contentDescription="@string/top_texture"/>
+  <!--<ImageView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="150dp"-->
+    <!--android:background="@drawable/ic_profile_top_texture"-->
+    <!--android:contentDescription="@string/top_texture"/>-->
 
   <Button
     android:id="@+id/settingsBt"

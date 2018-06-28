@@ -11,7 +11,7 @@
     android:id="@+id/spacer"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="124dp"
+    android:layout_marginTop="144dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"/>
@@ -32,7 +32,6 @@
     android:id="@+id/textView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="16dp"
     android:text="@string/your_full_name"
     android:textColor="@android:color/white"
     android:textSize="@dimen/title_text_size"
@@ -55,8 +54,9 @@
       android:id="@+id/nameTil"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:background="@android:color/transparent"
       android:hint="@string/first_name"
-      android:textColorHint="@android:color/white"
+      android:textColorHint="@color/lightBlue"
       app:hintTextAppearance="@style/WhiteTextInputLayout"
       tools:ignore="LabelFor">
 
@@ -64,8 +64,9 @@
         android:id="@+id/nameEt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@android:color/white"
-        android:inputType="text"
+        android:backgroundTint="@color/lightBlue"
+        android:imeOptions="actionDone"
+        android:inputType="textNoSuggestions"
         android:maxLength="30"
         android:textColor="@android:color/white"
         android:textSize="@dimen/subtitle_text_size"
@@ -78,7 +79,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:hint="@string/last_name"
-      android:textColorHint="@android:color/white"
+      android:textColorHint="@color/lightBlue"
       app:hintTextAppearance="@style/WhiteTextInputLayout"
       tools:ignore="LabelFor">
 
@@ -86,8 +87,9 @@
         android:id="@+id/lastNameEt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@android:color/white"
-        android:inputType="text"
+        android:backgroundTint="@color/lightBlue"
+        android:imeOptions="actionDone"
+        android:inputType="textNoSuggestions"
         android:maxLength="30"
         android:textColor="@android:color/white"
         android:textSize="@dimen/subtitle_text_size"
@@ -97,26 +99,28 @@
 
   </LinearLayout>
 
+
+  <Button
+    android:id="@+id/saveBt"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="@dimen/button_height"
+    android:layout_marginBottom="24dp"
+    android:background="@drawable/button_rounded_green"
+    android:elevation="@dimen/button_elevation"
+    android:text="@string/save"
+    android:textAllCaps="false"
+    android:textColor="@android:color/white"
+    android:textSize="@dimen/button_text_size"
+    app:layout_constraintBottom_toTopOf="@id/cancelTv"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"/>
+
   <TextView
     android:id="@+id/cancelTv"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginBottom="16dp"
     android:text="@string/cancel"
-    android:textColor="@android:color/white"
-    app:layout_constraintBottom_toTopOf="@+id/saveBt"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"/>
-
-  <Button
-    android:id="@+id/saveBt"
-    android:layout_width="@dimen/content_width"
-    android:layout_height="48dp"
-    android:layout_marginBottom="16dp"
-    android:background="@drawable/button_rounded_green"
-    android:elevation="@dimen/button_elevation"
-    android:text="@string/save"
-    android:textAllCaps="false"
     android:textColor="@android:color/white"
     android:textSize="@dimen/button_text_size"
     app:layout_constraintBottom_toBottomOf="parent"

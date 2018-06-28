@@ -1,6 +1,5 @@
 package com.kimlic.auth
 
-import android.app.Presentation
 import android.os.Bundle
 import android.view.animation.AccelerateDecelerateInterpolator
 import com.daimajia.androidanimations.library.Techniques

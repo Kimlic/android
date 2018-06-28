@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.kimlic.R
 import kotlinx.android.synthetic.main.fragment_tutorial_placeholder.view.*
 
 class TutorialPlaceholderFragment : Fragment() {
@@ -17,7 +16,7 @@ class TutorialPlaceholderFragment : Fragment() {
     // Companion
 
     companion object {
-        fun newInstance(bundle: Bundle = Bundle() , layout: Int): TutorialPlaceholderFragment {
+        fun newInstance(bundle: Bundle = Bundle(), layout: Int): TutorialPlaceholderFragment {
             val fragment = TutorialPlaceholderFragment()
             fragment.arguments = bundle
             fragment.layout = layout
@@ -31,9 +30,4 @@ class TutorialPlaceholderFragment : Fragment() {
         return inflater.inflate(layout, container, false)
     }
 
-    // Private
-
-    private fun assigneContent(tempText: String, view: View) {
-        view.tvContent.text = tempText
-    }
 }

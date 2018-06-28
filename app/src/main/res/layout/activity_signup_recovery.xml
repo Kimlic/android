@@ -25,14 +25,15 @@
     app:layout_constraintBottom_toBottomOf="@id/spacer"
     app:layout_constraintBottom_toTopOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="1.0"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="@id/spacer"
-    app:layout_constraintVertical_bias="0.435"/>
+    app:layout_constraintVertical_bias="0.416"/>
 
   <Button
     android:id="@+id/createBt"
     android:layout_width="@dimen/content_width"
-    android:layout_height="56dp"
+    android:layout_height="@dimen/button_height"
     android:layout_marginBottom="16dp"
     android:background="@drawable/button_rounded_blue"
     android:elevation="@dimen/button_elevation"
@@ -47,8 +48,8 @@
   <Button
     android:id="@+id/recoverBt"
     android:layout_width="@dimen/content_width"
-    android:layout_height="56dp"
-    android:layout_marginBottom="16dp"
+    android:layout_height="@dimen/button_height"
+    android:layout_marginBottom="32dp"
     android:background="@drawable/button_rounded_transparent_blue_stroke"
     android:elevation="@dimen/button_elevation"
     android:text="@string/recover_my_identity"

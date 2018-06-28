@@ -10,7 +10,7 @@
     android:id="@+id/spacer"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="124dp"
+    android:layout_marginTop="148dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"/>
@@ -30,7 +30,6 @@
   <LinearLayout
     android:layout_width="@dimen/content_width"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
     android:orientation="vertical"
     app:layout_constraintBottom_toTopOf="@id/saveBt"
     app:layout_constraintEnd_toEndOf="parent"
@@ -41,20 +40,20 @@
       android:id="@+id/titleTv"
       android:layout_width="@dimen/content_width"
       android:layout_height="match_parent"
-      android:layout_marginBottom="16dp"
-      android:gravity="center"
-      android:text="@string/verify_your_number"
-      android:textColor="@android:color/white"
-      android:textSize="@dimen/title_text_size"/>
-
-    <TextView
-      android:id="@+id/subtitleTv"
-      android:layout_width="@dimen/content_width"
-      android:layout_height="match_parent"
-      android:layout_marginBottom="16dp"
+      android:layout_marginBottom="8dp"
       android:gravity="center"
       android:text="@string/code_sent_to_555_495_34_40"
       android:textColor="@android:color/white"
+      android:textSize="@dimen/subtitle_text_size"/>
+
+    <TextView
+      android:id="@+id/cancelTv"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="24dp"
+      android:layout_gravity="center"
+      android:text="@string/change_phone_number"
+      android:textColor="@color/lightBlue"
       android:textSize="@dimen/subtitle_text_size"/>
 
     <LinearLayout
@@ -89,26 +88,13 @@
 
   </LinearLayout>
 
-  <TextView
-    android:id="@+id/cancelTv"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="16dp"
-    android:gravity="center"
-    android:text="@string/change_number"
-    android:textColor="@android:color/white"
-    android:textSize="@dimen/subtitle_text_size"
-    app:layout_constraintBottom_toTopOf="@+id/verifyBt"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"/>
-
   <Button
     android:id="@+id/verifyBt"
     android:layout_width="@dimen/content_width"
-    android:layout_height="48dp"
+    android:layout_height="@dimen/button_height"
     android:layout_marginBottom="16dp"
-    android:paddingStart="80dp"
-    android:paddingEnd="80dp"
+    android:paddingStart="60dp"
+    android:paddingEnd="60dp"
     android:background="@drawable/button_rounded_green"
     android:drawableStart="@drawable/ic_verify_lock_icon"
     android:text="@string/verify_number"

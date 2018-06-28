@@ -3,6 +3,7 @@ package com.kimlic.name
 import android.os.Bundle
 import android.text.InputFilter
 import android.view.KeyEvent
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
 import butterknife.BindView
@@ -14,7 +15,7 @@ import com.kimlic.R
 import kotlinx.android.synthetic.main.activity_name.*
 
 
-class NameActivity : BaseActivity() {
+class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
 
     // Binding
 
@@ -39,24 +40,27 @@ class NameActivity : BaseActivity() {
         showSoftKeyboard(nameEt)
     }
 
+    // Implementation
+
+    override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            manageInput(); hideKeyboard(); return true
+        }
+        return false
+    }
+
     // Private
 
     private fun setupUI() {
         saveBt.setOnClickListener {
             manageInput()
         }
-        nameEt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
-            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
-                if (event!!.keyCode == KeyEvent.KEYCODE_ENTER) {
-                    manageInput(); hideKeyboard(); return true
-                }
-                return false
-            }
-        })
+        nameEt.setOnEditorActionListener(this)
+        lastNameEt.setOnEditorActionListener(this)
 
         cancelTv.setOnClickListener { finish() }
-        firstNameField.filters = arrayOf(filter(), lengthFilter(20))
-        lastNameField.filters = arrayOf(filter(), lengthFilter(20))
+        firstNameField.filters = arrayOf(lengthFilter(20))//,filter())
+        lastNameField.filters = arrayOf(lengthFilter(20))//,filter())
     }
 
     // Filters

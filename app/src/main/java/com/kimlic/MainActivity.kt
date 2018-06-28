@@ -30,8 +30,8 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setupUI() {
-        //if (true) splshScreenFragment()
-        PresentationManager.stage(this)
+        if (true) splshScreenFragment()
+        //PresentationManager.stage(this)
     }
 
     private fun splshScreenActivity() {

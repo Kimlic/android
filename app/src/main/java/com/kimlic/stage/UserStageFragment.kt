@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kimlic.BaseFragment
+import com.kimlic.KimlicApp
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.AppConstants
 import kotlinx.android.synthetic.main.fragment_stage_user.*
+import java.io.File
 
 class UserStageFragment : BaseFragment() {
 
@@ -60,7 +62,8 @@ class UserStageFragment : BaseFragment() {
             takePhotoLl.visibility = View.INVISIBLE
         }
 
-        (userPhotoIv as UserPhotoView).showUserPhoto(AppConstants.userPortraitFileName.key)
+        val photo = File(KimlicApp.applicationContext().filesDir.toString() + "/" + AppConstants.userPortraitFileName)
+        if (photo.exists()) (userPhotoIv as UserPhotoView).showUserPhoto(AppConstants.userPortraitFileName.key)
 
     }
 

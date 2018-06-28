@@ -10,7 +10,7 @@
     android:id="@+id/spacer"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="124dp"
+    android:layout_marginTop="164dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"/>
@@ -31,7 +31,6 @@
     android:id="@+id/rootMiddle"
     android:layout_width="@dimen/content_width"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
     android:orientation="vertical"
     app:layout_constraintBottom_toTopOf="@id/saveBt"
     app:layout_constraintEnd_toEndOf="parent"
@@ -57,32 +56,19 @@
       <EditText
         android:id="@+id/emailEt"
         style="@style/KimlicEditText"
+        android:imeOptions="actionDone"
         android:inputType="textEmailAddress"
         android:textCursorDrawable="@null"
-        tools:ignore="LabelFor"/>
+        tools:ignore="LabelFor,TextFields"/>
 
     </android.support.design.widget.TextInputLayout>
 
   </LinearLayout>
 
-  <TextView
-    android:id="@+id/backTv"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="16dp"
-    android:gravity="center"
-    android:text="@string/cancel"
-    android:textColor="@android:color/white"
-    android:textSize="@dimen/subtitle_text_size"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.501"
-    app:layout_constraintStart_toStartOf="parent"/>
-
   <Button
     android:id="@+id/nextBt"
     android:layout_width="@dimen/content_width"
-    android:layout_height="48dp"
+    android:layout_height="@dimen/button_height"
     android:layout_marginTop="16dp"
     android:layout_marginBottom="16dp"
     android:background="@drawable/button_rounded_blue"
@@ -91,6 +77,19 @@
     android:textColor="@android:color/white"
     android:textSize="@dimen/button_text_size"
     app:layout_constraintBottom_toTopOf="@id/backTv"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"/>
+
+  <TextView
+    android:id="@+id/backTv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="24dp"
+    android:gravity="center"
+    android:text="@string/cancel"
+    android:textColor="@android:color/white"
+    android:textSize="@dimen/button_text_size"
+    app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"/>
 

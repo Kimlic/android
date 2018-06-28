@@ -10,7 +10,7 @@
     android:id="@+id/spacer"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="124dp"
+    android:layout_marginTop="148dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"/>
@@ -31,7 +31,6 @@
     android:id="@+id/root"
     android:layout_width="@dimen/content_width"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
     android:orientation="vertical"
     app:layout_constraintBottom_toTopOf="@id/saveBt"
     app:layout_constraintEnd_toEndOf="parent"
@@ -42,9 +41,8 @@
       android:id="@+id/phoneTv"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_marginBottom="8dp"
       android:gravity="center"
-      android:text="@string/enter_your_number"
+      android:text="@string/your_phone_number"
       android:textColor="@android:color/white"
       android:textSize="@dimen/title_text_size">
     </TextView>
@@ -63,20 +61,20 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:hint="@string/country"
-      android:textColorHint="@android:color/white"
+      android:textColorHint="@color/lightBlue"
       app:hintTextAppearance="@style/WhiteTextInputLayout"
       tools:ignore="LabelFor">
 
       <EditText
         android:id="@+id/countryEt"
         style="@style/KimlicEditText"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="28dp"
         android:clickable="false"
         android:focusable="false"
         android:inputType="textNoSuggestions"
         android:longClickable="false"
         android:maxLength="20"
-        android:textColor="@color/grayLight"
+        android:textColor="@android:color/white"
         tools:ignore="LabelFor"/>
 
     </android.support.design.widget.TextInputLayout>
@@ -84,9 +82,10 @@
     <android.support.design.widget.TextInputLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
       android:clickable="false"
       android:hint="@string/phone_number"
-      android:textColorHint="@android:color/white"
+      android:textColorHint="@color/lightBlue"
       app:hintTextAppearance="@style/WhiteTextInputLayout"
       tools:ignore="LabelFor">
 
@@ -102,8 +101,10 @@
         android:longClickable="false"
         android:maxLength="20"
         android:text="@string/plus_character"
+        android:imeOptions="actionDone"
         android:textCursorDrawable="@null"
         tools:ignore="LabelFor"/>
+
     </android.support.design.widget.TextInputLayout>
 
   </LinearLayout>
@@ -111,12 +112,13 @@
   <Button
     android:id="@+id/nextBt"
     android:layout_width="@dimen/content_width"
-    android:layout_height="48dp"
+    android:layout_height="@dimen/button_height"
     android:layout_marginTop="8dp"
-    android:layout_marginBottom="16dp"
+    android:layout_marginBottom="32dp"
     android:background="@drawable/button_rounded_blue"
     android:elevation="@dimen/button_elevation"
     android:text="@string/next"
+    android:textAllCaps="false"
     android:textColor="@android:color/white"
     android:textSize="@dimen/button_text_size"
     app:layout_constraintBottom_toBottomOf="parent"

@@ -4,7 +4,15 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="#0269C9">
+  android:background="#0273D0">
+
+  <ImageView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="36dp"
+    android:background="@drawable/rounded_background_tutorial"
+    android:contentDescription="@string/rounded_background"
+    app:layout_constraintBottom_toBottomOf="@id/cloudsIv"/>
 
   <ImageView
     android:id="@+id/cloudsIv"
@@ -19,11 +27,12 @@
 
   <ImageView
     android:id="@+id/tutorialIv"
-    android:layout_width="175dp"
-    android:layout_height="175dp"
-    android:layout_marginBottom="142dp"
-    android:background="#ffffff"
+    android:layout_width="216dp"
+    android:layout_height="216dp"
+    android:layout_marginBottom="136dp"
+    android:background="@drawable/tutorial_3_illustration"
     android:contentDescription="@string/tutorial"
+    android:scaleType="fitStart"
     app:layout_constraintBottom_toBottomOf="@+id/cloudsIv"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"/>
@@ -43,7 +52,7 @@
     android:id="@+id/rootMiddle"
     android:layout_width="@dimen/content_width"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="96dp"
+    android:layout_marginBottom="112dp"
     android:gravity="center"
     android:orientation="vertical"
     app:layout_constraintBottom_toBottomOf="parent"
@@ -60,11 +69,11 @@
       android:textSize="@dimen/title_text_size"/>
 
     <TextView
-      android:layout_width="220dp"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginBottom="8dp"
       android:gravity="center"
-      android:text="All your credentials stored in private blockch"
+      android:text="@string/all_your_credentials_stored_in_private_blockch"
       android:textColor="@android:color/white"
       android:textSize="@dimen/subtitle_text_size"/>
 

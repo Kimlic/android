@@ -9,13 +9,13 @@
 
   <!--Themes for textSwitcher Passcode-->
   <style name="TitleStyle">
-    <item name="android:textSize">22sp</item>
+    <item name="android:textSize">@dimen/title_text_size</item>
     <item name="android:textColor">@android:color/white</item>
     <item name="android:gravity">center_horizontal</item>
   </style>
 
   <style name="SubtitleStyle" parent="TitleStyle">
-    <item name="android:textSize">14sp</item>
+    <item name="android:textSize">@dimen/subtitle_text_size</item>
   </style>
 
   <!--Passcode circle button-->
@@ -25,8 +25,9 @@
   </style>
 
   <style name="PasscodeCircleButton">
-    <item name="android:layout_width">64dp</item>
-    <item name="android:layout_height">64dp</item>
+    <item name="android:layout_margin">10dp</item>
+    <item name="android:layout_width">72dp</item>
+    <item name="android:layout_height">72dp</item>
     <item name="android:textColor">@android:color/white</item>
     <item name="android:textSize">@dimen/circle_button_digit</item>
     <item name="android:background">@drawable/button_shape_circle</item>
@@ -61,8 +62,8 @@
     <item name="android:layout_weight">1</item>
     <item name="android:textColor">@android:color/white</item>
     <item name="android:textColorHint">@android:color/white</item>
-    <item name="android:textSize">14sp</item>
-    <item name="android:backgroundTint">@android:color/white</item>
+    <item name="android:textSize">16sp</item>
+    <item name="android:backgroundTint">@color/lightBlue</item>
     <item name="android:inputType">text</item>
     <item name="android:lines">1</item>
     <item name="android:paddingStart">5dp</item>
@@ -84,17 +85,17 @@
   <!--NameActivity PhoneActivityu-->
   <style name="WhiteTextInputLayout" parent="@android:style/TextAppearance">
     <item name="android:textColor">@color/grayLight</item>
-    <item name="android:textSize">14sp</item>
+    <item name="android:textSize">16sp</item>
   </style>
 
 
   <style name="DigitHolderStyle">
-    <item name="android:layout_width">45dp</item>
-    <item name="android:layout_height">60dp</item>
-    <item name="android:layout_marginStart">8dp</item>
-    <item name="android:layout_marginEnd">8dp</item>
+    <item name="android:layout_width">70dp</item>
+    <item name="android:layout_height">80dp</item>
+    <item name="android:layout_marginStart">4dp</item>
+    <item name="android:layout_marginEnd">4dp</item>
     <item name="android:textColor">@android:color/white</item>
-    <item name="android:textSize">35sp</item>
+    <item name="android:textSize">40sp</item>
     <item name="android:gravity">center</item>
     <item name="android:maxLength">1</item>
     <item name="android:background">@drawable/square_edittext_background_trasparent</item>

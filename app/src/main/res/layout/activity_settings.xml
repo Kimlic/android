@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="@drawable/background_profile_settings">
@@ -10,7 +9,7 @@
     android:id="@+id/titleTV"
     android:layout_width="@dimen/content_width"
     android:layout_height="wrap_content"
-    android:layout_marginTop="24dp"
+    android:layout_marginTop="32dp"
     android:gravity="center"
     android:text="@string/profile_settings"
     android:textColor="@android:color/white"
@@ -31,9 +30,9 @@
 
   <Button
     android:id="@+id/backBt"
-    android:layout_width="@dimen/menu_element_square_size"
-    android:layout_height="@dimen/menu_element_square_size"
-    android:layout_marginTop="24dp"
+    android:layout_width="36dp"
+    android:layout_height="36dp"
+    android:layout_marginTop="32dp"
     android:layout_marginStart="16dp"
     android:background="@drawable/ic_chevron_left_36dp"
     app:layout_constraintStart_toStartOf="parent"
@@ -42,8 +41,8 @@
   <Button
     android:id="@+id/signoutBt"
     android:layout_width="@dimen/content_width"
-    android:layout_height="48dp"
-    android:layout_marginBottom="8dp"
+    android:layout_height="@dimen/button_height"
+    android:layout_marginBottom="16dp"
     android:background="@drawable/button_rounded_blue"
     android:text="@string/sign_out"
     android:textAllCaps="false"
@@ -56,8 +55,8 @@
   <Button
     android:id="@+id/deleteBt"
     android:layout_width="@dimen/content_width"
-    android:layout_height="48dp"
-    android:layout_marginBottom="12dp"
+    android:layout_height="@dimen/button_height"
+    android:layout_marginBottom="32dp"
     android:background="@drawable/button_rounded_red"
     android:text="@string/delete_identity"
     android:textAllCaps="false"

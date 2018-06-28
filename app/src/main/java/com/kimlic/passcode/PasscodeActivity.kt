@@ -105,7 +105,7 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
 
     private fun setupUIPasscode() {
         titleTs.setText(getString(R.string.create_your_passcode))
-        subtitleTs.setText(getString(R.string.you_will_have_to_enter_your_passcode_every_time_you_want_to_open_kimlic))
+        subtitleTs.setText(getString(R.string.You_have_to_enter_passcode_every_time_you_want_to_open))
         showDots()
     }
 
@@ -222,6 +222,8 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
 
                 override fun onTick(millisUntilFinished: Long) {}
             }
+                    // TODO use automatic ok enter
+                    .start()
     }
 
     // Text switcher

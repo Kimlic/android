@@ -1,7 +1,10 @@
 package com.kimlic.email
 
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import android.widget.TextView
 import com.kimlic.BaseActivity
 import com.kimlic.R
@@ -33,7 +36,7 @@ class EmailActivity : BaseActivity() {
 
         emailEt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
-                if (event!!.keyCode == KeyEvent.KEYCODE_ENTER) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     manageInput(); hideKeyboard(); return true
                 }
                 return false

@@ -39,7 +39,6 @@ class TutorialActivity : BaseActivity() {
             TERMS_ACCEPT_REQUEST_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
                     Prefs.termsAccepted = true
-                    showToast("Terms accepted!!!")
                     PresentationManager.phoneNumber(this@TutorialActivity)
                 } else
                     PresentationManager.signupRecovery(this@TutorialActivity)

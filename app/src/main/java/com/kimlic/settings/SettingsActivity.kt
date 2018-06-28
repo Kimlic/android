@@ -1,7 +1,6 @@
 package com.kimlic.settings
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -108,11 +107,11 @@ class SettingsActivity : BaseActivity() {
 
     private fun initSettingsList() {
         settingsList = mutableListOf(
-                SwitchSetting(getString(R.string.passcode), getString(R.string.protect_your_kimlic), "passcode", AppConstants.settingSwitch.intKey, Prefs.isPasscodeEnabled),
-                SwitchSetting(getString(R.string.enable_touch_id), getString(R.string.gets_access_accounts), "touch", AppConstants.settingSwitch.intKey, Prefs.isTouchEnabled),
-                SwitchSetting(getString(R.string.account_recovery), getString(R.string.backed_up_kimlic_id), "recovery", AppConstants.settingSwitch.intKey, Prefs.isRecoveryEnabled),
-                IntentSetting(getString(R.string.terms_and_conditions), "", "terms", AppConstants.settingIntent.intKey),
-                IntentSetting(getString(R.string.about_kimlic), getString(R.string.last_modified_december_5_2017), "about", AppConstants.settingIntent.intKey))
+                SwitchSetting(getString(R.string.passcode), getString(R.string.protect_my_id), "passcode", AppConstants.settingSwitch.intKey, Prefs.isPasscodeEnabled),
+                SwitchSetting(getString(R.string.enable_touch_id), getString(R.string.use_my_touch_id), "touch", AppConstants.settingSwitch.intKey, Prefs.isTouchEnabled),
+                SwitchSetting(getString(R.string.account_recovery), getString(R.string.back_up_your_credentials), "recovery", AppConstants.settingSwitch.intKey, Prefs.isRecoveryEnabled),
+                IntentSetting(getString(R.string.terms_and_conditions), getString(R.string.last_modified_23_july_2017), "terms", AppConstants.settingIntent.intKey),
+                IntentSetting(getString(R.string.about_kimlic), "", "about", AppConstants.settingIntent.intKey))
 
         val passcodeChange = IntentSetting(getStringValue(R.string.change_passcode), "", "change", AppConstants.settingIntent.intKey)
 

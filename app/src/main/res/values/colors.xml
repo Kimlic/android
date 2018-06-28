@@ -15,33 +15,23 @@
 
   <color name="transparent">#00ffffff</color>
 
-
   <color name="progreesYellow">#B4CB09</color>
-
-
-
-
 
   <color name="lightBlueStroke">#4bc1ff</color>
 
   <!--Rounded logo color-->
-  <color name="lightBlueRounded">#3c0057c2</color>
+  <color name="lightBlueRounded">#2d0064c2</color>
   <!--Gradient colors-->
-  <color name="startEndBlue">#f3005ab7</color>
-  <color name="centerBlue">#0785db</color>
+  <color name="startEndBlue">#f30068b7</color>
+  <color name="centerBlue">#0d9dff</color>
 
   <!--Rounded logo risks color-->
   <color name="grayLightRounded">#5dd7d7d7</color>
 
-
-
-
   <color name="darkBlue">#1576D3</color>
-
 
   <color name="grayLight">#d8d8d8</color>
   <color name="grayMiddle">#a3a3a3</color>
-
   <color name="grayDark">#797979</color>
 
 

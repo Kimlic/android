@@ -30,8 +30,8 @@
       <item
         android:drawable="@drawable/ic_white_name_icon_sml"
         android:gravity="center"
-        android:height="@dimen/logo_size"
-        android:width="54dp">
+        android:height="72dp"
+        android:width="56dp">
       </item>
 
     </layer-list>

@@ -21,7 +21,7 @@ class PhraseAdapter(var phraseCntext: Context, var resource: Int, var list: List
         val phrasePosition = view.findViewById<TextView>(R.id.positionTv)
         val phrase = view.findViewById<TextView>(R.id.phrase)
 
-        phrasePosition.text = String.format("%d.", position + 1)
+        phrasePosition.text = String.format("%d ", position + 1)
         phrase.text = list[position]
 
         return view

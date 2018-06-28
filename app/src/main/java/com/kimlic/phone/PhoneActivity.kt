@@ -5,6 +5,7 @@ import android.os.Handler
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.text.Editable
 import android.view.KeyEvent
+import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import com.kimlic.BaseActivity
 import com.kimlic.R
@@ -81,7 +82,7 @@ class PhoneActivity : BaseActivity() {
 
         phoneEt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
-                if (event!!.keyCode == KeyEvent.KEYCODE_ENTER) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     managePhone(); hideKeyboard(); return true
                 }
                 return false
@@ -91,8 +92,6 @@ class PhoneActivity : BaseActivity() {
         nextBt.setOnClickListener {
             managePhone()
         }
-
-
     }
 
     private fun managePhone() {

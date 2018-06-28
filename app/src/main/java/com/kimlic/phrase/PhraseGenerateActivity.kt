@@ -45,12 +45,12 @@ class PhraseGenerateActivity : BaseActivity() {
                     setPhrases(phraseList)
                     phraseBt.tag = "copy"
                     phraseBt.text = getString(R.string.copy_to_buffer)
-                    showPopup(message = getString(R.string.please_write_down_these_words_and_store_them_in_a_safe_place_as_they_can_t_be_recovered))
+                    showPopup(message = getString(R.string.write_down_these_words_stroe_them_in_a_safe_place))
                 }
                 "copy" -> {
                     copyToBuffer(phraseList)
                     phraseBt.tag = "save"
-                    phraseBt.text = getString(R.string.i_save_the_passphrase)
+                    phraseBt.text = getString(R.string.ok_i_save_the_passphrase)
                 }
                 "save" ->{
                     PresentationManager.phraseVerify(this)
@@ -88,7 +88,6 @@ class PhraseGenerateActivity : BaseActivity() {
             listToSave.forEachIndexed { index, it -> string.append(it + " ") }
             val clipData = ClipData.newPlainText("copyedText", string)
             clipBoard.primaryClip = clipData
-            showToast(getString(R.string.phrases_copied_to_buffer))
         }
     }
 }
