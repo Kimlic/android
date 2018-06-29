@@ -192,6 +192,7 @@
   <string name="logo">Logo</string>
   <string name="your_address_added_successfully">Your address added successfully</string>
   <string name="your_identity_have_been_verified">Your identity have been verified</string>
+  <string name="bottom_menu_background">Bottom menu background</string>
 
 
 </resources>

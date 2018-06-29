@@ -4,7 +4,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@color/bgLight"
+  android:background="@color/lightBlue"
   tools:context=".stage.StageActivity">
 
   <FrameLayout
@@ -13,22 +13,20 @@
     android:layout_height="match_parent"
     app:layout_constraintBottom_toTopOf="@id/bottomLl"/>
 
-  <Button
-    android:id="@+id/scanBt"
-    android:layout_width="80dp"
-    android:layout_height="80dp"
-    android:layout_marginBottom="32dp"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"/>
+  <ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="64dp"
+    android:background="@drawable/ic_buttom_menu_background"
+    android:contentDescription="@string/bottom_menu_background"
+    app:layout_constraintBottom_toBottomOf="@+id/bottomLl"/>
 
   <LinearLayout
     android:id="@+id/bottomLl"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
+    android:background="@android:color/transparent"
     android:orientation="horizontal"
-    android:weightSum="11"
+    android:weightSum="13"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent">
@@ -42,9 +40,9 @@
       android:stateListAnimator="@null"/>
 
     <android.support.v4.widget.Space
-      android:layout_width="0dp"
+      android:layout_width="2dp"
       android:layout_height="match_parent"
-      android:layout_weight="3"/>
+      android:layout_weight="5"/>
 
     <Button
       android:id="@+id/accountsBt"
@@ -52,10 +50,48 @@
       android:layout_height="wrap_content"
       android:layout_weight="4"
       android:background="@drawable/button_underlined_selector_accounts"
-      android:stateListAnimator="@null"
-      />
-
+      android:stateListAnimator="@null"/>
 
   </LinearLayout>
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="200"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent">
+
+    <View
+      android:id="@+id/profileLineV"
+      android:layout_width="0dp"
+      android:layout_height="4dp"
+      android:layout_weight="84"
+      android:background="@drawable/ic_blue_menu_left_selector"
+      android:visibility="visible"/>
+
+    <android.support.v4.widget.Space
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:layout_weight="32"/>
+
+    <View
+      android:id="@+id/accountsLineV"
+      android:layout_width="0dp"
+      android:layout_height="4dp"
+      android:layout_weight="84"
+      android:background="@drawable/ic_blue_menu_right_selector"
+      android:visibility="invisible"/>
+  </LinearLayout>
+
+  <Button
+    android:id="@+id/scanBt"
+    android:layout_width="144dp"
+    android:layout_height="128dp"
+    android:background="@drawable/ic_scan_button"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

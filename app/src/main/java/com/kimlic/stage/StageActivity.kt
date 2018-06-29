@@ -3,6 +3,7 @@ package com.kimlic.stage
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
+import android.view.View
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.preferences.Prefs
@@ -45,13 +46,15 @@ class StageActivity : BaseActivity() {
 
     private fun setupListners() {
         profileBt.setOnClickListener {
-            profileBt.isSelected = true; accountsBt.isSelected = false
+            profileBt.isSelected = true; accountsBt.isSelected = false; profileLineV.visibility = View.VISIBLE; accountsLineV.visibility = View.INVISIBLE
             replaceFragment(userStageFragment, UserStageFragment.FRAGMENT_KEY)
         }
         accountsBt.setOnClickListener {
-            accountsBt.isSelected = true; profileBt.isSelected = false
+            accountsBt.isSelected = true; profileBt.isSelected = false; accountsLineV.visibility = View.VISIBLE; profileLineV.visibility = View.INVISIBLE
             replaceFragment(accountsStageFragment, AccountsStageFragment.FRAGMENT_KEY)
         }
+
+        scanBt.setOnClickListener { showToast("Scan button is pressed") }
     }
 
     private fun initFragments() {
@@ -73,7 +76,7 @@ class StageActivity : BaseActivity() {
         }
     }
 
-    private fun phoneVirify(){
+    private fun phoneVirify() {
         val phoneVerify = PhoneVerifyFragment.newInstance()
         phoneVerify.show(supportFragmentManager, PhoneVerifyFragment.FRAGMENT_KEY)
     }

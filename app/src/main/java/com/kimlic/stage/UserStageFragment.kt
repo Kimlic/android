@@ -54,22 +54,20 @@ class UserStageFragment : BaseFragment() {
         setupListners()
         setupFielsds()
         setupTitles()
-        setProgress(35)
     }
 
     private fun setUserPhoto() {
-        if (!Prefs.isUserPhotoTaken) {
-            takePhotoLl.visibility = View.INVISIBLE
-        }
+//        if (!Prefs.isUserPhotoTaken) {
+//            takePhotoLl.visibility = View.INVISIBLE
+//        }
 
-        val photo = File(KimlicApp.applicationContext().filesDir.toString() + "/" + AppConstants.userPortraitFileName)
+        val filePath = KimlicApp.applicationContext().filesDir.toString() + "/" + AppConstants.userPortraitFileName.key
+        val photo = File(filePath)
+
         if (photo.exists()) (userPhotoIv as UserPhotoView).showUserPhoto(AppConstants.userPortraitFileName.key)
 
     }
 
-    private fun setProgress(progress: Int = 0) {
-        (userPhotoIv as UserPhotoView).setProgress(progress)
-    }
 
     private fun setBlueScreen() {
         (userPhotoIv as UserPhotoView).showBlueScreen()
@@ -83,8 +81,8 @@ class UserStageFragment : BaseFragment() {
         idItem.setOnClickListener { PresentationManager.documentChooseVerify(activity!!) }
         addressItem.setOnClickListener { showToast("addres item is clicked"); PresentationManager.address(activity!!) }
 
-        titleTv.setOnClickListener { setProgress(90); setUserPhoto() }
-        subtitleTv.setOnClickListener { setProgress(20); setBlueScreen() }
+        titleTv.setOnClickListener { setUserPhoto() }
+        subtitleTv.setOnClickListener { setBlueScreen() }
 
 
         takePhotoLl.setOnClickListener {

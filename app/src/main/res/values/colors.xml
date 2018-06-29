@@ -32,6 +32,10 @@
   <color name="startEndBlue">#f30068b7</color>
   <color name="centerBlue">#0d9dff</color>
 
+  <!--user photo gradient backgrounds-->
+  <color name="startGradient">#1C62A8</color>
+  <color name="endGradient">#1c7de4</color>
+
   <!--Rounded logo risks color-->
   <color name="grayLightRounded">#5dd7d7d7</color>
 

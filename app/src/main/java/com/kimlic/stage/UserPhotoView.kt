@@ -14,12 +14,11 @@ class UserPhotoView : View {
     // Variables
 
     private val hexPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private val progressPaint = Paint()
+    // private val progressPaint = Paint()
     private var path: Path? = Path()
     private var userPhotoBitmap: Bitmap? = null
     private var userPhotoBackBitmap: Bitmap? = null
-    private val pathEffect = CornerPathEffect(35f)
-    private var progress = 0
+    private val pathEffect = CornerPathEffect(50f)
     private var hexCanvas: Canvas? = null
     private var bitmapToShow: Bitmap? = null
         set
@@ -29,12 +28,9 @@ class UserPhotoView : View {
 
     // Constants
 
-    private val progressColor = context.getColor(R.color.progreesYellow)
-    private val gradientCenterColor = context.getColor(R.color.lightBlue)
-    private val gradientEdgeColor = context.getColor(R.color.darkBlue)
-    private val gradientRadius = 300f
-    private val cornerWidth = 10f
-    private val strokeWidth = 30f
+    private val gradientColorStart = context.getColor(R.color.startGradient)
+    private val gradientColorEnd = context.getColor(R.color.endGradient)
+    private val gradientRadius = 400f
     // Aagel value of 60 degree in radians
     private val angel: Double = 1.0472
 
@@ -87,21 +83,10 @@ class UserPhotoView : View {
 
         canvas.drawBitmap(userPhotoBitmap, 0f, 0f, q)
         q.xfermode = null
-        q.color = Color.WHITE
-        q.strokeWidth = strokeWidth
-        q.style = Paint.Style.STROKE
-        q.pathEffect = pathEffect
 
-        canvas.drawPath(hexagonPath(cornerWidth), q)
-        showProgress(canvas, progressPaint, progress)
     }
 
     // Public
-
-    fun setProgress(progress: Int = 0) {
-        this.progress = progress
-        invalidate()
-    }
 
     fun showUserPhoto(fileName: String) {
         this.bitmapToShow = userPhotoBitmap(fileName)
@@ -116,7 +101,9 @@ class UserPhotoView : View {
     //Private
 
     private fun blueGradient(width: Int, height: Int): Bitmap {
-        val gradient = RadialGradient((width / 2).toFloat(), (height / 2).toFloat(), gradientRadius, gradientCenterColor, gradientEdgeColor, android.graphics.Shader.TileMode.CLAMP)
+        val gradient = RadialGradient((width / 2).toFloat(), (height / 2).toFloat(), gradientRadius, gradientColorEnd, gradientColorStart, android.graphics.Shader.TileMode.CLAMP)
+        // Linear gradient
+        //val gradient = LinearGradient(0f, 0f, 0f, height.toFloat(), gradientColorStart, gradientColorEnd, android.graphics.Shader.TileMode.CLAMP)
         val p = Paint()
         p.isDither = true
         p.shader = gradient
@@ -127,63 +114,17 @@ class UserPhotoView : View {
         return bitmap
     }
 
-    private fun showProgress(canvas: Canvas, paint: Paint, progress: Int) {
-        val centerX = width / 2
-        val centerY = height / 2
-        val step = width * 0.25
-        val path = Path()
-        path.reset()
-
-        if (progress >= 17) {
-            path.moveTo((centerX - step + 75).toFloat(), cornerWidth)
-            path.lineTo((centerX + step - 75).toFloat(), cornerWidth)
-            path.lineTo((centerX + step).toFloat(), cornerWidth)
-            path.lineTo((centerX + step + 45).toFloat(), (cornerWidth + 45) * Math.tan(angel).toFloat())
-        }
-
-        if (progress >= 35) {
-            path.lineTo(width - cornerWidth, (centerY).toFloat())
-            path.lineTo(width - cornerWidth - 45, centerY + 48 * Math.tan(angel).toFloat())
-
-        }
-
-        if (progress >= 50) {
-            path.lineTo((centerX + step).toFloat(), height - cornerWidth)
-            path.lineTo((centerX + step - 75).toFloat(), height - cornerWidth)
-        }
-
-        if (progress >= 66) {
-            path.lineTo((centerX - step).toFloat(), height - cornerWidth); path.lineTo((centerX - step - 45).toFloat(), height - cornerWidth - 48 * Math.tan(angel).toFloat())
-        }
-
-        if (progress >= 83) {
-            path.lineTo(cornerWidth, (centerY).toFloat()); path.lineTo(cornerWidth + 45, centerY - 48 * Math.tan(angel).toFloat())
-        }
-
-        if (progress >= 100) {
-            path.lineTo((centerX - step).toFloat(), cornerWidth); path.close()
-        }
-
-        canvas.drawPath(path, paint)
-    }
-
     private fun initialize() {
-        hexPaint.color = Color.BLUE
+        hexPaint.color = Color.WHITE
         hexPaint.style = Paint.Style.FILL_AND_STROKE
         hexPaint.isAntiAlias = true
         hexPaint.pathEffect = pathEffect
-
-        progressPaint.isAntiAlias = true
-        progressPaint.style = Paint.Style.STROKE
-        progressPaint.strokeWidth = strokeWidth
-        progressPaint.color = progressColor
-        progressPaint.pathEffect = pathEffect
     }
 
     private fun userPhotoBitmap(fileName: String): Bitmap {
         val bitmap = BitmapFactory.decodeFile(KimlicApp.applicationContext().filesDir.toString() + "/" + fileName)
         val mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
-        return getResizedBitmap(mutableBitmap, 800, 600, -90f, true)
+        return getResizedBitmap(mutableBitmap, 1100, 800, -90f, true)
     }
 
     private fun getResizedBitmap(bm: Bitmap, newWidth: Int, newHeight: Int, angel: Float, isNecessaryToKeepOrig: Boolean): Bitmap {
