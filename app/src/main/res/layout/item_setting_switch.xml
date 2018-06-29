@@ -55,19 +55,35 @@
 
   </LinearLayout>
 
-  <Switch
+  <!--<Switch-->
+  <!--android:id="@+id/selector"-->
+  <!--android:layout_width="wrap_content"-->
+  <!--android:layout_height="wrap_content"-->
+  <!--android:layout_weight="1"-->
+  <!--android:layout_gravity="center_vertical"-->
+  <!--android:checked="true"-->
+  <!--android:clickable="false"-->
+  <!--android:focusable="false"-->
+  <!--android:focusableInTouchMode="false"-->
+  <!--android:textSize="10sp"-->
+  <!--android:thumb="@drawable/switch_selector"-->
+  <!--android:track="@drawable/switch_track"/>-->
+
+  <ToggleButton
     android:id="@+id/selector"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_weight="1"
-    android:layout_gravity="center_vertical"
+    android:layout_gravity="center"
+    android:background="@color/transparent"
+    android:button="@null"
     android:checked="true"
     android:clickable="false"
+    android:drawableEnd="@drawable/checkbox_selector"
     android:focusable="false"
     android:focusableInTouchMode="false"
-    android:textSize="10sp"
-    android:thumb="@drawable/switch_selector"
-    android:track="@drawable/switch_track"/>
+    android:text=""
+    android:textOff="@null"
+    android:textOn="@null"/>
 
 </LinearLayout>
 

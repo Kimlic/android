@@ -7,8 +7,8 @@
   <dimen name="hint_text_size_large">24sp</dimen>
 
   <!--SettingsProfile text sizes-->
-  <dimen name="settings_text_size_large">18sp</dimen>
-  <dimen name="settings_text_size_medium">12sp</dimen>
+  <dimen name="settings_text_size_large">19sp</dimen>
+  <dimen name="settings_text_size_medium">13sp</dimen>
 
 
   <dimen name="subtitle_text_size">18sp</dimen>
@@ -55,5 +55,15 @@
   <dimen name="stage_button_height">48dp</dimen>
   <dimen name="profile_icon_height">28dp</dimen>
   <dimen name="profile_icon_width">22dp</dimen>
+
+  <!--settings switch -->
+  <dimen name="toggle_background_height">28dp</dimen>
+  <dimen name="toggle_background_width">44dp</dimen>
+  <dimen name="toggle_button_radius">27.5dp</dimen>
+  <dimen name="toggle_button_height">15dp</dimen>
+  <dimen name="toggle_button_width">15dp</dimen>
+
+
+
 
 </resources>
