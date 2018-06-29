@@ -19,12 +19,11 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="autoMirrored" value="true" />
-                            <entry key="height" value="520" />
-                            <entry key="outputName" value="ic_white_id_success_icon" />
+                            <entry key="height" value="667" />
+                            <entry key="outputName" value="ic_simple_background" />
                             <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="I:\My Documents\K I M L I C K\App_UI_SVG_assets\White_ID_success_icon.svg" />
-                            <entry key="width" value="606" />
+                            <entry key="sourceFile" value="I:\My Documents\K I M L I C K\simple_background.svg" />
+                            <entry key="width" value="375" />
                           </map>
                         </option>
                       </PersistentState>

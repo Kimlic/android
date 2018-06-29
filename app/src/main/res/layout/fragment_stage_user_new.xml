@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@drawable/ic_simple_background">
+
+  <Button
+    android:id="@+id/settingsBt"
+    android:layout_width="@dimen/menu_element_square_size"
+    android:layout_height="@dimen/menu_element_square_size"
+    android:layout_marginTop="24dp"
+    android:layout_marginEnd="24dp"
+    android:background="@drawable/ic_profile_settings_button"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
+
+  <FrameLayout
+    android:id="@+id/userPhotoFl"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <com.kimlic.stage.UserPhotoView
+      android:id="@+id/userPhotoIv"
+      android:layout_width="200dp"
+      android:layout_height="180dp"
+      android:layout_gravity="center"
+      android:padding="10dp"
+      android:contentDescription="@string/user_photo"/>
+
+    <LinearLayout
+      android:id="@+id/takePhotoLl"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:orientation="vertical"
+      tools:ignore="UseCompoundDrawables">
+
+      <ImageView
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+        android:background="@drawable/ic_profile_photo_icon"
+        android:contentDescription="@string/photo_camera_image"
+        android:focusableInTouchMode="false"
+        />
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_your_photo"
+        android:textColor="@color/lightBlue"
+        />
+
+    </LinearLayout>
+
+  </FrameLayout>
+
+  <LinearLayout
+    android:id="@+id/rootMiddle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="24dp"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/userPhotoFl">
+
+    <TextView
+      android:id="@+id/titleTv"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:textColor="@android:color/white"
+      android:textSize="@dimen/title_text_size"
+      tools:text="Add your name"/>
+
+    <TextView
+      android:id="@+id/subtitleTv"
+      android:layout_width="wrap_content"
+      android:layout_height="24dp"
+      android:layout_marginTop="4dp"
+      android:drawablePadding="4dp"
+      android:drawableStart="@drawable/ic_profile_warning_icon"
+      android:textColor="@android:color/white"
+      android:textSize="@dimen/subtitle_text_size"
+      tools:text="You have 2 security risks"/>
+
+  </LinearLayout>
+
+  <ScrollView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:orientation="vertical"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/rootMiddle">
+
+    <LinearLayout
+      android:layout_width="@dimen/content_width"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      tools:ignore="ContentDescription">
+
+      <RelativeLayout
+        android:id="@+id/nameItem"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:focusableInTouchMode="false">
+
+        <ImageView
+          android:id="@+id/nameIv"
+          style="@style/DetailsItemTextView"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="@drawable/ic_profile_name_icon_blue"/>
+
+        <TextView
+          android:id="@+id/nameTv"
+          style="@style/DetailsItemTextView"
+          android:layout_marginStart="32dp"
+          android:layout_alignParentStart="true"
+          android:layout_centerVertical="true"
+          tools:text="Your full name"/>
+
+        <ImageView
+          android:id="@+id/nameArrow"
+          style="@style/DetailsItemShevron"/>
+
+      </RelativeLayout>
+
+      <View
+        android:layout_width="@dimen/content_width"
+        android:layout_height="1dp"
+        android:background="@color/lightBlue"/>
+
+      <RelativeLayout
+        android:id="@+id/phoneItem"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:focusableInTouchMode="false">
+
+        <ImageView
+          android:id="@+id/phoneIv"
+          style="@style/DetailsItemTextView"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="@drawable/ic_phone_in_talk_dark_24dp"/>
+
+        <TextView
+          android:id="@+id/phoneTv"
+          style="@style/DetailsItemTextView"
+          android:layout_marginStart="32dp"
+          android:gravity="center"
+          tools:text="+372 504953839"/>
+
+        <ImageView
+          android:id="@+id/phoneArrow"
+          style="@style/DetailsItemShevron"/>
+
+      </RelativeLayout>
+
+      <View
+        android:layout_width="@dimen/content_width"
+        android:layout_height="1dp"
+        android:background="@color/lightBlue"/>
+
+      <RelativeLayout
+        android:id="@+id/emailItem"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:focusableInTouchMode="false">
+
+        <ImageView
+          android:id="@+id/emailIv"
+          style="@style/DetailsItemTextView"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="@drawable/ic_perm_identity_dark_24dp"/>
+
+        <TextView
+          android:id="@+id/emailTv"
+          style="@style/DetailsItemTextView"
+          android:layout_marginStart="32dp"
+          tools:text="Add your email"/>
+
+        <ImageView
+          android:id="@+id/emailArrow"
+          style="@style/DetailsItemShevron"/>
+
+      </RelativeLayout>
+
+      <View
+        android:layout_width="@dimen/content_width"
+        android:layout_height="1dp"
+        android:background="@color/lightBlue"/>
+
+      <RelativeLayout
+        android:id="@+id/idItem"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:focusableInTouchMode="false">
+
+        <ImageView
+          android:id="@+id/idIv"
+          style="@style/DetailsItemTextView"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="@drawable/ic_assignment_ind_dark_24dp"/>
+
+        <TextView
+          android:id="@+id/idTv"
+          style="@style/DetailsItemTextView"
+          android:layout_marginStart="32dp"
+          tools:text="Verify your ID"/>
+
+        <ImageView
+          android:id="@+id/idArrow"
+          style="@style/DetailsItemShevron"/>
+
+      </RelativeLayout>
+
+      <View
+        android:layout_width="@dimen/content_width"
+        android:layout_height="1dp"
+        android:background="@color/lightBlue"/>
+
+      <RelativeLayout
+        android:id="@+id/addressItem"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:focusableInTouchMode="false">
+
+        <ImageView
+          android:id="@+id/addressIv"
+          style="@style/DetailsItemTextView"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="@drawable/map_marker_outline"/>
+
+        <TextView
+          android:id="@+id/addressTv"
+          style="@style/DetailsItemTextView"
+          android:layout_marginStart="32dp"
+          tools:text="Address"/>
+
+        <ImageView
+          android:id="@+id/addressArrow"
+          style="@style/DetailsItemShevron"/>
+
+      </RelativeLayout>
+
+      <View
+        android:layout_width="@dimen/content_width"
+        android:layout_height="1dp"
+        android:background="@color/lightBlue"/>
+
+    </LinearLayout>
+
+  </ScrollView>
+
+</android.support.constraint.ConstraintLayout>
