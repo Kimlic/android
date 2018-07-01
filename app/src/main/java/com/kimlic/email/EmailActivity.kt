@@ -49,7 +49,7 @@ class EmailActivity : BaseActivity() {
     private fun manageInput() {
         if (isEmailValid()) {
             emailEt.setError(null)
-            PresentationManager.emailVerify(this)
+            PresentationManager.emailVerify(this, emailEt.text.toString())
         } else {
             emailEt.setError("invalid")
         }

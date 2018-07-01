@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <item>
+    <layer-list>
+      <item android:gravity="top" android:height="@dimen/circle_one" android:width="@dimen/circle_one">
+        <shape android:shape="oval">
+          <solid android:color="@color/lightBlueRounded"/>
+        </shape>
+      </item>
+
+      <item android:gravity="center" android:height="@dimen/circle_two" android:width="@dimen/circle_two">
+        <shape android:shape="oval">
+          <solid android:color="@color/lightBlueRounded"/>
+        </shape>
+      </item>
+
+      <item android:gravity="center" android:height="@dimen/circle_three" android:width="@dimen/circle_three">
+        <shape android:shape="oval">
+          <solid android:color="@color/lightBlueRounded"/>
+        </shape>
+      </item>
+
+      <item android:gravity="center" android:height="@dimen/circle_four" android:width="@dimen/circle_four">
+        <shape android:shape="oval">
+          <solid android:color="@color/lightBlueRounded"/>
+        </shape>
+      </item>
+
+      <item
+        android:drawable="@drawable/ic_white_location_icon_sml"
+        android:gravity="center"
+        android:height="@dimen/logo_size"
+        android:width="64dp">
+      </item>
+
+    </layer-list>
+  </item>
+
+</selector>

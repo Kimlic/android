@@ -71,6 +71,6 @@ class RisksFragment : BasePopupFragment() {
             buttons[count++].setOnClickListener { Prefs.isPasscodeOffered = true; dismiss(); PresentationManager.passcode(activity!!) }
         }
 
-        subtitleTv.text = resources.getString(R.string.you_have_main_risks, count)
+        risksTv.text = resources.getString(R.string.you_have_main_risks, count)
     }
 }

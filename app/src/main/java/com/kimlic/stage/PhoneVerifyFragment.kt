@@ -33,7 +33,7 @@ class PhoneVerifyFragment : BasePopupFragment() {
 
     private fun setupUI() {
         titleTv.text = getString(R.string.verify_your_number_)
-        subtitleTv.text = getString(R.string.number_is_not_verified)
+        risksTv.text = getString(R.string.number_is_not_verified)
 
         upperView.visibility = View.VISIBLE
         upperBt.text = getString(R.string.change_number_)

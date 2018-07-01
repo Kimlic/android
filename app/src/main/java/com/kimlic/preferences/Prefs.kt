@@ -22,6 +22,13 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
         isPasscodeOffered = false
         isRecoveryOffered = false
         isUserPhotoTaken = false
+
+        // User profile preferences
+
+        userName = ""
+        userLastName = ""
+        userPhone = ""
+        userEmail = ""
     }
 
     // Preferences
@@ -75,4 +82,25 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
         get() = getBoolean(AppConstants.isUserPhotoTaken.key)
         set(value) = setBoolean(AppConstants.isUserPhotoTaken.key, value)
 
+    // Profile preferences
+
+    var userName: String
+        get() = getString(AppConstants.userName.key)
+        set(value) = setString(AppConstants.userName.key, value)
+
+    var userLastName: String
+        get() = getString(AppConstants.userLastName.key)
+        set(value) = setString(AppConstants.userLastName.key, value)
+
+    var userPhone: String
+        get() = getString(AppConstants.userPhone.key)
+        set(value) = setString(AppConstants.userPhone.key, value)
+
+    var userEmail: String
+        get() = getString(AppConstants.userEmail.key)
+        set(value) = setString(AppConstants.userEmail.key, value)
+
+    var userAddress: String
+        get() = getString(AppConstants.userAddress.key)
+        set(value) = setString(AppConstants.userAddress.key, value)
 }

@@ -4,7 +4,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@color/lightBlue"
+  android:background="@color/darkBlue"
   tools:context=".stage.StageActivity">
 
   <FrameLayout
@@ -87,11 +87,26 @@
 
   <Button
     android:id="@+id/scanBt"
-    android:layout_width="144dp"
-    android:layout_height="128dp"
+    android:layout_width="112dp"
+    android:layout_height="100dp"
+    android:layout_marginBottom="8dp"
     android:background="@drawable/ic_scan_button"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"/>
+
+  <Button
+    android:id="@+id/redCircleBt"
+    android:layout_width="8dp"
+    android:layout_height="8dp"
+    android:layout_marginBottom="32dp"
+    android:layout_marginEnd="32dp"
+    android:background="@drawable/button_shape_circle_red"
+    android:clickable="false"
+    android:elevation="@dimen/button_elevation"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

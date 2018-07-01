@@ -102,8 +102,10 @@ object PresentationManager {
         present(presenter = presenter, className = PhoneActivity::class.java, isStarting = false)
     }
 
-    fun phoneNumberVerify(presenter: BaseActivity) {
-        present(presenter = presenter, className = PhoneVerifyActivity::class.java, isStarting = false)
+    fun phoneNumberVerify(presenter: BaseActivity, phoneNumber: String = "") {
+        val params = HashMap<String, String>()
+        params.put("phone", phoneNumber)
+        present(presenter = presenter, className = PhoneVerifyActivity::class.java, isStarting = false, params = params)
     }
 
     fun name(presenter: BaseActivity) {
@@ -112,12 +114,15 @@ object PresentationManager {
 
     // TODO check this flow
     fun email(presenter: BaseActivity) {
+
         present(presenter = presenter, className = EmailActivity::class.java, isStarting = false)
     }
 
     // TODO check this flow
-    fun emailVerify(presenter: BaseActivity) {
-        present(presenter = presenter, className = EmailVerifyActivity::class.java, isStarting = false)
+    fun emailVerify(presenter: BaseActivity, email: String = "") {
+        val params = HashMap<String, String>()
+        params.put("email", email)
+        present(presenter = presenter, className = EmailVerifyActivity::class.java, isStarting = false, params = params)
 
     }
 
@@ -175,7 +180,7 @@ object PresentationManager {
         presenter.showToast("About activity")
     }
 
-    fun address(presenter: BaseActivity){
+    fun address(presenter: BaseActivity) {
         present(presenter = presenter, className = AddressActivity::class.java, isStarting = false)
     }
 

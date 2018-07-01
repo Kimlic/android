@@ -1,14 +1,16 @@
 package com.kimlic.stage
 
+import android.arch.lifecycle.LiveData
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.kimlic.BaseFragment
 import com.kimlic.KimlicApp
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
-import com.kimlic.preferences.Prefs
 import com.kimlic.utils.AppConstants
 import kotlinx.android.synthetic.main.fragment_stage_user.*
 import java.io.File
@@ -17,7 +19,7 @@ class UserStageFragment : BaseFragment() {
 
     // Variables
 
-    private lateinit var uaserName: String
+    private lateinit var userName: LiveData<String>
 
     // Companion
 
@@ -50,22 +52,52 @@ class UserStageFragment : BaseFragment() {
     // Private
 
     private fun setupUI() {
-        setUserPhoto()
+        //setUserPhoto()
         setupListners()
         setupFielsds()
-        setupTitles()
+        manageRisks()
     }
 
-    private fun setUserPhoto() {
+    private fun setupListners() {
+        settingsBt.setOnClickListener { PresentationManager.settings(activity!!) }
+        nameItem.setOnClickListener { PresentationManager.name(activity!!) }
+        phoneItem.setOnClickListener { PresentationManager.phoneNumber(activity!!) }
+        emailItem.setOnClickListener { PresentationManager.email(activity!!) }
+        idItem.setOnClickListener { PresentationManager.documentChooseVerify(activity!!) }
+        addressItem.setOnClickListener { showToast("addres item is clicked"); PresentationManager.address(activity!!) }
+
+        titleTv.setOnClickListener { setUserPhoto() }
+        risksTv.setOnClickListener { setBlueScreen() }
+
+        takePhotoLl.setOnClickListener { it.visibility = if (setUserPhoto()) View.INVISIBLE else View.VISIBLE }
+    }
+
+    // Mocks
+
+    private fun manageRisks() {
+        if (true) risksTv.visibility = View.VISIBLE
+    }
+
+    private fun setupFielsds() {
+        setupKimField(0)
+        setupNameField("Vladimir")
+        setupPhoneField("+380508668370")
+        setupEmailField("babenkovladimirbmd@gmail.com")
+        setupIDField("Some Id")
+        setupAddressField("Kiev")
+    }
+
+    private fun setUserPhoto(): Boolean {
 //        if (!Prefs.isUserPhotoTaken) {
 //            takePhotoLl.visibility = View.INVISIBLE
 //        }
-
         val filePath = KimlicApp.applicationContext().filesDir.toString() + "/" + AppConstants.userPortraitFileName.key
-        val photo = File(filePath)
 
-        if (photo.exists()) (userPhotoIv as UserPhotoView).showUserPhoto(AppConstants.userPortraitFileName.key)
-
+        if (File(filePath).exists()) {
+            (userPhotoIv as UserPhotoView).showUserPhoto(AppConstants.userPortraitFileName.key)
+            return true
+        } else
+            return false
     }
 
 
@@ -73,75 +105,55 @@ class UserStageFragment : BaseFragment() {
         (userPhotoIv as UserPhotoView).showBlueScreen()
     }
 
-    private fun setupListners() {
-        settingsBt.setOnClickListener { PresentationManager.settings(activity!!) }
-        nameItem.setOnClickListener { PresentationManager.name(activity!!) }
-        phoneItem.setOnClickListener { showToast("phone item is clicked") }
-        emailItem.setOnClickListener { PresentationManager.email(activity!!) }
-        idItem.setOnClickListener { PresentationManager.documentChooseVerify(activity!!) }
-        addressItem.setOnClickListener { showToast("addres item is clicked"); PresentationManager.address(activity!!) }
-
-        titleTv.setOnClickListener { setUserPhoto() }
-        subtitleTv.setOnClickListener { setBlueScreen() }
-
-
-        takePhotoLl.setOnClickListener {
-            // Todo creare call to photo
-            it.visibility = View.INVISIBLE
-            showToast("TakePortrait photo is clicked")
-        }
-    }
-
-    // Mocks
-
-    private fun setupTitles() {
-        if (true) titleTv.text = getString(R.string.add_your_name)
-        if (true) subtitleTv.text = getString(R.string.id_assurance)
-    }
-
-    private fun setupFielsds() {
-        setupNameField()
-        setupPhoneField()
-        setupEmailField()
-        setupIDField()
-        setupAddressField()
-    }
-
     // Setup profile Fields
+
+    private fun setupKimField(kim: Int = 0) {
+        kimIv.background = resources.getDrawable(if (kim == 0) Icons.KIM_BLUE.icon else Icons.KIM_WHITE.icon, null)
+        kimArrow.background = resources.getDrawable(if (kim == 0) Icons.ARROW_BLUE.icon else Icons.ARROW_WHITE.icon, null)
+        kimTv.text = Editable.Factory.getInstance().newEditable(context!!.getString(R.string.you_have_kim, kim))
+        kimTv.setTextColor(if (kim == 0) resources.getColor(R.color.lightBlue, null) else resources.getColor(android.R.color.white, null))
+    }
 
     private fun setupEmailField(email: String = "") {
         emailIv.background = resources.getDrawable(if (email.equals("")) Icons.EMAIL_BLUE.icon else Icons.EMAIL_WHITE.icon, null)
         emailArrow.background = resources.getDrawable(if (email.equals("")) Icons.ARROW_BLUE.icon else Icons.ARROW_WHITE.icon, null)
         emailTv.text = if (email.equals("")) getString(R.string.add_your_email) else email
+        emailTv.setTextColor(if (email.equals("")) resources.getColor(R.color.lightBlue, null) else resources.getColor(android.R.color.white, null))
     }
 
     private fun setupNameField(name: String = "") {
-        nameIv.background = resources.getDrawable(if (name.equals("")) Icons.NAME_BLUE.icon else Icons.NAME_WHITE.icon, null)
+        //nameIv.background = resources.getDrawable(if (name.equals("")) Icons.NAME_BLUE.icon else Icons.NAME_WHITE.icon, null)
         nameArrow.background = resources.getDrawable(if (name.equals("")) Icons.ARROW_BLUE.icon else Icons.ARROW_WHITE.icon, null)
         nameTv.text = if (name.equals("")) getString(R.string.add_your_full_name) else name
+        nameTv.setTextColor(if (name.equals("")) resources.getColor(R.color.lightBlue, null) else resources.getColor(android.R.color.white, null))
     }
 
     private fun setupPhoneField(phone: String = "") {
         phoneIv.background = resources.getDrawable(if (phone.equals("")) Icons.PHONE_BLUE.icon else Icons.PHONE_WHITE.icon, null)
         phoneArrow.background = resources.getDrawable(if (phone.equals("")) Icons.ARROW_BLUE.icon else Icons.ARROW_WHITE.icon, null)
         phoneTv.text = if (phone.equals("")) getString(R.string.add_your_phone) else phone
+        phoneTv.setTextColor(if (phone.equals("")) resources.getColor(R.color.lightBlue, null) else resources.getColor(android.R.color.white, null))
     }
 
     private fun setupIDField(id: String = "") {
         idIv.background = resources.getDrawable(if (id.equals("")) Icons.ID_BLUE.icon else Icons.ID_WHITE.icon, null)
         idArrow.background = resources.getDrawable(if (id.equals("")) Icons.ARROW_BLUE.icon else Icons.ARROW_WHITE.icon, null)
         idTv.text = if (id.equals("")) getString(R.string.verify_your_id) else id
+        idTv.setTextColor(if (id.equals("")) resources.getColor(R.color.lightBlue, null) else resources.getColor(android.R.color.white, null))
     }
 
     private fun setupAddressField(address: String = "") {
         addressIv.background = resources.getDrawable(if (address.equals("")) Icons.LOCATION_BLUE.icon else Icons.LOCATION_WHITE.icon, null)
         addressArrow.background = resources.getDrawable(if (address.equals("")) Icons.ARROW_BLUE.icon else Icons.ARROW_WHITE.icon, null)
         addressTv.text = if (address.equals("")) getString(R.string.add_your_address) else address
+        addressTv.setTextColor(if (address.equals("")) resources.getColor(R.color.lightBlue, null) else resources.getColor(android.R.color.white, null))
     }
-
 }
 
 internal enum class Icons(val icon: Int) {
+
+    KIM_BLUE(R.drawable.ic_profile_name_icon_blue),
+    KIM_WHITE(R.drawable.ic_profile_name_icon_white),
 
     NAME_BLUE(R.drawable.ic_profile_name_icon_blue),
     NAME_WHITE(R.drawable.ic_profile_name_icon_white),

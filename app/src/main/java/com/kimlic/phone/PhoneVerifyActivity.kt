@@ -67,6 +67,8 @@ class PhoneVerifyActivity : BaseActivity() {
         if (pinEntered()) {
             if (true) {// If pin is accepted
                 Prefs.authenticated = true
+                val phone = intent.extras.getString("phone", "")
+                Prefs.userPhone = phone
                 successfull()
             }
         } else showToast("Pin is not entered")

@@ -222,8 +222,7 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
 
                 override fun onTick(millisUntilFinished: Long) {}
             }
-                    // TODO use automatic ok enter
-                    .start()
+                    .start()// TODO use automatic ok enter
     }
 
     // Text switcher

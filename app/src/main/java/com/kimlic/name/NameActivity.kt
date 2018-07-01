@@ -1,6 +1,5 @@
 package com.kimlic.name
 
-import android.app.Activity
 import android.os.Bundle
 import android.text.InputFilter
 import android.view.KeyEvent
@@ -12,8 +11,7 @@ import butterknife.ButterKnife
 
 import com.kimlic.BaseActivity
 import com.kimlic.R
-import com.kimlic.passcode.PasscodeSuccessfullFragment
-import com.kimlic.phone.PhoneSuccessfullFragment
+import com.kimlic.preferences.Prefs
 import com.kimlic.utils.BaseCallback
 
 import kotlinx.android.synthetic.main.activity_name.*
@@ -24,10 +22,9 @@ class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
     // Binding
 
     @BindView(R.id.nameEt)
-    lateinit var firstNameField: EditText
+    lateinit var name: EditText
     @BindView(R.id.lastNameEt)
-    lateinit var lastNameField: EditText
-
+    lateinit var lastName: EditText
 
     // Life
 
@@ -63,16 +60,19 @@ class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
         lastNameEt.setOnEditorActionListener(this)
 
         cancelTv.setOnClickListener { finish() }
-        firstNameField.filters = arrayOf(lengthFilter(20))//,filter())
-        lastNameField.filters = arrayOf(lengthFilter(20))//,filter())
+        name.filters = arrayOf(lengthFilter(20))//,filter())
+        lastName.filters = arrayOf(lengthFilter(20))//,filter())
     }
 
     // Filters
 
     private fun manageInput() {
-        if (validFields())
-        // Process fielsd
+        if (validFields()) {
+            // Process fielsd
+            Prefs.userName = name.text.toString()
+            Prefs.userLastName = lastName.text.toString()
             succesfull()
+        }
     }
 
     private fun succesfull() {
@@ -88,19 +88,19 @@ class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
     private fun validFields(): Boolean {
         var noError = true
 
-        if (firstNameField.text.length < 3) {
-            firstNameField.setError("error")
+        if (name.text.length < 3) {
+            name.setError("error")
             noError = false
         } else {
-            firstNameField.setError(null)
+            name.setError(null)
             noError = true
         }
 
-        if (lastNameField.text.length < 3) {
-            lastNameField.setError("error")
+        if (lastName.text.length < 3) {
+            lastName.setError("error")
             noError = false
         } else {
-            lastNameField.setError(null)
+            lastName.setError(null)
             noError = true
         }
 

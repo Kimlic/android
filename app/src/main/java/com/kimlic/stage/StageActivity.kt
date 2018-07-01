@@ -76,6 +76,8 @@ class StageActivity : BaseActivity() {
         }
     }
 
+
+
     private fun phoneVirify() {
         val phoneVerify = PhoneVerifyFragment.newInstance()
         phoneVerify.show(supportFragmentManager, PhoneVerifyFragment.FRAGMENT_KEY)

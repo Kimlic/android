@@ -22,8 +22,7 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
     tutorials("TUTORIALS"),
     fingerprint("FINGERPRINT"),
 
-    // Camer type
-
+    // Camera type
     cameraType("CAMERA_TYPE"),
     cameraFront("CAMERA_FRONT", 1),
     cameraRear("CAMERA_REAR", 0),
@@ -35,5 +34,13 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
 
     // User photo files
 
-    userPortraitFileName("portrait.jpg")
+    userPortraitFileName("portrait.jpg"),
+
+    // User profile preferences
+
+    userName("USER_NAME"),
+    userLastName("USER_LAST_NAME"),
+    userPhone("USER_PHONE"),
+    userEmail("USER_EMAIL"),
+    userAddress("USER_ADDRESS")
 }

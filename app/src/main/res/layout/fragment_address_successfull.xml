@@ -37,7 +37,7 @@
 
         <ImageView
           android:id="@+id/logoIv"
-          android:layout_width="132dp"
+          android:layout_width="@dimen/logo_size_success"
           android:layout_height="@dimen/logo_size_success"
           android:layout_gravity="center"
           android:background="@drawable/ic_white_location_success_icon"

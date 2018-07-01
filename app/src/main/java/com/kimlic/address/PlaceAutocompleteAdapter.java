@@ -81,7 +81,6 @@ public class PlaceAutocompleteAdapter
 
         TextView textView0 = (TextView) view.findViewById(R.id.searchResultTv);
         textView0.setText(item.getPrimaryText(STYLE_BOLD));
-
 //        return row;
         return view;
     }

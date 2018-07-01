@@ -128,7 +128,7 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_alignParentEnd">true</item>
     <item name="android:layout_centerVertical">true</item>
-    <item name="android:background">@drawable/ic_chevron_right_24dp</item>
+    <item name="android:background">@drawable/ic_white_menu_arrow</item>
     <item name="android:contentDescription">@string/shevron_right</item>
   </style>
 

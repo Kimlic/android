@@ -5,25 +5,34 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@drawable/ic_simple_background"
+  android:background="@drawable/ic_fingerprint_background"
   tools:context=".address.AddressActivity">
 
-  <ImageView
-    android:id="@+id/logoIv"
-    android:layout_width="40dp"
-    android:layout_height="56dp"
-    android:layout_marginTop="16dp"
-    android:background="@drawable/ic_white_location_icon_sml"
-    android:contentDescription="@string/addrerss_logo"
+  <Space
+    android:id="@+id/spacer"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="172dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"/>
+
+  <ImageView
+    android:id="@+id/logoIv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_logo_address"
+    android:contentDescription="@string/addrerss_logo"
+    app:layout_constraintBottom_toBottomOf="@id/spacer"
+    app:layout_constraintBottom_toTopOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="@id/spacer"/>
 
   <TextView
     android:id="@+id/textView2"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="16dp"
     android:text="@string/your_address"
     android:textColor="@android:color/white"
     android:textSize="@dimen/title_text_size"
@@ -32,55 +41,107 @@
     app:layout_constraintTop_toBottomOf="@+id/logoIv"/>
 
   <android.support.design.widget.TextInputLayout
-    android:layout_width="match_parent"
+    android:id="@+id/textInputLayout"
+    android:layout_width="@dimen/content_width"
     android:layout_height="wrap_content"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
-    android:hint="Enter address"
+    android:backgroundTint="@color/lightBlue"
+    android:hint="@string/type_your_address"
+    android:textColorHint="@color/lightBlue"
+    app:hintTextAppearance="@style/WhiteTextInputLayout"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/textView2"
-    >
+    app:layout_constraintTop_toBottomOf="@+id/textView2">
 
     <AutoCompleteTextView
       android:id="@+id/inputSearchTV"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="8dp"
       android:layout_centerVertical="true"
       android:backgroundTint="@android:color/white"
-      android:elevation="10dp"
-      android:imeOptions="actionSearch"
-      android:inputType="textNoSuggestions"
+      android:imeOptions="actionDone"
+      android:inputType="textNoSuggestions|textCapWords"
       android:textColor="@android:color/white"
-      />
+      android:textCursorDrawable="@null"
+      tools:ignore="LabelFor"/>
+
+    <TextView
+      android:id="@+id/addressTv"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/address_document"
+      android:textColor="@color/lightBlue"
+      android:textSize="@dimen/subtitle_text_size"/>
 
   </android.support.design.widget.TextInputLayout>
+
+  <FrameLayout
+    android:id="@+id/documentFl"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="0dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="16dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:background="@drawable/rounded_background_transparent"
+    app:layout_constraintBottom_toTopOf="@id/saveBt"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+
+    <LinearLayout
+      android:id="@+id/uploadLl"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:orientation="vertical">
+
+      <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/ic_upload_file_icon"
+        android:contentDescription="@string/upload_file_icon"
+        />
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="center"
+        android:text="@string/tap_to_upload_file"
+        android:textColor="@color/lightBlue"
+        android:textSize="@dimen/subtitle_text_size"/>
+
+    </LinearLayout>
+
+  </FrameLayout>
+
+  <Button
+    android:id="@+id/saveBt"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="@dimen/button_height"
+    android:layout_marginTop="16dp"
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/button_rounded_green"
+    android:text="@string/save"
+    android:textAllCaps="false"
+    android:textColor="@android:color/white"
+    android:textSize="@dimen/button_text_size"
+    app:layout_constraintBottom_toTopOf="@id/cancelTv"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"/>
 
   <TextView
     android:id="@+id/cancelTv"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="16dp"
+    android:layout_marginBottom="24dp"
     android:gravity="center"
     android:text="@string/cancel"
     android:textColor="@android:color/white"
     android:textSize="@dimen/subtitle_text_size"
-    app:layout_constraintBottom_toTopOf="@+id/submitBt"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"/>
-
-  <Button
-    android:id="@+id/submitBt"
-    android:layout_width="@dimen/content_width"
-    android:layout_height="48dp"
-    android:layout_marginTop="16dp"
-    android:layout_marginBottom="16dp"
-    android:background="@drawable/button_rounded_blue"
-    android:text="@string/submit"
-    android:textAllCaps="false"
-    android:textColor="@android:color/white"
-    android:textSize="@dimen/button_text_size"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"/>

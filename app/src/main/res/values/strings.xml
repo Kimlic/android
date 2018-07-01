@@ -168,6 +168,7 @@
   <string name="change_number_">Change Number</string>
   <string name="number_is_not_verified">555 458 39 40 is not verified</string>
   <string name="send_verification_code">Send Verification Code</string>
+  <string name="you_have_kim">You have %1$d KIM</string>
   <string name="add_your_email">Add your email</string>
   <string name="add_your_full_name">Add your full name</string>
   <string name="add_your_phone">Add your phone</string>
@@ -193,6 +194,10 @@
   <string name="your_address_added_successfully">Your address added successfully</string>
   <string name="your_identity_have_been_verified">Your identity have been verified</string>
   <string name="bottom_menu_background">Bottom menu background</string>
+  <string name="type_your_address">Type your address</string>
+  <string name="upload_file_icon">Upload file icon</string>
+  <string name="tap_to_upload_file">Tap to Upload File</string>
+  <string name="address_document">Address document</string>
 
 
 </resources>

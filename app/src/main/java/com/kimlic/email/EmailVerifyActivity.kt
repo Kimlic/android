@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
 import butterknife.BindViews
@@ -12,6 +13,7 @@ import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
 import com.kimlic.phone.PhoneSuccessfullFragment
+import com.kimlic.preferences.Prefs
 import com.kimlic.utils.BaseCallback
 import kotlinx.android.synthetic.main.activity_email_verify.*
 
@@ -52,7 +54,7 @@ class EmailVerifyActivity : BaseActivity() {
 
         digitsList[3].setOnEditorActionListener(object : TextView.OnEditorActionListener {
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
-                if (event!!.keyCode == KeyEvent.KEYCODE_ENTER) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     managePins(); hideKeyboard(); return true
                 }
                 return false
@@ -61,7 +63,12 @@ class EmailVerifyActivity : BaseActivity() {
     }
 
     private fun managePins() {
-        if (pinEntered()) successfull() else showToast("Pins are NOT entered")
+        if (pinEntered()) {
+            // email authentication
+            val email = intent.extras.getString("email", "")
+            Prefs.userEmail = email
+            successfull()
+        } else showToast("Pins are NOT entered")
     }
 
     private fun pinEntered(): Boolean {

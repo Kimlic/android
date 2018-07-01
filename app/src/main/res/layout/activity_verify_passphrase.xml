@@ -28,7 +28,7 @@
       android:textSize="@dimen/title_text_size"/>
 
     <TextView
-      android:id="@+id/subtitleTv"
+      android:id="@+id/risksTv"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginBottom="16dp"

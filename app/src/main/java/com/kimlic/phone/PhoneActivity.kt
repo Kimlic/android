@@ -50,13 +50,14 @@ class PhoneActivity : BaseActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        PresentationManager.signupRecovery(this)// finish?????
+        //PresentationManager.signupRecovery(this)// finish????? // TODO check for finish
+        finish()
     }
 
     // Private
 
     private fun setupUI() {
-        countriesList = readCountries()
+        countriesList = countries()
 
         phoneEt.addTextChangedListener(object : PhoneNumberFormattingTextWatcher() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -98,7 +99,7 @@ class PhoneActivity : BaseActivity() {
         if (isPhoneValid()) {
             phoneEt.setError(null)
             // TODO use phone number
-            PresentationManager.phoneNumberVerify(this@PhoneActivity)
+            PresentationManager.phoneNumberVerify(this@PhoneActivity, phoneEt.text.toString())
         } else
             phoneEt.setError(getString(R.string.phone_is_not_valid))
     }
@@ -110,7 +111,7 @@ class PhoneActivity : BaseActivity() {
         return phone.matches("^[+]?[0-9]{10,13}\$".toRegex())
     }
 
-    private fun readCountries(): List<Country> {
+    private fun countries(): List<Country> {
         val countries = mutableListOf<Country>()
         var hasNextLine = true
 
