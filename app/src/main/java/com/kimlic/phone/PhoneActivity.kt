@@ -50,7 +50,6 @@ class PhoneActivity : BaseActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        //PresentationManager.signupRecovery(this)// finish????? // TODO check for finish
         finish()
     }
 

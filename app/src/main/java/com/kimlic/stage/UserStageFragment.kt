@@ -64,9 +64,8 @@ class UserStageFragment : BaseFragment() {
         phoneItem.setOnClickListener { PresentationManager.phoneNumber(activity!!) }
         emailItem.setOnClickListener { PresentationManager.email(activity!!) }
         idItem.setOnClickListener { PresentationManager.documentChooseVerify(activity!!) }
-        addressItem.setOnClickListener { showToast("addres item is clicked"); PresentationManager.address(activity!!) }
+        addressItem.setOnClickListener { PresentationManager.address(activity!!) }
 
-        titleTv.setOnClickListener { setUserPhoto() }
         risksTv.setOnClickListener { setBlueScreen() }
 
         takePhotoLl.setOnClickListener { it.visibility = if (setUserPhoto()) View.INVISIBLE else View.VISIBLE }

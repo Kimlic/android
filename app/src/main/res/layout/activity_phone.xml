@@ -10,7 +10,7 @@
     android:id="@+id/spacer"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="148dp"
+    android:layout_marginTop="172dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"/>
@@ -97,11 +97,11 @@
         android:cursorVisible="false"
         android:digits="0123456789 ()+"
         android:focusable="true"
+        android:imeOptions="actionDone"
         android:inputType="phone"
         android:longClickable="false"
         android:maxLength="20"
         android:text="@string/plus_character"
-        android:imeOptions="actionDone"
         android:textCursorDrawable="@null"
         tools:ignore="LabelFor"/>
 

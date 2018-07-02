@@ -2,14 +2,15 @@
 <android.support.constraint.ConstraintLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="48dp"
-  android:background="@color/darkBlue">
+  android:layout_height="56dp"
+  android:background="@android:color/transparent">
 
   <ImageView
     android:id="@+id/imageView"
-    android:layout_width="24dp"
-    android:layout_height="32dp"
+    android:layout_width="16dp"
+    android:layout_height="24dp"
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
     android:layout_marginStart="8dp"
@@ -26,18 +27,19 @@
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
     android:layout_marginStart="8dp"
-    android:text="TextRezult"
+    android:background="@android:color/transparent"
     android:gravity="center"
     android:textColor="@android:color/white"
     android:textSize="@dimen/subtitle_text_size"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toEndOf="@+id/imageView"
-    app:layout_constraintTop_toTopOf="parent"/>
+    app:layout_constraintTop_toTopOf="parent"
+    tools:text="@string/text_rezult"/>
 
   <View
     android:layout_width="match_parent"
-    android:layout_height="2dp"
-    android:background="@android:color/darker_gray"
+    android:layout_height="1dp"
+    android:background="@color/lightBlue"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"/>

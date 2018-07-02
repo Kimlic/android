@@ -76,8 +76,10 @@
     <item name="colorControlHighlight">@android:color/white</item>
   </style>
 
-  <!--TetxInputLayout ana EditText unside-->
+  <!--TetxInputLayout and EditText unside-->
   <!--NameActivity-->
+  <!--Address Activity-->
+
   <style name="WhiteUnderlineTheme" parent="AppTheme">
     <item name="colorAccent">@android:color/white</item>
   </style>
@@ -88,6 +90,10 @@
     <item name="android:textSize">16sp</item>
   </style>
 
+  <style name="AddressTextInputLayout" parent="@android:style/TextAppearance">
+    <item name="android:textColor">@color/lightBlue</item>
+    <item name="android:textSize">16sp</item>
+  </style>
 
   <style name="DigitHolderStyle">
     <item name="android:layout_width">70dp</item>

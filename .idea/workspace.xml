@@ -15,7 +15,8 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_LOG_LEVEL" value="error" />
+    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="TAGED" />
+    <option name="TOOL_WINDOW_LOG_LEVEL" value="verbose" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="BookmarkManager">
@@ -32,48 +33,17 @@
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.bin" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.lock" afterPath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.lock" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" />
-      <change beforePath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kimlic/address/AddressActivity.kt" afterPath="$PROJECT_DIR$/app/src/main/java/com/kimlic/address/AddressActivity.kt" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kimlic/address/PlaceAutocompleteAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/kimlic/address/PlaceAutocompleteAdapter.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kimlic/email/EmailActivity.kt" afterPath="$PROJECT_DIR$/app/src/main/java/com/kimlic/email/EmailActivity.kt" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kimlic/email/EmailVerifyActivity.kt" afterPath="$PROJECT_DIR$/app/src/main/java/com/kimlic/email/EmailVerifyActivity.kt" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kimlic/managers/PresentationManager.kt" afterPath="$PROJECT_DIR$/app/src/main/java/com/kimlic/managers/PresentationManager.kt" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kimlic/name/NameActivity.kt" afterPath="$PROJECT_DIR$/app/src/main/java/com/kimlic/name/NameActivity.kt" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kimlic/passcode/PasscodeActivity.kt" afterPath="$PROJECT_DIR$/app/src/main/java/com/kimlic/passcode/PasscodeActivity.kt" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kimlic/address/AddressSuccesfullFragment.kt" afterPath="$PROJECT_DIR$/app/src/main/java/com/kimlic/address/AddressSuccesfullFragment.kt" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kimlic/phone/PhoneActivity.kt" afterPath="$PROJECT_DIR$/app/src/main/java/com/kimlic/phone/PhoneActivity.kt" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kimlic/phone/PhoneVerifyActivity.kt" afterPath="$PROJECT_DIR$/app/src/main/java/com/kimlic/phone/PhoneVerifyActivity.kt" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kimlic/preferences/Prefs.kt" afterPath="$PROJECT_DIR$/app/src/main/java/com/kimlic/preferences/Prefs.kt" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kimlic/stage/PhoneVerifyFragment.kt" afterPath="$PROJECT_DIR$/app/src/main/java/com/kimlic/stage/PhoneVerifyFragment.kt" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kimlic/stage/RisksFragment.kt" afterPath="$PROJECT_DIR$/app/src/main/java/com/kimlic/stage/RisksFragment.kt" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kimlic/stage/StageActivity.kt" afterPath="$PROJECT_DIR$/app/src/main/java/com/kimlic/stage/StageActivity.kt" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kimlic/stage/UserStageFragment.kt" afterPath="$PROJECT_DIR$/app/src/main/java/com/kimlic/stage/UserStageFragment.kt" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kimlic/terms/TermsActivity.kt" afterPath="$PROJECT_DIR$/app/src/main/java/com/kimlic/terms/TermsActivity.kt" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/kimlic/utils/AppConstants.kt" afterPath="$PROJECT_DIR$/app/src/main/java/com/kimlic/utils/AppConstants.kt" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ic_back_button.xml" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_back_button.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ic_blue_menu_arrow.xml" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_blue_menu_arrow.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ic_profile_warning_icon.xml" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_profile_warning_red_white_icon.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ic_white_location_success_icon.xml" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_white_location_success_icon.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ic_white_menu_arrow.xml" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_white_menu_arrow.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/rounded_edittext.xml" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/rounded_background_edittext.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_account_recovery.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_account_recovery.xml" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/ic_upload_file_icon.xml" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/ic_upload_file_icon.xml" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_address.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_address.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_email.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_email.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_email_verify.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_email_verify.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_name.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_name.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_stage.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_stage.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_terms.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_terms.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_touch_id.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_touch_id.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_verify_passphrase.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_verify_passphrase.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_address_successfull.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_address_successfull.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_phone_verify.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_phone_verify.xml" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_phone.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_phone.xml" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_stage_user.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_stage_user.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_updating.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_updating.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_setting_switch.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_setting_switch.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/risks_fragment.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/risks_fragment.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/touch_id_fragment.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/touch_id_fragment.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/item_search_autocompleate.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/item_search_autocompleate.xml" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
     </list>
@@ -138,62 +108,86 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="AddressActivity.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/address/AddressActivity.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1598">
+              <caret line="143" column="112" lean-forward="false" selection-start-line="143" selection-start-column="112" selection-end-line="143" selection-end-column="112" />
+              <folding>
+                <element signature="e#28#830#0" expanded="true" />
+                <element signature="e#3772#3927#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="UserStageFragment.kt" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/stage/UserStageFragment.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1707">
-              <caret line="38" column="46" lean-forward="false" selection-start-line="38" selection-start-column="46" selection-end-line="38" selection-end-column="46" />
+            <state relative-caret-position="-295">
+              <caret line="100" column="0" lean-forward="true" selection-start-line="100" selection-start-column="0" selection-end-line="100" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="StageActivity.kt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/stage/StageActivity.kt">
+      <file leaf-file-name="PresentationManager.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/managers/PresentationManager.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1044">
-              <caret line="78" column="0" lean-forward="false" selection-start-line="78" selection-start-column="0" selection-end-line="78" selection-end-column="0" />
+            <state relative-caret-position="243">
+              <caret line="152" column="8" lean-forward="false" selection-start-line="152" selection-start-column="8" selection-end-line="152" selection-end-column="8" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="activity_stage.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_stage.xml">
+      <file leaf-file-name="AddressSuccesfullFragment.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/address/AddressSuccesfullFragment.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1751">
-              <caret line="103" column="43" lean-forward="false" selection-start-line="103" selection-start-column="43" selection-end-line="103" selection-end-column="43" />
+            <state relative-caret-position="153">
+              <caret line="14" column="54" lean-forward="false" selection-start-line="14" selection-start-column="54" selection-end-line="14" selection-end-column="54" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PhoneVerifyActivity.kt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/phone/PhoneVerifyActivity.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1190">
+              <caret line="84" column="12" lean-forward="false" selection-start-line="84" selection-start-column="12" selection-end-line="84" selection-end-column="12" />
               <folding>
-                <element signature="e#767#799#0" expanded="true" />
-                <element signature="e#3582#3607#0" expanded="true" />
+                <element signature="e#2730#4740#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="styles.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/values/styles.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="359">
+              <caret line="85" column="0" lean-forward="false" selection-start-line="85" selection-start-column="0" selection-end-line="85" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="activity_address.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_address.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="61" column="31" lean-forward="false" selection-start-line="61" selection-start-column="31" selection-end-line="61" selection-end-column="31" />
+              <folding>
+                <element signature="e#1701#1723#0" expanded="true" />
+                <element signature="e#3154#3527#0" expanded="false" />
+                <element signature="e#3383#3410#0" expanded="true" />
+                <element signature="e#5260#5274#0" expanded="true" />
               </folding>
             </state>
           </provider>
           <provider editor-type-id="android-designer2">
             <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="button_shape_circle_red.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable-v24/button_shape_circle_red.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" column="39" lean-forward="false" selection-start-line="7" selection-start-column="39" selection-end-line="7" selection-end-column="39" />
-              <folding />
-            </state>
-          </provider>
-          <provider editor-type-id="android-designer2">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="colors.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/values/colors.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="11" column="15" lean-forward="false" selection-start-line="11" selection-start-column="15" selection-end-line="11" selection-end-column="15" />
-              <folding />
-            </state>
           </provider>
         </entry>
       </file>
@@ -2423,12 +2417,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_verify_passphrase.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_signup_recovery.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_splash_screen.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/drawable/ic_profile_background_.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/drawable/ic_untitled_1.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/kimlic/stage/UserPhotoView_.kt" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_stage_user_new.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/kimlic/stage/UserStageFragment_new.kt" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/kimlic/stage/UserPhotoView.kt" />
@@ -2440,17 +2428,13 @@
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/ic_profile_assurance_sheild.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/ic_profile_warning_stage.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_stage_user.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/dimens.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/ic_blue_menu_arrow.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/ic_white_menu_arrow.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/ic_back_button.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_settings.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/kimlic/stage/UserStageFragment.kt" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/kimlic/passcode/PasscodeActivity.kt" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/kimlic/phone/PhoneVerifyActivity.kt" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/kimlic/phone/PhoneActivity.kt" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/kimlic/BaseDialogFragment.kt" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/kimlic/email/EmailActivity.kt" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/kimlic/managers/PresentationManager.kt" />
@@ -2461,19 +2445,29 @@
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/rounded_logo_address.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_address_successfull.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_account_recovery.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/drawable/ic_upload_file_icon.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/rounded_background_transparent.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_email_verify.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/kimlic/address/PlaceAutocompleteAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/kimlic/preferences/Prefs.kt" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/kimlic/email/EmailVerifyActivity.kt" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/kimlic/address/AddressActivity.kt" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_address.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/button_shape_circle.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_stage.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable-v24/button_shape_circle_red.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/kimlic/stage/StageActivity.kt" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/item_search_autocompleate_cardView.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/drawable/ic_address_close_button.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/drawable/ic_upload_file_icon.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/item_search_autocompleate.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_stage_user.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/kimlic/stage/UserStageFragment.kt" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/kimlic/phone/PhoneActivity.kt" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_phone.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_address.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/kimlic/address/AddressSuccesfullFragment.kt" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/kimlic/address/AddressActivity.kt" />
       </list>
     </option>
   </component>
@@ -2518,6 +2512,71 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="AndroidView">
+        <subPane>
+          <expand>
+            <path>
+              <item name="android" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+            </path>
+            <path>
+              <item name="android" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+            </path>
+            <path>
+              <item name="android" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="kimlic" type="cbb59c9e:AndroidPsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="android" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="kimlic" type="cbb59c9e:AndroidPsiDirectoryNode" />
+              <item name="address" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="android" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="kimlic" type="cbb59c9e:AndroidPsiDirectoryNode" />
+              <item name="email" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="android" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="kimlic" type="cbb59c9e:AndroidPsiDirectoryNode" />
+              <item name="phone" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="android" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="kimlic" type="cbb59c9e:AndroidPsiDirectoryNode" />
+              <item name="stage" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="android" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="res" type="d4f16f75:AndroidResFolderNode" />
+            </path>
+            <path>
+              <item name="android" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="res" type="d4f16f75:AndroidResFolderNode" />
+              <item name="layout" type="ddeffd01:AndroidResFolderTypeNode" />
+            </path>
+            <path>
+              <item name="android" type="1abcf292:AndroidViewProjectNode" />
+              <item name="Gradle Scripts" type="ae0cef3a:AndroidBuildScriptsGroupNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -2572,51 +2631,7 @@
           <select />
         </subPane>
       </pane>
-      <pane id="AndroidView">
-        <subPane>
-          <expand>
-            <path>
-              <item name="android" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-            </path>
-            <path>
-              <item name="android" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
-            </path>
-            <path>
-              <item name="android" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
-              <item name="kimlic" type="cbb59c9e:AndroidPsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="android" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
-              <item name="kimlic" type="cbb59c9e:AndroidPsiDirectoryNode" />
-              <item name="stage" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="android" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="res" type="d4f16f75:AndroidResFolderNode" />
-            </path>
-            <path>
-              <item name="android" type="1abcf292:AndroidViewProjectNode" />
-              <item name="app" type="feadf853:AndroidModuleNode" />
-              <item name="res" type="d4f16f75:AndroidResFolderNode" />
-              <item name="drawable" type="ddeffd01:AndroidResFolderTypeNode" />
-            </path>
-            <path>
-              <item name="android" type="1abcf292:AndroidViewProjectNode" />
-              <item name="Gradle Scripts" type="ae0cef3a:AndroidBuildScriptsGroupNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="PackagesPane">
         <subPane>
           <expand>
@@ -2644,7 +2659,7 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -2673,9 +2688,9 @@
       <recent name="com.kimlic.name" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Kimlic\android\app\src\main\res\drawable-v24" />
       <recent name="C:\Kimlic\android\app\src\main\res\drawable" />
       <recent name="C:\Kimlic\android\app\src\main\res\layout" />
+      <recent name="C:\Kimlic\android\app\src\main\res\drawable-v24" />
       <recent name="C:\Kimlic\android\app\src\main\java\com\kimlic\stage" />
       <recent name="C:\Kimlic\android\app\src\main\java\com\kimlic\address" />
     </key>
@@ -2993,16 +3008,16 @@
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25510204" sideWeight="0.53868616" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6537181" sideWeight="0.5042644" order="11" side_tool="true" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2448" sideWeight="0.4385965" order="7" side_tool="false" content_ui="tabs" x="0" y="0" width="1920" height="1032" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2896" sideWeight="0.4385965" order="7" side_tool="false" content_ui="tabs" x="0" y="0" width="1920" height="1032" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22419533" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19437939" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32963374" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
-      <window_info id="Logcat" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.083240844" sideWeight="0.49573562" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Logcat" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.0" sideWeight="0.49573562" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18421052" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19093333" sideWeight="0.46131387" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Build" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18534961" sideWeight="0.49785176" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30346668" sideWeight="0.46131387" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Build" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15760267" sideWeight="0.49785176" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Android WiFi ADB" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34293333" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32853332" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24973147" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -3074,143 +3089,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_email.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="49" lean-forward="true" selection-start-line="14" selection-start-column="49" selection-end-line="14" selection-end-column="49" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://I:/My Documents/AndroidStudio/DeviceExplorer/xiaomi-redmi_note_4-442ec4380903/data/data/com.kimlic/shared_prefs/com.kimlic_preferences.xml" />
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/name/NameActivity.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="32" column="35" lean-forward="false" selection-start-line="32" selection-start-column="35" selection-end-line="32" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/rounded_logo_name.xml">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/rounded_logo_address.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="0" lean-forward="true" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-          <folding>
-            <element signature="e#1211#1229#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/rounded_logo_email.xml">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_name.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="0" lean-forward="false" selection-start-line="18" selection-start-column="0" selection-end-line="28" selection-end-column="51" />
-          <folding>
-            <element signature="e#1355#1379#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/rounded_logo_successfull.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="20" column="11" lean-forward="true" selection-start-line="20" selection-start-column="11" selection-end-line="20" selection-end-column="11" />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_address_successfull.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="595">
-          <caret line="35" column="57" lean-forward="false" selection-start-line="35" selection-start-column="57" selection-end-line="35" selection-end-column="57" />
-          <folding>
-            <element signature="e#1665#1691#0" expanded="false" />
-            <element signature="e#1724#1750#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/address/AddressSuccesfullFragment.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="26" column="51" lean-forward="true" selection-start-line="26" selection-start-column="51" selection-end-line="26" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/managers/PresentationManager.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="129" column="57" lean-forward="true" selection-start-line="129" selection-start-column="57" selection-end-line="129" selection-end-column="57" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_account_recovery.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="44" column="50" lean-forward="false" selection-start-line="44" selection-start-column="50" selection-end-line="44" selection-end-column="50" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/SignupRecoveryActivity.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="31" column="44" lean-forward="true" selection-start-line="31" selection-start-column="44" selection-end-line="31" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_back_button.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_blue_menu_arrow.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_profile_warning_red_white_icon.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -3243,14 +3121,6 @@
       </provider>
       <provider selected="true" editor-type-id="android-designer2">
         <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_upload_file_icon.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="23" lean-forward="false" selection-start-line="4" selection-start-column="23" selection-end-line="4" selection-end-column="23" />
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_profile_warning_stage.xml">
@@ -3291,32 +3161,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_phone.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="88" column="6" lean-forward="true" selection-start-line="88" selection-start-column="6" selection-end-line="88" selection-end-column="58" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/styles.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="269">
-          <caret line="87" column="36" lean-forward="false" selection-start-line="87" selection-start-column="36" selection-end-line="87" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/address/PlaceAutocompleteAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="527">
-          <caret line="82" column="59" lean-forward="false" selection-start-line="82" selection-start-column="59" selection-end-line="82" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/preferences/BasePreferences.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
@@ -3340,13 +3184,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/phone/PhoneActivity.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-493">
-          <caret line="17" column="6" lean-forward="false" selection-start-line="17" selection-start-column="6" selection-end-line="17" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_email_verify.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-8">
@@ -3358,27 +3195,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/phone/PhoneVerifyActivity.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="33" column="41" lean-forward="false" selection-start-line="33" selection-start-column="41" selection-end-line="33" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/email/EmailVerifyActivity.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="56" column="58" lean-forward="false" selection-start-line="56" selection-start-column="58" selection-end-line="56" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/email/EmailActivity.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="310">
-          <caret line="37" column="19" lean-forward="false" selection-start-line="37" selection-start-column="19" selection-end-line="37" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/recovery/AccountRecoveryActivity.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -3386,58 +3202,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://I:/My Documents/AndroidStudio/DeviceExplorer/xiaomi-redmi_note_4-442ec4380903/data/data/com.kimlic/shared_prefs/KIMLIC_PREFERENCES.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_address.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="43" lean-forward="false" selection-start-line="8" selection-start-column="43" selection-end-line="8" selection-end-column="43" />
-          <folding>
-            <element signature="e#940#963#0" expanded="false" />
-            <element signature="e#1360#1382#0" expanded="false" />
-            <element signature="e#1449#1473#0" expanded="false" />
-            <element signature="e#1739#1761#0" expanded="false" />
-            <element signature="e#1938#1965#0" expanded="false" />
-            <element signature="e#2835#2861#0" expanded="false" />
-            <element signature="e#2928#2955#0" expanded="false" />
-            <element signature="e#3084#3106#0" expanded="false" />
-            <element signature="e#4018#4044#0" expanded="false" />
-            <element signature="e#4262#4290#0" expanded="false" />
-            <element signature="e#4361#4388#0" expanded="false" />
-            <element signature="e#4495#4517#0" expanded="false" />
-            <element signature="e#4544#4566#0" expanded="false" />
-            <element signature="e#4715#4729#0" expanded="false" />
-            <element signature="e#4828#4853#0" expanded="false" />
-            <element signature="e#5217#5233#0" expanded="false" />
-            <element signature="e#5300#5327#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/address/AddressActivity.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="34" column="42" lean-forward="false" selection-start-line="34" selection-start-column="42" selection-end-line="34" selection-end-column="42" />
-          <folding>
-            <element signature="e#28#660#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://I:/My Documents/AndroidStudio/DeviceExplorer/xiaomi-redmi_note_4-442ec4380903/data/data/com.kimlic/shared_prefs/KIMLIC_PREFERENCES.xml" />
     <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/button_rounded_red.xml">
       <provider editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
       <provider selected="true" editor-type-id="android-designer2">
@@ -3448,7 +3217,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
       <provider editor-type-id="android-designer2">
@@ -3459,7 +3227,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
       <provider editor-type-id="android-designer2">
@@ -3470,7 +3237,6 @@
       <provider editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
       <provider selected="true" editor-type-id="android-designer2">
@@ -3481,21 +3247,9 @@
       <provider editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
       <provider selected="true" editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_stage_user.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4496">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2">
         <state />
       </provider>
     </entry>
@@ -3511,7 +3265,20 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
           <caret line="7" column="39" lean-forward="false" selection-start-line="7" selection-start-column="39" selection-end-line="7" selection-end-column="39" />
-          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_stage.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1751">
+          <caret line="103" column="43" lean-forward="false" selection-start-line="103" selection-start-column="43" selection-end-line="103" selection-end-column="43" />
+          <folding>
+            <element signature="e#767#799#0" expanded="false" />
+            <element signature="e#3582#3607#0" expanded="false" />
+          </folding>
         </state>
       </provider>
       <provider editor-type-id="android-designer2">
@@ -3520,19 +3287,143 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/stage/StageActivity.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1044">
+        <state relative-caret-position="1207">
           <caret line="78" column="0" lean-forward="false" selection-start-line="78" selection-start-column="0" selection-end-line="78" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_stage.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/item_search_autocompleate_cardView.xml" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/item_setting_switch.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1751">
-          <caret line="103" column="43" lean-forward="false" selection-start-line="103" selection-start-column="43" selection-end-line="103" selection-end-column="43" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/item_phrase.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values/values.xml" />
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/KimlicApp.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="5" column="6" lean-forward="false" selection-start-line="5" selection-start-column="6" selection-end-line="5" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider editor-type-id="android-manifest">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="849">
+          <caret line="125" column="37" lean-forward="false" selection-start-line="125" selection-start-column="37" selection-end-line="125" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/address/PlaceAutocompleteAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="69" column="89" lean-forward="true" selection-start-line="69" selection-start-column="89" selection-end-line="69" selection-end-column="89" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_popup_close_button.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_phone_warning_icon.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_launcher_background.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_address_close_button.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_upload_file_icon.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="0" lean-forward="false" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_name.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="72" column="37" lean-forward="true" selection-start-line="72" selection-start-column="37" selection-end-line="72" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/name/NameActivity.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="32" column="40" lean-forward="true" selection-start-line="32" selection-start-column="40" selection-end-line="32" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_stage_user.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2092">
+          <caret line="100" column="56" lean-forward="false" selection-start-line="100" selection-start-column="56" selection-end-line="100" selection-end-column="56" />
           <folding>
-            <element signature="e#767#799#0" expanded="true" />
-            <element signature="e#3582#3607#0" expanded="true" />
+            <element signature="e#445#478#0" expanded="false" />
+            <element signature="e#505#538#0" expanded="false" />
+            <element signature="e#1313#1333#0" expanded="false" />
+            <element signature="e#1821#1849#0" expanded="false" />
+            <element signature="e#2024#2048#0" expanded="false" />
+            <element signature="e#2214#2236#0" expanded="false" />
+            <element signature="e#2787#2811#0" expanded="false" />
+            <element signature="e#2971#2986#0" expanded="false" />
+            <element signature="e#3078#3100#0" expanded="false" />
+            <element signature="e#3384#3411#0" expanded="false" />
+            <element signature="e#3959#3981#0" expanded="false" />
+            <element signature="e#4935#4957#0" expanded="false" />
+            <element signature="e#5884#5906#0" expanded="false" />
+            <element signature="e#6797#6819#0" expanded="false" />
+            <element signature="e#7699#7721#0" expanded="false" />
+            <element signature="e#8605#8627#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -3540,10 +3431,119 @@
         <state />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/item_search_autocompleate.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="20" column="47" lean-forward="false" selection-start-line="20" selection-start-column="47" selection-end-line="20" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/styles.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="359">
+          <caret line="85" column="0" lean-forward="false" selection-start-line="85" selection-start-column="0" selection-end-line="85" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_phone.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-323">
+          <caret line="11" column="40" lean-forward="false" selection-start-line="11" selection-start-column="40" selection-end-line="11" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/phone/PhoneActivity.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="35" column="40" lean-forward="false" selection-start-line="35" selection-start-column="40" selection-end-line="35" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_address.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="61" column="31" lean-forward="false" selection-start-line="61" selection-start-column="31" selection-end-line="61" selection-end-column="31" />
+          <folding>
+            <element signature="e#1701#1723#0" expanded="true" />
+            <element signature="e#3154#3527#0" expanded="false" />
+            <element signature="e#3383#3410#0" expanded="true" />
+            <element signature="e#5260#5274#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/email/EmailVerifyActivity.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="521">
+          <caret line="83" column="29" lean-forward="false" selection-start-line="80" selection-start-column="4" selection-end-line="88" selection-end-column="5" />
+          <folding>
+            <element signature="e#2651#4661#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/email/EmailActivity.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="436">
+          <caret line="48" column="31" lean-forward="true" selection-start-line="48" selection-start-column="31" selection-end-line="48" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/phone/PhoneVerifyActivity.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1190">
+          <caret line="84" column="12" lean-forward="false" selection-start-line="84" selection-start-column="12" selection-end-line="84" selection-end-column="12" />
+          <folding>
+            <element signature="e#2730#4740#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/address/AddressSuccesfullFragment.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="14" column="54" lean-forward="false" selection-start-line="14" selection-start-column="54" selection-end-line="14" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/managers/PresentationManager.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="243">
+          <caret line="152" column="8" lean-forward="false" selection-start-line="152" selection-start-column="8" selection-end-line="152" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/address/AddressActivity.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1598">
+          <caret line="143" column="112" lean-forward="false" selection-start-line="143" selection-start-column="112" selection-end-line="143" selection-end-column="112" />
+          <folding>
+            <element signature="e#28#830#0" expanded="true" />
+            <element signature="e#3772#3927#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/kimlic/stage/UserStageFragment.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1707">
-          <caret line="38" column="46" lean-forward="false" selection-start-line="38" selection-start-column="46" selection-end-line="38" selection-end-column="46" />
+        <state relative-caret-position="-295">
+          <caret line="100" column="0" lean-forward="true" selection-start-line="100" selection-start-column="0" selection-end-line="100" selection-end-column="0" />
           <folding />
         </state>
       </provider>

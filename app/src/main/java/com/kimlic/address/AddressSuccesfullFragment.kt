@@ -12,7 +12,7 @@ class AddressSuccesfullFragment : BaseDialogFragment() {
     // Companion
 
     companion object {
-        val FRAGMENT_KEY = this::class.java
+        val FRAGMENT_KEY = this::class.java.simpleName
 
         fun newInstance(bundle: Bundle = Bundle()): AddressSuccesfullFragment {
             val fragment = AddressSuccesfullFragment()
