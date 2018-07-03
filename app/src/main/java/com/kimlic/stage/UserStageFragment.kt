@@ -68,7 +68,10 @@ class UserStageFragment : BaseFragment() {
 
         risksTv.setOnClickListener { setBlueScreen() }
 
-        takePhotoLl.setOnClickListener { it.visibility = if (setUserPhoto()) View.INVISIBLE else View.VISIBLE }
+        takePhotoLl.setOnClickListener {
+            PresentationManager.portraitPhoto(activity!!)
+//            it.visibility = if (setUserPhoto()) View.INVISIBLE else View.VISIBLE
+        }
     }
 
     // Mocks
@@ -90,10 +93,10 @@ class UserStageFragment : BaseFragment() {
 //        if (!Prefs.isUserPhotoTaken) {
 //            takePhotoLl.visibility = View.INVISIBLE
 //        }
-        val filePath = KimlicApp.applicationContext().filesDir.toString() + "/" + AppConstants.userPortraitFileName.key
+        val filePath = KimlicApp.applicationContext().filesDir.toString() + "/" + AppConstants.userStagePortraitFileName.key
 
         if (File(filePath).exists()) {
-            (userPhotoIv as UserPhotoView).showUserPhoto(AppConstants.userPortraitFileName.key)
+            (userPhotoIv as UserPhotoView).showUserPhoto(AppConstants.userStagePortraitFileName.key)
             return true
         } else
             return false

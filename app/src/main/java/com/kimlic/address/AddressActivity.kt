@@ -66,7 +66,6 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
 
         placeAutocompleteAdapter = PlaceAutocompleteAdapter(this, mGoogleApiClient, LAT_LNG_BOUNDS, citieFilter())
 
-        //
         addressEt.setAdapter(placeAutocompleteAdapter)
         addressEt.setDropDownBackgroundResource(R.color.transparent)
 

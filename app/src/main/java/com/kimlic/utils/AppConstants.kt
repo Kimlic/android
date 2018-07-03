@@ -13,28 +13,37 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
     isRecoveryEnabled("IS_RECOVERY_ENABLED"),
     isRecoveryOffered("IS_RECOVERY_OFFERED"),
 
-    // UserPortraitPhoto
-    isUserPhotoTaken("IS_USER_PHOTO_TAKEN"),
-
     terms("TERMS"),
     privacy("PRIVACY"),
 
     tutorials("TUTORIALS"),
     fingerprint("FINGERPRINT"),
 
-    // Camera type
+    // Camera
+
     cameraType("CAMERA_TYPE"),
     cameraFront("CAMERA_FRONT", 1),
     cameraRear("CAMERA_REAR", 0),
+
+    filePathRezult("FILE_PATH_REZULT"),
+
+    // User photo files
+    userStagePortraitFileName("portrait.jpg"),
+
+    userPassportPortraitFileName("passportPortrait.jpg"),
+    userPassportFrontSideFileName("passportFront.jpg"),
+    userPassportBackSideFileName("passportBack.jpg"),
+
+
+    // UserPortraitPhoto
+
+    isUserPhotoTaken("IS_USER_PHOTO_TAKEN"),
 
     // Settings type
 
     settingSwitch("SETTING_SWITCH", 1),
     settingIntent("SETTING_INFO", 2),
 
-    // User photo files
-
-    userPortraitFileName("portrait.jpg"),
 
     // User profile preferences
 

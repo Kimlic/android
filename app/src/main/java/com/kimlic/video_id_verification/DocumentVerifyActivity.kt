@@ -5,7 +5,7 @@ import android.os.Bundle
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.utils.AppConstants
-import com.kimlic.video_id_verification.fragments.FacePhotoFragment
+import com.kimlic.video_id_verification.fragments.PortraitPhotoFragment
 import com.kimlic.video_id_verification.fragments.IDBackPhotoFragment
 import com.kimlic.video_id_verification.fragments.IDPhotoFragment
 
@@ -14,7 +14,7 @@ class DocumentVerifyActivity : BaseActivity() {
     // Variables
 
     private lateinit var documentType: String
-    private lateinit var facePhotoFragment: FacePhotoFragment
+    private lateinit var facePhotoFragment: PortraitPhotoFragment
     private lateinit var idPhotoFragment: IDPhotoFragment
     private lateinit var idBackPhotoFragment: IDBackPhotoFragment
 
@@ -38,7 +38,7 @@ class DocumentVerifyActivity : BaseActivity() {
 
         initFragmentas()
         //documentType = intent.extras.getString("", "passport")
-        showFragment(R.id.container, facePhotoFragment, FacePhotoFragment.FRAGMENT_KEY)
+        showFragment(R.id.container, facePhotoFragment, PortraitPhotoFragment.FRAGMENT_KEY)
 
     }
 
@@ -46,7 +46,7 @@ class DocumentVerifyActivity : BaseActivity() {
         val bundle = Bundle()
         bundle.putInt(AppConstants.cameraType.key, AppConstants.cameraFront.intKey)
 
-        facePhotoFragment = FacePhotoFragment.newInstance(bundle)
+        facePhotoFragment = PortraitPhotoFragment.newInstance(bundle)
         idPhotoFragment = IDPhotoFragment.newInstance()
         idBackPhotoFragment = IDBackPhotoFragment.newInstance()
     }

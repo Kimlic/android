@@ -12,7 +12,6 @@ class DocumentVerifyChooseActivity : BaseActivity() {
 
     private lateinit var documentType: String
 
-
     // Life
 
     override fun onCreate(savedInstanceState: Bundle?) {

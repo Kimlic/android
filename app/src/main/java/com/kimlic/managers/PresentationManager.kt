@@ -8,6 +8,7 @@ import com.kimlic.R
 import com.kimlic.SignupRecoveryActivity
 import com.kimlic.address.AddressActivity
 import com.kimlic.auth.TouchIdActivity
+import com.kimlic.video_id_verification.PortraitActivity
 import com.kimlic.email.EmailActivity
 import com.kimlic.email.EmailVerifyActivity
 import com.kimlic.name.NameActivity
@@ -152,6 +153,11 @@ object PresentationManager {
 
     fun stage(presenter: BaseActivity) {
         present(presenter = presenter, className = StageActivity::class.java, isStarting = true)
+    }
+
+    fun portraitPhoto(presenter: BaseActivity) {
+
+        present(presenter = presenter, className = PortraitActivity::class.java, isStarting = false)
     }
 
     fun termsReview(presenter: BaseActivity) {

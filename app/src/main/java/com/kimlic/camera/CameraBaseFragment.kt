@@ -30,8 +30,10 @@ open class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
 
     // Binding
 
-    @BindView(R.id.frameLayout) lateinit var frameLayout: FrameLayout
-    @BindView(R.id.captureBt) lateinit var captureBt: Button
+    @BindView(R.id.frameLayout)
+    lateinit var frameLayout: FrameLayout
+    @BindView(R.id.captureBt)
+    lateinit var captureBt: Button
 
     // Variables
 
@@ -105,7 +107,7 @@ open class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
         kimlicSurfaceView = null
     }
 
-    private fun setCameraParams(camera: Camera){
+    private fun setCameraParams(camera: Camera) {
         camera.setDisplayOrientation(90)
         val params = camera.parameters
         val sizes: List<Camera.Size> = params.supportedPictureSizes
@@ -113,14 +115,14 @@ open class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
         var currentHight = 480
 
         for (size in sizes) {
-            if(size.height>currentHight && size.width>currentWidth){
+            if (size.height > currentHight && size.width > currentWidth) {
                 currentHight = size.height
                 currentWidth = size.width
             }
         }
         params.pictureFormat = ImageFormat.JPEG
         params.focusMode = (Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)
-        params.setPictureSize(currentWidth,currentHight)
+        params.setPictureSize(currentWidth, currentHight)
         camera.parameters = params
     }
 
@@ -129,7 +131,7 @@ open class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
     private fun permissionsGranted(): Boolean {
         if (ActivityCompat.checkSelfPermission(activity!!, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity!!, arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    ,REQUEST_CAMERA_PERMISSION)
+                    , REQUEST_CAMERA_PERMISSION)
             return false
         }
         return true
@@ -142,7 +144,7 @@ open class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
         // send file URI to activity
 
         val fos: FileOutputStream?
-        val filepath = AppConstants.userPortraitFileName.key // temporary
+        val filepath = AppConstants.userStagePortraitFileName.key // temporary
         try {
             fos = KimlicApp.applicationContext().openFileOutput(filepath, Context.MODE_PRIVATE)
             fos.write(data)

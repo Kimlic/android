@@ -4,7 +4,7 @@ import android.os.Bundle
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.utils.AppConstants
-import com.kimlic.video_id_verification.fragments.FacePhotoFragment
+import com.kimlic.video_id_verification.fragments.PortraitPhotoFragment
 import com.kimlic.video_id_verification.fragments.IDBackPhotoFragment
 import com.kimlic.video_id_verification.fragments.IDPhotoFragment
 
@@ -26,8 +26,8 @@ class VideoIdActivity : BaseActivity() {
     private fun faceFragment() {
         val bundle = Bundle()
         bundle.putInt(AppConstants.cameraType.key, AppConstants.cameraFront.intKey)
-        val fragment = FacePhotoFragment.newInstance(bundle)
-        showFragment(R.id.containerVideo, fragment, FacePhotoFragment.FRAGMENT_KEY)
+        val fragment = PortraitPhotoFragment.newInstance(bundle)
+        showFragment(R.id.containerVideo, fragment, PortraitPhotoFragment.FRAGMENT_KEY)
     }
 
     private fun idPhotoFragment() {

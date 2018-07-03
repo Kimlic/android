@@ -19,11 +19,11 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="height" value="133" />
-                            <entry key="outputName" value="ic_upload_file_icon" />
+                            <entry key="height" value="184" />
+                            <entry key="outputName" value="ic_camera_screen_portrait_photo_icon" />
                             <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="I:\My Documents\K I M L I C K\upload_file_icon.svg" />
-                            <entry key="width" value="153" />
+                            <entry key="sourceFile" value="I:\My Documents\K I M L I C K\App_UI_SVG_assets\camera_Screen_portrait_photo_icon.svg" />
+                            <entry key="width" value="100" />
                           </map>
                         </option>
                       </PersistentState>
