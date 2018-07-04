@@ -25,6 +25,7 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
 
         // User profile preferences
 
+        auth = ""
         userName = ""
         userLastName = ""
         userPhone = ""
@@ -84,6 +85,10 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
 
     // Profile preferences
 
+    var auth: String
+        get() = getString(AppConstants.userAuth.key)
+        set(value) = setString(AppConstants.userAuth.key, value)
+
     var userName: String
         get() = getString(AppConstants.userName.key)
         set(value) = setString(AppConstants.userName.key, value)
@@ -103,4 +108,13 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
     var userAddress: String
         get() = getString(AppConstants.userAddress.key)
         set(value) = setString(AppConstants.userAddress.key, value)
+
+    // Mocks
+    var authorization: String = "Bearer: 359A09A81C9BE5F6931A6279A660EF855F9DE3382AEAF97F4D9FE96E47AA981F"
+
+    var authSecretCode: String = "12345"
+
+    var accountAddress: String = "0xaf0524fe539dacd488391d48a892857347a81584"
+
+
 }

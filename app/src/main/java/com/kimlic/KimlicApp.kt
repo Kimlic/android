@@ -2,6 +2,7 @@ package com.kimlic
 
 import android.app.Application
 import android.content.Context
+import com.android.volley.RequestQueue
 
 class KimlicApp : Application() {
 
@@ -15,6 +16,7 @@ class KimlicApp : Application() {
         private var instance: KimlicApp? = null
 
         fun applicationContext(): Context = instance!!.applicationContext
+
     }
 
     // Life

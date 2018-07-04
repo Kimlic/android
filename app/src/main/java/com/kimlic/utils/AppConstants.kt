@@ -47,9 +47,12 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
 
     // User profile preferences
 
+    userAuth("USER_AUTH"),
     userName("USER_NAME"),
     userLastName("USER_LAST_NAME"),
     userPhone("USER_PHONE"),
     userEmail("USER_EMAIL"),
     userAddress("USER_ADDRESS")
+
+
 }

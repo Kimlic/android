@@ -115,7 +115,6 @@ object PresentationManager {
 
     // TODO check this flow
     fun email(presenter: BaseActivity) {
-
         present(presenter = presenter, className = EmailActivity::class.java, isStarting = false)
     }
 
@@ -124,7 +123,6 @@ object PresentationManager {
         val params = HashMap<String, String>()
         params.put("email", email)
         present(presenter = presenter, className = EmailVerifyActivity::class.java, isStarting = false, params = params)
-
     }
 
     fun recovery(presenter: BaseActivity) {
@@ -156,7 +154,6 @@ object PresentationManager {
     }
 
     fun portraitPhoto(presenter: BaseActivity) {
-
         present(presenter = presenter, className = PortraitActivity::class.java, isStarting = false)
     }
 

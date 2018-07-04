@@ -4,11 +4,16 @@ import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
 import android.widget.TextView
+import com.android.volley.Request
+import com.android.volley.Response
+import com.kimlic.API.KimlicRequest
+import com.kimlic.API.VolleySingleton
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
+import com.kimlic.preferences.Prefs
+import com.kimlic.utils.QuorumURL
 import kotlinx.android.synthetic.main.activity_email.*
 
 class EmailActivity : BaseActivity() {
@@ -47,9 +52,36 @@ class EmailActivity : BaseActivity() {
     }
 
     private fun manageInput() {
-        if (isEmailValid()) {
+
+        if (!isEmailValid()) {
             emailEt.setError(null)
-            PresentationManager.emailVerify(this, emailEt.text.toString())
+
+            val requestParams = emptyMap<String, String>().toMutableMap()
+            val headers = emptyMap<String, String>().toMutableMap()
+
+            headers.put("authorization", Prefs.authorization)
+            headers.put("account-address", Prefs.accountAddress)
+            headers.put("auth-secret-token", Prefs.authSecretCode)
+
+            //params.put("email", emailEt.text.toString())
+            requestParams.put("email", "babenkovladimirbmd@gmail.com")
+
+            val request = KimlicRequest(Request.Method.POST, QuorumURL.emailVerify.url,
+                    Response.Listener<String> { response ->
+                        PresentationManager.emailVerify(this, emailEt.text.toString())
+                        Log.d("TAGPOST", response.toString())
+                    },
+                    Response.ErrorListener {
+                        Log.d("TAGPOST", "error")
+                    }
+            )
+
+            request.setHeaders(headers)
+            request.setParams(requestParams)
+
+            VolleySingleton.getInstance(this).addToRequestQueue(request)
+            // PresentationManager.emailVerify(this, emailEt.text.toString())
+
         } else {
             emailEt.setError("invalid")
         }

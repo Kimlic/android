@@ -22,7 +22,7 @@ import com.kimlic.R
 import com.kimlic.utils.AppConstants
 import java.io.FileOutputStream
 
-open class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
+abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
 
     // Constants
 
@@ -84,6 +84,8 @@ open class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
 
     private fun setupUI() {
         cameraId = arguments!!.getInt(AppConstants.cameraType.key, AppConstants.cameraRear.intKey)
+        filePath = arguments!!.getString(AppConstants.filePathRezult.key, "default.jpg")
+
         captureBt.setOnClickListener { takePicture() }
     }
 
@@ -144,9 +146,9 @@ open class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
         // send file URI to activity
 
         val fos: FileOutputStream?
-        val filepath = AppConstants.userStagePortraitFileName.key // temporary
+       // val filepath = AppConstants.userStagePortraitFileName.key // temporary
         try {
-            fos = KimlicApp.applicationContext().openFileOutput(filepath, Context.MODE_PRIVATE)
+            fos = KimlicApp.applicationContext().openFileOutput(filePath, Context.MODE_PRIVATE)
             fos.write(data)
             fos.close()
         } catch (e: Exception) {
