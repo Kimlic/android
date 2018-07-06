@@ -7,7 +7,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId 'com.kimlic'
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -23,6 +23,10 @@ android {
     }
     buildToolsVersion '27.0.3'
     dexOptions {
+    }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
     }
 }
 
@@ -61,8 +65,7 @@ dependencies {
 
     // web3j
     implementation 'org.web3j:core:3.3.1-android'
-
-
+    implementation 'org.web3j:quorum:0.8.0'
 }
 
 kapt {

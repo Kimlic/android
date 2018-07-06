@@ -21,13 +21,13 @@ class MainActivity : BaseActivity() {
         setupUI()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        when (resultCode) {
-            SPLASH_SCREEN_REQUEST_CODE -> {
-                // in case SplashActivity
-            }
-        }
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        when (resultCode) {
+//            SPLASH_SCREEN_REQUEST_CODE -> {
+//                // in case SplashActivity
+//            }
+//        }
+//    }
 
     private fun setupUI() {
         if (true) splashScreenFragment()
