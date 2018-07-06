@@ -65,10 +65,7 @@ dependencies {
 
     // web3j
     implementation 'org.web3j:core:3.3.1-android'
-
     implementation 'org.web3j:quorum:0.8.0'
-
-
 }
 
 kapt {

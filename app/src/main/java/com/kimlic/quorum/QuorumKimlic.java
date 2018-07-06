@@ -17,8 +17,12 @@ public class QuorumKimlic {
 
     // Constants
 
-    private final static String QUORUM_URL = "http://05357055.ngrok.io";
-    private final static String ADDRESS_SIMPLE_STORAGE = "0x238e461d596a8416b73e8dd3c75789aeaa81edeb";
+    private final static String QUORUM_URL = "http://40.115.43.126:22000";
+    private final static String ADDRESS_ACCOUNT_STORAGE_ADAPTER = "0xd37debc7b53d678788661c74c94f265b62a412ac";
+
+//    private final static String QUORUM_URL = "http://05357055.ngrok.io";
+//    private final static String ADDRESS_SIMPLE_STORAGE = "0x238e461d596a8416b73e8dd3c75789aeaa81edeb";
+//    private final static String ADDRESS_ACCOUNT_STORAGE_ADAPTER = "0x267aa04f44bdbd1a15ac9269d48d1d471307ba8c";
 
     // Variables
 
@@ -28,7 +32,8 @@ public class QuorumKimlic {
     private String mAddress;
     private Web3j mWeb3 = Web3.getInstance(QUORUM_URL).getWeb3();
 
-    private SimpleStorage mSimpleStorage;
+//    private SimpleStorage mSimpleStorage;
+    private AccountStorageAdapter mAccountStorageAdapter;
 
     // Life
 
@@ -39,25 +44,29 @@ public class QuorumKimlic {
         mAddress = generateAddress(mKeyPair);
 
         Credentials credentials = credentialsFrom(mKeyPair);
-        mSimpleStorage = loadSimpleStorage(credentials, mWeb3, ADDRESS_SIMPLE_STORAGE);
+//        mSimpleStorage = loadSimpleStorage(credentials, mWeb3, ADDRESS_SIMPLE_STORAGE);
+        mAccountStorageAdapter = loadAccountStorageAdapter(credentials, mWeb3, ADDRESS_ACCOUNT_STORAGE_ADAPTER);
     }
 
     // Public
 
-    public TransactionReceipt setEmpty() throws ExecutionException, InterruptedException {
-        return mSimpleStorage.setEmpty().sendAsync().get();
-    }
+//    public TransactionReceipt setEmpty() throws ExecutionException, InterruptedException {
+//        return mSimpleStorage.setEmpty().sendAsync().get();
+//    }
+//
+//    public int get() throws ExecutionException, InterruptedException {
+//        return mSimpleStorage.get().sendAsync().get().intValue();
+//    }
+//
+//    public TransactionReceipt set(int value) throws ExecutionException, InterruptedException {
+//        return mSimpleStorage.set(BigInteger.valueOf(value)).sendAsync().get();
+//    }
 
-    public int get() throws ExecutionException, InterruptedException {
-        return mSimpleStorage.get().sendAsync().get().intValue();
-    }
-
-    public TransactionReceipt set(int value) throws ExecutionException, InterruptedException {
-        return mSimpleStorage.set(BigInteger.valueOf(value)).sendAsync().get();
+    public TransactionReceipt setAccountFieldMainData(String UDID, String verificationType) throws ExecutionException, InterruptedException {
+        return mAccountStorageAdapter.setAccountFieldMainData(UDID, verificationType).sendAsync().get();
     }
 
     // Accessors
-
 
     public static QuorumKimlic getInstance() {
         if (sInstance == null) {
@@ -89,7 +98,11 @@ public class QuorumKimlic {
         return Numeric.prependHexPrefix(Keys.getAddress(keyPair));
     }
 
-    private SimpleStorage loadSimpleStorage(Credentials credentials, Web3j web3j, String contractAddress) {
-        return SimpleStorage.load(contractAddress, web3j, credentials, BigInteger.ZERO, BigInteger.valueOf(4612388));
+//    private SimpleStorage loadSimpleStorage(Credentials credentials, Web3j web3j, String contractAddress) {
+//        return SimpleStorage.load(contractAddress, web3j, credentials, BigInteger.ZERO, BigInteger.valueOf(4612388));
+//    }
+
+    private AccountStorageAdapter loadAccountStorageAdapter(Credentials credentials, Web3j web3j, String contractAddress) {
+        return AccountStorageAdapter.load(contractAddress, web3j, credentials, BigInteger.ZERO, BigInteger.valueOf(4612388));
     }
 }
