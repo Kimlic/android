@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.text.Editable
+import android.util.Log
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
@@ -15,6 +16,8 @@ import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
+import com.kimlic.quorum.QuorumKimlic
+import com.kimlic.quorum.Sha
 import com.kimlic.utils.QuorumURL
 import kotlinx.android.synthetic.main.activity_phone.*
 import org.json.JSONObject
@@ -109,15 +112,18 @@ class PhoneActivity : BaseActivity() {
             val params = emptyMap<String, String>().toMutableMap()
             val headers = emptyMap<String, String>().toMutableMap()
 
-            headers.put("authorization", Prefs.authorization)
-            headers.put("account-address", Prefs.accountAddress)
-            headers.put("auth-secret-token", Prefs.authSecretCode)
+            val quorumKimlic = QuorumKimlic.getInstance()
+            val address = quorumKimlic.address
 
+            val receiptPhone = quorumKimlic.setAccountFieldMainData(Sha.sha256(phone), "phone")
+
+            headers.put("account-address", address)
             params.put("phone", phone)
 
             val request = KimlicRequest(Request.Method.POST, QuorumURL.phoneVerify.url,
                     Response.Listener<String> { response ->
                         val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
+                        
                         if (responceCode.startsWith("2")) PresentationManager.phoneNumberVerify(this@PhoneActivity, phone)
                     },
                     Response.ErrorListener { showToast("onError") }

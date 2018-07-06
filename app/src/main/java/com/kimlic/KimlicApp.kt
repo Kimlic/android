@@ -51,7 +51,7 @@ class KimlicApp : Application() {
 //        Log.e(TAG, "VALUE 2: $currentValueTwo")
 
         val UDID = DeviceID.id(applicationContext)
-        val shaUDID = Sha.sha256(UDID)
+        val shaUDID = Sha.sha256(UDID)// saves to preferences
         val address = quorumKimlic.address
 
         Log.e(TAG, "UDID: $UDID")

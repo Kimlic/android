@@ -2,6 +2,7 @@ package com.kimlic.email
 
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -18,6 +19,7 @@ import com.kimlic.R
 import com.kimlic.managers.PresentationManager
 import com.kimlic.phone.PhoneSuccessfullFragment
 import com.kimlic.preferences.Prefs
+import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.utils.BaseCallback
 import com.kimlic.utils.QuorumURL
 import kotlinx.android.synthetic.main.activity_email_verify.*
@@ -33,7 +35,7 @@ class EmailVerifyActivity : BaseActivity() {
     // Variables
 
     private var currentHolder = 0
-    private var code: String = ""
+    private lateinit var code: StringBuilder
 
     // Life
 
@@ -62,7 +64,8 @@ class EmailVerifyActivity : BaseActivity() {
         digitsList[3].setOnEditorActionListener(object : TextView.OnEditorActionListener {
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    managePins(); hideKeyboard(); return true
+                    //managePins();
+                    hideKeyboard(); return true
                 }
                 return false
             }
@@ -72,30 +75,31 @@ class EmailVerifyActivity : BaseActivity() {
     private fun managePins() {
         if (pinEntered()) {
             val email = intent.extras.getString("email", "")
-            Prefs.userEmail = email
 
-            digitsList.forEach { code.plus(it.text.toString()) }
+            code = StringBuilder()
+            digitsList.forEach { code.append(it.text.toString()) }
 
             val params = emptyMap<String, String>().toMutableMap()
             val headers = emptyMap<String, String>().toMutableMap()
 
-            headers.put("authorization", Prefs.authorization)
-            headers.put("account-address", Prefs.accountAddress)
-            headers.put("auth-secret-token", Prefs.authSecretCode)
+            val quorumKimlic = QuorumKimlic.getInstance()
+            val address = quorumKimlic.address
 
-            params.put("code", code)
+            headers.put("account-address", address)
+            params.put("code", code.toString())
 
             val request = KimlicRequest(Request.Method.POST, QuorumURL.emailVerifyApprove.url,
                     Response.Listener<String> { response ->
                         val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
+                        val status = JSONObject(response).getJSONObject("data").optString("status").toString()
 
-                        if (responceCode.startsWith("2")) {
+                        if (responceCode.startsWith("2") && status.equals("ok")) {
                             Prefs.userEmail = email; successfull()
                         } else {
                             // TODO else
                         }
                     },
-                    Response.ErrorListener { showToast("onError") }
+                    Response.ErrorListener { showToast("Invalid code"); finish() }//PresentationManager.stage(this@EmailVerifyActivity) }
             )
 
             request.requestHeaders = headers

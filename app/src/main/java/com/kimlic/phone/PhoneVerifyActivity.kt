@@ -18,6 +18,7 @@ import com.kimlic.BaseDialogFragment
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
+import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.utils.BaseCallback
 import com.kimlic.utils.QuorumURL
 import kotlinx.android.synthetic.main.activity_phone_verify.*
@@ -34,7 +35,7 @@ class PhoneVerifyActivity : BaseActivity() {
 
     private lateinit var fragment: BaseDialogFragment
     private lateinit var phone: String
-    private var code: String = ""
+    private lateinit var code: StringBuilder
 
 
     // Life
@@ -66,7 +67,8 @@ class PhoneVerifyActivity : BaseActivity() {
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
 
                 if (event!!.keyCode == KeyEvent.KEYCODE_ENTER) {
-                    managePin(); hideKeyboard(); return true
+                    //managePin();
+                    hideKeyboard(); return true
                 }
                 return false
             }
@@ -75,35 +77,33 @@ class PhoneVerifyActivity : BaseActivity() {
 
     private fun managePin() {
         if (pinEntered()) {
-
             phone = intent.extras!!.getString("phone", "")
+            code = StringBuilder()
+            digitsList.forEach { code.append(it.text.toString()) }
 
-            code = ""
-            digitsList.forEach { code.plus(it.text.toString()) }
-            Log.d("TAGCODE", "code = " + code)
-            Log.d("TAGCODE", "phone = " + phone)
+            val quorumKimlic = QuorumKimlic.getInstance()
+            val address = quorumKimlic.address
 
             val params = emptyMap<String, String>().toMutableMap()
             val headers = emptyMap<String, String>().toMutableMap()
 
-            headers.put("authorization", Prefs.authorization)
-            headers.put("account-address", Prefs.accountAddress)
-            headers.put("auth-secret-token", Prefs.authSecretCode)
-
-            params.put("code", code)
+            headers.put("account-address", address)
+            params.put("code", code.toString())
 
             val request = KimlicRequest(Request.Method.POST, QuorumURL.phoneVierifyApprove.url,
                     Response.Listener<String> { response ->
                         val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
+                        val status = JSONObject(response).getJSONObject("data").optString("status").toString()
 
-                        if (responceCode.startsWith("2")) {
+                        if (responceCode.startsWith("2") && status.equals("ok")) {
                             Prefs.userPhone = phone
+                            Prefs.authenticated = true
                             successfull()
                         } else {
                             // TODO else
                         }
                     },
-                    Response.ErrorListener { showToast("onError") }
+                    Response.ErrorListener { showToast("Invalid code"); PresentationManager.stage(this@PhoneVerifyActivity) }
             )
 
             request.requestHeaders = headers

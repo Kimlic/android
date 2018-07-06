@@ -13,6 +13,9 @@ import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
+import com.kimlic.quorum.DeviceID
+import com.kimlic.quorum.QuorumKimlic
+import com.kimlic.quorum.Sha
 import com.kimlic.utils.QuorumURL
 import kotlinx.android.synthetic.main.activity_email.*
 import org.json.JSONObject
@@ -61,10 +64,12 @@ class EmailActivity : BaseActivity() {
             val params = emptyMap<String, String>().toMutableMap()
             val headers = emptyMap<String, String>().toMutableMap()
 
-            headers.put("authorization", Prefs.authorization)
-            headers.put("account-address", Prefs.accountAddress)
-            headers.put("auth-secret-token", Prefs.authSecretCode)
+            val quorumKimlic = QuorumKimlic.getInstance()
+            val address = quorumKimlic.address
 
+            val receiptEmail = quorumKimlic.setAccountFieldMainData(Sha.sha256(email), "email")
+
+            headers.put("account-address", address)
             params.put("email", email)
 
             val request = KimlicRequest(Request.Method.POST, QuorumURL.emailVerify.url,

@@ -2,11 +2,13 @@ package com.kimlic
 
 import android.content.Intent
 import android.os.Bundle
+import com.crashlytics.android.Crashlytics
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
 import com.kimlic.splash.SplashScreenActivity
 import com.kimlic.splash.SplashScreenFragment
 import com.kimlic.utils.BaseCallback
+import io.fabric.sdk.android.Fabric
 
 class MainActivity : BaseActivity() {
 
@@ -17,6 +19,7 @@ class MainActivity : BaseActivity() {
     // Life
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Fabric.with(this@MainActivity, Crashlytics())
         super.onCreate(savedInstanceState)
         setupUI()
     }
