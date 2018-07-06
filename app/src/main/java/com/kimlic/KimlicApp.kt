@@ -58,10 +58,10 @@ class KimlicApp : Application() {
         Log.e(TAG, "SHA UDID: $shaUDID")
         Log.e(TAG, "QUORUM ADDRESS: $address")
 
-        val receiptEmail = quorumKimlic.setAccountFieldMainData(UDID, "email")
+        val receiptEmail = quorumKimlic.setAccountFieldMainData(Sha.sha256("dmytro@pharosproduction.com"), "email")
         Log.e(TAG, "RECEIPT: $receiptEmail")
 
-        val receiptPhone = quorumKimlic.setAccountFieldMainData(UDID, "phone")
+        val receiptPhone = quorumKimlic.setAccountFieldMainData(Sha.sha256("+380997762791"), "phone")
         Log.e(TAG, "RECEIPT: $receiptPhone")
     }
 }
