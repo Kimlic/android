@@ -19,6 +19,7 @@
   <dimen name="content_width">310dp</dimen>
   <dimen name="button_height">56dp</dimen>
 
+  <!--popup fragments, camera exit button size-->
   <dimen name="menu_element_square_size">24dp</dimen>
 
   <dimen name="popup_fragment_width">280dp</dimen>

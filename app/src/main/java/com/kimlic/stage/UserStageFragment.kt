@@ -6,7 +6,6 @@ import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import com.kimlic.BaseFragment
 import com.kimlic.KimlicApp
 import com.kimlic.R
@@ -45,14 +44,15 @@ class UserStageFragment : BaseFragment() {
     }
 
     override fun onResume() {
+        setUserPhoto()
         super.onResume()
-        userPhotoIv.invalidate()
+
     }
 
     // Private
 
     private fun setupUI() {
-        //setUserPhoto()
+        setUserPhoto()
         setupListners()
         setupFielsds()
         manageRisks()

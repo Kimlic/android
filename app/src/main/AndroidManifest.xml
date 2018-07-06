@@ -59,7 +59,7 @@
       android:screenOrientation="portrait"/>
     <activity
       android:label="Video identification"
-      android:name=".video_id_verification.VideoIdActivity"/>
+      android:name=".camera_id_verification.VideoIdActivity"/>
     <activity
       android:label="Account recovery"
       android:name=".recovery.AccountRecoveryActivity"/>
@@ -87,7 +87,7 @@
       android:name=".name.NameActivity"/>
     <activity
       android:label="Verify ID document"
-      android:name=".video_id_verification.DocumentVerifyChooseActivity"/>
+      android:name=".camera_id_verification.DocumentVerifyChooseActivity"/>
     <activity
       android:label="Email"
       android:name=".email.EmailActivity"/>
@@ -96,12 +96,14 @@
       android:name=".email.EmailVerifyActivity"/>
     <activity
       android:label="Document Verify"
-      android:name=".video_id_verification.DocumentVerifyActivity"/>
+      android:name=".camera_id_verification.DocumentVerifyActivity"/>
     <activity
       android:label="Address"
       android:name=".address.AddressActivity"
       android:windowSoftInputMode="adjustResize|adjustPan"/>
-    <activity android:name=".video_id_verification.PortraitActivity">
+    <activity android:name=".camera_id_verification.PortraitActivity">
+    </activity>
+    <activity android:name=".camera_id_verification.PassportVerifyActivity">
     </activity>
   </application>
 

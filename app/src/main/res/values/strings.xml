@@ -47,7 +47,7 @@
   <string name="upper_arc">Upper arc</string>
   <string name="face_contour">Face contour</string>
   <string name="capture">Capture</string>
-  <string name="id_card">Id card</string>
+  <string name="id_card">ID card</string>
   <string name="id_back_side">ID back side</string>
   <string name="scanning">Scanning…</string>
   <string name="show_the_back_side_your_id_card">Show the Back side your ID-Card</string>
@@ -199,6 +199,7 @@
   <string name="tap_to_upload_file">Tap to Upload File</string>
   <string name="address_document">Address document</string>
   <string name="text_rezult">TextRezult</string>
+  <string name="photo_preview">Photo preview</string>
 
 
 </resources>

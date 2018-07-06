@@ -5,9 +5,11 @@ package com.kimlic.camera
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.graphics.ImageFormat
 import android.hardware.Camera
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.ActivityCompat
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +22,8 @@ import com.kimlic.BaseFragment
 import com.kimlic.KimlicApp
 import com.kimlic.R
 import com.kimlic.utils.AppConstants
+import com.kimlic.utils.BaseCallback
+import kotlinx.android.synthetic.main.fragment_id_photo.*
 import java.io.FileOutputStream
 
 abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
@@ -41,8 +45,11 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
     private lateinit var camera: Camera
     private var kimlicSurfaceView: KimlicSurfaceView? = null
     private lateinit var filePath: String
+    private lateinit var callback: BaseCallback
 
-    // Life
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_id_photo, container, false)
@@ -78,6 +85,12 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
     override fun onDestroyView() {
         super.onDestroyView()
         camera.release()
+    }
+
+    // Public
+
+    fun setCallback(callback: BaseCallback) {
+        this.callback = callback
     }
 
     // Private
@@ -139,6 +152,11 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
         return true
     }
 
+    private fun showResultPhoto(data: ByteArray?) {
+        val bitmap = BitmapFactory.decodeByteArray(data, 0, data!!.size)
+        auxilaryContourIv.setImageBitmap(bitmap)
+    }
+
     // CameraPicture BaseCallback
 
     override fun onPictureTaken(data: ByteArray?, camera: Camera?) {
@@ -146,15 +164,19 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
         // send file URI to activity
 
         val fos: FileOutputStream?
-       // val filepath = AppConstants.userStagePortraitFileName.key // temporary
         try {
             fos = KimlicApp.applicationContext().openFileOutput(filePath, Context.MODE_PRIVATE)
             fos.write(data)
             fos.close()
         } catch (e: Exception) {
-            throw Exception("Cant write data to internal storage")
+            throw Exception("Can't write data to internal storage")
         }
 
-        camera?.startPreview()
+        closeCamera()
+        showResultPhoto(data)
+        //camera?.startPreview()
+
+        //callback.callback()
+
     }
 }

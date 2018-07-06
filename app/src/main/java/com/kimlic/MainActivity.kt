@@ -30,7 +30,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setupUI() {
-        if (true) splshScreenFragment()
+        if (true) splashScreenFragment()
         //PresentationManager.stage(this)
     }
 
@@ -39,7 +39,7 @@ class MainActivity : BaseActivity() {
         startActivityForResult(splash, SPLASH_SCREEN_REQUEST_CODE)
     }
 
-    private fun splshScreenFragment() {
+    private fun splashScreenFragment() {
         val fragment = SplashScreenFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
