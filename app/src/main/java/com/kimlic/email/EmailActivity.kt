@@ -15,6 +15,8 @@ import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.QuorumURL
 import kotlinx.android.synthetic.main.activity_email.*
+import org.json.JSONObject
+
 
 class EmailActivity : BaseActivity() {
 
@@ -35,14 +37,14 @@ class EmailActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        nextBt.setOnClickListener {
-            manageInput()
-        }
+        nextBt.setOnClickListener { manageInput() }
 
         emailEt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    manageInput(); hideKeyboard(); return true
+                    //manageInput()
+                    hideKeyboard()
+                    return true
                 }
                 return false
             }
@@ -52,36 +54,31 @@ class EmailActivity : BaseActivity() {
     }
 
     private fun manageInput() {
-
-        if (!isEmailValid()) {
+        if (isEmailValid()) {
             emailEt.setError(null)
 
-            val requestParams = emptyMap<String, String>().toMutableMap()
+            val email = emailEt.text.toString()
+            val params = emptyMap<String, String>().toMutableMap()
             val headers = emptyMap<String, String>().toMutableMap()
 
             headers.put("authorization", Prefs.authorization)
             headers.put("account-address", Prefs.accountAddress)
             headers.put("auth-secret-token", Prefs.authSecretCode)
 
-            //params.put("email", emailEt.text.toString())
-            requestParams.put("email", "babenkovladimirbmd@gmail.com")
+            params.put("email", email)
 
             val request = KimlicRequest(Request.Method.POST, QuorumURL.emailVerify.url,
                     Response.Listener<String> { response ->
-                        PresentationManager.emailVerify(this, emailEt.text.toString())
-                        Log.d("TAGPOST", response.toString())
+                        val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
+                        if (responceCode.startsWith("2")) PresentationManager.emailVerify(this@EmailActivity, email)
                     },
-                    Response.ErrorListener {
-                        Log.d("TAGPOST", "error")
-                    }
+                    Response.ErrorListener { showToast("onError") }
             )
 
-            request.setHeaders(headers)
-            request.setParams(requestParams)
+            request.requestHeaders = headers
+            request.requestParasms = params
 
             VolleySingleton.getInstance(this).addToRequestQueue(request)
-            // PresentationManager.emailVerify(this, emailEt.text.toString())
-
         } else {
             emailEt.setError("invalid")
         }
