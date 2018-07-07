@@ -11,7 +11,6 @@ import android.graphics.ImageFormat
 import android.graphics.Matrix
 import android.hardware.Camera
 import android.os.Bundle
-import android.os.Handler
 import android.support.v4.app.ActivityCompat
 import android.view.LayoutInflater
 import android.view.View
@@ -25,9 +24,6 @@ import com.kimlic.KimlicApp
 import com.kimlic.R
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.BaseCallback
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_email.*
-import kotlinx.android.synthetic.main.fragment_id_photo.*
 import kotlinx.android.synthetic.main.fragment_portrait_photo.*
 import java.io.FileOutputStream
 
@@ -105,15 +101,6 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
         filePath = arguments!!.getString(AppConstants.filePathRezult.key, "default.jpg")
 
         captureBt.setOnClickListener { takePicture() }
-
-        // Confirm layout
-        acceptBt.setOnClickListener {
-
-        }
-        cancelBt.setOnClickListener {
-
-
-        }
     }
 
     private fun takePicture() {
@@ -170,6 +157,18 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
         val bitmap = BitmapFactory.decodeByteArray(data, 0, data!!.size)
         previewIv.setImageBitmap(rotateBitmap(bitmap, -90f))
         confirmLl.visibility = View.VISIBLE
+
+        // Confirm layout
+        confirmBt.setOnClickListener {
+            savePicture(filePath, data)
+            callback.callback()
+        }
+        retakelBt.setOnClickListener {
+            confirmLl.visibility = View.GONE
+            openCamera()
+            kimlicSurfaceView = KimlicSurfaceView(KimlicApp.applicationContext(), camera)
+            frameLayout.addView(kimlicSurfaceView)
+        }
     }
 
     // CameraPicture BaseCallback
@@ -178,14 +177,11 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
         // Save File
         // send file URI to activity
 
-        savePicture(filePath, data)
-
         closeCamera()
         showResultPhoto(data)
         //camera?.startPreview()
 
         //callback.callback()
-
     }
 
     private fun savePicture(filePath: String, data: ByteArray?) {

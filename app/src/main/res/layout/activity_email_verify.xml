@@ -32,6 +32,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
+    android:gravity="center"
     android:orientation="vertical"
     app:layout_constraintBottom_toTopOf="@id/saveBt"
     app:layout_constraintEnd_toEndOf="parent"
@@ -39,20 +40,21 @@
     app:layout_constraintTop_toBottomOf="@id/logoIv">
 
     <TextView
+      android:id="@+id/titleTv"
       android:layout_width="wrap_content"
       android:layout_height="match_parent"
       android:layout_marginBottom="8dp"
       android:gravity="center"
-      android:text="@string/code_sent_to_mdsanders_kimlic_com"
+      android:text="@string/code_sent_to_email"
       android:textColor="@android:color/white"
       android:textSize="@dimen/subtitle_text_size"/>
 
     <TextView
-      android:layout_gravity="center"
       android:id="@+id/cancelTv"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginBottom="16dp"
+      android:layout_gravity="center"
       android:gravity="center"
       android:text="@string/change_email_address"
       android:textColor="@color/lightBlue"

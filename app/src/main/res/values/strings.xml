@@ -95,10 +95,10 @@
   <string name="create_new">Create new</string>
   <string name="change_email_address">Change email address</string>
   <string name="verify_your_email">Verify your email</string>
-  <string name="code_sent_to_mdsanders_kimlic_com">Code sent to mdsanders@kimlic.com</string>
+  <string name="code_sent_to_email">Code sent to %1$s</string>
   <string name="phone_logo">Phone logo</string>
   <string name="verify_your_number">Verify your number</string>
-  <string name="code_sent_to_555_495_34_40">Code Sent to 555 653 49 59</string>
+  <string name="code_sent_to">Code Sent to %1$s</string>
   <string name="change_phone_number">Change phone number</string>
   <string name="email_address">Email address</string>
   <string name="your_phone_number">Your Phone Number</string>
@@ -200,6 +200,8 @@
   <string name="address_document">Address document</string>
   <string name="text_rezult">TextRezult</string>
   <string name="photo_preview">Photo preview</string>
+  <string name="retake">Retake</string>
+  <string name="confirm">Confirm</string>
 
 
 </resources>

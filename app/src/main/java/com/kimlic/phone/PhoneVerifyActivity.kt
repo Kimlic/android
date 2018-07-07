@@ -2,7 +2,6 @@ package com.kimlic.phone
 
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.widget.EditText
@@ -37,7 +36,6 @@ class PhoneVerifyActivity : BaseActivity() {
     private lateinit var phone: String
     private lateinit var code: StringBuilder
 
-
     // Life
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,6 +57,10 @@ class PhoneVerifyActivity : BaseActivity() {
         verifyBt.setOnClickListener {
             managePin()
         }
+
+        phone = intent.extras!!.getString("phone", "")
+        titleTv.text = Editable.Factory.getInstance().newEditable(this.getString(R.string.code_sent_to, phone))
+
         cancelTv.setOnClickListener { PresentationManager.phoneNumber(this) }
         showSoftKeyboard(digit1Et)
         setupDigitListner()
@@ -77,7 +79,6 @@ class PhoneVerifyActivity : BaseActivity() {
 
     private fun managePin() {
         if (pinEntered()) {
-            phone = intent.extras!!.getString("phone", "")
             code = StringBuilder()
             digitsList.forEach { code.append(it.text.toString()) }
 

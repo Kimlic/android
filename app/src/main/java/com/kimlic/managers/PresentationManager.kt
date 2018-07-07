@@ -8,7 +8,7 @@ import com.kimlic.R
 import com.kimlic.SignupRecoveryActivity
 import com.kimlic.address.AddressActivity
 import com.kimlic.auth.TouchIdActivity
-import com.kimlic.camera_id_verification.PortraitActivity
+import com.kimlic.validation.PortraitActivity
 import com.kimlic.email.EmailActivity
 import com.kimlic.email.EmailVerifyActivity
 import com.kimlic.name.NameActivity
@@ -23,9 +23,9 @@ import com.kimlic.splash.SplashScreenActivity
 import com.kimlic.stage.StageActivity
 import com.kimlic.terms.TermsActivity
 import com.kimlic.tutorial.TutorialActivity
-import com.kimlic.camera_id_verification.DocumentVerifyActivity
-import com.kimlic.camera_id_verification.DocumentVerifyChooseActivity
-import com.kimlic.camera_id_verification.PassportVerifyActivity
+import com.kimlic.validation.DocumentVerifyActivity
+import com.kimlic.validation.DocumentVerifyChooseActivity
+import com.kimlic.validation.PassportVerifyActivity
 import java.util.*
 
 object PresentationManager {

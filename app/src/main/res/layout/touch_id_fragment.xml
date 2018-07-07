@@ -54,7 +54,7 @@
       android:background="@color/grayLight"/>
 
     <Button
-      android:id="@+id/cancelBt"
+      android:id="@+id/retakelBt"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:background="@android:color/transparent"
