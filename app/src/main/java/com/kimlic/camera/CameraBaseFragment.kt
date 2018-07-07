@@ -5,8 +5,10 @@ package com.kimlic.camera
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageFormat
+import android.graphics.Matrix
 import android.hardware.Camera
 import android.os.Bundle
 import android.os.Handler
@@ -23,7 +25,10 @@ import com.kimlic.KimlicApp
 import com.kimlic.R
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.BaseCallback
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_email.*
 import kotlinx.android.synthetic.main.fragment_id_photo.*
+import kotlinx.android.synthetic.main.fragment_portrait_photo.*
 import java.io.FileOutputStream
 
 abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
@@ -100,6 +105,15 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
         filePath = arguments!!.getString(AppConstants.filePathRezult.key, "default.jpg")
 
         captureBt.setOnClickListener { takePicture() }
+
+        // Confirm layout
+        acceptBt.setOnClickListener {
+
+        }
+        cancelBt.setOnClickListener {
+
+
+        }
     }
 
     private fun takePicture() {
@@ -154,7 +168,8 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
 
     private fun showResultPhoto(data: ByteArray?) {
         val bitmap = BitmapFactory.decodeByteArray(data, 0, data!!.size)
-        auxilaryContourIv.setImageBitmap(bitmap)
+        previewIv.setImageBitmap(rotateBitmap(bitmap, -90f))
+        confirmLl.visibility = View.VISIBLE
     }
 
     // CameraPicture BaseCallback
@@ -163,6 +178,17 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
         // Save File
         // send file URI to activity
 
+        savePicture(filePath, data)
+
+        closeCamera()
+        showResultPhoto(data)
+        //camera?.startPreview()
+
+        //callback.callback()
+
+    }
+
+    private fun savePicture(filePath: String, data: ByteArray?) {
         val fos: FileOutputStream?
         try {
             fos = KimlicApp.applicationContext().openFileOutput(filePath, Context.MODE_PRIVATE)
@@ -172,11 +198,11 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
             throw Exception("Can't write data to internal storage")
         }
 
-        closeCamera()
-        showResultPhoto(data)
-        //camera?.startPreview()
+    }
 
-        //callback.callback()
-
+    private fun rotateBitmap(sourse: Bitmap, angel: Float): Bitmap {
+        val matrix = Matrix()
+        matrix.postRotate(angel)
+        return Bitmap.createBitmap(sourse, 0, 0, sourse.width, sourse.height, matrix, true)
     }
 }

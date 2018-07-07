@@ -19,7 +19,6 @@ class MainActivity : BaseActivity() {
     // Life
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Fabric.with(this@MainActivity, Crashlytics())
         super.onCreate(savedInstanceState)
         setupUI()
     }
@@ -33,8 +32,8 @@ class MainActivity : BaseActivity() {
 //    }
 
     private fun setupUI() {
-        if (true) splashScreenFragment()
-        //PresentationManager.stage(this)
+        //if (true) splashScreenFragment()
+        PresentationManager.stage(this)
     }
 
     private fun splshScreenActivity() {

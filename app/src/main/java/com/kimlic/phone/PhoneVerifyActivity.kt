@@ -103,7 +103,7 @@ class PhoneVerifyActivity : BaseActivity() {
                             // TODO else
                         }
                     },
-                    Response.ErrorListener { showToast("Invalid code"); PresentationManager.stage(this@PhoneVerifyActivity) }
+                    Response.ErrorListener { showToast("Invalid code"); finish() }
             )
 
             request.requestHeaders = headers

@@ -58,6 +58,7 @@ class EmailActivity : BaseActivity() {
 
     private fun manageInput() {
         if (isEmailValid()) {
+            nextBt.isClickable = false
             emailEt.setError(null)
 
             val email = emailEt.text.toString()
@@ -77,7 +78,7 @@ class EmailActivity : BaseActivity() {
                         val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
                         if (responceCode.startsWith("2")) PresentationManager.emailVerify(this@EmailActivity, email)
                     },
-                    Response.ErrorListener { showToast("onError") }
+                    Response.ErrorListener { showToast("onError"); finish() }
             )
 
             request.requestHeaders = headers
