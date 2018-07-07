@@ -25,8 +25,8 @@
       android:value="@integer/google_play_services_version"/>
 
     <meta-data
-      android:name="io.fabric.ApiKey"
-      android:value="622cd2d9f2a0612f02c6736d12b8328d6f5f26eb" />
+        android:name="io.fabric.ApiKey"
+        android:value="a5f149222cca55fee6eb72b0c20f2347242e97a2" />
 
     <activity android:name=".MainActivity">
       <intent-filter>

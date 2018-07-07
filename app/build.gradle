@@ -86,7 +86,7 @@ dependencies {
 
     // Fabric
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') {
-        transitive = true;
+        transitive = true
     }
 }
 
