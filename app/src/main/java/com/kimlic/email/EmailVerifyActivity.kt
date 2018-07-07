@@ -2,7 +2,6 @@ package com.kimlic.email
 
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -36,6 +35,7 @@ class EmailVerifyActivity : BaseActivity() {
 
     private var currentHolder = 0
     private lateinit var code: StringBuilder
+    private lateinit var email: String
 
     // Life
 
@@ -55,6 +55,9 @@ class EmailVerifyActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
+        email = intent.extras.getString("email", "")
+        titleTv.text = Editable.Factory.getInstance().newEditable(this.getString(R.string.code_sent_to_email, email))
+
         digitsList[currentHolder].requestFocus()
         verifyBt.setOnClickListener { managePins() }
 
@@ -74,8 +77,6 @@ class EmailVerifyActivity : BaseActivity() {
 
     private fun managePins() {
         if (pinEntered()) {
-            val email = intent.extras.getString("email", "")
-
             code = StringBuilder()
             digitsList.forEach { code.append(it.text.toString()) }
 

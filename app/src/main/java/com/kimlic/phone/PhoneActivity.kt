@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.text.Editable
-import android.util.Log
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
@@ -15,7 +14,6 @@ import com.kimlic.API.VolleySingleton
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
-import com.kimlic.preferences.Prefs
 import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.quorum.Sha
 import com.kimlic.utils.QuorumURL
@@ -80,9 +78,9 @@ class PhoneActivity : BaseActivity() {
                 handler?.post(Runnable {
                     var country: String = ""
                     countryCode = 0
-                    val stringtoCheck = if (s.startsWith("+")) s.substring(1) else s
+                    val stringToCheck = if (s.startsWith("+")) s.substring(1) else s
 
-                    countriesList.forEach { if (stringtoCheck.startsWith(it.code.toString())) country = it.country }
+                    countriesList.forEach { if (stringToCheck.startsWith(it.code.toString())) country = it.country }
 
                     runOnUiThread { countryEt.text = Editable.Factory.getInstance().newEditable(country) }
                 })
@@ -106,6 +104,7 @@ class PhoneActivity : BaseActivity() {
 
     private fun managePhone() {
         if (isPhoneValid()) {
+            nextBt.isClickable = false
             phoneEt.setError(null)
 
             val phone = phoneEt.text.toString().replace(" ", "")
@@ -123,10 +122,10 @@ class PhoneActivity : BaseActivity() {
             val request = KimlicRequest(Request.Method.POST, QuorumURL.phoneVerify.url,
                     Response.Listener<String> { response ->
                         val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
-                        
+
                         if (responceCode.startsWith("2")) PresentationManager.phoneNumberVerify(this@PhoneActivity, phone)
                     },
-                    Response.ErrorListener { showToast("onError") }
+                    Response.ErrorListener { showToast("onError"); finish() }
             )
 
             request.requestHeaders = headers

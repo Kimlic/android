@@ -1,10 +1,10 @@
-package com.kimlic.camera_id_verification
+package com.kimlic.validation
 
 import android.os.Bundle
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.utils.AppConstants
-import com.kimlic.camera_id_verification.fragments.PortraitPhotoFragment
+import com.kimlic.validation.fragments.PortraitPhotoFragment
 import com.kimlic.utils.BaseCallback
 
 class PortraitActivity : BaseActivity() {
@@ -25,7 +25,6 @@ class PortraitActivity : BaseActivity() {
     override fun onBackPressed() {
         finish()
         super.onBackPressed()
-
     }
 
     // Private
@@ -38,7 +37,6 @@ class PortraitActivity : BaseActivity() {
                 finish()
             }
         })
-
         showFragment(R.id.container, portraitFragment, PortraitPhotoFragment.FRAGMENT_KEY)
     }
 
@@ -48,5 +46,4 @@ class PortraitActivity : BaseActivity() {
         bundle.putString(AppConstants.filePathRezult.key, AppConstants.userStagePortraitFileName.key)
         portraitFragment = PortraitPhotoFragment.newInstance(bundle)
     }
-
 }

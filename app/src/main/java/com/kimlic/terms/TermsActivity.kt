@@ -46,8 +46,8 @@ class TermsActivity : BaseActivity() {
 
         when (action) {
             "accept" -> {
-                acceptBt.text = getString(R.string.accept_)
-                acceptBt.setOnClickListener {
+                confirmBt.text = getString(R.string.accept_)
+                confirmBt.setOnClickListener {
                     setResult(Activity.RESULT_OK)
                     finish()
                 }
@@ -55,8 +55,8 @@ class TermsActivity : BaseActivity() {
                 cancelTv.setOnClickListener { setResult(Activity.RESULT_CANCELED); finish() }
             }
             "review" -> {
-                acceptBt.text = getString(R.string.close)
-                acceptBt.setOnClickListener { finish() }
+                confirmBt.text = getString(R.string.close)
+                confirmBt.setOnClickListener { finish() }
             }
             else -> throw RuntimeException("Invalid document type")
         }

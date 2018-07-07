@@ -75,27 +75,41 @@
   <android.support.constraint.ConstraintLayout
     android:id="@+id/confirmLl"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:visibility="gone">
 
     <ImageView
       android:id="@+id/previewIv"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:contentDescription="@string/photo_preview"/>
+      android:contentDescription="@string/photo_preview"
+      android:scaleType="centerCrop"/>
 
     <Button
-      android:id="@+id/acceptBt"
+      android:id="@+id/retakelBt"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="Confirm"
+      android:layout_marginBottom="16dp"
+      android:layout_marginStart="16dp"
+      android:background="@color/transparent"
+      android:text="@string/retake"
+      android:textAllCaps="false"
+      android:textColor="@android:color/white"
+      android:textSize="@dimen/subtitle_text_size"
       app:layout_constraintBottom_toBottomOf="@id/confirmLl"
       app:layout_constraintStart_toStartOf="@id/confirmLl"/>
 
     <Button
-      android:id="@+id/cancelBt"
+      android:id="@+id/confirmBt"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="Cancel"
+      android:layout_marginBottom="16dp"
+      android:layout_marginEnd="16dp"
+      android:background="@color/transparent"
+      android:text="@string/confirm"
+      android:textAllCaps="false"
+      android:textColor="@android:color/white"
+      android:textSize="@dimen/subtitle_text_size"
       app:layout_constraintBottom_toBottomOf="@id/confirmLl"
       app:layout_constraintEnd_toEndOf="@id/confirmLl"/>
 

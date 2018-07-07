@@ -69,7 +69,7 @@
 
     <activity
       android:label="Video identification"
-      android:name=".camera_id_verification.VideoIdActivity"/>
+      android:name=".validation.VideoIdActivity"/>
 
     <activity
       android:label="Account recovery"
@@ -106,7 +106,7 @@
 
     <activity
       android:label="Verify ID document"
-      android:name=".camera_id_verification.DocumentVerifyChooseActivity"/>
+      android:name=".validation.DocumentVerifyChooseActivity"/>
 
     <activity
       android:label="Email"
@@ -118,7 +118,7 @@
 
     <activity
       android:label="Document Verify"
-      android:name=".camera_id_verification.DocumentVerifyActivity"/>
+      android:name=".validation.DocumentVerifyActivity"/>
 
     <activity
       android:label="Address"
@@ -127,13 +127,12 @@
 
     <activity
       android:label="Portrait"
-      android:name=".camera_id_verification.PortraitActivity"/>
+      android:name=".validation.PortraitActivity"/>
 
     <activity
       android:label="Passpot"
-      android:name=".camera_id_verification.PassportVerifyActivity"/>
+      android:name=".validation.PassportVerifyActivity"/>
 
   </application>
 
-</manifest> <!-- android:configChanges="keyboard" -->
-  <!--  -->
+</manifest>

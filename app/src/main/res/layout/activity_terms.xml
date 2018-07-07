@@ -49,7 +49,7 @@
     android:background="@android:color/transparent"
     android:overScrollMode="never"
     android:scrollbars="none"
-    app:layout_constraintBottom_toTopOf="@id/acceptBt"
+    app:layout_constraintBottom_toTopOf="@id/confirmBt"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/upperRoot"/>
@@ -67,7 +67,7 @@
     app:layout_constraintTop_toTopOf="@+id/webView"/>
 
   <Button
-    android:id="@+id/acceptBt"
+    android:id="@+id/confirmBt"
     android:layout_width="@dimen/content_width"
     android:layout_height="@dimen/button_height"
     android:layout_marginBottom="16dp"

@@ -1,4 +1,4 @@
-package com.kimlic.camera_id_verification.fragments
+package com.kimlic.validation.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater

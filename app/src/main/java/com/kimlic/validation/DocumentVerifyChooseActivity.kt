@@ -1,4 +1,4 @@
-package com.kimlic.camera_id_verification
+package com.kimlic.validation
 
 import android.os.Bundle
 import com.kimlic.BaseActivity

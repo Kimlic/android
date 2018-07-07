@@ -1,12 +1,12 @@
-package com.kimlic.camera_id_verification
+package com.kimlic.validation
 
 import android.os.Bundle
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.utils.AppConstants
-import com.kimlic.camera_id_verification.fragments.PortraitPhotoFragment
-import com.kimlic.camera_id_verification.fragments.IDBackPhotoFragment
-import com.kimlic.camera_id_verification.fragments.IDPhotoFragment
+import com.kimlic.validation.fragments.PortraitPhotoFragment
+import com.kimlic.validation.fragments.IDBackPhotoFragment
+import com.kimlic.validation.fragments.IDPhotoFragment
 
 class VideoIdActivity : BaseActivity() {
 
