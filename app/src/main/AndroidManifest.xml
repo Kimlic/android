@@ -2,9 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="com.kimlic">
 
-  <uses-feature
-    android:name="android.permission.USE_FINGERPRINT"
-    android:required="true"/>
+  <uses-feature android:name="android.permission.USE_FINGERPRINT" android:required="false"/>
 
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
@@ -27,24 +25,16 @@
       android:value="@integer/google_play_services_version"/>
 
     <meta-data
-      android:name="io.fabric.ApiKey"
-      android:value="622cd2d9f2a0612f02c6736d12b8328d6f5f26eb" />
+        android:name="io.fabric.ApiKey"
+        android:value="a5f149222cca55fee6eb72b0c20f2347242e97a2" />
 
     <activity android:name=".MainActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <category android:name="android.intent.category.LAUNCHER"/>
-      </intent-filter>
-
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
         <action android:name="android.intent.action.VIEW"/>
-        <category android:name="android.intent.category.LAUNCHER"/>
         <category android:name="android.intent.category.DEFAULT"/>
-        <category android:name="android.intent.category.BROWSABLE"/>
-        <data android:scheme="kimlic"/>
       </intent-filter>
-
     </activity>
 
     <activity
