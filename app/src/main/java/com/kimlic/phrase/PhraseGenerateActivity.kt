@@ -36,8 +36,8 @@ class PhraseGenerateActivity : BaseActivity() {
     private fun setupUI() {
         phraseBt.tag = "import"
 
-        phraseBt.setOnClickListener{
-            when(it.tag){
+        phraseBt.setOnClickListener {
+            when (it.tag) {
                 "import" -> {
                     // Import phrases
                     // Use moks
@@ -52,27 +52,30 @@ class PhraseGenerateActivity : BaseActivity() {
                     phraseBt.tag = "save"
                     phraseBt.text = getString(R.string.ok_i_save_the_passphrase)
                 }
-                "save" ->{
+                "save" -> {
                     PresentationManager.phraseVerify(this)
                 }
             }
         }
-        cancelTv.setOnClickListener{finish()}
+        cancelTv.setOnClickListener { finish() }
     }
 
-    private fun showPopup(title: String = "", message: String) {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(title)
-                .setMessage(message)
-                .setPositiveButton(getString(R.string.OK), object : DialogInterface.OnClickListener {
-                    override fun onClick(dialog: DialogInterface?, which: Int) {
-                        dialog?.dismiss()
-                    }
-                }).setCancelable(true)
+    // Moved to baseActivity
 
-        val dialog = builder.create()
-        dialog.show()
-    }
+    // TODO delete if no problems
+//    private fun showPopup(title: String = "", message: String) {
+//        val builder = AlertDialog.Builder(this)
+//        builder.setTitle(title)
+//                .setMessage(message)
+//                .setPositiveButton(getString(R.string.OK), object : DialogInterface.OnClickListener {
+//                    override fun onClick(dialog: DialogInterface?, which: Int) {
+//                        dialog?.dismiss()
+//                    }
+//                }).setCancelable(true)
+//
+//        val dialog = builder.create()
+//        dialog.show()
+//    }
 
     private fun setPhrases(list: List<String>) {
         val adapter = PhraseAdapter(this, R.layout.item_phrase, list)

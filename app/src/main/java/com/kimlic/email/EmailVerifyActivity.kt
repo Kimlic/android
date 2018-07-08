@@ -66,8 +66,8 @@ class EmailVerifyActivity : BaseActivity() {
 
         digitsList[3].setOnEditorActionListener(object : TextView.OnEditorActionListener {
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    //managePins();
                     hideKeyboard(); return true
                 }
                 return false
@@ -77,17 +77,16 @@ class EmailVerifyActivity : BaseActivity() {
 
     private fun managePins() {
         if (pinEntered()) {
+            progressBar.visibility = View.VISIBLE
+            verifyBt.isClickable = false
             code = StringBuilder()
             digitsList.forEach { code.append(it.text.toString()) }
-
-            val params = emptyMap<String, String>().toMutableMap()
-            val headers = emptyMap<String, String>().toMutableMap()
 
             val quorumKimlic = QuorumKimlic.getInstance()
             val address = quorumKimlic.address
 
-            headers.put("account-address", address)
-            params.put("code", code.toString())
+            val params = emptyMap<String, String>().toMutableMap(); params.put("code", code.toString())
+            val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", address)
 
             val request = KimlicRequest(Request.Method.POST, QuorumURL.emailVerifyApprove.url,
                     Response.Listener<String> { response ->
@@ -95,12 +94,17 @@ class EmailVerifyActivity : BaseActivity() {
                         val status = JSONObject(response).getJSONObject("data").optString("status").toString()
 
                         if (responceCode.startsWith("2") && status.equals("ok")) {
-                            Prefs.userEmail = email; successfull()
+                            Prefs.userEmail = email;
+                            Prefs.isUserEmailAccepted = true
+                            verifyBt.isClickable = true
+                            successfull()
                         } else {
-                            // TODO else
+                            verifyBt.isClickable = true
+                            digitsList.forEach { it.text.clear() }
+                            showPopup(message = getString(R.string.unable_to_verify_the_code))
                         }
                     },
-                    Response.ErrorListener { showToast("Invalid code"); finish() }//PresentationManager.stage(this@EmailVerifyActivity) }
+                    Response.ErrorListener { unableToProceed() }
             )
 
             request.requestHeaders = headers
@@ -108,7 +112,7 @@ class EmailVerifyActivity : BaseActivity() {
 
             VolleySingleton.getInstance(this).addToRequestQueue(request)
 
-        } else showToast("Pins are NOT entered")
+        } else showToast(getString(R.string.pin_is_not_enterd))
     }
 
     private fun pinEntered(): Boolean {
@@ -126,6 +130,12 @@ class EmailVerifyActivity : BaseActivity() {
             }
         })
         fragment.show(supportFragmentManager, PhoneSuccessfullFragment.FRAGMENT_KEY)
+    }
+
+    private fun unableToProceed() {
+        runOnUiThread { progressBar.visibility = View.GONE }
+        verifyBt.isClickable = true
+        showPopup(message = getString(R.string.unable_to_proceed_with_verification))
     }
 
     private fun setupDigitListner() {

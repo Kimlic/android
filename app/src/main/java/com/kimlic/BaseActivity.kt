@@ -1,9 +1,11 @@
 package com.kimlic
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.WindowManager
@@ -71,5 +73,19 @@ abstract class BaseActivity : AppCompatActivity() {
         transaction.replace(containerViewId, fragment, tag)
         transaction.addToBackStack(tag)
         transaction.commit()
+    }
+
+    fun showPopup(title: String = "", message: String) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(getString(R.string.OK), object : DialogInterface.OnClickListener {
+                    override fun onClick(dialog: DialogInterface?, which: Int) {
+                        dialog?.dismiss()
+                    }
+                }).setCancelable(true)
+
+        val dialog = builder.create()
+        dialog.show()
     }
 }

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <item>
+    <layer-list>
+
+      <item
+        android:drawable="@drawable/updating_blockchain_illustration"
+        android:gravity="center"
+        android:height="148dp"
+        android:top="16dp"
+        android:width="164dp">
+      </item>
+
+      <item android:gravity="center" android:height="@dimen/circle_one_medium" android:width="@dimen/circle_one_medium">
+        <shape android:shape="oval">
+          <stroke android:color="#329bb5de" android:width="1dp"/>
+        </shape>
+      </item>
+
+      <item android:gravity="center" android:height="@dimen/circle_two_medium" android:width="@dimen/circle_two_medium">
+        <shape android:shape="oval">
+          <stroke android:color="#649bb5de" android:width="1dp"/>
+        </shape>
+      </item>
+
+      <item android:gravity="center" android:height="@dimen/circle_three_medium" android:width="@dimen/circle_three_medium">
+        <shape android:shape="oval">
+          <stroke android:color="#969bb5de" android:width="1dp"/>
+        </shape>
+      </item>
+
+      <item android:gravity="center" android:height="@dimen/circle_four_medium" android:width="@dimen/circle_four_medium">
+        <shape android:shape="oval">
+          <stroke android:color="#c89bb5de" android:width="1dp"/>
+        </shape>
+      </item>
+
+      <item android:gravity="center" android:height="@dimen/circle_five_medium" android:width="@dimen/circle_five_medium">
+        <shape android:shape="oval">
+          <stroke android:color="#9bb5de" android:width="1dp"/>
+        </shape>
+      </item>
+
+
+    </layer-list>
+  </item>
+
+
+</selector>

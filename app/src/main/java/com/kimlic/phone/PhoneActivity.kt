@@ -1,10 +1,13 @@
 package com.kimlic.phone
 
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
+import android.os.Looper
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.text.Editable
 import android.view.KeyEvent
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import com.android.volley.Request
@@ -12,6 +15,7 @@ import com.android.volley.Response
 import com.kimlic.API.KimlicRequest
 import com.kimlic.API.VolleySingleton
 import com.kimlic.BaseActivity
+import com.kimlic.BlockchainUpdatingFragment
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
 import com.kimlic.quorum.QuorumKimlic
@@ -19,29 +23,27 @@ import com.kimlic.quorum.Sha
 import com.kimlic.utils.QuorumURL
 import kotlinx.android.synthetic.main.activity_phone.*
 import org.json.JSONObject
+import org.web3j.protocol.core.methods.response.TransactionReceipt
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
+import java.util.concurrent.ExecutionException
 
 class PhoneActivity : BaseActivity() {
 
     // Variables
 
     private lateinit var countriesList: List<Country>
-    private var handler: Handler?
+    private var handler: Handler? = null
     private var countryCode = 0
-
-    // Init
-
-    init {
-        handler = Handler()
-    }
+    private lateinit var blockchainUpdatingFragment: BlockchainUpdatingFragment
 
     // Life
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_phone)
+        handler = Handler(Looper.getMainLooper())
 
         setupUI()
     }
@@ -64,6 +66,7 @@ class PhoneActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
+        blockchainUpdatingFragment = BlockchainUpdatingFragment.newInstance()
         countriesList = countries()
 
         phoneEt.addTextChangedListener(object : PhoneNumberFormattingTextWatcher() {
@@ -91,50 +94,82 @@ class PhoneActivity : BaseActivity() {
         phoneEt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    //managePhone()
                     hideKeyboard()
                     return true
                 }
                 return false
             }
         })
-
         nextBt.setOnClickListener { managePhone() }
     }
 
     private fun managePhone() {
         if (isPhoneValid()) {
+            showProgress()
             nextBt.isClickable = false
             phoneEt.setError(null)
-
             val phone = phoneEt.text.toString().replace(" ", "")
-            val params = emptyMap<String, String>().toMutableMap()
-            val headers = emptyMap<String, String>().toMutableMap()
 
-            val quorumKimlic = QuorumKimlic.getInstance()
-            val address = quorumKimlic.address
+            Thread(object : Runnable {
+                override fun run() {
+                    val quorumKimlic = QuorumKimlic.getInstance()
+                    var receiptPhone: TransactionReceipt? = null
 
-            val receiptPhone = quorumKimlic.setAccountFieldMainData(Sha.sha256(phone), "phone")
+                    try {
+                        receiptPhone = quorumKimlic.setAccountFieldMainData(Sha.sha256(phone), "phone")
+                    } catch (e: ExecutionException) {
+                        unableToProceed()
+                    } catch (e: InterruptedException) {
+                        unableToProceed()
+                    }
 
-            headers.put("account-address", address)
-            params.put("phone", phone)
+                    if (receiptPhone != null && receiptPhone.transactionHash.isNotEmpty()) {
+                        val address = quorumKimlic.address
+                        val params = emptyMap<String, String>().toMutableMap(); params.put("phone", phone)
+                        val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", address)
 
-            val request = KimlicRequest(Request.Method.POST, QuorumURL.phoneVerify.url,
-                    Response.Listener<String> { response ->
-                        val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
+                        val request = KimlicRequest(Request.Method.POST, QuorumURL.phoneVerify.url,
+                                Response.Listener<String> { response ->
+                                    hideProgress()
+                                    val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
 
-                        if (responceCode.startsWith("2")) PresentationManager.phoneNumberVerify(this@PhoneActivity, phone)
-                    },
-                    Response.ErrorListener { showToast("onError"); finish() }
-            )
+                                    if (responceCode.startsWith("2")) {
+                                        nextBt.isClickable = true
+                                        PresentationManager.phoneNumberVerify(this@PhoneActivity, phoneEt.text.toString())
+                                    } else unableToProceed()
+                                },
+                                Response.ErrorListener { unableToProceed() }
+                        )
+                        request.requestHeaders = headers
+                        request.requestParasms = params
+                        VolleySingleton.getInstance(this@PhoneActivity).addToRequestQueue(request)
+                    } else unableToProceed()
+                }
+            }).start()
 
-            request.requestHeaders = headers
-            request.requestParasms = params
-
-            VolleySingleton.getInstance(this).addToRequestQueue(request)
         } else
             phoneEt.setError(getString(R.string.phone_is_not_valid))
     }
+
+    private fun unableToProceed() {
+        runOnUiThread { hideProgress() }
+        nextBt.isClickable = true
+        showPopup(message = getString(R.string.unable_to_proceed_with_verification))
+    }
+
+    private fun showProgress() {
+        blockchainUpdatingFragment = BlockchainUpdatingFragment.newInstance()
+
+        object : CountDownTimer(1000, 1000) {
+            override fun onFinish() {
+                blockchainUpdatingFragment.show(supportFragmentManager, BlockchainUpdatingFragment.FRAGMENT_KEY)
+            }
+
+            override fun onTick(millisUntilFinished: Long) {}
+        }.start()
+    }
+
+    private fun hideProgress() = runOnUiThread { blockchainUpdatingFragment.dismiss() }
 
     private fun isPhoneValid(): Boolean {
         val list = phoneEt.text.toString().split(" ")
@@ -166,3 +201,5 @@ class PhoneActivity : BaseActivity() {
 
     class Country(val country: String, val sh: String, val code: Int)
 }
+
+

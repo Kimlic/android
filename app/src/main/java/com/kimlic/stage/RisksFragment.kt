@@ -12,7 +12,7 @@ import com.kimlic.BasePopupFragment
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
-import kotlinx.android.synthetic.main.risks_fragment.*
+import kotlinx.android.synthetic.main.fragment_risks.*
 
 class RisksFragment : BasePopupFragment() {
 
@@ -38,7 +38,7 @@ class RisksFragment : BasePopupFragment() {
     // Life
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.risks_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_risks, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

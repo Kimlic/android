@@ -69,7 +69,6 @@ class PhoneVerifyActivity : BaseActivity() {
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
 
                 if (event!!.keyCode == KeyEvent.KEYCODE_ENTER) {
-                    //managePin();
                     hideKeyboard(); return true
                 }
                 return false
@@ -79,32 +78,37 @@ class PhoneVerifyActivity : BaseActivity() {
 
     private fun managePin() {
         if (pinEntered()) {
+            progressBar.visibility = View.VISIBLE
+            verifyBt.isClickable = false
             code = StringBuilder()
             digitsList.forEach { code.append(it.text.toString()) }
 
             val quorumKimlic = QuorumKimlic.getInstance()
             val address = quorumKimlic.address
 
-            val params = emptyMap<String, String>().toMutableMap()
-            val headers = emptyMap<String, String>().toMutableMap()
-
-            headers.put("account-address", address)
-            params.put("code", code.toString())
+            val params = emptyMap<String, String>().toMutableMap(); params.put("code", code.toString())
+            val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", address)
 
             val request = KimlicRequest(Request.Method.POST, QuorumURL.phoneVierifyApprove.url,
                     Response.Listener<String> { response ->
+                        progressBar.visibility = View.GONE
+
                         val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
                         val status = JSONObject(response).getJSONObject("data").optString("status").toString()
 
                         if (responceCode.startsWith("2") && status.equals("ok")) {
                             Prefs.userPhone = phone
+                            Prefs.isUserPhoneAccepted = true
                             Prefs.authenticated = true
+                            verifyBt.isClickable = true
                             successfull()
                         } else {
-                            // TODO else
+                            verifyBt.isClickable = true
+                            digitsList.forEach { it.text.clear() }
+                            showPopup(message = getString(R.string.unable_to_verify_the_code))
                         }
                     },
-                    Response.ErrorListener { showToast("Invalid code"); finish() }
+                    Response.ErrorListener { unableToProceed() }
             )
 
             request.requestHeaders = headers
@@ -112,7 +116,13 @@ class PhoneVerifyActivity : BaseActivity() {
 
             VolleySingleton.getInstance(this).addToRequestQueue(request)
 
-        } else showToast("Pin is not entered")
+        } else showToast(getString(R.string.pin_is_not_enterd))
+    }
+
+    private fun unableToProceed() {
+        runOnUiThread { progressBar.visibility = View.GONE }
+        verifyBt.isClickable = true
+        showPopup(message = getString(R.string.unable_to_proceed_with_verification))
     }
 
     private fun pinEntered(): Boolean {

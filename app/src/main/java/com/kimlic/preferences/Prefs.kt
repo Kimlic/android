@@ -29,6 +29,7 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
         userName = ""
         userLastName = ""
         userPhone = ""
+        isUserPhoneAccepted = false
         userEmail = ""
     }
 
@@ -101,20 +102,19 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
         get() = getString(AppConstants.userPhone.key)
         set(value) = setString(AppConstants.userPhone.key, value)
 
+    var isUserPhoneAccepted: Boolean
+        get() = getBoolean(AppConstants.userPhoneAccepted.key)
+        set(value) = setBoolean(AppConstants.userPhoneAccepted.key, value)
+
     var userEmail: String
         get() = getString(AppConstants.userEmail.key)
         set(value) = setString(AppConstants.userEmail.key, value)
 
+    var isUserEmailAccepted: Boolean
+        get() = getBoolean(AppConstants.userEmailAccepted.key)
+        set(value) = setBoolean(AppConstants.userEmailAccepted.key, value)
+
     var userAddress: String
         get() = getString(AppConstants.userAddress.key)
         set(value) = setString(AppConstants.userAddress.key, value)
-
-    // Mocks
-    var authorization: String = "Bearer: 359A09A81C9BE5F6931A6279A660EF855F9DE3382AEAF97F4D9FE96E47AA981F"
-
-    var authSecretCode: String = "12345"
-
-    var accountAddress: String = "0xaf0524fe539dacd488391d48a892857347a81584"
-
-
 }
