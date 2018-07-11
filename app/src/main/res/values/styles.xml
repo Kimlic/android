@@ -56,6 +56,7 @@
   </style>
 
   <!--EditText Style -> passphrases-->
+  <!--Document verify-->
   <style name="KimlicEditText">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">40dp</item>
@@ -70,7 +71,6 @@
     <item name="android:paddingEnd">15dp</item>
     <item name="android:max">30</item>
     <item name="android:colorAccent">@android:color/white</item>
-
     <item name="colorControlNormal">@android:color/white</item>
     <item name="colorControlActivated">@android:color/white</item>
     <item name="colorControlHighlight">@android:color/white</item>
@@ -84,9 +84,14 @@
     <item name="colorAccent">@android:color/white</item>
   </style>
 
-  <!--NameActivity PhoneActivityu-->
+  <!--NameActivity PhoneActivityu DetailsActivity-->
   <style name="WhiteTextInputLayout" parent="@android:style/TextAppearance">
     <item name="android:textColor">@color/grayLight</item>
+    <item name="android:textSize">16sp</item>
+  </style>
+
+  <style name="WhiteTextDocInputLayout" parent="@android:style/TextAppearance">
+    <item name="android:textColor">@android:color/white</item>
     <item name="android:textSize">16sp</item>
   </style>
 

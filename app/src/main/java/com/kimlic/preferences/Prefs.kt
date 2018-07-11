@@ -31,6 +31,8 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
         userPhone = ""
         isUserPhoneAccepted = false
         userEmail = ""
+        userAddress = ""
+        documentToverify = ""
     }
 
     // Preferences
@@ -80,6 +82,7 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
         set(value) = setBoolean(AppConstants.fingerprint.key, value)
 
     // User photo
+
     var isUserPhotoTaken: Boolean
         get() = getBoolean(AppConstants.isUserPhotoTaken.key)
         set(value) = setBoolean(AppConstants.isUserPhotoTaken.key, value)
@@ -117,4 +120,9 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
     var userAddress: String
         get() = getString(AppConstants.userAddress.key)
         set(value) = setString(AppConstants.userAddress.key, value)
+
+    var documentToverify: String
+        get() = getString(AppConstants.documentToVerify.key)
+        set(value) = setString(AppConstants.documentToVerify.key, value)
+
 }

@@ -8,7 +8,6 @@ import com.kimlic.R
 import com.kimlic.SignupRecoveryActivity
 import com.kimlic.address.AddressActivity
 import com.kimlic.auth.TouchIdActivity
-import com.kimlic.validation.PortraitActivity
 import com.kimlic.email.EmailActivity
 import com.kimlic.email.EmailVerifyActivity
 import com.kimlic.name.NameActivity
@@ -23,10 +22,12 @@ import com.kimlic.splash.SplashScreenActivity
 import com.kimlic.stage.StageActivity
 import com.kimlic.terms.TermsActivity
 import com.kimlic.tutorial.TutorialActivity
-import com.kimlic.validation.DocumentVerifyActivity
-import com.kimlic.validation.DocumentVerifyChooseActivity
-import com.kimlic.validation.PassportVerifyActivity
-import java.util.*
+import com.kimlic.utils.AppConstants
+import com.kimlic.utils.UserPhotos
+import com.kimlic.verification.DocumentVerifyActivity
+import com.kimlic.verification.DocumentVerifyChooseActivity
+import com.kimlic.verification.PortraitActivity
+import com.kimlic.verification.VerifyDetails
 
 object PresentationManager {
 
@@ -100,6 +101,8 @@ object PresentationManager {
         present(presenter = presenter, className = PhraseVerifyActivity::class.java, params = params)
     }
 
+    // Phone validation
+
     fun phoneNumber(presenter: BaseActivity) {
         present(presenter = presenter, className = PhoneActivity::class.java, isStarting = false)
     }
@@ -110,20 +113,20 @@ object PresentationManager {
         present(presenter = presenter, className = PhoneVerifyActivity::class.java, isStarting = false, params = params)
     }
 
-    fun name(presenter: BaseActivity) {
-        present(presenter = presenter, className = NameActivity::class.java, isStarting = false)
-    }
+    // Email validation
 
-    // TODO check this flow
     fun email(presenter: BaseActivity) {
         present(presenter = presenter, className = EmailActivity::class.java, isStarting = false)
     }
 
-    // TODO check this flow
     fun emailVerify(presenter: BaseActivity, email: String = "") {
         val params = HashMap<String, String>()
         params.put("email", email)
         present(presenter = presenter, className = EmailVerifyActivity::class.java, isStarting = false, params = params)
+    }
+
+    fun name(presenter: BaseActivity) {
+        present(presenter = presenter, className = NameActivity::class.java, isStarting = false)
     }
 
     fun recovery(presenter: BaseActivity) {
@@ -134,9 +137,48 @@ object PresentationManager {
         present(presenter = presenter, className = DocumentVerifyChooseActivity::class.java, isStarting = false)
     }
 
-    fun documentVerify(presenter: BaseActivity) {
-        present(presenter = presenter, className = DocumentVerifyActivity::class.java, isStarting = false)
+    // Verification
+
+    fun verifyPassport(presenter: BaseActivity) {
+        val params = HashMap<String, String>()
+
+        params.put(AppConstants.documentType.key, AppConstants.documentPassport.key)
+        params.put(UserPhotos.portraitFilePath.fileName, UserPhotos.passportPortrait.fileName)
+        params.put(UserPhotos.frontFilePath.fileName, UserPhotos.passportFrontSide.fileName)
+        params.put(UserPhotos.backFilePath.fileName, UserPhotos.passportBackSide.fileName)
+
+        present(presenter = presenter, className = DocumentVerifyActivity::class.java, isStarting = false, params = params)
     }
+
+    fun verifyDriverLicence(presenter: BaseActivity) {
+        val params = HashMap<String, String>()
+
+        params.put(AppConstants.documentType.key, AppConstants.documentLicense.key)
+        params.put(UserPhotos.portraitFilePath.fileName, UserPhotos.driverLicensePortrait.fileName)
+        params.put(UserPhotos.frontFilePath.fileName, UserPhotos.driverLicensFrontSide.fileName)
+        params.put(UserPhotos.backFilePath.fileName, UserPhotos.driverLicensBackSide.fileName)
+
+        present(presenter = presenter, className = DocumentVerifyActivity::class.java, isStarting = false, params = params)
+    }
+
+    fun verifyIDCard(presenter: BaseActivity) {
+        val params = HashMap<String, String>()
+
+        params.put(AppConstants.documentType.key, AppConstants.documentID.key)
+        params.put(UserPhotos.portraitFilePath.fileName, UserPhotos.IDCardPortrait.fileName)
+        params.put(UserPhotos.frontFilePath.fileName, UserPhotos.IDCardFrontSide.fileName)
+        params.put(UserPhotos.backFilePath.fileName, UserPhotos.IDCardBackSide.fileName)
+
+        present(presenter = presenter, className = DocumentVerifyActivity::class.java, isStarting = false, params = params)
+    }
+
+    fun verifyDetails(presenter: BaseActivity, documentType: String) {
+        val params = HashMap<String, String>()
+        params.put(AppConstants.documentType.key, documentType)
+
+        present(presenter = presenter, className = VerifyDetails::class.java, isStarting = false, params = params)
+    }
+
 
     fun signupRecovery(presenter: BaseActivity) {
         present(presenter = presenter, className = SignupRecoveryActivity::class.java, isStarting = true)
@@ -158,10 +200,9 @@ object PresentationManager {
         present(presenter = presenter, className = PortraitActivity::class.java, isStarting = false)
     }
 
-    fun passportVerify(presenter: BaseActivity) {
-        present(presenter = presenter, className = PassportVerifyActivity::class.java, isStarting = false)
-    }
-
+//    fun passportVerify(presenter: BaseActivity) {
+//        present(presenter = presenter, className = PassportVerifyActivity::class.java, isStarting = false)
+//    }
 
     fun termsReview(presenter: BaseActivity) {
         val params = HashMap<String, String>()
@@ -193,7 +234,7 @@ object PresentationManager {
         present(presenter = presenter, className = AddressActivity::class.java, isStarting = false)
     }
 
-    // private
+    // Private
 
     private fun present(presenter: BaseActivity, className: Class<out Activity>, isStarting: Boolean = false, params: HashMap<String, String>? = null) {
         val intent = Intent(presenter, className)

@@ -28,7 +28,6 @@ class StageActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         risks()
-        //phoneVirify()
     }
 
     override fun onBackPressed() {
@@ -75,8 +74,6 @@ class StageActivity : BaseActivity() {
             risksFragment.show(supportFragmentManager, RisksFragment.FRAGMENT_KEY)
         }
     }
-
-
 
     private fun phoneVirify() {
         val phoneVerify = PhoneVerifyFragment.newInstance()

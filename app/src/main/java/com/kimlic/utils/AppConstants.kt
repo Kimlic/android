@@ -25,15 +25,17 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
     cameraFront("CAMERA_FRONT", 1),
     cameraRear("CAMERA_REAR", 0),
 
+    // Document type
+
+    documentType("DOCUMENT_TYPE"),
+    documentPassport("PASSPORT"),
+    documentLicense("LICENSE"),
+    documentID("ID"),
+    documentToVerify("DOCUMENT_TO_VERIFY"),
+
+    // File path
+
     filePathRezult("FILE_PATH_REZULT"),
-
-    // User photo files
-    userStagePortraitFileName("portrait.jpg"),
-
-    userPassportPortraitFileName("passportPortrait.jpg"),
-    userPassportFrontSideFileName("passportFront.jpg"),
-    userPassportBackSideFileName("passportBack.jpg"),
-
 
     // UserPortraitPhoto
 

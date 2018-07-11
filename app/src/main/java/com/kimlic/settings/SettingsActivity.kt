@@ -8,12 +8,15 @@ import android.view.View
 import android.widget.LinearLayout
 import butterknife.ButterKnife
 import com.kimlic.BaseActivity
+import com.kimlic.KimlicApp
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
 import com.kimlic.passcode.PasscodeActivity
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.AppConstants
+import com.kimlic.utils.UserPhotos
 import kotlinx.android.synthetic.main.activity_settings.*
+import java.io.File
 
 class SettingsActivity : BaseActivity() {
 
@@ -64,6 +67,8 @@ class SettingsActivity : BaseActivity() {
         setupAdapter()
         signoutBt.setOnClickListener {
             Prefs.clear()
+            deleteUserPhotos()
+
             PresentationManager.signupRecovery(this)
         }
         deleteBt.setOnClickListener { showToast("delete id Clicked") }
@@ -126,6 +131,13 @@ class SettingsActivity : BaseActivity() {
         val intent = Intent(this, PasscodeActivity::class.java)
         intent.putExtra("action", "set")
         startActivityForResult(intent, PASSCODE_REQUEST_CODE)
+    }
+
+    private fun deleteUserPhotos() {
+        UserPhotos.values().forEach {
+            val file = File(KimlicApp.applicationContext().filesDir.toString() + "/" + it.fileName)
+            if (file.exists()) file.delete()
+        }
     }
 }
 

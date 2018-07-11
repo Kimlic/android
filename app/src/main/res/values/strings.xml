@@ -61,11 +61,11 @@
   <string name="description_info">Info</string>
   <string name="request_permission">This sample needs camera permission.</string>
   <string name="camera_error">This device doesn\'t support Camera2 API.</string>
-  <string name="the_front_side_of_your_drivers_license">the front side of your Drivers License</string>
+  <string name="front_side_of_your_drivers_license">Front Side of the document</string>
   <string name="driver_licence">Driver Licence</string>
   <string name="you_cant_use_camera_vithout_permissions">You can\'t use camera without permission</string>
   <string name="face_photo">Face photo</string>
-  <string name="the_back_side_your_drivers_license">the Back side your Drivers License</string>
+  <string name="back_side_your_drivers_license">Back Side your Drivers License</string>
   <string name="congratulations">Congratulations</string>
   <string name="congratulations_">Congratulations !</string>
   <string name="your_phone_number_have_been_verified">Your Phone Number have \n been verified</string>
@@ -207,6 +207,12 @@
   <string name="unable_to_proceed_with_verification">Unable to proceed with verification</string>
   <string name="information_is_saving_on_blockchain_wait_for_a_while">Information is saving on BlockChain. \n Wait for a while.</string>
   <string name="blockchain_updating">Blockchain updating</string>
-
+  <string name="country_of_sitizenship">Country of sitizenship</string>
+  <string name="expire_date">Expire date</string>
+  <string name="document_number">Document number</string>
+  <string name="front_side_of_the_document">Front side of the document</string>
+  <string name="add_new_id">Add new ID</string>
+  <string name="back_side_of_the_document">Back side of the document</string>
+  <string name="background">Background</string>
 
 </resources>

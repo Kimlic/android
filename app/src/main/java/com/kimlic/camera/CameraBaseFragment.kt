@@ -24,7 +24,7 @@ import com.kimlic.KimlicApp
 import com.kimlic.R
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.BaseCallback
-import kotlinx.android.synthetic.main.fragment_portrait_photo.*
+import kotlinx.android.synthetic.main.fragment_document_portrait.*
 import java.io.FileOutputStream
 
 abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
@@ -48,12 +48,10 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
     private lateinit var filePath: String
     private lateinit var callback: BaseCallback
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-    }
+    // Live
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_id_photo, container, false)
+        return inflater.inflate(R.layout.fragment_document_card, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -73,6 +71,7 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
                     , REQUEST_CAMERA_PERMISSION)
             return
         }
+
         openCamera()
         kimlicSurfaceView = KimlicSurfaceView(KimlicApp.applicationContext(), camera)
         frameLayout.addView(kimlicSurfaceView)
@@ -139,6 +138,7 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
         params.pictureFormat = ImageFormat.JPEG
         params.focusMode = (Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)
         params.setPictureSize(currentWidth, currentHight)
+
         camera.parameters = params
     }
 
@@ -153,18 +153,26 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
         return true
     }
 
+
+    /*
+    * Fun shows result photo
+    * */
     private fun showResultPhoto(data: ByteArray?) {
         val bitmap = BitmapFactory.decodeByteArray(data, 0, data!!.size)
-        previewIv.setImageBitmap(rotateBitmap(bitmap, -90f))
+        captureBt.visibility = View.GONE
+        previewIv.setImageBitmap(rotateBitmap(bitmap, if (cameraId == 1) -90f else 90f))
         confirmLl.visibility = View.VISIBLE
 
-        // Confirm layout
+        // Confirm layout save button listner
         confirmBt.setOnClickListener {
+            closeCamera()
             savePicture(filePath, data)
             callback.callback()
         }
+
         retakelBt.setOnClickListener {
             confirmLl.visibility = View.GONE
+            captureBt.visibility = View.VISIBLE
             openCamera()
             kimlicSurfaceView = KimlicSurfaceView(KimlicApp.applicationContext(), camera)
             frameLayout.addView(kimlicSurfaceView)
@@ -176,11 +184,9 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
     override fun onPictureTaken(data: ByteArray?, camera: Camera?) {
         // Save File
         // send file URI to activity
-
         closeCamera()
         showResultPhoto(data)
         //camera?.startPreview()
-
         //callback.callback()
     }
 

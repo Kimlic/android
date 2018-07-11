@@ -10,7 +10,9 @@ import com.kimlic.BaseFragment
 import com.kimlic.KimlicApp
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
+import com.kimlic.preferences.Prefs
 import com.kimlic.utils.AppConstants
+import com.kimlic.utils.UserPhotos
 import kotlinx.android.synthetic.main.fragment_stage_user.*
 import java.io.File
 
@@ -44,9 +46,9 @@ class UserStageFragment : BaseFragment() {
     }
 
     override fun onResume() {
-        setUserPhoto()
         super.onResume()
-
+        setUserPhoto()
+        setupFielsds()
     }
 
     // Private
@@ -80,28 +82,45 @@ class UserStageFragment : BaseFragment() {
         if (true) risksTv.visibility = View.VISIBLE
     }
 
+    // Implementr liveData
+
     private fun setupFielsds() {
+
+        // Use view model
         setupKimField(0)
         setupNameField("Vladimir")
         setupPhoneField("+380508668370")
         setupEmailField("babenkovladimirbmd@gmail.com")
-        setupIDField("Some Id")
+
+        when (Prefs.documentToverify) {
+            AppConstants.documentPassport.key -> {
+                setupIDField(getString(R.string.passport)); idItem.setOnClickListener { PresentationManager.verifyDetails(activity!!, AppConstants.documentPassport.key) }
+            }
+            AppConstants.documentLicense.key -> {
+                setupIDField(getString(R.string.driver_licence)); idItem.setOnClickListener {
+                    PresentationManager.verifyDetails(activity!!, AppConstants.documentLicense.key)
+                }
+            }
+            AppConstants.documentID.key -> {
+                setupIDField(getString(R.string.id_card)); idItem.setOnClickListener { PresentationManager.verifyDetails(activity!!, AppConstants.documentID.key) }
+            }
+            else -> {
+                setupIDField(""); idItem.setOnClickListener { PresentationManager.documentChooseVerify(activity!!) }
+            }
+        }
+
         setupAddressField("Kiev")
     }
 
     private fun setUserPhoto(): Boolean {
-//        if (!Prefs.isUserPhotoTaken) {
-//            takePhotoLl.visibility = View.INVISIBLE
-//        }
-        val filePath = KimlicApp.applicationContext().filesDir.toString() + "/" + AppConstants.userStagePortraitFileName.key
+        val filePath = KimlicApp.applicationContext().filesDir.toString() + "/" + UserPhotos.portraitFilePath.fileName
 
         if (File(filePath).exists()) {
-            (userPhotoIv as UserPhotoView).showUserPhoto(AppConstants.userStagePortraitFileName.key)
+            (userPhotoIv as UserPhotoView).showUserPhoto(UserPhotos.portraitFilePath.fileName)
             return true
         } else
             return false
     }
-
 
     private fun setBlueScreen() {
         (userPhotoIv as UserPhotoView).showBlueScreen()

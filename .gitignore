@@ -1,5 +1,5 @@
 *.iml
-.gradle
+.gradle/
 .idea
 /.gradle
 /.idea
@@ -12,3 +12,4 @@
 /build
 /captures
 .externalNativeBuild
+.idea/*

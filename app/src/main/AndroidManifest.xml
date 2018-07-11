@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="com.kimlic">
 
-  <uses-feature android:name="android.permission.USE_FINGERPRINT" android:required="false"/>
+  <uses-feature
+    android:name="android.permission.USE_FINGERPRINT"
+    android:required="false"/>
 
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
@@ -11,8 +13,10 @@
 
   <application
     android:allowBackup="true"
+    android:hardwareAccelerated="true"
     android:icon="@mipmap/ic_launcher"
     android:label="@string/app_name"
+    android:largeHeap="true"
     android:name=".KimlicApp"
     android:roundIcon="@mipmap/ic_launcher_round"
     android:supportsRtl="true"
@@ -23,116 +27,91 @@
     <meta-data
       android:name="com.google.android.gms.version"
       android:value="@integer/google_play_services_version"/>
-
     <meta-data
-        android:name="io.fabric.ApiKey"
-        android:value="a5f149222cca55fee6eb72b0c20f2347242e97a2" />
+      android:name="io.fabric.ApiKey"
+      android:value="a5f149222cca55fee6eb72b0c20f2347242e97a2"/>
 
     <activity android:name=".MainActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
+
         <category android:name="android.intent.category.LAUNCHER"/>
+
         <action android:name="android.intent.action.VIEW"/>
+
         <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
     </activity>
-
     <activity
       android:label="Splash Screen"
       android:name=".splash.SplashScreenActivity"
       android:screenOrientation="portrait"/>
-
     <activity
       android:label="Passcode"
       android:name=".passcode.PasscodeActivity"
       android:screenOrientation="portrait"/>
-
     <activity
       android:label="Tutorial"
       android:name=".tutorial.TutorialActivity"
       android:screenOrientation="portrait"/>
-
     <activity
       android:label="Touch ID"
       android:name=".auth.TouchIdActivity"
       android:screenOrientation="portrait"/>
-
     <activity
       android:label="Verify"
       android:name=".phrase.PhraseVerifyActivity"
       android:screenOrientation="portrait"/>
-
     <activity
       android:label="Mnemonic Phrase"
       android:name=".phrase.PhraseGenerateActivity"
       android:screenOrientation="portrait"/>
-
-    <activity
-      android:label="Video identification"
-      android:name=".validation.VideoIdActivity"/>
-
     <activity
       android:label="Account recovery"
       android:name=".recovery.AccountRecoveryActivity"/>
-
     <activity
       android:label="Terms &amp; Privacy"
       android:name=".terms.TermsActivity"/>
-
     <activity
       android:label="Signup Recovery"
       android:name=".SignupRecoveryActivity"/>
-
     <activity
       android:label="Settings"
       android:name=".settings.SettingsActivity"/>
-
     <activity
       android:label="Main Stage"
       android:launchMode="singleTask"
       android:name=".stage.StageActivity"/>
-
     <activity
       android:label="Phone"
       android:name=".phone.PhoneActivity"/>
-
     <activity
       android:label="Phone Verify"
       android:name=".phone.PhoneVerifyActivity"/>
-
     <activity
       android:label="Name"
       android:name=".name.NameActivity"/>
-
     <activity
       android:label="Verify ID document"
-      android:name=".validation.DocumentVerifyChooseActivity"/>
-
+      android:name=".verification.DocumentVerifyChooseActivity"/>
     <activity
       android:label="Email"
       android:name=".email.EmailActivity"/>
-
     <activity
       android:label="Email verify"
       android:name=".email.EmailVerifyActivity"/>
-
     <activity
       android:label="Document Verify"
-      android:name=".validation.DocumentVerifyActivity"/>
-
+      android:name=".verification.DocumentVerifyActivity"/>
     <activity
       android:label="Address"
       android:name=".address.AddressActivity"
       android:windowSoftInputMode="adjustResize|adjustPan"/>
-
     <activity
       android:label="Portrait"
-      android:name=".validation.PortraitActivity"/>
-
-    <activity
-      android:label="Passpot"
-      android:name=".validation.PassportVerifyActivity"/>
-
+      android:name=".verification.PortraitActivity"/>
+    <activity android:name=".verification.VerifyDetails">
+    </activity>
   </application>
 
 </manifest>
