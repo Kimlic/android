@@ -109,7 +109,7 @@ class UserStageFragment : BaseFragment() {
             }
         }
 
-        setupAddressField("Kiev")
+        setupAddressField(Prefs.userAddress)
     }
 
     private fun setUserPhoto(): Boolean {

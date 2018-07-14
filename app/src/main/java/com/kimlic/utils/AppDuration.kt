@@ -9,6 +9,6 @@ enum class AppDuration(val duration: Long, val repeat: Int = 4) {
     //quick shake logo duration
     LOGO_DURATION(800),
     FINGERPRINT_DURATION(4000, 10),
-    SPLASH(1500, 1)
+    SPLASH(2000, 1)
 
 }

@@ -42,74 +42,101 @@
         <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
     </activity>
+
+    <receiver android:name=".notification.KimlicReceiver">
+      <intent-filter>
+        <action android:name="mock"/>
+      </intent-filter>
+    </receiver>
+
     <activity
       android:label="Splash Screen"
       android:name=".splash.SplashScreenActivity"
       android:screenOrientation="portrait"/>
+
     <activity
       android:label="Passcode"
       android:name=".passcode.PasscodeActivity"
       android:screenOrientation="portrait"/>
+
     <activity
       android:label="Tutorial"
       android:name=".tutorial.TutorialActivity"
       android:screenOrientation="portrait"/>
+
     <activity
       android:label="Touch ID"
       android:name=".auth.TouchIdActivity"
       android:screenOrientation="portrait"/>
+
     <activity
       android:label="Verify"
       android:name=".phrase.PhraseVerifyActivity"
       android:screenOrientation="portrait"/>
+
     <activity
       android:label="Mnemonic Phrase"
       android:name=".phrase.PhraseGenerateActivity"
       android:screenOrientation="portrait"/>
+
     <activity
       android:label="Account recovery"
       android:name=".recovery.AccountRecoveryActivity"/>
+
     <activity
       android:label="Terms &amp; Privacy"
       android:name=".terms.TermsActivity"/>
+
     <activity
       android:label="Signup Recovery"
       android:name=".SignupRecoveryActivity"/>
+
     <activity
       android:label="Settings"
       android:name=".settings.SettingsActivity"/>
+
     <activity
       android:label="Main Stage"
       android:launchMode="singleTask"
       android:name=".stage.StageActivity"/>
+
     <activity
       android:label="Phone"
       android:name=".phone.PhoneActivity"/>
+
     <activity
       android:label="Phone Verify"
       android:name=".phone.PhoneVerifyActivity"/>
+
     <activity
       android:label="Name"
       android:name=".name.NameActivity"/>
+
     <activity
       android:label="Verify ID document"
       android:name=".verification.DocumentVerifyChooseActivity"/>
+
     <activity
       android:label="Email"
       android:name=".email.EmailActivity"/>
+
     <activity
       android:label="Email verify"
       android:name=".email.EmailVerifyActivity"/>
+
     <activity
       android:label="Document Verify"
       android:name=".verification.DocumentVerifyActivity"/>
+
     <activity
       android:label="Address"
       android:name=".address.AddressActivity"
       android:windowSoftInputMode="adjustResize|adjustPan"/>
+
     <activity
       android:label="Portrait"
       android:name=".verification.PortraitActivity"/>
+
     <activity android:name=".verification.VerifyDetails">
     </activity>
   </application>

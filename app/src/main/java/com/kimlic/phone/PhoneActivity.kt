@@ -6,12 +6,14 @@ import android.os.Handler
 import android.os.Looper
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.text.Editable
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import com.android.volley.Request
 import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
 import com.kimlic.API.KimlicRequest
 import com.kimlic.API.VolleySingleton
 import com.kimlic.BaseActivity
@@ -36,7 +38,8 @@ class PhoneActivity : BaseActivity() {
     private lateinit var countriesList: List<Country>
     private var handler: Handler? = null
     private var countryCode = 0
-    private lateinit var blockchainUpdatingFragment: BlockchainUpdatingFragment
+    private var blockchainUpdatingFragment: BlockchainUpdatingFragment? = null
+    private var timer: CountDownTimer? = null
 
     // Life
 
@@ -56,6 +59,7 @@ class PhoneActivity : BaseActivity() {
     override fun onDestroy() {
         super.onDestroy()
         handler = null
+        timer = null
     }
 
     override fun onBackPressed() {
@@ -105,7 +109,7 @@ class PhoneActivity : BaseActivity() {
 
     private fun managePhone() {
         if (isPhoneValid()) {
-            showProgress()
+            //showProgress()
             nextBt.isClickable = false
             phoneEt.setError(null)
             val phone = phoneEt.text.toString().replace(" ", "")
@@ -117,6 +121,7 @@ class PhoneActivity : BaseActivity() {
 
                     try {
                         receiptPhone = quorumKimlic.setAccountFieldMainData(Sha.sha256(phone), "phone")
+                        Log.d("TAGReceipt",receiptPhone.toString())
                     } catch (e: ExecutionException) {
                         unableToProceed()
                     } catch (e: InterruptedException) {
@@ -125,23 +130,30 @@ class PhoneActivity : BaseActivity() {
 
                     if (receiptPhone != null && receiptPhone.transactionHash.isNotEmpty()) {
                         val address = quorumKimlic.address
+
                         val params = emptyMap<String, String>().toMutableMap(); params.put("phone", phone)
                         val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", address)
+                        Log.d("TAG", "account address - "+ address)
+                        Log.d("TAG", "phone - "+ phone)
 
                         val request = KimlicRequest(Request.Method.POST, QuorumURL.phoneVerify.url,
                                 Response.Listener<String> { response ->
+                                    Log.d("TAGPHONE", response)
                                     hideProgress()
                                     val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
-
                                     if (responceCode.startsWith("2")) {
                                         nextBt.isClickable = true
                                         PresentationManager.phoneNumberVerify(this@PhoneActivity, phoneEt.text.toString())
                                     } else unableToProceed()
                                 },
-                                Response.ErrorListener { unableToProceed() }
+                                Response.ErrorListener {
+                                    Log.d("TAGPHONE", "mark " + it.networkResponse.statusCode); unableToProceed()
+                                }
                         )
                         request.requestHeaders = headers
                         request.requestParasms = params
+                        Log.d("TAGPHONE", "Headrs -  " + request.headers.toString())
+
                         VolleySingleton.getInstance(this@PhoneActivity).addToRequestQueue(request)
                     } else unableToProceed()
                 }
@@ -158,18 +170,20 @@ class PhoneActivity : BaseActivity() {
     }
 
     private fun showProgress() {
-        blockchainUpdatingFragment = BlockchainUpdatingFragment.newInstance()
 
         object : CountDownTimer(1000, 1000) {
             override fun onFinish() {
-                blockchainUpdatingFragment.show(supportFragmentManager, BlockchainUpdatingFragment.FRAGMENT_KEY)
+                blockchainUpdatingFragment = BlockchainUpdatingFragment.newInstance()
+                blockchainUpdatingFragment?.show(supportFragmentManager, BlockchainUpdatingFragment.FRAGMENT_KEY)
             }
 
             override fun onTick(millisUntilFinished: Long) {}
         }.start()
     }
 
-    private fun hideProgress() = runOnUiThread { blockchainUpdatingFragment.dismiss() }
+    private fun hideProgress() = runOnUiThread {
+        //if (blockchainUpdatingFragment != null) blockchainUpdatingFragment?.dismiss()
+    }
 
     private fun isPhoneValid(): Boolean {
         val list = phoneEt.text.toString().split(" ")

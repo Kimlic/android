@@ -2,13 +2,21 @@ package com.kimlic
 
 import android.app.Application
 import android.content.Context
+import android.content.IntentFilter
+import android.os.Build
 import android.util.Log
 import com.kimlic.quorum.QuorumKimlic
 import java.util.*
 import android.provider.SyncStateContract.Helpers.update
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
 import com.crashlytics.android.Crashlytics
+import com.kimlic.API.KimlicRequest
+import com.kimlic.API.VolleySingleton
 import com.kimlic.quorum.DeviceID
 import com.kimlic.quorum.Sha
+import com.kimlic.utils.QuorumURL
 import io.fabric.sdk.android.Fabric
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
@@ -38,33 +46,12 @@ class KimlicApp : Application() {
         super.onCreate()
         Fabric.with(this@KimlicApp, Crashlytics())
 
-        //val quorumKimlic = QuorumKimlic.getInstance()
-//        val address = quorumKimlic.address
-//        val currentValueZero = quorumKimlic.get()
-//        val receiptOne = quorumKimlic.setEmpty()
-//        val currentValueOne = quorumKimlic.get()
-//        val receiptTwo = quorumKimlic.set(123123)
-//        val currentValueTwo = quorumKimlic.get()
-//
-//        Log.e(TAG, "MY QUORUM ADDRESS IS: $address")
-//        Log.e(TAG, "VALUE 0: $currentValueZero")
-//        Log.e(TAG, "RECEIPT 1: $receiptOne")
-//        Log.e(TAG, "VALUE 1: $currentValueOne")
-//        Log.e(TAG, "RECEIPT 2: $receiptTwo")
-//        Log.e(TAG, "VALUE 2: $currentValueTwo")
+    }
 
-       // val UDID = DeviceID.id(applicationContext)
-       // val shaUDID = Sha.sha256(UDID)// saves to preferences
-       // val address = quorumKimlic.address
+    fun registerReceiver(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            val intentFilter = IntentFilter()
+        }
 
-       // Log.e(TAG, "UDID: $UDID")
-       // Log.e(TAG, "SHA UDID: $shaUDID")
-       // Log.e(TAG, "QUORUM ADDRESS: $address")
-
-        //val receiptEmail = quorumKimlic.setAccountFieldMainData(Sha.sha256("dmytro@pharosproduction.com"), "email")
-       // Log.e(TAG, "RECEIPT: $receiptEmail")
-
-       // val receiptPhone = quorumKimlic.setAccountFieldMainData(Sha.sha256("+380997762791"), "phone")
-       // Log.e(TAG, "RECEIPT: $receiptPhone")
     }
 }

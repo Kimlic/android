@@ -130,13 +130,15 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
         var currentHight = 480
 
         for (size in sizes) {
-            if (size.height > currentHight && size.width > currentWidth) {
+            if (size.height > currentHight && size.width > currentWidth && size.height < 3000 && size.width < 2500) {
                 currentHight = size.height
                 currentWidth = size.width
             }
         }
+
         params.pictureFormat = ImageFormat.JPEG
-        params.focusMode = (Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)
+        params.jpegQuality = 80
+        params.focusMode = (Camera.Parameters.FOCUS_MODE_AUTO)
         params.setPictureSize(currentWidth, currentHight)
 
         camera.parameters = params

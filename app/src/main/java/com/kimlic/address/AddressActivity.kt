@@ -1,9 +1,12 @@
 package com.kimlic.address
 
 import android.content.Intent
+import android.database.Cursor
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -20,6 +23,7 @@ import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.BaseCallback
 import kotlinx.android.synthetic.main.activity_address.*
+import java.io.File
 
 class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListener, KeyEvent.Callback {
 
@@ -45,8 +49,53 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        // TODO use file uri
-        val uri = data?.data
+
+
+        when (requestCode) {
+            PICK_FILE_REQUEST_CODE -> if (resultCode == RESULT_OK) {
+                // Get the Uri of the selected file
+                val uri = data!!.getData()
+                val uriString = uri.toString()
+                val myFile = File(uriString)
+
+                val path = myFile.absolutePath
+                var displayName: String? = null
+
+                if (uriString.startsWith("content://")) {
+                    var cursor: Cursor? = null
+                    try {
+                        cursor = this.getContentResolver().query(uri, null, null, null, null)
+                        if (cursor != null && cursor!!.moveToFirst()) {
+                            displayName = cursor!!.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                        }
+                    } finally {
+                        cursor!!.close()
+                    }
+                } else if (uriString.startsWith("file://")) {
+                    displayName = myFile.name
+                }
+
+                Log.d("TAG", "display name = " + displayName)
+
+                data.extras.getByteArray("")
+
+
+                browsBt.setOnClickListener({})
+
+
+//                Log.d("TAG", "data = " + data.data.)
+//                val fos: FileOutputStream?
+//                try {
+//                    fos = KimlicApp.applicationContext().openFileOutput(displayName, Context.MODE_PRIVATE)
+//                    fos.write()
+//                    fos.close()
+//                } catch (e: Exception) {
+//                    throw Exception("Can't write data to internal storage")
+//                }
+            }
+        }
+
+
     }
 
     override fun onBackPressed() {
@@ -91,12 +140,11 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
 
         // Button listners
         cancelAddressBt.setOnClickListener { addressEt.text = Editable.Factory().newEditable(""); moveDown() }
-        uploadLl.setOnClickListener { pickFile() }
-        saveBt.setOnClickListener { manageInput() }
         cancelTv.setOnClickListener { finish() }
         cancelAddressBt.visibility = View.INVISIBLE
+        saveBt.setOnClickListener { manageInput() }
+        browsBt.setOnClickListener { pickFile() }
     }
-
 
     private fun manageInput() {
         // TODO chek if fields are empty; use file address
@@ -106,8 +154,12 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
 
     private fun pickFile() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
+//        intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.setType("*/*")
-        startActivityForResult(intent, PICK_FILE_REQUEST_CODE)
+        //startActivityForResult(intent, PICK_FILE_REQUEST_CODE)
+        startActivityForResult(Intent.createChooser(intent, "Select a file"), PICK_FILE_REQUEST_CODE)
+
+
     }
 
     private fun moveDown() {
