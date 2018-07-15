@@ -23,14 +23,15 @@ class MainActivity : BaseActivity() {
 
     val SPLASH_SCREEN_REQUEST_CODE = 124
 
-    // Variables
-
-    private var addressAccepted: Boolean = false
-
     // Life
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        QuorumKimlic.createInstance(null, this)
+        val mnemonic = QuorumKimlic.getInstance().mnemonic
+        Log.e("MAIN ACTIVITY", "MNEMONIC: $mnemonic")
+
         setupUI()
     }
 
@@ -50,36 +51,22 @@ class MainActivity : BaseActivity() {
     }
 
     private fun quorumRequest() {
-        val quoroomKimlick = QuorumKimlic.getInstance()
-        val address = quoroomKimlick.address
+        val address = QuorumKimlic.getInstance().walletAddress
+        val headers = mapOf<String, String>(Pair("account-address", address))
+        val addressRequest = KimlicRequest(Request.Method.GET, QuorumURL.config.url, headers, null, Response.Listener {
+            Log.e(TAG, "CONFIG: " + it)
+            val json = JSONObject(it)
+            val responceCode = json.getJSONObject("meta").optString("code").toString()
 
-        val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", address)
-
-        val addressRequest = KimlicRequest(Request.Method.GET, QuorumURL.config.url,
-                Response.Listener<String> {
-                    val responceCode = JSONObject(it).getJSONObject("meta").optString("code").toString()
-
-                    if (responceCode.startsWith("2")) {
-                        addressAccepted = true
-                        val context_contract = JSONObject(it).getJSONObject("data").optString("context_contract")
-                        //QuorumKimlic.setContextContract(context_contract)
-                        Log.d("TAG", "context_contract = " + context_contract.toString())
-                    }
-
-                },
-                Response.ErrorListener {
-//                    object : CountDownTimer(1000, 1000) {
-//                        override fun onTick(millisUntilFinished: Long) {}
-//                        override fun onFinish() {
-//                            quorumRequest()
-//                        }
-//                    }.start()
-
-                    Log.d("TAGKIMLICE", "Error" + it.networkResponse.statusCode)
-                })
-
-        addressRequest.requestHeaders = headers
-
+            if (responceCode.startsWith("2")) {
+                val accountStorageAdapterAddress = json.getJSONObject("data").optString("context_contract")
+                QuorumKimlic.getInstance().setAccountStorageAdapterAddress(accountStorageAdapterAddress)
+            } else {
+                // should show error
+            }
+        }, Response.ErrorListener {
+            // should show error
+        })
         VolleySingleton.getInstance(this@MainActivity).requestQueue.add(addressRequest)
 
     }

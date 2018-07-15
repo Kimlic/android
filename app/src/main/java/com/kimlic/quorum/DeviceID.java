@@ -7,8 +7,15 @@ import java.util.UUID;
 
 public class DeviceID {
 
-    private static String uniqueID = null;
+    // Constants
+
     private static final String PREF_UNIQUE_ID = "PREF_UNIQUE_ID";
+
+    // Variables
+
+    private static String uniqueID = null;
+
+    // Public
 
     public synchronized static String id(Context context) {
         if (uniqueID != null)

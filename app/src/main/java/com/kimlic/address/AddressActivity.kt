@@ -58,15 +58,15 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
                 val uriString = uri.toString()
                 val myFile = File(uriString)
 
-                val path = myFile.absolutePath
+//                val path = myFile.absolutePath
                 var displayName: String? = null
 
                 if (uriString.startsWith("content://")) {
                     var cursor: Cursor? = null
                     try {
                         cursor = this.getContentResolver().query(uri, null, null, null, null)
-                        if (cursor != null && cursor!!.moveToFirst()) {
-                            displayName = cursor!!.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                        if (cursor != null && cursor.moveToFirst()) {
+                            displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
                         }
                     } finally {
                         cursor!!.close()

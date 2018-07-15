@@ -83,12 +83,10 @@ class EmailVerifyActivity : BaseActivity() {
             digitsList.forEach { code.append(it.text.toString()) }
 
             val quorumKimlic = QuorumKimlic.getInstance()
-            val address = quorumKimlic.address
-
             val params = emptyMap<String, String>().toMutableMap(); params.put("code", code.toString())
-            val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", address)
+            val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", quorumKimlic.walletAddress)
 
-            val request = KimlicRequest(Request.Method.POST, QuorumURL.emailVerifyApprove.url,
+            val request = KimlicRequest(Request.Method.POST, QuorumURL.emailVerifyApprove.url, headers, params,
                     Response.Listener<String> { response ->
                         val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
                         val status = JSONObject(response).getJSONObject("data").optString("status").toString()
@@ -106,9 +104,6 @@ class EmailVerifyActivity : BaseActivity() {
                     },
                     Response.ErrorListener { unableToProceed() }
             )
-
-            request.requestHeaders = headers
-            request.requestParasms = params
 
             VolleySingleton.getInstance(this).addToRequestQueue(request)
 

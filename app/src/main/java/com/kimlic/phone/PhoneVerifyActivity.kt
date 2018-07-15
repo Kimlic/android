@@ -84,12 +84,10 @@ class PhoneVerifyActivity : BaseActivity() {
             digitsList.forEach { code.append(it.text.toString()) }
 
             val quorumKimlic = QuorumKimlic.getInstance()
-            val address = quorumKimlic.address
-
             val params = emptyMap<String, String>().toMutableMap(); params.put("code", code.toString())
-            val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", address)
+            val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", quorumKimlic.walletAddress)
 
-            val request = KimlicRequest(Request.Method.POST, QuorumURL.phoneVierifyApprove.url,
+            val request = KimlicRequest(Request.Method.POST, QuorumURL.phoneVierifyApprove.url, headers, params,
                     Response.Listener<String> { response ->
                         progressBar.visibility = View.GONE
 
@@ -110,9 +108,6 @@ class PhoneVerifyActivity : BaseActivity() {
                     },
                     Response.ErrorListener { unableToProceed() }
             )
-
-            request.requestHeaders = headers
-            request.requestParasms = params
 
             VolleySingleton.getInstance(this).addToRequestQueue(request)
 
