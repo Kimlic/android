@@ -15,6 +15,8 @@ import com.kimlic.API.VolleySingleton
 import com.kimlic.BaseActivity
 import com.kimlic.BaseDialogFragment
 import com.kimlic.R
+import com.kimlic.db.KimlicDB
+import com.kimlic.db.User
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
 import com.kimlic.quorum.QuorumKimlic
@@ -55,7 +57,11 @@ class PhoneVerifyActivity : BaseActivity() {
 
     private fun setupUI() {
         verifyBt.setOnClickListener {
-            managePin()
+            //managePin()
+            // TODO implement db to api call // Temporary Room tests
+            val user = User(id = Prefs.userId, phone = "+380 68 806 86 66")
+            KimlicDB.getInstance()!!.userDao().insert(user)
+
         }
 
         phone = intent.extras!!.getString("phone", "")

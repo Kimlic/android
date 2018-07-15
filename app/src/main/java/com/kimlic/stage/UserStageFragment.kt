@@ -1,6 +1,8 @@
 package com.kimlic.stage
 
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.text.Editable
 import android.view.LayoutInflater
@@ -9,6 +11,7 @@ import android.view.ViewGroup
 import com.kimlic.BaseFragment
 import com.kimlic.KimlicApp
 import com.kimlic.R
+import com.kimlic.db.User
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.AppConstants
@@ -21,6 +24,8 @@ class UserStageFragment : BaseFragment() {
     // Variables
 
     private lateinit var userName: LiveData<String>
+    private lateinit var model: UserStageViewModel
+    private lateinit var userLiveData: MutableLiveData<User>
 
     // Companion
 
@@ -54,6 +59,8 @@ class UserStageFragment : BaseFragment() {
     // Private
 
     private fun setupUI() {
+        model = ViewModelProviders.of(this).get(UserStageViewModel::class.java)
+        //userLiveData = model.getUserLiveData()
         setUserPhoto()
         setupListners()
         setupFielsds()

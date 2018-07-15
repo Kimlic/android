@@ -10,6 +10,7 @@ import butterknife.ButterKnife
 import com.kimlic.BaseActivity
 import com.kimlic.KimlicApp
 import com.kimlic.R
+import com.kimlic.db.KimlicDB
 import com.kimlic.managers.PresentationManager
 import com.kimlic.passcode.PasscodeActivity
 import com.kimlic.preferences.Prefs
@@ -67,7 +68,9 @@ class SettingsActivity : BaseActivity() {
         setupAdapter()
         signoutBt.setOnClickListener {
             Prefs.clear()
+            KimlicDB.getInstance(this)!!.userDao().deleteById(Prefs.userId)
             deleteUserPhotos()
+
 
             PresentationManager.signupRecovery(this)
         }

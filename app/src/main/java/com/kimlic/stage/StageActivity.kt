@@ -1,21 +1,17 @@
 package com.kimlic.stage
 
 
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
-import android.media.RingtoneManager
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.*
 import android.view.View
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.preferences.Prefs
-import com.kimlic.settings.SettingsActivity
 import kotlinx.android.synthetic.main.activity_stage.*
-import android.app.NotificationChannel
-import android.os.Build
+import android.util.Log
+import com.kimlic.db.KimlicDB
+import com.kimlic.db.User
 
 
 class StageActivity : BaseActivity() {
@@ -37,6 +33,13 @@ class StageActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         risks()
+        // TEmp for database test
+        KimlicDB.getInstance()!!.userDao().findById(Prefs.userId).observe(this, object : Observer<User> {
+            override fun onChanged(t: User?) {
+
+            }
+        })
+//        Log.d("TAGSTAGE", "user = "+ user)
     }
 
     override fun onBackPressed() {

@@ -11,6 +11,8 @@ import butterknife.ButterKnife
 
 import com.kimlic.BaseActivity
 import com.kimlic.R
+import com.kimlic.db.KimlicDB
+import com.kimlic.db.User
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.BaseCallback
 
@@ -69,8 +71,12 @@ class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
     private fun manageInput() {
         if (validFields()) {
             // Process fielsd
+
             Prefs.userName = name.text.toString()
             Prefs.userLastName = lastName.text.toString()
+
+            val user = User(Prefs.userId, name = name.text.toString(), lastName = lastName.text.toString())
+            KimlicDB.getInstance()!!.userDao().update(user)
             succesfull()
         }
     }

@@ -109,56 +109,57 @@ class PhoneActivity : BaseActivity() {
 
     private fun managePhone() {
         if (isPhoneValid()) {
-            //showProgress()
-            nextBt.isClickable = false
-            phoneEt.setError(null)
-            val phone = phoneEt.text.toString().replace(" ", "")
+//            //showProgress()
+//            nextBt.isClickable = false
+//            phoneEt.setError(null)
+//            val phone = phoneEt.text.toString().replace(" ", "")
+//
+//            Thread(object : Runnable {
+//                override fun run() {
+//                    val quorumKimlic = QuorumKimlic.getInstance()
+//                    var receiptPhone: TransactionReceipt? = null
+//
+//                    try {
+//                        receiptPhone = quorumKimlic.setAccountFieldMainData(Sha.sha256(phone), "phone")
+//                        Log.d("TAGReceipt",receiptPhone.toString())
+//                    } catch (e: ExecutionException) {
+//                        unableToProceed()
+//                    } catch (e: InterruptedException) {
+//                        unableToProceed()
+//                    }
+//
+//                    if (receiptPhone != null && receiptPhone.transactionHash.isNotEmpty()) {
+//                        val address = quorumKimlic.address
+//
+//                        val params = emptyMap<String, String>().toMutableMap(); params.put("phone", phone)
+//                        val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", address)
+//                        Log.d("TAG", "account address - "+ address)
+//                        Log.d("TAG", "phone - "+ phone)
+//
+//                        val request = KimlicRequest(Request.Method.POST, QuorumURL.phoneVerify.url,
+//                                Response.Listener<String> { response ->
+//                                    Log.d("TAGPHONE", response)
+//                                    hideProgress()
+//                                    val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
+//                                    if (responceCode.startsWith("2")) {
+//                                        nextBt.isClickable = true
+//                                        PresentationManager.phoneNumberVerify(this@PhoneActivity, phoneEt.text.toString())
+//                                    } else unableToProceed()
+//                                },
+//                                Response.ErrorListener {
+//                                    Log.d("TAGPHONE", "mark " + it.networkResponse.statusCode); unableToProceed()
+//                                }
+//                        )
+//                        request.requestHeaders = headers
+//                        request.requestParasms = params
+//                        Log.d("TAGPHONE", "Headrs -  " + request.headers.toString())
+//
+//                        VolleySingleton.getInstance(this@PhoneActivity).addToRequestQueue(request)
+//                    } else unableToProceed()
+//                }
+//            }).start()
 
-            Thread(object : Runnable {
-                override fun run() {
-                    val quorumKimlic = QuorumKimlic.getInstance()
-                    var receiptPhone: TransactionReceipt? = null
-
-                    try {
-                        receiptPhone = quorumKimlic.setAccountFieldMainData(Sha.sha256(phone), "phone")
-                        Log.d("TAGReceipt",receiptPhone.toString())
-                    } catch (e: ExecutionException) {
-                        unableToProceed()
-                    } catch (e: InterruptedException) {
-                        unableToProceed()
-                    }
-
-                    if (receiptPhone != null && receiptPhone.transactionHash.isNotEmpty()) {
-                        val address = quorumKimlic.address
-
-                        val params = emptyMap<String, String>().toMutableMap(); params.put("phone", phone)
-                        val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", address)
-                        Log.d("TAG", "account address - "+ address)
-                        Log.d("TAG", "phone - "+ phone)
-
-                        val request = KimlicRequest(Request.Method.POST, QuorumURL.phoneVerify.url,
-                                Response.Listener<String> { response ->
-                                    Log.d("TAGPHONE", response)
-                                    hideProgress()
-                                    val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
-                                    if (responceCode.startsWith("2")) {
-                                        nextBt.isClickable = true
-                                        PresentationManager.phoneNumberVerify(this@PhoneActivity, phoneEt.text.toString())
-                                    } else unableToProceed()
-                                },
-                                Response.ErrorListener {
-                                    Log.d("TAGPHONE", "mark " + it.networkResponse.statusCode); unableToProceed()
-                                }
-                        )
-                        request.requestHeaders = headers
-                        request.requestParasms = params
-                        Log.d("TAGPHONE", "Headrs -  " + request.headers.toString())
-
-                        VolleySingleton.getInstance(this@PhoneActivity).addToRequestQueue(request)
-                    } else unableToProceed()
-                }
-            }).start()
-
+            PresentationManager.phoneNumberVerify(this@PhoneActivity, phoneEt.text.toString())// Temporary
         } else
             phoneEt.setError(getString(R.string.phone_is_not_valid))
     }
