@@ -1,13 +1,16 @@
 package com.kimlic.stage
 
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import com.kimlic.BaseFragment
 import com.kimlic.KimlicApp
 import com.kimlic.R
@@ -23,9 +26,8 @@ class UserStageFragment : BaseFragment() {
 
     // Variables
 
-    private lateinit var userName: LiveData<String>
     private lateinit var model: UserStageViewModel
-    private lateinit var userLiveData: MutableLiveData<User>
+    private lateinit var userLiveData: LiveData<User>
 
     // Companion
 
@@ -42,6 +44,7 @@ class UserStageFragment : BaseFragment() {
     // Life
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        model = ViewModelProviders.of(this).get(UserStageViewModel::class.java)
         return inflater.inflate(R.layout.fragment_stage_user, container, false)
     }
 
@@ -52,16 +55,37 @@ class UserStageFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        setUserPhoto()
-        setupFielsds()
     }
 
     // Private
 
     private fun setupUI() {
-        model = ViewModelProviders.of(this).get(UserStageViewModel::class.java)
-        //userLiveData = model.getUserLiveData()
-        setUserPhoto()
+//        model = ViewModelProviders.of(this).get(UserStageViewModel::class.java)
+        userLiveData = model.getUserLiveData()
+        userLiveData.observe(activity!!, object : Observer<User> {
+            override fun onChanged(user: User?) {
+
+                // setUserPhoto("preview_" + user!!.portraitFilePath)
+                setupEmailField(user!!.email)
+                setupPhoneField(user.phone)
+                setupNameField(if (user.name.isNotEmpty()) {
+                    user.name + " " + user.lastName
+                } else "")
+
+                val layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                layoutParams.gravity = Gravity.CENTER
+                val userPhoto = UserPhotoView(activity!!, "preview_" + user.portraitFilePath)
+                userPhoto.layoutParams = layoutParams
+
+                userPhotoLl.removeAllViews()
+                userPhotoLl.addView(userPhoto)
+
+                setupAddressField(user.address)
+            }
+        })
+
+
+        //setUserPhoto()
         setupListners()
         setupFielsds()
         manageRisks()
@@ -74,30 +98,22 @@ class UserStageFragment : BaseFragment() {
         emailItem.setOnClickListener { PresentationManager.email(activity!!) }
         idItem.setOnClickListener { PresentationManager.documentChooseVerify(activity!!) }
         addressItem.setOnClickListener { PresentationManager.address(activity!!) }
-
-        risksTv.setOnClickListener { setBlueScreen() }
-
         takePhotoLl.setOnClickListener {
             PresentationManager.portraitPhoto(activity!!)
 //            it.visibility = if (setUserPhoto()) View.INVISIBLE else View.VISIBLE
         }
+        // Stub?
+        //userPhotoIv.setOnClickListener { PresentationManager.portraitPhoto(activity!!) }
     }
 
     // Mocks
 
     private fun manageRisks() {
-        if (true) risksTv.visibility = View.VISIBLE
+        risksTv.visibility = if (Prefs.isPasscodeEnabled && Prefs.isTouchEnabled) View.GONE else View.VISIBLE
     }
 
-    // Implementr liveData
-
     private fun setupFielsds() {
-
-        // Use view model
-        setupKimField(0)
-        setupNameField("Vladimir")
-        setupPhoneField("+380508668370")
-        setupEmailField("babenkovladimirbmd@gmail.com")
+        setupKimField(2)
 
         when (Prefs.documentToverify) {
             AppConstants.documentPassport.key -> {
@@ -115,30 +131,27 @@ class UserStageFragment : BaseFragment() {
                 setupIDField(""); idItem.setOnClickListener { PresentationManager.documentChooseVerify(activity!!) }
             }
         }
-
-        setupAddressField(Prefs.userAddress)
     }
 
-    private fun setUserPhoto(): Boolean {
-        val filePath = KimlicApp.applicationContext().filesDir.toString() + "/" + UserPhotos.portraitFilePath.fileName
-
-        if (File(filePath).exists()) {
-            (userPhotoIv as UserPhotoView).showUserPhoto(UserPhotos.portraitFilePath.fileName)
-            return true
-        } else
-            return false
-    }
-
-    private fun setBlueScreen() {
-        (userPhotoIv as UserPhotoView).showBlueScreen()
-    }
+//    private fun setUserPhoto(photoName: String) {
+//        val filePath = KimlicApp.applicationContext().filesDir.toString() + "/" + photoName// UserPhotos.stagePortrait.fileName
+//        Log.d("TAGFRAGMENT", "setUserPhoto")
+//        if (File(filePath).exists()) {
+//            Log.d("TAGFRAGMENT", "setUserPhoto file exist")
+//            //(userPhotoIv as UserPhotoView).showUserPhoto(photoName)
+////            (userPhotoIv as UserPhotoView).postInvalidate()
+//            takePhotoLl.visibility = View.GONE
+//
+//        }
+//
+//    }
 
     // Setup profile Fields
 
     private fun setupKimField(kim: Int = 0) {
         kimIv.background = resources.getDrawable(if (kim == 0) Icons.KIM_BLUE.icon else Icons.KIM_WHITE.icon, null)
         kimArrow.background = resources.getDrawable(if (kim == 0) Icons.ARROW_BLUE.icon else Icons.ARROW_WHITE.icon, null)
-        kimTv.text = Editable.Factory.getInstance().newEditable(context!!.getString(R.string.you_have_kim, kim))
+        kimTv.text = Editable.Factory.getInstance().newEditable(getString(R.string.you_have_kim, kim))
         kimTv.setTextColor(if (kim == 0) resources.getColor(R.color.lightBlue, null) else resources.getColor(android.R.color.white, null))
     }
 
@@ -150,7 +163,7 @@ class UserStageFragment : BaseFragment() {
     }
 
     private fun setupNameField(name: String = "") {
-        //nameIv.background = resources.getDrawable(if (name.equals("")) Icons.NAME_BLUE.icon else Icons.NAME_WHITE.icon, null)
+//        nameIv.background = resources.getDrawable(if (name.equals("")) Icons.NAME_BLUE.icon else Icons.NAME_WHITE.icon, null)
         nameArrow.background = resources.getDrawable(if (name.equals("")) Icons.ARROW_BLUE.icon else Icons.ARROW_WHITE.icon, null)
         nameTv.text = if (name.equals("")) getString(R.string.add_your_full_name) else name
         nameTv.setTextColor(if (name.equals("")) resources.getColor(R.color.lightBlue, null) else resources.getColor(android.R.color.white, null))

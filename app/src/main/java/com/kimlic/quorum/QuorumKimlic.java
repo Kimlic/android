@@ -1,10 +1,16 @@
 package com.kimlic.quorum;
 
+import android.content.Context;
+
+import com.kimlic.quorum.bip44.HdKeyNode;
+import com.kimlic.quorum.bip44.hdpath.HdKeyPath;
+import com.kimlic.quorum.crypto.MnemonicUtils;
+import com.kimlic.quorum.crypto.SecureRandomTools;
+
 import java.math.BigInteger;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
+import java.security.SecureRandom;
 import java.util.concurrent.ExecutionException;
+
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.ECKeyPair;
 import org.web3j.crypto.Keys;
@@ -17,70 +23,110 @@ public class QuorumKimlic {
   // Constants
 
   private final static String QUORUM_URL = "http://40.115.43.126:22000";
-  private static String ADDRESS_ACCOUNT_STORAGE_ADAPTER = "0x5702bb159c49ad76c9998e2f4cb7707985f6ad6a";//"0xd37debc7b53d678788661c74c94f265b62a412ac";// variable
 
   // Variables
 
   private static QuorumKimlic sInstance;
 
-  private ECKeyPair mKeyPair;
-  private String mAddress;
-  private Web3j mWeb3 = Web3.getInstance(QUORUM_URL).getWeb3();
-
-  //    private SimpleStorage mSimpleStorage;
-
+  private Web3j mWeb3;
+  private String mWalletAddress;
   private AccountStorageAdapter mAccountStorageAdapter;
-
-  // Life
-
-  private QuorumKimlic()
-      throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
-    sInstance = this;
-
-    mKeyPair = generateKeyPair();
-    mAddress = generateAddress(mKeyPair);
-
-    Credentials credentials = credentialsFrom(mKeyPair);
-    mAccountStorageAdapter = loadAccountStorageAdapter(credentials, mWeb3,
-        ADDRESS_ACCOUNT_STORAGE_ADAPTER);
-  }
+  private Credentials mCredentials;
+  private String mMnemonic;
 
   // Public
 
-  public TransactionReceipt setAccountFieldMainData(String UDID, String verificationType)
-      throws ExecutionException, InterruptedException {
-    return mAccountStorageAdapter.setAccountFieldMainData(UDID, verificationType).sendAsync().get();
-//    return getAccountStorageAdapter().setAccountFieldMainData(UDID, verificationType).sendAsync()
-//        .get();
+  public static QuorumKimlic createInstance(String mnemonic, Context context) throws Exception {
+    if (sInstance != null) {
+      throw new Exception("createInstance should be called once");
+    }
+
+    if (context == null) {
+      throw new IllegalArgumentException("Context is null");
+    }
+
+    if (mnemonic == null) {
+      mnemonic = generateMnemonic(context);
+    }
+
+    return new QuorumKimlic(mnemonic);
   }
 
-//  public static void setContextContract(String context_contract) {
-//    ADDRESS_ACCOUNT_STORAGE_ADAPTER = context_contract;
-//  }
+  public static void destroyInstance() {
+    if (sInstance != null) {
+      sInstance = null;
+    }
+  }
+
+  public TransactionReceipt setAccountFieldMainData(String UDID, String verificationType)
+      throws ExecutionException, InterruptedException {
+    if (mAccountStorageAdapter == null) {
+      throw new InterruptedException("Empty contract address");
+    }
+
+    return mAccountStorageAdapter.setAccountFieldMainData(UDID, verificationType).sendAsync().get();
+  }
 
   // Accessors
 
-  public static QuorumKimlic getInstance() {
+  public static QuorumKimlic getInstance() throws Exception {
     if (sInstance == null) {
-      try {
-        sInstance = new QuorumKimlic();
-      } catch (InvalidAlgorithmParameterException | NoSuchAlgorithmException | NoSuchProviderException e) {
-        e.printStackTrace();
-      }
+      throw new Exception("Call createInstance to generate instace");
     }
 
     return sInstance;
   }
 
-  public String getAddress() {
-    return mAddress;
+  public String getWalletAddress() {
+    return mWalletAddress;
+  }
+
+  public String getMnemonic() {
+    return mMnemonic;
+  }
+
+  public void setAccountStorageAdapterAddress(String address) {
+    mAccountStorageAdapter = AccountStorageAdapter
+        .load(address, mWeb3, mCredentials, BigInteger.ZERO, BigInteger.valueOf(4612388));
   }
 
   // Private
 
-  private ECKeyPair generateKeyPair()
-      throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException {
-    return Keys.createEcKeyPair();
+  private QuorumKimlic(String mnemonic) {
+    sInstance = this;
+    mMnemonic = mnemonic;
+
+    mWeb3 = Web3.getInstance(QUORUM_URL).getWeb3();
+    ECKeyPair keyPair = generateKeyPair(mMnemonic);
+    mWalletAddress = generateAddress(keyPair);
+    mCredentials = credentialsFrom(keyPair);
+  }
+
+  private static String generateMnemonic(Context context) {
+    MnemonicUtils.initWordList(context);
+
+    byte[] initialEntropy = new byte[16];
+    SecureRandom secureRandom = SecureRandomTools.secureRandom();
+    secureRandom.nextBytes(initialEntropy);
+
+    return MnemonicUtils.generateMnemonic(initialEntropy);
+  }
+
+  private ECKeyPair generateKeyPair(String mnemonic) {
+    String path = "m/44'/60'/0'/0/0";
+    String passphrase = "kimlic";
+    byte[] seed = MnemonicUtils.generateSeed(mnemonic, passphrase);
+
+    return createBip44NodeFromSeed(seed, path);
+  }
+
+  private static ECKeyPair createBip44NodeFromSeed(byte[] seed, String path) {
+    HdKeyPath p = HdKeyPath.valueOf(path);
+    HdKeyNode node = HdKeyNode.fromSeed(seed);
+    node = node.createChildNode(p);
+    byte[] privateKeyByte = node.getPrivateKey().getPrivateKeyBytes();
+
+    return ECKeyPair.create(privateKeyByte);
   }
 
   private Credentials credentialsFrom(ECKeyPair keyPair) {
@@ -89,12 +135,5 @@ public class QuorumKimlic {
 
   private String generateAddress(ECKeyPair keyPair) {
     return Numeric.prependHexPrefix(Keys.getAddress(keyPair));
-  }
-
-
-  private AccountStorageAdapter loadAccountStorageAdapter(Credentials credentials, Web3j web3j,
-      String contractAddress) {
-    return AccountStorageAdapter
-        .load(contractAddress, web3j, credentials, BigInteger.ZERO, BigInteger.valueOf(4612388));
   }
 }

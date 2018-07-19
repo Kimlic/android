@@ -17,11 +17,6 @@ import kotlinx.android.synthetic.main.fragment_phone_successfull.*
 
 abstract class BaseDialogFragment : DialogFragment() {
 
-    // Constants
-
-    private val DEFAULT_ANIMATION_DURATION = 2000L
-    private val DEFAULT_ANIMATION_REPEAT = 1
-
     // Variables
 
     var activity: BaseActivity? = null

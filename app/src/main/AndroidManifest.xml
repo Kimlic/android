@@ -12,7 +12,7 @@
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
   <application
-    android:allowBackup="true"
+    android:allowBackup="false"
     android:hardwareAccelerated="true"
     android:icon="@mipmap/ic_launcher"
     android:label="@string/app_name"
@@ -71,12 +71,12 @@
 
     <activity
       android:label="Verify"
-      android:name=".phrase.PhraseVerifyActivity"
+      android:name=".mnemonic.MnemonicVerifyActivity"
       android:screenOrientation="portrait"/>
 
     <activity
       android:label="Mnemonic Phrase"
-      android:name=".phrase.PhraseGenerateActivity"
+      android:name=".mnemonic.MnemonicPreviewActivity"
       android:screenOrientation="portrait"/>
 
     <activity
@@ -137,8 +137,13 @@
       android:label="Portrait"
       android:name=".verification.PortraitActivity"/>
 
-    <activity android:name=".verification.VerifyDetails">
-    </activity>
+    <activity
+      android:label="Document verify details"
+      android:name=".verification.VerifyDetails"/>
+
+    <activity
+      android:label="Bill"
+      android:name=".verification.BillActivity"/>
   </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.kimlic.phrase
+package com.kimlic.mnemonic
 
 import android.os.Bundle
 import android.support.design.widget.TextInputLayout
@@ -7,12 +7,13 @@ import butterknife.BindViews
 import butterknife.ButterKnife
 import com.kimlic.BaseActivity
 import com.kimlic.R
+import com.kimlic.db.KimlicDB
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.BaseCallback
 import kotlinx.android.synthetic.main.activity_verify_passphrase.*
 
-class PhraseVerifyActivity : BaseActivity() {
+class MnemonicVerifyActivity : BaseActivity() {
 
     // Binding
 
@@ -22,9 +23,9 @@ class PhraseVerifyActivity : BaseActivity() {
     @BindViews(R.id.phrase1Til, R.id.phrase2Til, R.id.phrase3Til, R.id.phrase4Til)
     lateinit var titleList: List<@JvmSuppressWildcards TextInputLayout>
 
-    // Mocks
+    // Variables
 
-    private val mockHintList: List<String> = listOf("5th word", "7th word", "12th word", "17th word")
+    private val hintList: List<Int> = listOf(2, 4, 7, 11)
 
     // Life
 
@@ -40,22 +41,24 @@ class PhraseVerifyActivity : BaseActivity() {
 
     private fun setupUI() {
         verifyBt.setOnClickListener {
-            // use entered words to verify
-            Prefs.isRecoveryEnabled = true
-            successfull()
+            if (validEmptyFields()) {
+                if (phrasesMatch()) {
+                    Prefs.isRecoveryEnabled = true
+                    successfull()
+                } else errorPopup(getString(R.string.mnemonic_phrases_do_not_match))
+            }
         }
 
         backTv.setOnClickListener {
-            // Temporary
             Prefs.isRecoveryEnabled = false
             PresentationManager.stage(this)
         }
-        setupHints(mockHintList)
+        setupHints(hintList)
     }
 
-    private fun setupHints(hintList: List<String>) {
+    private fun setupHints(hintList: List<Int>) {
         for (i in 0 until hintList.size) {
-            titleList[i].hint = hintList[i]
+            titleList[i].hint = getString(R.string.th_word, hintList[i])
         }
     }
 
@@ -63,10 +66,31 @@ class PhraseVerifyActivity : BaseActivity() {
         val fragment = MnemonicSuccessfullFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
-                PresentationManager.stage(this@PhraseVerifyActivity)
+                PresentationManager.stage(this@MnemonicVerifyActivity)
             }
         })
         fragment.show(supportFragmentManager, MnemonicSuccessfullFragment.FRAGMENT_KEY)
     }
 
+    private fun phrasesMatch(): Boolean {
+        var noError = true
+        val mnemonicList = KimlicDB.getInstance()!!.userDao().findById(Prefs.userId).mnemonic.split(" ")
+
+        for (i in 0 until hintList.size) noError = mnemonicList[hintList[i] - 1].equals(editTextList[i].text.toString())
+
+        return noError
+    }
+
+    private fun validEmptyFields(): Boolean {
+        var noError = true
+
+        editTextList.forEach {
+            if (it.text.length < 3) {
+                it.setError("error"); noError = false
+            } else {
+                it.setError(null); noError = true
+            }
+        }
+        return noError
+    }
 }

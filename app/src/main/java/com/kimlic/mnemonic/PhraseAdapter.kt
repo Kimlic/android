@@ -1,4 +1,4 @@
-package com.kimlic.phrase
+package com.kimlic.mnemonic
 
 import android.content.Context
 import android.view.LayoutInflater

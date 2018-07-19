@@ -55,6 +55,10 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
     userPhoneAccepted("USER_PHONE_ACCEPTED"),
     userEmail("USER_EMAIL"),
     userEmailAccepted("USER_EMAIL_ACCEPTED"),
-    userAddress("USER_ADDRESS")
+    userAddress("USER_ADDRESS"),
+
+    // Help constants
+
+    errorDescription("ERROR")
 
 }

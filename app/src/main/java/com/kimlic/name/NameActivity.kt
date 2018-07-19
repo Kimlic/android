@@ -70,13 +70,7 @@ class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
 
     private fun manageInput() {
         if (validFields()) {
-            // Process fielsd
-
-            Prefs.userName = name.text.toString()
-            Prefs.userLastName = lastName.text.toString()
-
-            val user = User(Prefs.userId, name = name.text.toString(), lastName = lastName.text.toString())
-            KimlicDB.getInstance()!!.userDao().update(user)
+            updateName(nameEt.text.toString(), lastName.text.toString())
             succesfull()
         }
     }
@@ -111,6 +105,13 @@ class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
         }
 
         return noError
+    }
+
+    private fun updateName(name: String, lastName: String) {
+        val user = KimlicDB.getInstance()!!.userDao().findById(Prefs.userId)
+        user.name = name
+        user.lastName = lastName
+        KimlicDB.getInstance()!!.userDao().update(user)
     }
 
     private fun filter(): InputFilter {

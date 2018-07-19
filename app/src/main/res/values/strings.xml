@@ -83,7 +83,7 @@
   <string name="accept">Accept</string>
   <string name="terms_amp_conditions"><![CDATA[Terms & Conditions]]></string>
   <string name="last_modified_23_july_2017">Last modified 23 July 2017</string>
-  <string name="please_paste_type_your_mnemonic_passphrase_to_recover_your_identity">Please paste/type your mnemonic passphrase to recover your identity</string>
+  <string name="please_paste_type_your_mnemonic_passphrase_to_recover_your_identity">Please paste/type your mnemonic passphrase \n to recover your identity</string>
   <string name="copy">Copy</string>
   <string name="continue_">Continue</string>
   <string name="paste_type_here">Paste/type here…</string>
@@ -215,5 +215,10 @@
   <string name="back_side_of_the_document">Back side of the document</string>
   <string name="background">Background</string>
   <string name="brows_file">Brows File</string>
+  <string name="server_error">Server error</string>
+  <string name="take_a_photo_of_bill">Take a photo of Bill</string>
+  <string name="mnemonic_phrases_do_not_match">Mnemonic phrases \n do not match</string>
+  <string name="show">Show</string>
+  <string name="th_word">%1$dth word</string>
 
 </resources>

@@ -1,18 +1,15 @@
 package com.kimlic.stage
 
-
-import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.*
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentTransaction
 import android.view.View
 import com.kimlic.BaseActivity
+import com.kimlic.BaseFragment
 import com.kimlic.R
 import com.kimlic.preferences.Prefs
 import kotlinx.android.synthetic.main.activity_stage.*
-import android.util.Log
-import com.kimlic.db.KimlicDB
-import com.kimlic.db.User
-
 
 class StageActivity : BaseActivity() {
 
@@ -26,20 +23,12 @@ class StageActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stage)
-
         setupUI()
     }
 
     override fun onResume() {
         super.onResume()
-        risks()
-        // TEmp for database test
-        KimlicDB.getInstance()!!.userDao().findById(Prefs.userId).observe(this, object : Observer<User> {
-            override fun onChanged(t: User?) {
-
-            }
-        })
-//        Log.d("TAGSTAGE", "user = "+ user)
+        //risks()
     }
 
     override fun onBackPressed() {
@@ -49,20 +38,23 @@ class StageActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
+        val model = ViewModelProviders.of(this).get(UserStageViewModel::class.java)
         initFragments()
         setupListners()
         profileBt.isSelected = true
-        replaceFragment(userStageFragment, UserStageFragment.FRAGMENT_KEY)
+
+        replaceStageFragment()
     }
 
     private fun setupListners() {
         profileBt.setOnClickListener {
             profileBt.isSelected = true; accountsBt.isSelected = false; profileLineV.visibility = View.VISIBLE; accountsLineV.visibility = View.INVISIBLE
-            replaceFragment(userStageFragment, UserStageFragment.FRAGMENT_KEY)
+            replaceStageFragment()
         }
+
         accountsBt.setOnClickListener {
             accountsBt.isSelected = true; profileBt.isSelected = false; accountsLineV.visibility = View.VISIBLE; profileLineV.visibility = View.INVISIBLE
-            replaceFragment(accountsStageFragment, AccountsStageFragment.FRAGMENT_KEY)
+            replaceAccountsFragment()
         }
 
         scanBt.setOnClickListener { showToast("Scan button is pressed") }
@@ -87,16 +79,19 @@ class StageActivity : BaseActivity() {
         }
     }
 
-    private fun phoneVirify() {
-        val phoneVerify = PhoneVerifyFragment.newInstance()
-        phoneVerify.show(supportFragmentManager, PhoneVerifyFragment.FRAGMENT_KEY)
-    }
-
     // Helpers
 
-    private fun replaceFragment(newFragment: Fragment, tag: String): Boolean {
+    private fun replaceStageFragment(): Boolean {
         val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.container, newFragment, tag).commit()
+        ft.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
+        ft.replace(R.id.container, userStageFragment, UserStageFragment.FRAGMENT_KEY).commit()
+        return true
+    }
+
+    private fun replaceAccountsFragment(): Boolean {
+        val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
+        ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
+        ft.replace(R.id.container, accountsStageFragment, AccountsStageFragment.FRAGMENT_KEY).commit()
         return true
     }
 }

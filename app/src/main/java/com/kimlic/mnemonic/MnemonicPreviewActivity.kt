@@ -1,32 +1,28 @@
-package com.kimlic.phrase
+package com.kimlic.mnemonic
 
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
+import android.util.Log
 import com.kimlic.BaseActivity
 import com.kimlic.R
+import com.kimlic.db.KimlicDB
 import com.kimlic.managers.PresentationManager
-import kotlinx.android.synthetic.main.activity_phrase_generate.*
+import com.kimlic.preferences.Prefs
+import kotlinx.android.synthetic.main.activity_mnemonic_preview.*
 
-
-class PhraseGenerateActivity : BaseActivity() {
+class MnemonicPreviewActivity : BaseActivity() {
 
     // Variables
 
     private var phraseList: List<String> = emptyList()
 
-    // Mocks
-
-    private val phraseMockList = listOf<String>("fdvdf", "svcsdvc", "sdcsdcs", "scsdcsdc", "tyjfm", "dndy", "dndyn", "vfvfv", "fvfvf", "ddfdfd", "erer", "ererer")
-
     // Life
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_phrase_generate)
+        setContentView(R.layout.activity_mnemonic_preview)
 
         setupUI()
     }
@@ -34,14 +30,14 @@ class PhraseGenerateActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        phraseBt.tag = "import"
+        phraseBt.tag = "show"
 
         phraseBt.setOnClickListener {
             when (it.tag) {
-                "import" -> {
+                "show" -> {
                     // Import phrases
                     // Use moks
-                    phraseList = phraseMockList
+                    phraseList = mnemonicList()
                     setPhrases(phraseList)
                     phraseBt.tag = "copy"
                     phraseBt.text = getString(R.string.copy_to_buffer)
@@ -60,26 +56,16 @@ class PhraseGenerateActivity : BaseActivity() {
         cancelTv.setOnClickListener { finish() }
     }
 
-    // Moved to baseActivity
-
-    // TODO delete if no problems
-//    private fun showPopup(title: String = "", message: String) {
-//        val builder = AlertDialog.Builder(this)
-//        builder.setTitle(title)
-//                .setMessage(message)
-//                .setPositiveButton(getString(R.string.OK), object : DialogInterface.OnClickListener {
-//                    override fun onClick(dialog: DialogInterface?, which: Int) {
-//                        dialog?.dismiss()
-//                    }
-//                }).setCancelable(true)
-//
-//        val dialog = builder.create()
-//        dialog.show()
-//    }
-
     private fun setPhrases(list: List<String>) {
         val adapter = PhraseAdapter(this, R.layout.item_phrase, list)
         listView.adapter = adapter
+    }
+
+    private fun mnemonicList(): List<String>{
+        val phraseString = KimlicDB.getInstance()!!.userDao().findById(Prefs.userId).mnemonic
+        val phraseList = phraseString.split(" ")
+        Log.d("TAG", "phrases:"+ phraseList.toString())
+        return phraseList
 
     }
 

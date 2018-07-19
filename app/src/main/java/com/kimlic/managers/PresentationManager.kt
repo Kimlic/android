@@ -14,8 +14,8 @@ import com.kimlic.name.NameActivity
 import com.kimlic.passcode.PasscodeActivity
 import com.kimlic.phone.PhoneActivity
 import com.kimlic.phone.PhoneVerifyActivity
-import com.kimlic.phrase.PhraseGenerateActivity
-import com.kimlic.phrase.PhraseVerifyActivity
+import com.kimlic.mnemonic.MnemonicPreviewActivity
+import com.kimlic.mnemonic.MnemonicVerifyActivity
 import com.kimlic.recovery.AccountRecoveryActivity
 import com.kimlic.settings.SettingsActivity
 import com.kimlic.splash.SplashScreenActivity
@@ -24,10 +24,7 @@ import com.kimlic.terms.TermsActivity
 import com.kimlic.tutorial.TutorialActivity
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.UserPhotos
-import com.kimlic.verification.DocumentVerifyActivity
-import com.kimlic.verification.DocumentVerifyChooseActivity
-import com.kimlic.verification.PortraitActivity
-import com.kimlic.verification.VerifyDetails
+import com.kimlic.verification.*
 
 object PresentationManager {
 
@@ -69,7 +66,6 @@ object PresentationManager {
         val params = HashMap<String, String>()
         params.put("action", "unlock")
         present(presenter = presenter, className = TouchIdActivity::class.java, isStarting = true, params = params)
-        //present(presenter = presenter, className = LoginActivity::class.java, isStarting = true)
     }
 
     fun touchCreate(presenter: BaseActivity) {
@@ -86,11 +82,11 @@ object PresentationManager {
 
     // causes passphrase generation
     fun recoveryEnable(presenter: BaseActivity) {
-        present(presenter = presenter, className = PhraseGenerateActivity::class.java, isStarting = false)
+        present(presenter = presenter, className = MnemonicPreviewActivity::class.java, isStarting = false)
     }
 
     fun phraseVerify(presenter: BaseActivity) {
-        present(presenter = presenter, className = PhraseVerifyActivity::class.java)
+        present(presenter = presenter, className = MnemonicVerifyActivity::class.java)
     }
 
     // TODO probably will be changed
@@ -98,7 +94,7 @@ object PresentationManager {
         val params = HashMap<String, String>()
         params.put("action", "disable")
         params.put("content", "terms")
-        present(presenter = presenter, className = PhraseVerifyActivity::class.java, params = params)
+        present(presenter = presenter, className = MnemonicVerifyActivity::class.java, params = params)
     }
 
     // Phone validation
@@ -179,13 +175,16 @@ object PresentationManager {
         present(presenter = presenter, className = VerifyDetails::class.java, isStarting = false, params = params)
     }
 
+    fun verifyBill(presenter: BaseActivity) {
+        present(presenter = presenter, className = BillActivity::class.java, isStarting = false)
+    }
 
     fun signupRecovery(presenter: BaseActivity) {
         present(presenter = presenter, className = SignupRecoveryActivity::class.java, isStarting = true)
     }
 
     fun passhraseCreate(presenter: BaseActivity) {
-        present(presenter = presenter, className = PhraseGenerateActivity::class.java)
+        present(presenter = presenter, className = MnemonicPreviewActivity::class.java)
     }
 
     fun settings(presenter: BaseActivity) {
@@ -199,10 +198,6 @@ object PresentationManager {
     fun portraitPhoto(presenter: BaseActivity) {
         present(presenter = presenter, className = PortraitActivity::class.java, isStarting = false)
     }
-
-//    fun passportVerify(presenter: BaseActivity) {
-//        present(presenter = presenter, className = PassportVerifyActivity::class.java, isStarting = false)
-//    }
 
     fun termsReview(presenter: BaseActivity) {
         val params = HashMap<String, String>()

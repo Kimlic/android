@@ -3,9 +3,14 @@ package com.kimlic
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import com.kimlic.db.KimlicDB
+import com.kimlic.db.User
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
+import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.terms.TermsActivity
+import com.kimlic.utils.AppConstants
 import kotlinx.android.synthetic.main.activity_signup_recovery.*
 
 class SignupRecoveryActivity : BaseActivity() {
@@ -33,7 +38,7 @@ class SignupRecoveryActivity : BaseActivity() {
                 }
             }
             TERMS_ACCEPT_CREATE_REQUEST_CODE -> {
-                if(resultCode == Activity.RESULT_OK) {
+                if (resultCode == Activity.RESULT_OK) {
                     Prefs.termsAccepted = true
                     PresentationManager.recovery(this)
                 }
@@ -45,8 +50,14 @@ class SignupRecoveryActivity : BaseActivity() {
 
     private fun setupUI() {
         createBt.setOnClickListener {
-                PresentationManager.tutorials(this)
-                //termsToAccept(TERMS_ACCEPT_CREATE_REQUEST_CODE)
+            PresentationManager.tutorials(this)
+            //termsToAccept(TERMS_ACCEPT_CREATE_REQUEST_CODE)
+            initNewUserRegistaration()
+
+//            QuorumKimlic.createInstance(null, this)
+//            val mnemonic = QuorumKimlic.getInstance().mnemonic
+//            Log.d("TAGSIGNUP", "mnemonic - " + mnemonic)
+//            KimlicDB.getInstance()!!.userDao().findById(Prefs.userId)
         }
         recoverBt.setOnClickListener {
             termsToAccept(TERMS_ACCEPT_RECOVERY_REQUEST_CODE)
@@ -59,5 +70,17 @@ class SignupRecoveryActivity : BaseActivity() {
         intent.putExtra("action", "accept")
         intent.putExtra("content", "terms")
         startActivityForResult(intent, requestCode)
+    }
+
+    private fun initNewUserRegistaration() {
+        QuorumKimlic.createInstance(null, this)
+        val mnemonic = QuorumKimlic.getInstance().mnemonic
+        val walletAddress = QuorumKimlic.getInstance().walletAddress
+        val user = User(id = Prefs.userId, mnemonic = mnemonic, blockchainAddress = walletAddress)
+        KimlicDB.getInstance()!!.userDao().insert(user)
+        Log.d("TAGMNEMONIC", "mnemonic - " + mnemonic)
+        Log.d("TAGMNEMONIC", "walletAddress - " + walletAddress)
+
+
     }
 }

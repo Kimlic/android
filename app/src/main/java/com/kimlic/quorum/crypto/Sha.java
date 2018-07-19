@@ -1,4 +1,4 @@
-package com.kimlic.quorum;
+package com.kimlic.quorum.crypto;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -13,7 +13,7 @@ public class Sha {
     }
 
     private static String bytesToHex(byte[] bytes) {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         for (byte byt : bytes) result.append(Integer.toString((byt & 0xff) + 0x100, 16).substring(1));
 
         return result.toString();

@@ -11,6 +11,8 @@ import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import com.kimlic.utils.AppConstants
+import com.kimlic.utils.ErrorPopupFragment
 
 abstract class BaseActivity : AppCompatActivity() {
 
@@ -56,6 +58,13 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     fun getStringValue(resId: Int): String = KimlicApp.applicationContext().getString(resId)
+
+    fun errorPopup(error: String? = getString(R.string.error)) {
+        val bundle = Bundle()
+        bundle.putString(AppConstants.errorDescription.key, error)
+        val errorFragment = ErrorPopupFragment.newInstanse(bundle)
+        errorFragment.show(supportFragmentManager, ErrorPopupFragment.FRAGMENT_KEY)
+    }
 
     // Private
 

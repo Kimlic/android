@@ -14,7 +14,9 @@ import com.kimlic.db.KimlicDB
 import com.kimlic.managers.PresentationManager
 import com.kimlic.passcode.PasscodeActivity
 import com.kimlic.preferences.Prefs
+import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.utils.AppConstants
+import com.kimlic.utils.QuorumURL
 import com.kimlic.utils.UserPhotos
 import kotlinx.android.synthetic.main.activity_settings.*
 import java.io.File
@@ -69,8 +71,8 @@ class SettingsActivity : BaseActivity() {
         signoutBt.setOnClickListener {
             Prefs.clear()
             KimlicDB.getInstance(this)!!.userDao().deleteById(Prefs.userId)
+            QuorumKimlic.destroyInstance()
             deleteUserPhotos()
-
 
             PresentationManager.signupRecovery(this)
         }
@@ -97,11 +99,7 @@ class SettingsActivity : BaseActivity() {
                         if (Prefs.isTouchEnabled) PresentationManager.touchDisable(this@SettingsActivity)
                         else PresentationManager.touchCreate(this@SettingsActivity)
                     }
-                    "recovery" ->
-                        // Vill be changed
-                        if (!Prefs.isRecoveryEnabled) PresentationManager.recoveryEnable(this@SettingsActivity)
-                //else PresentationManager.recoveryEnable(this@SettingsActivity)
-
+                    "recovery" -> PresentationManager.recoveryEnable(this@SettingsActivity)
                     "terms" -> PresentationManager.termsReview(this@SettingsActivity)
                     "about" -> PresentationManager.about(this@SettingsActivity)
                     "change" -> PresentationManager.passcodeChange(this@SettingsActivity)
@@ -117,7 +115,8 @@ class SettingsActivity : BaseActivity() {
         settingsList = mutableListOf(
                 SwitchSetting(getString(R.string.passcode), getString(R.string.protect_my_id), "passcode", AppConstants.settingSwitch.intKey, Prefs.isPasscodeEnabled),
                 SwitchSetting(getString(R.string.enable_touch_id), getString(R.string.use_my_touch_id), "touch", AppConstants.settingSwitch.intKey, Prefs.isTouchEnabled),
-                SwitchSetting(getString(R.string.account_recovery), getString(R.string.back_up_your_credentials), "recovery", AppConstants.settingSwitch.intKey, Prefs.isRecoveryEnabled),
+//                SwitchSetting(getString(R.string.account_recovery), getString(R.string.back_up_your_credentials), "recovery", AppConstants.settingSwitch.intKey, Prefs.isRecoveryEnabled),
+                IntentSetting(getString(R.string.account_recovery), getString(R.string.back_up_your_credentials), "recovery", AppConstants.settingIntent.intKey),
                 IntentSetting(getString(R.string.terms_and_conditions), getString(R.string.last_modified_23_july_2017), "terms", AppConstants.settingIntent.intKey),
                 IntentSetting(getString(R.string.about_kimlic), "", "about", AppConstants.settingIntent.intKey))
 

@@ -8,36 +8,30 @@ import org.web3j.protocol.http.HttpService;
 
 public class Web3 {
 
-    // Variables
+  // Variables
 
-    private static Web3 sInstance;
+  private static Web3 sInstance;
 
-    private Web3j mWeb3;
-    private Web3jService mHttpService;
+  private Web3j mWeb3;
 
-    // Public
+  // Public
 
-    public static Web3 getInstance(String URL) {
-        if (sInstance == null)
-            sInstance = new Web3(URL);
+  public static Web3 getInstance(String URL) {
+    if (sInstance == null)
+      sInstance = new Web3(URL);
 
-        return sInstance;
-    }
+    return sInstance;
+  }
 
-    // Life
+  // Accessors
 
-    private Web3(String URL) {
-        mHttpService = new HttpService(URL);
-        mWeb3 = Web3jFactory.build(mHttpService);
-    }
+  public Web3j getWeb3() {
+    return mWeb3;
+  }
 
-    // Accessors
+  // Private
 
-    public Web3j getWeb3() {
-        return mWeb3;
-    }
-
-    public Web3jService getHttpService() {
-        return mHttpService;
-    }
+  private Web3(String URL) {
+    mWeb3 = Web3jFactory.build(new HttpService(URL));
+  }
 }

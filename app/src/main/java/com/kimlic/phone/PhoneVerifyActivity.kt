@@ -1,7 +1,9 @@
 package com.kimlic.phone
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.widget.EditText
@@ -59,9 +61,10 @@ class PhoneVerifyActivity : BaseActivity() {
         verifyBt.setOnClickListener {
             //managePin()
             // TODO implement db to api call // Temporary Room tests
-            val user = User(id = Prefs.userId, phone = "+380 68 806 86 66")
-            KimlicDB.getInstance()!!.userDao().insert(user)
-
+            val phone = intent.extras.getString("phone", "+380 65 874 56 25")
+            updatePhone(phone)
+            Prefs.authenticated = true
+            successfull()
         }
 
         phone = intent.extras!!.getString("phone", "")
@@ -90,12 +93,10 @@ class PhoneVerifyActivity : BaseActivity() {
             digitsList.forEach { code.append(it.text.toString()) }
 
             val quorumKimlic = QuorumKimlic.getInstance()
-            val address = quorumKimlic.address
-
             val params = emptyMap<String, String>().toMutableMap(); params.put("code", code.toString())
-            val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", address)
+            val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", quorumKimlic.walletAddress)
 
-            val request = KimlicRequest(Request.Method.POST, QuorumURL.phoneVierifyApprove.url,
+            val request = KimlicRequest(Request.Method.POST, QuorumURL.phoneVierifyApprove.url, headers, params,
                     Response.Listener<String> { response ->
                         progressBar.visibility = View.GONE
 
@@ -103,8 +104,8 @@ class PhoneVerifyActivity : BaseActivity() {
                         val status = JSONObject(response).getJSONObject("data").optString("status").toString()
 
                         if (responceCode.startsWith("2") && status.equals("ok")) {
-                            Prefs.userPhone = phone
-                            Prefs.isUserPhoneAccepted = true
+                            //Prefs.isUserPhoneAccepted = true
+                            updatePhone(phone)
                             Prefs.authenticated = true
                             verifyBt.isClickable = true
                             successfull()
@@ -116,9 +117,6 @@ class PhoneVerifyActivity : BaseActivity() {
                     },
                     Response.ErrorListener { unableToProceed() }
             )
-
-            request.requestHeaders = headers
-            request.requestParasms = params
 
             VolleySingleton.getInstance(this).addToRequestQueue(request)
 
@@ -136,6 +134,13 @@ class PhoneVerifyActivity : BaseActivity() {
         digitsList.forEach { it -> if (!it.text.isEmpty()) count++ }
 
         return (count == 4)
+    }
+
+    private fun updatePhone(phone: String) {
+        val user = KimlicDB.getInstance()!!.userDao().findById(Prefs.userId)
+        user.phone = phone
+        KimlicDB.getInstance()!!.userDao().update(user)
+
     }
 
     private fun successfull() {

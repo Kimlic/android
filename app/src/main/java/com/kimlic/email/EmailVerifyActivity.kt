@@ -15,6 +15,7 @@ import com.kimlic.API.KimlicRequest
 import com.kimlic.API.VolleySingleton
 import com.kimlic.BaseActivity
 import com.kimlic.R
+import com.kimlic.db.KimlicDB
 import com.kimlic.managers.PresentationManager
 import com.kimlic.phone.PhoneSuccessfullFragment
 import com.kimlic.preferences.Prefs
@@ -59,7 +60,15 @@ class EmailVerifyActivity : BaseActivity() {
         titleTv.text = Editable.Factory.getInstance().newEditable(this.getString(R.string.code_sent_to_email, email))
 
         digitsList[currentHolder].requestFocus()
-        verifyBt.setOnClickListener { managePins() }
+        verifyBt.setOnClickListener {
+            //  Stub
+            val user = KimlicDB.getInstance()!!.userDao().findById(Prefs.userId)
+            user.email = email
+            KimlicDB.getInstance()!!.userDao().update(user)
+            successfull()
+
+            //managePins()
+        }
 
         cancelTv.setOnClickListener { finish(); showToast("change Email") }
         setupDigitListner()
@@ -82,20 +91,18 @@ class EmailVerifyActivity : BaseActivity() {
             code = StringBuilder()
             digitsList.forEach { code.append(it.text.toString()) }
 
+
             val quorumKimlic = QuorumKimlic.getInstance()
-            val address = quorumKimlic.address
-
             val params = emptyMap<String, String>().toMutableMap(); params.put("code", code.toString())
-            val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", address)
+            val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", quorumKimlic.walletAddress)
 
-            val request = KimlicRequest(Request.Method.POST, QuorumURL.emailVerifyApprove.url,
+            val request = KimlicRequest(Request.Method.POST, QuorumURL.emailVerifyApprove.url, headers, params,
                     Response.Listener<String> { response ->
                         val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
                         val status = JSONObject(response).getJSONObject("data").optString("status").toString()
 
                         if (responceCode.startsWith("2") && status.equals("ok")) {
-                            Prefs.userEmail = email;
-                            Prefs.isUserEmailAccepted = true
+                            updateEmail(email)
                             verifyBt.isClickable = true
                             successfull()
                         } else {
@@ -107,12 +114,15 @@ class EmailVerifyActivity : BaseActivity() {
                     Response.ErrorListener { unableToProceed() }
             )
 
-            request.requestHeaders = headers
-            request.requestParasms = params
-
             VolleySingleton.getInstance(this).addToRequestQueue(request)
 
         } else showToast(getString(R.string.pin_is_not_enterd))
+    }
+
+    private fun updateEmail(email: String) {
+        val user = KimlicDB.getInstance()!!.userDao().findById(Prefs.userId)
+        user.email = email
+        KimlicDB.getInstance()!!.userDao().update(user)
     }
 
     private fun pinEntered(): Boolean {

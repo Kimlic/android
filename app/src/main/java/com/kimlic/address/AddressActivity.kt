@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.kimlic.BaseActivity
 import com.kimlic.R
+import com.kimlic.db.KimlicDB
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.BaseCallback
@@ -58,15 +59,15 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
                 val uriString = uri.toString()
                 val myFile = File(uriString)
 
-                val path = myFile.absolutePath
+//                val path = myFile.absolutePath
                 var displayName: String? = null
 
                 if (uriString.startsWith("content://")) {
                     var cursor: Cursor? = null
                     try {
                         cursor = this.getContentResolver().query(uri, null, null, null, null)
-                        if (cursor != null && cursor!!.moveToFirst()) {
-                            displayName = cursor!!.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                        if (cursor != null && cursor.moveToFirst()) {
+                            displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
                         }
                     } finally {
                         cursor!!.close()
@@ -76,26 +77,11 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
                 }
 
                 Log.d("TAG", "display name = " + displayName)
-
                 data.extras.getByteArray("")
-
-
                 browsBt.setOnClickListener({})
 
-
-//                Log.d("TAG", "data = " + data.data.)
-//                val fos: FileOutputStream?
-//                try {
-//                    fos = KimlicApp.applicationContext().openFileOutput(displayName, Context.MODE_PRIVATE)
-//                    fos.write()
-//                    fos.close()
-//                } catch (e: Exception) {
-//                    throw Exception("Can't write data to internal storage")
-//                }
             }
         }
-
-
     }
 
     override fun onBackPressed() {
@@ -148,18 +134,15 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
 
     private fun manageInput() {
         // TODO chek if fields are empty; use file address
-        Prefs.userAddress = addressEt.text.toString()
+        val user = KimlicDB.getInstance()!!.userDao().findById(Prefs.userId)
+        user.address = addressEt.text.toString()
+        KimlicDB.getInstance()!!.userDao().update(user)
+
         successfull()
     }
 
     private fun pickFile() {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-//        intent.addCategory(Intent.CATEGORY_OPENABLE)
-        intent.setType("*/*")
-        //startActivityForResult(intent, PICK_FILE_REQUEST_CODE)
-        startActivityForResult(Intent.createChooser(intent, "Select a file"), PICK_FILE_REQUEST_CODE)
-
-
+        PresentationManager.verifyBill(this)
     }
 
     private fun moveDown() {

@@ -5,7 +5,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="@drawable/ic_fingerprint_background"
-  tools:context="com.kimlic.phrase.PhraseGenerateActivity">
+  tools:context="com.kimlic.mnemonic.MnemonicPreviewActivity">
 
   <LinearLayout
     android:id="@+id/rootUpper"
@@ -45,6 +45,7 @@
     android:layout_width="@dimen/content_width"
     android:layout_height="wrap_content"
     android:divider="@null"
+    android:layout_marginStart="16dp"
     android:dividerHeight="0dp"
     app:layout_constraintBottom_toTopOf="@id/phraseBt"
     app:layout_constraintEnd_toEndOf="parent"
@@ -58,7 +59,7 @@
     android:layout_marginBottom="16dp"
     android:background="@drawable/button_rounded_blue"
     android:elevation="@dimen/button_elevation"
-    android:text="@string/import_"
+    android:text="@string/show"
     android:textAllCaps="false"
     android:textColor="@android:color/white"
     android:textSize="@dimen/button_text_size"

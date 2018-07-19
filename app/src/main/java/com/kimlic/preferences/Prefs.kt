@@ -26,12 +26,6 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
         // User profile preferences
 
         auth = ""
-        userName = ""
-        userLastName = ""
-        userPhone = ""
-        isUserPhoneAccepted = false
-        userEmail = ""
-        userAddress = ""
         documentToverify = ""
     }
 
@@ -58,8 +52,8 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
         set(value) = setBoolean(AppConstants.isTouchEnabled.key, value)
 
     var isRecoveryEnabled: Boolean
-        get() = getBoolean(AppConstants.isTouchEnabled.key)
-        set(value) = setBoolean(AppConstants.isTouchEnabled.key, value)
+        get() = getBoolean(AppConstants.isRecoveryEnabled.key)
+        set(value) = setBoolean(AppConstants.isRecoveryEnabled.key, value)
 
     var isRecoveryOffered: Boolean
         get() = getBoolean(AppConstants.isRecoveryOffered.key)
@@ -95,33 +89,6 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
 
     val userId: Long = 0L
 
-    var userName: String
-        get() = getString(AppConstants.userName.key)
-        set(value) = setString(AppConstants.userName.key, value)
-
-    var userLastName: String
-        get() = getString(AppConstants.userLastName.key)
-        set(value) = setString(AppConstants.userLastName.key, value)
-
-    var userPhone: String
-        get() = getString(AppConstants.userPhone.key)
-        set(value) = setString(AppConstants.userPhone.key, value)
-
-    var isUserPhoneAccepted: Boolean
-        get() = getBoolean(AppConstants.userPhoneAccepted.key)
-        set(value) = setBoolean(AppConstants.userPhoneAccepted.key, value)
-
-    var userEmail: String
-        get() = getString(AppConstants.userEmail.key)
-        set(value) = setString(AppConstants.userEmail.key, value)
-
-    var isUserEmailAccepted: Boolean
-        get() = getBoolean(AppConstants.userEmailAccepted.key)
-        set(value) = setBoolean(AppConstants.userEmailAccepted.key, value)
-
-    var userAddress: String
-        get() = getString(AppConstants.userAddress.key)
-        set(value) = setString(AppConstants.userAddress.key, value)
 
     var documentToverify: String
         get() = getString(AppConstants.documentToVerify.key)

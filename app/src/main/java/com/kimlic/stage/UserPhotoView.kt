@@ -3,11 +3,11 @@ package com.kimlic.stage
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
-import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import com.kimlic.KimlicApp
 import com.kimlic.R
-
+import java.io.File
 
 class UserPhotoView : View {
 
@@ -21,10 +21,10 @@ class UserPhotoView : View {
     private val pathEffect = CornerPathEffect(50f)
     private var hexCanvas: Canvas? = null
     private var bitmapToShow: Bitmap? = null
-        set
     private var bitmapGradient: Bitmap? = null
     private var viewWidth = 0
     private var viewHeight = 0
+    private var fileName = ""
 
     // Constants
 
@@ -36,16 +36,17 @@ class UserPhotoView : View {
 
     // Constructor
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        initialize()
-    }
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        initialize()
-    }
-
-    constructor(context: Context) : super(context) {
-        initialize()
+    //    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
+//        initialize()
+//    }
+//
+//    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+//        initialize()
+//    }
+//
+    constructor(context: Context, fileName: String) : super(context) {
+        initialize(fileName)
+        this.fileName = fileName
     }
 
     // Live
@@ -59,9 +60,11 @@ class UserPhotoView : View {
         viewHeight = (0.9 * width).toInt()
 
         bitmapGradient = blueGradient(viewWidth, viewHeight)
-        bitmapToShow = bitmapGradient
-    }
+        // userPhotoBackBitmap = bitmapGradient//bitmapToShow // to remove
+        if(getUserPhotoBitmap(fileName = fileName)!=null) bitmapToShow = getUserPhotoBitmap(fileName) else
 
+        bitmapToShow = bitmapGradient// Removed
+    }
 
     @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas) {
@@ -69,7 +72,7 @@ class UserPhotoView : View {
         path!!.addPath(hexagonPath())
         path!!.computeBounds(bounds, true)
 
-        userPhotoBitmap = Bitmap.createBitmap(bounds.width().toInt(), bounds.height().toInt(), Bitmap.Config.ARGB_8888)
+        userPhotoBitmap = Bitmap.createBitmap(bounds.width().toInt(), bounds.height().toInt(), Bitmap.Config.ARGB_4444)
 
         hexCanvas = Canvas(userPhotoBitmap!!)
         hexCanvas!!.drawPath(path!!, hexPaint)
@@ -78,25 +81,27 @@ class UserPhotoView : View {
 
         val q = Paint(Paint.ANTI_ALIAS_FLAG)
         setLayerType(View.LAYER_TYPE_HARDWARE, q)
+        canvas.save()
+        canvas.scale(1.5f,1.5f)
         canvas.drawBitmap(userPhotoBackBitmap, 0f, 0f, q)
+        canvas.restore()
         q.xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_IN)
 
         canvas.drawBitmap(userPhotoBitmap, 0f, 0f, q)
         q.xfermode = null
-
     }
 
     // Public
 
-    fun showUserPhoto(fileName: String) {
-        this.bitmapToShow = userPhotoBitmap(fileName)
-        invalidate()
-    }
-
-    fun showBlueScreen() {
-        this.bitmapToShow = bitmapGradient
-        invalidate()
-    }
+//    fun showUserPhoto(fileName: String) {
+//        if (File(KimlicApp.applicationContext().filesDir.toString() + "/" + fileName).exists()) {
+//            this.bitmapToShow = userPhotoBitmap(fileName)
+//        }
+//    }
+//    fun showBlueScreen() {
+//        this.bitmapToShow = bitmapGradient
+//        invalidate()
+//    }
 
     //Private
 
@@ -114,36 +119,45 @@ class UserPhotoView : View {
         return bitmap
     }
 
-    private fun initialize() {
+    private fun initialize(fileName: String) {
+        Log.d("TAGUSERPHOTO", "onInitialize!!!!!!!")
+//        bitmapToShow = bitmapGradient // Test - works
+//        bitmapToShow = getUserPhotoBitmap(fileName) // Test - works
+//        if (File(KimlicApp.applicationContext().filesDir.toString() + "/" + fileName).exists()) {
+//            bitmapToShow = blueGradient(width, height)//getUserPhotoBitmap(fileName)
+//        } else bitmapToShow = blueGradient(width, height)
         hexPaint.color = Color.WHITE
         hexPaint.style = Paint.Style.FILL_AND_STROKE
         hexPaint.isAntiAlias = true
         hexPaint.pathEffect = pathEffect
     }
 
-    private fun userPhotoBitmap(fileName: String): Bitmap {
+    private fun getUserPhotoBitmap(fileName: String): Bitmap? {
+        Log.d("TAGUSERPHOTO", "userPhotoBitmap")
         val bitmap = BitmapFactory.decodeFile(KimlicApp.applicationContext().filesDir.toString() + "/" + fileName)
-        val mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
-        return getResizedBitmap(mutableBitmap, 1100, 800, -90f, true)
+        //val mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+        //return getResizedBitmap(mutableBitmap, 1100, 800, -90f, true)
+        return bitmap
+
     }
 
-    private fun getResizedBitmap(bm: Bitmap, newWidth: Int, newHeight: Int, angel: Float, isNecessaryToKeepOrig: Boolean): Bitmap {
-        val width = bm.width
-        val height = bm.height
-        val scaleWidth = newWidth.toFloat() / width
-        val scaleHeight = newHeight.toFloat() / height
-        // CREATE A MATRIX FOR THE MANIPULATION
-        val matrix = Matrix()
-        // RESIZE THE BIT MAP
-        matrix.postScale(scaleWidth, scaleHeight)
-        matrix.postRotate(angel)
-        // "RECREATE" THE NEW BITMAP
-        val resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false)
-        if (!isNecessaryToKeepOrig) {
-            bm.recycle()
-        }
-        return resizedBitmap
-    }
+//    private fun getResizedBitmap(bm: Bitmap, newWidth: Int, newHeight: Int, angel: Float, isNecessaryToKeepOrig: Boolean): Bitmap {
+//        val width = bm.width
+//        val height = bm.height
+//        val scaleWidth = newWidth.toFloat() / width
+//        val scaleHeight = newHeight.toFloat() / height
+//        // CREATE A MATRIX FOR THE MANIPULATION
+//        val matrix = Matrix()
+//        // RESIZE THE BIT MAP
+//        matrix.postScale(scaleWidth, scaleHeight)
+//        matrix.postRotate(angel)
+//        // "RECREATE" THE NEW BITMAP
+//        val resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false)
+//        if (!isNecessaryToKeepOrig) {
+//            bm.recycle()
+//        }
+//        return resizedBitmap
+//    }
 
     private fun hexagonPath(cornerWidth: Float = 0f): Path {
         val centerX = width / 2

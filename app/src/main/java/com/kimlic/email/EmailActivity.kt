@@ -3,7 +3,6 @@ package com.kimlic.email
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.KeyEvent
-import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import com.android.volley.Request
@@ -13,9 +12,11 @@ import com.kimlic.API.VolleySingleton
 import com.kimlic.BaseActivity
 import com.kimlic.BlockchainUpdatingFragment
 import com.kimlic.R
+import com.kimlic.db.KimlicDB
 import com.kimlic.managers.PresentationManager
+import com.kimlic.preferences.Prefs
 import com.kimlic.quorum.QuorumKimlic
-import com.kimlic.quorum.Sha
+import com.kimlic.quorum.crypto.Sha
 import com.kimlic.utils.QuorumURL
 import kotlinx.android.synthetic.main.activity_email.*
 import org.json.JSONObject
@@ -45,7 +46,14 @@ class EmailActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        nextBt.setOnClickListener { manageInput() }
+        nextBt.setOnClickListener {
+            // Stub
+            if (isEmailValid()) {
+                val email = emailEt.text.toString()
+                PresentationManager.emailVerify(this, email)
+            }
+            //manageInput()
+        }
         emailEt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -80,29 +88,27 @@ class EmailActivity : BaseActivity() {
                     }
 
                     if (receiptEmail != null && receiptEmail.transactionHash.isNotEmpty()) {
-                        val address = quorumKimlic.address
                         val params = emptyMap<String, String>().toMutableMap(); params.put("email", email)
-                        val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", address)
+                        val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", quorumKimlic.walletAddress)
 
-                        val request = KimlicRequest(Request.Method.POST, QuorumURL.emailVerify.url,
-                                Response.Listener<String> { response ->
-                                    hideProgress()
-                                    val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
+                        val request = KimlicRequest(Request.Method.POST, QuorumURL.emailVerify.url, headers, params, Response.Listener { response ->
+                            hideProgress()
+                            val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
 
-                                    if (responceCode.startsWith("2")) {
-                                        nextBt.isClickable = true
-                                        PresentationManager.emailVerify(this@EmailActivity, emailEt.text.toString())
-                                    } else unableToProceed()
-                                },
+                            if (responceCode.startsWith("2")) {
+                                nextBt.isClickable = true
+                                PresentationManager.emailVerify(this@EmailActivity, emailEt.text.toString())
+                            } else unableToProceed()
+                        },
                                 Response.ErrorListener { unableToProceed() }
                         )
-                        request.requestHeaders = headers
-                        request.requestParasms = params
                         VolleySingleton.getInstance(this@EmailActivity).addToRequestQueue(request)
                     } else unableToProceed()
                 }
-            }).start()
-
+//            }).start()
+                // Stub
+            })
+            PresentationManager.emailVerify(this@EmailActivity, emailEt.text.toString())
         } else {
             emailEt.setError("invalid")
         }

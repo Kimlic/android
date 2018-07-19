@@ -11,5 +11,11 @@ data class User(
         @ColumnInfo(name = "name") var name: String = "",
         @ColumnInfo(name = "last_name") var lastName: String = "",
         @ColumnInfo(name = "email") var email: String = "",
-        @ColumnInfo(name = "address") var address: String = ""
+        @ColumnInfo(name = "address") var address: String = "",
+        @ColumnInfo(name = "blockchain_address") var blockchainAddress: String = "",
+        @ColumnInfo(name = "mnemonic") var mnemonic: String = "",
+
+        @ColumnInfo(name = "portrait_file_path") var portraitFilePath: String = "",
+        @ColumnInfo(name = "portrait_mini_icon_file_path") var portraitMiniFilePath: String = ""
+
 )

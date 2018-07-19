@@ -21,19 +21,19 @@
     <TextView
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_marginBottom="16dp"
+      android:layout_marginBottom="24dp"
       android:gravity="center"
       android:text="@string/account_recovery"
-      android:textColor="@color/lightBlue"
+      android:textColor="@android:color/white"
       android:textSize="@dimen/title_text_size"/>
 
     <TextView
-      android:layout_width="236dp"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginBottom="16dp"
       android:gravity="center"
       android:text="@string/please_paste_type_your_mnemonic_passphrase_to_recover_your_identity"
-      android:textColor="@color/lightBlue"
+      android:textColor="@android:color/white"
       android:textSize="@dimen/subtitle_text_size"/>
 
     <EditText
@@ -58,7 +58,7 @@
     android:layout_marginBottom="16dp"
     android:gravity="center"
     android:text="@string/cancel_and_return"
-    android:textColor="@color/lightBlue"
+    android:textColor="@android:color/white"
     android:textSize="@dimen/subtitle_text_size"
     app:layout_constraintBottom_toTopOf="@+id/verifyBt"
     app:layout_constraintEnd_toEndOf="parent"
@@ -67,13 +67,14 @@
   <Button
     android:id="@+id/verifyBt"
     android:layout_width="@dimen/content_width"
-    android:layout_height="48dp"
-    android:layout_marginBottom="16dp"
+    android:layout_height="@dimen/button_height"
+    android:layout_marginBottom="24dp"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
-    android:background="@drawable/button_rounded"
+    android:background="@drawable/button_rounded_green"
     android:text="@string/virify"
-    android:textColor="@color/lightBlue"
+    android:textAllCaps="false"
+    android:textColor="@android:color/white"
     android:textSize="@dimen/button_text_size"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
