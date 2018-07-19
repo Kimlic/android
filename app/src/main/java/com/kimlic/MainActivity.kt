@@ -34,11 +34,6 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //QuorumKimlic.createInstance(null, this)
-        //val mnemonic = QuorumKimlic.getInstance().mnemonic
-        //val address = QuorumKimlic.getInstance().walletAddress
-        //Log.d("MAIN ACTIVITY", "MNEMONIC: $mnemonic")
-
         setupUI()
     }
 
@@ -101,44 +96,7 @@ class MainActivity : BaseActivity() {
 
         Log.d("WALLETADDRES", address)
 
-        val headers = mapOf<String, String>(Pair("account-address", address))
-        val addressRequest = KimlicRequest(Request.Method.GET, QuorumURL.config.url, headers, null, Response.Listener {
-            //Log.e(TAG, "CONFIG: " + it)
-            val json = JSONObject(it)
-            val responceCode = json.getJSONObject("meta").optString("code").toString()
 
-            if (responceCode.startsWith("2")) {
-                val accountStorageAdapterAddress = json.getJSONObject("data").optString("context_contract")
-                Log.d("TAGACCOUNTSTORAGE", "account starage = " + accountStorageAdapterAddress)
-
-                QuorumKimlic.getInstance().setAccountStorageAdapterAddress(accountStorageAdapterAddress)
-
-                object : CountDownTimer(1000, 1000) {
-                    override fun onTick(millisUntilFinished: Long) {}
-
-                    override fun onFinish() {
-                        splashScreenHide()
-                        if (Prefs.isPasscodeEnabled) {
-                            if (Prefs.isTouchEnabled) {
-                                PresentationManager.login(this@MainActivity)
-                            } else {
-                                PresentationManager.passcodeUnlock(this@MainActivity)
-                            }
-                        } else
-                            PresentationManager.stage(this@MainActivity)
-                    }
-                }.start()
-
-                // Add delay
-            } else {
-                // should show error
-                errorPopup(getString(R.string.server_error))
-            }
-        }, Response.ErrorListener {
-            // should show error
-            errorPopup(getString(R.string.server_error))
-        })
-        VolleySingleton.getInstance(this@MainActivity).requestQueue.add(addressRequest)
 
     }
 

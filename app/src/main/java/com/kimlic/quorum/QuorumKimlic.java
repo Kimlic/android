@@ -30,9 +30,10 @@ public class QuorumKimlic {
 
   private Web3j mWeb3;
   private String mWalletAddress;
-  private AccountStorageAdapter mAccountStorageAdapter;
   private Credentials mCredentials;
   private String mMnemonic;
+  private AccountStorageAdapter mAccountStorageAdapter;
+  private KimlicContractsContext mKimlicContractsContext;
 
   // Public
 
@@ -57,6 +58,18 @@ public class QuorumKimlic {
       sInstance = null;
     }
   }
+
+  // Quorum Calls
+
+  public String getAccountStorageAdapter() throws ExecutionException, InterruptedException {
+    if (mKimlicContractsContext == null) {
+      throw new InterruptedException("Empty contract address");
+    }
+
+    return mKimlicContractsContext.getAccountStorageAdapter().sendAsync().get();
+  }
+
+  // Quorum Transactions
 
   public TransactionReceipt setAccountFieldMainData(String UDID, String verificationType)
       throws ExecutionException, InterruptedException {
@@ -83,6 +96,10 @@ public class QuorumKimlic {
 
   public String getMnemonic() {
     return mMnemonic;
+  }
+
+  public void setKimlicContractsContextAddress(String address) {
+    mKimlicContractsContext = KimlicContractsContext.load(address, mWeb3, mCredentials, BigInteger.ZERO, BigInteger.valueOf(4612388));
   }
 
   public void setAccountStorageAdapterAddress(String address) {

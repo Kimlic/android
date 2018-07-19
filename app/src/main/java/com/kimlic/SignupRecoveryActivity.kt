@@ -4,6 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import com.android.volley.Request
+import com.android.volley.Response
+import com.kimlic.API.KimlicRequest
+import com.kimlic.API.VolleySingleton
 import com.kimlic.db.KimlicDB
 import com.kimlic.db.User
 import com.kimlic.managers.PresentationManager
@@ -11,7 +15,9 @@ import com.kimlic.preferences.Prefs
 import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.terms.TermsActivity
 import com.kimlic.utils.AppConstants
+import com.kimlic.utils.QuorumURL
 import kotlinx.android.synthetic.main.activity_signup_recovery.*
+import org.json.JSONObject
 
 class SignupRecoveryActivity : BaseActivity() {
 
@@ -73,14 +79,39 @@ class SignupRecoveryActivity : BaseActivity() {
     }
 
     private fun initNewUserRegistaration() {
+        // 1. Create Quorum instance locally - mnemonic and address
+
         QuorumKimlic.createInstance(null, this)
         val mnemonic = QuorumKimlic.getInstance().mnemonic
         val walletAddress = QuorumKimlic.getInstance().walletAddress
+
         val user = User(id = Prefs.userId, mnemonic = mnemonic, blockchainAddress = walletAddress)
         KimlicDB.getInstance()!!.userDao().insert(user)
-        Log.d("TAGMNEMONIC", "mnemonic - " + mnemonic)
-        Log.d("TAGMNEMONIC", "walletAddress - " + walletAddress)
 
+        // 2. Get entry point of the Quorum
 
+        val headers = mapOf<String, String>(Pair("account-address", walletAddress))
+        val addressRequest = KimlicRequest(Request.Method.GET, QuorumURL.config.url, headers, null, Response.Listener {
+            val json = JSONObject(it)
+            val responceCode = json.getJSONObject("meta").optString("code").toString()
+
+            if (!responceCode.startsWith("2")) {
+                errorPopup(getString(R.string.server_error))
+                return@Listener
+            }
+
+            // 3. Get context contract address
+
+            val contextContractAddress = json.getJSONObject("data").optString("context_contract")
+            QuorumKimlic.getInstance().setKimlicContractsContextAddress(contextContractAddress)
+
+            // 3. Set account storage address
+
+            val accountStorageAdapterAddress = QuorumKimlic.getInstance().accountStorageAdapter
+            QuorumKimlic.getInstance().setAccountStorageAdapterAddress(accountStorageAdapterAddress)
+        }, Response.ErrorListener {
+            errorPopup(getString(R.string.server_error))
+        })
+        VolleySingleton.getInstance(this@SignupRecoveryActivity).requestQueue.add(addressRequest)
     }
 }

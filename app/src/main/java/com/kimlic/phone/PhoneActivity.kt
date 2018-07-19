@@ -110,8 +110,28 @@ class PhoneActivity : BaseActivity() {
             phoneEt.error = getString(R.string.phone_is_not_valid)
             return
         }
+
+        val phone = phoneEt.text.toString().replace(" ", "")
+        val receiptPhone = QuorumKimlic.getInstance().setAccountFieldMainData(Sha.sha256(phone), "phone")
+
+        val headers = mapOf(Pair("account-address", QuorumKimlic.getInstance().walletAddress))
+        val params = mapOf(Pair("phone", phone))
+
+        val request = KimlicRequest(Request.Method.POST, QuorumURL.phoneVerify.url, headers, params, Response.Listener { response ->
+            val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
+            Log.e("AAAAA", JSONObject(response).toString())
+
+            if (responceCode.startsWith("2")) {
+                PresentationManager.phoneNumberVerify(this, phoneEt.text.toString())
+            } else
+                unableToProceed()
+        }, Response.ErrorListener {
+            Log.e(TAG, "ERR" + String(it.networkResponse.data))
+        })
+        VolleySingleton.getInstance(this@PhoneActivity).addToRequestQueue(request)
+
         // Create new appUser with id = 0
-        PresentationManager.phoneNumberVerify(this, phoneEt.text.toString())
+
 
 
 //        // TODO: SHOW PROGRESS
