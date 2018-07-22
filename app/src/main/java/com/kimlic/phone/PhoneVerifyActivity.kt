@@ -1,9 +1,7 @@
 package com.kimlic.phone
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.widget.EditText
@@ -18,7 +16,6 @@ import com.kimlic.BaseActivity
 import com.kimlic.BaseDialogFragment
 import com.kimlic.R
 import com.kimlic.db.KimlicDB
-import com.kimlic.db.User
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
 import com.kimlic.quorum.QuorumKimlic
@@ -58,14 +55,8 @@ class PhoneVerifyActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        verifyBt.setOnClickListener {
-            //managePin()
-            // TODO implement db to api call // Temporary Room tests
-            val phone = intent.extras.getString("phone", "+380 65 874 56 25")
-            updatePhone(phone)
-            Prefs.authenticated = true
-            successfull()
-        }
+        verifyBt.setOnClickListener { managePin() }
+        backBt.setOnClickListener { finish() }
 
         phone = intent.extras!!.getString("phone", "")
         titleTv.text = Editable.Factory.getInstance().newEditable(this.getString(R.string.code_sent_to, phone))
@@ -93,18 +84,17 @@ class PhoneVerifyActivity : BaseActivity() {
             digitsList.forEach { code.append(it.text.toString()) }
 
             val quorumKimlic = QuorumKimlic.getInstance()
-            val params = emptyMap<String, String>().toMutableMap(); params.put("code", code.toString())
-            val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", quorumKimlic.walletAddress)
+
+            val params = mapOf(Pair("code", code.toString()))
+            val headers = mapOf(Pair("account-address", quorumKimlic.walletAddress))
 
             val request = KimlicRequest(Request.Method.POST, QuorumURL.phoneVierifyApprove.url, headers, params,
                     Response.Listener<String> { response ->
                         progressBar.visibility = View.GONE
-
                         val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
                         val status = JSONObject(response).getJSONObject("data").optString("status").toString()
 
                         if (responceCode.startsWith("2") && status.equals("ok")) {
-                            //Prefs.isUserPhoneAccepted = true
                             updatePhone(phone)
                             Prefs.authenticated = true
                             verifyBt.isClickable = true
@@ -119,13 +109,13 @@ class PhoneVerifyActivity : BaseActivity() {
             )
 
             VolleySingleton.getInstance(this).addToRequestQueue(request)
-
         } else showToast(getString(R.string.pin_is_not_enterd))
     }
 
     private fun unableToProceed() {
         runOnUiThread { progressBar.visibility = View.GONE }
         verifyBt.isClickable = true
+        digitsList.forEach { it.text = Editable.Factory.getInstance().newEditable("") }
         showPopup(message = getString(R.string.unable_to_proceed_with_verification))
     }
 
@@ -137,18 +127,20 @@ class PhoneVerifyActivity : BaseActivity() {
     }
 
     private fun updatePhone(phone: String) {
-        val user = KimlicDB.getInstance()!!.userDao().findById(Prefs.userId)
-        user.phone = phone
-        KimlicDB.getInstance()!!.userDao().update(user)
+        val phoneContact = KimlicDB.getInstance()!!.userDao1().selectContactByUserIdAndType(userId = Prefs.currentId, type = "phone")
 
+        phoneContact.approved = true
+        phoneContact.value = phone
+
+        KimlicDB.getInstance()!!.userDao1().update(phoneContact)
     }
 
     private fun successfull() {
         fragment = PhoneSuccessfullFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
+
             override fun callback() {
-                finishAffinity()
-                PresentationManager.stage(this@PhoneVerifyActivity)
+                finishAffinity(); PresentationManager.stage(this@PhoneVerifyActivity)
             }
         })
         fragment.show(supportFragmentManager, PhoneSuccessfullFragment.FRAGMENT_KEY)

@@ -6,7 +6,6 @@ import android.os.Handler
 import android.os.Looper
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.text.Editable
-import android.util.Log
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
@@ -17,7 +16,9 @@ import com.kimlic.API.VolleySingleton
 import com.kimlic.BaseActivity
 import com.kimlic.BlockchainUpdatingFragment
 import com.kimlic.R
+import com.kimlic.db.KimlicDB
 import com.kimlic.managers.PresentationManager
+import com.kimlic.preferences.Prefs
 import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.quorum.crypto.Sha
 import com.kimlic.utils.QuorumURL
@@ -100,9 +101,8 @@ class PhoneActivity : BaseActivity() {
                 return false
             }
         })
-        nextBt.setOnClickListener {
-            managePhone()
-        }
+        nextBt.setOnClickListener { managePhone() }
+        backBt.setOnClickListener { finish() }
     }
 
     private fun managePhone() {
@@ -110,74 +110,30 @@ class PhoneActivity : BaseActivity() {
             phoneEt.error = getString(R.string.phone_is_not_valid)
             return
         }
+        showProgress()
 
-        val phone = phoneEt.text.toString().replace(" ", "")
-        val receiptPhone = QuorumKimlic.getInstance().setAccountFieldMainData(Sha.sha256(phone), "phone")
+        Thread(Runnable {
+            val phone = phoneEt.text.toString().replace(" ", "")
+            val receiptPhone = QuorumKimlic.getInstance().setAccountFieldMainData(Sha.sha256(phone), "phone")
 
-        val headers = mapOf(Pair("account-address", QuorumKimlic.getInstance().walletAddress))
-        val params = mapOf(Pair("phone", phone))
+            if (receiptPhone != null && receiptPhone.transactionHash.isNotEmpty()) {
 
-        val request = KimlicRequest(Request.Method.POST, QuorumURL.phoneVerify.url, headers, params, Response.Listener { response ->
-            val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
-            Log.e("AAAAA", JSONObject(response).toString())
+                val headers = mapOf(Pair("account-address", KimlicDB.getInstance()!!.userDao1().selectUserById(Prefs.currentId).walletAddress))
+                val params = mapOf(Pair("phone", phone))
 
-            if (responceCode.startsWith("2")) {
-                PresentationManager.phoneNumberVerify(this, phoneEt.text.toString())
-            } else
-                unableToProceed()
-        }, Response.ErrorListener {
-            Log.e(TAG, "ERR" + String(it.networkResponse.data))
-        })
-        VolleySingleton.getInstance(this@PhoneActivity).addToRequestQueue(request)
+                val request = KimlicRequest(Request.Method.POST, QuorumURL.phoneVerify.url, headers, params, Response.Listener { response ->
+                    val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
 
-        // Create new appUser with id = 0
-
-
-
-//        // TODO: SHOW PROGRESS
-//        //showProgress()
-//        nextBt.isClickable = false
-//        phoneEt.error = null
-//        val phone = phoneEt.text.toString().replace(" ", "")
-//        Log.d("TAGPHONE","in tag phone")
-//        Thread(object : Runnable {
-//            override fun run() {
-//                Log.e(TAG, "PHONE: $phone")
-//                try {
-//            val receiptPhone = QuorumKimlic.getInstance().setAccountFieldMainData(Sha.sha256("+380997762791"), "phone")
-//                    //val receiptPhone = QuorumKimlic.getInstance().setAccountFieldMainData(Sha.sha256(phone), "phone")
-//                    Log.e("TAGReceipt", receiptPhone.toString())
-//                } catch (e: Exception) {
-//                    // TODO: SHOW ERROR
-//                    unableToProceed()
-//                }
-//
-////                    if (receiptPhone != null && receiptPhone.transactionHash.isNotEmpty()) {
-//                val headers = mapOf(Pair("account-address", QuorumKimlic.getInstance().walletAddress))
-//                val params = mapOf(Pair("phone", phone))
-//                Log.e(TAG, "HEADERS: " + headers.toString())
-//                Log.e(TAG, "PARAMS: " + params.toString())
-//
-//                val request = KimlicRequest(Request.Method.POST, QuorumURL.phoneVerify.url, headers, params, Response.Listener { response ->
-//                    Log.e(TAG, "RESP: " + response)
-////      hideProgress()
-//                    // TODO: HIDE PROGRESS
-//                    val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
-//
-//                    if (responceCode.startsWith("2")) {
-//                        Log.d("TAGQUORUM", "Quorum responce = starts with 2")
-////        nextBt.isClickable = true
-////        PresentationManager.phoneNumberVerify(this@PhoneActivity, phoneEt.text.toString())
-//                    } else
-//                        unableToProceed()
-//                }, Response.ErrorListener {
-//                    // TODO: SHOW ERROR
-//                    Log.e(TAG, "ERR" + String(it.networkResponse.data))
-//                })
-//                VolleySingleton.getInstance(this@PhoneActivity).addToRequestQueue(request)
-////  } else unableToProceed()
-//            }
-//        }).start()
+                    if (responceCode.startsWith("2")) {
+                        hideProgress();PresentationManager.phoneNumberVerify(this, phoneEt.text.toString())
+                    } else
+                        unableToProceed()
+                }, Response.ErrorListener {
+                    unableToProceed()
+                })
+                VolleySingleton.getInstance(this@PhoneActivity).addToRequestQueue(request)
+            }
+        }).start()
     }
 
     private fun unableToProceed() {
@@ -187,7 +143,7 @@ class PhoneActivity : BaseActivity() {
     }
 
     private fun showProgress() {
-        object : CountDownTimer(1000, 1000) {
+        object : CountDownTimer(500, 500) {
             override fun onFinish() {
                 blockchainUpdatingFragment = BlockchainUpdatingFragment.newInstance()
                 blockchainUpdatingFragment?.show(supportFragmentManager, BlockchainUpdatingFragment.FRAGMENT_KEY)

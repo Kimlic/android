@@ -220,5 +220,7 @@
   <string name="mnemonic_phrases_do_not_match">Mnemonic phrases \n do not match</string>
   <string name="show">Show</string>
   <string name="th_word">%1$dth word</string>
+  <string name="you_have_security_risks">You have security risks</string>
+
 
 </resources>

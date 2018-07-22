@@ -12,7 +12,6 @@ import butterknife.ButterKnife
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.db.KimlicDB
-import com.kimlic.db.User
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.BaseCallback
 
@@ -89,29 +88,25 @@ class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
         var noError = true
 
         if (name.text.length < 3) {
-            name.setError("error")
-            noError = false
+            name.setError("error"); noError = false
         } else {
-            name.setError(null)
-            noError = true
+            name.setError(null); noError = true
         }
 
         if (lastName.text.length < 3) {
-            lastName.setError("error")
-            noError = false
+            lastName.setError("error"); noError = false
         } else {
-            lastName.setError(null)
-            noError = true
+            lastName.setError(null); noError = true
         }
 
         return noError
     }
 
     private fun updateName(name: String, lastName: String) {
-        val user = KimlicDB.getInstance()!!.userDao().findById(Prefs.userId)
-        user.name = name
-        user.lastName = lastName
-        KimlicDB.getInstance()!!.userDao().update(user)
+        val user1 = KimlicDB.getInstance()!!.userDao1().selectUserById(Prefs.currentId)
+        user1.firstName = name
+        user1.lastName = lastName
+        KimlicDB.getInstance()!!.userDao1().updateUser(user = user1)
     }
 
     private fun filter(): InputFilter {

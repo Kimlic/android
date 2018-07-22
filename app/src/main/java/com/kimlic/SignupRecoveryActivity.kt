@@ -3,18 +3,19 @@ package com.kimlic
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import com.android.volley.Request
 import com.android.volley.Response
 import com.kimlic.API.KimlicRequest
 import com.kimlic.API.VolleySingleton
 import com.kimlic.db.KimlicDB
-import com.kimlic.db.User
+import com.kimlic.db.entity.Address
+import com.kimlic.db.entity.Contact
+import com.kimlic.db.entity.Document
+import com.kimlic.db.entity.User
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
 import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.terms.TermsActivity
-import com.kimlic.utils.AppConstants
 import com.kimlic.utils.QuorumURL
 import kotlinx.android.synthetic.main.activity_signup_recovery.*
 import org.json.JSONObject
@@ -57,13 +58,12 @@ class SignupRecoveryActivity : BaseActivity() {
     private fun setupUI() {
         createBt.setOnClickListener {
             PresentationManager.tutorials(this)
-            //termsToAccept(TERMS_ACCEPT_CREATE_REQUEST_CODE)
             initNewUserRegistaration()
 
 //            QuorumKimlic.createInstance(null, this)
 //            val mnemonic = QuorumKimlic.getInstance().mnemonic
 //            Log.d("TAGSIGNUP", "mnemonic - " + mnemonic)
-//            KimlicDB.getInstance()!!.userDao().findById(Prefs.userId)
+//            KimlicDB.getInstance()!!.userDao().findById(Prefs.currentId)
         }
         recoverBt.setOnClickListener {
             termsToAccept(TERMS_ACCEPT_RECOVERY_REQUEST_CODE)
@@ -80,16 +80,32 @@ class SignupRecoveryActivity : BaseActivity() {
 
     private fun initNewUserRegistaration() {
         // 1. Create Quorum instance locally - mnemonic and address
-
-        QuorumKimlic.createInstance(null, this)
+        QuorumKimlic.createInstance(null, this) // moved to quorum request
         val mnemonic = QuorumKimlic.getInstance().mnemonic
         val walletAddress = QuorumKimlic.getInstance().walletAddress
 
-        val user = User(id = Prefs.userId, mnemonic = mnemonic, blockchainAddress = walletAddress)
-        KimlicDB.getInstance()!!.userDao().insert(user)
+        // Init new user
+        val user1 = User(Prefs.currentId, mnemonic = mnemonic, walletAddress = walletAddress)
+        val emailContact = Contact(userId = Prefs.currentId, type = "email")
+        val phoneContact = Contact(userId = Prefs.currentId, type = "phone")
+        val passportDocument = Document(userId = Prefs.currentId, type = "passport")
+        val licenceDocument = Document(userId = Prefs.currentId, type = "licence")
+        val idDocument = Document(userId = Prefs.currentId, type = "id")
+        val permitDocument = Document(userId = Prefs.currentId, type = "permit")
+        val address = Address(userId = Prefs.currentId)
+
+        with(KimlicDB.getInstance()!!.userDao1()) {
+            insert(user1)
+            insert(emailContact)
+            insert(phoneContact)
+            insert(passportDocument)
+            insert(licenceDocument)
+            insert(idDocument)
+            insert(permitDocument)
+            insert(address)
+        }
 
         // 2. Get entry point of the Quorum
-
         val headers = mapOf<String, String>(Pair("account-address", walletAddress))
         val addressRequest = KimlicRequest(Request.Method.GET, QuorumURL.config.url, headers, null, Response.Listener {
             val json = JSONObject(it)
@@ -99,14 +115,10 @@ class SignupRecoveryActivity : BaseActivity() {
                 errorPopup(getString(R.string.server_error))
                 return@Listener
             }
-
             // 3. Get context contract address
-
             val contextContractAddress = json.getJSONObject("data").optString("context_contract")
             QuorumKimlic.getInstance().setKimlicContractsContextAddress(contextContractAddress)
-
             // 3. Set account storage address
-
             val accountStorageAdapterAddress = QuorumKimlic.getInstance().accountStorageAdapter
             QuorumKimlic.getInstance().setAccountStorageAdapterAddress(accountStorageAdapterAddress)
         }, Response.ErrorListener {

@@ -16,7 +16,6 @@ import com.kimlic.passcode.PasscodeActivity
 import com.kimlic.preferences.Prefs
 import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.utils.AppConstants
-import com.kimlic.utils.QuorumURL
 import com.kimlic.utils.UserPhotos
 import kotlinx.android.synthetic.main.activity_settings.*
 import java.io.File
@@ -69,10 +68,11 @@ class SettingsActivity : BaseActivity() {
     private fun setupUI() {
         setupAdapter()
         signoutBt.setOnClickListener {
+//            KimlicDB.getInstance(this)!!.userDao1().deleteById(Prefs.currentId)
+            KimlicDB.getInstance(this)!!.userDao1().deleteAll()
             Prefs.clear()
-            KimlicDB.getInstance(this)!!.userDao().deleteById(Prefs.userId)
             QuorumKimlic.destroyInstance()
-            deleteUserPhotos()
+            //deleteUserPhotos()
 
             PresentationManager.signupRecovery(this)
         }

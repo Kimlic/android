@@ -134,9 +134,9 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
 
     private fun manageInput() {
         // TODO chek if fields are empty; use file address
-        val user = KimlicDB.getInstance()!!.userDao().findById(Prefs.userId)
-        user.address = addressEt.text.toString()
-        KimlicDB.getInstance()!!.userDao().update(user)
+        val addressDoc = KimlicDB.getInstance()!!.userDao1().selectAddres(userId = Prefs.currentId)
+        addressDoc.value = addressEt.text.toString()
+        KimlicDB.getInstance()!!.userDao1().update(addressDoc)
 
         successfull()
     }
@@ -175,7 +175,7 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
         isSearchActive = true
     }
 
-    private fun citieFilter() = AutocompleteFilter.Builder().setTypeFilter(AutocompleteFilter.TYPE_FILTER_CITIES).build()
+    private fun citieFilter() = AutocompleteFilter.Builder().setTypeFilter(AutocompleteFilter.TYPE_FILTER_NONE).build()
 
     private fun successfull() {
         val fragment = AddressSuccesfullFragment.newInstance()

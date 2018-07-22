@@ -87,7 +87,7 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
         get() = getString(AppConstants.userAuth.key)
         set(value) = setString(AppConstants.userAuth.key, value)
 
-    val userId: Long = 0L
+    val currentId: Long = 0L
 
 
     var documentToverify: String

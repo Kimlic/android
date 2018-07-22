@@ -86,7 +86,7 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
 
         passcodeDeleteBt.setOnClickListener { deletePasscode() }
         cancelTv.setOnClickListener { finish() }
-        passcodeOkBt.setOnClickListener { usePasscode(action) }
+        //passcodeOkBt.setOnClickListener { usePasscode(action) }
     }
 
 
@@ -129,7 +129,7 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
 
     private fun setupUITryAgain() {
         titleTs.setText(getString(R.string.passcode_didnt_match))
-        passcodeOkBt.isEnabled = false
+        //passcodeOkBt.isEnabled = false
         firstInput = false
         blinkDots()
     }
@@ -212,7 +212,7 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
         }
 
         passcodeDeleteBt.visibility = if (passLength > 0) View.VISIBLE else View.INVISIBLE
-        passcodeOkBt.isEnabled = this.passcode.length == 4
+        //passcodeOkBt.isEnabled = this.passcode.length == 4
 
         if (this.passcode.length == 4)
             object : CountDownTimer(250, 250) {

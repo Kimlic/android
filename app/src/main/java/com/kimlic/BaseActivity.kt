@@ -63,7 +63,7 @@ abstract class BaseActivity : AppCompatActivity() {
         val bundle = Bundle()
         bundle.putString(AppConstants.errorDescription.key, error)
         val errorFragment = ErrorPopupFragment.newInstanse(bundle)
-        errorFragment.show(supportFragmentManager, ErrorPopupFragment.FRAGMENT_KEY)
+        errorFragment.show(this.supportFragmentManager, ErrorPopupFragment.FRAGMENT_KEY)
     }
 
     // Private

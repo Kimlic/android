@@ -19,7 +19,6 @@ import com.kimlic.db.KimlicDB
 import com.kimlic.managers.PresentationManager
 import com.kimlic.phone.PhoneSuccessfullFragment
 import com.kimlic.preferences.Prefs
-import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.utils.BaseCallback
 import com.kimlic.utils.QuorumURL
 import kotlinx.android.synthetic.main.activity_email_verify.*
@@ -60,17 +59,11 @@ class EmailVerifyActivity : BaseActivity() {
         titleTv.text = Editable.Factory.getInstance().newEditable(this.getString(R.string.code_sent_to_email, email))
 
         digitsList[currentHolder].requestFocus()
-        verifyBt.setOnClickListener {
-            //  Stub
-            val user = KimlicDB.getInstance()!!.userDao().findById(Prefs.userId)
-            user.email = email
-            KimlicDB.getInstance()!!.userDao().update(user)
-            successfull()
+        verifyBt.setOnClickListener { managePins() }
 
-            //managePins()
-        }
+        cancelTv.setOnClickListener { finish() }
+        backBt.setOnClickListener { finish() }
 
-        cancelTv.setOnClickListener { finish(); showToast("change Email") }
         setupDigitListner()
 
         digitsList[3].setOnEditorActionListener(object : TextView.OnEditorActionListener {
@@ -91,13 +84,12 @@ class EmailVerifyActivity : BaseActivity() {
             code = StringBuilder()
             digitsList.forEach { code.append(it.text.toString()) }
 
-
-            val quorumKimlic = QuorumKimlic.getInstance()
-            val params = emptyMap<String, String>().toMutableMap(); params.put("code", code.toString())
-            val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", quorumKimlic.walletAddress)
+            val walletAddress = KimlicDB.getInstance()!!.userDao1().selectUserById(Prefs.currentId).walletAddress
+            val params = mapOf(Pair("code", code.toString()))
+            val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", walletAddress)
 
             val request = KimlicRequest(Request.Method.POST, QuorumURL.emailVerifyApprove.url, headers, params,
-                    Response.Listener<String> { response ->
+                    Response.Listener { response ->
                         val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
                         val status = JSONObject(response).getJSONObject("data").optString("status").toString()
 
@@ -113,16 +105,17 @@ class EmailVerifyActivity : BaseActivity() {
                     },
                     Response.ErrorListener { unableToProceed() }
             )
-
             VolleySingleton.getInstance(this).addToRequestQueue(request)
-
         } else showToast(getString(R.string.pin_is_not_enterd))
     }
 
     private fun updateEmail(email: String) {
-        val user = KimlicDB.getInstance()!!.userDao().findById(Prefs.userId)
-        user.email = email
-        KimlicDB.getInstance()!!.userDao().update(user)
+        val emailContact = KimlicDB.getInstance()!!.userDao1().selectContactByUserIdAndType(userId = Prefs.currentId, type = "email")
+
+        emailContact.approved = true
+        emailContact.value = email
+
+        KimlicDB.getInstance()!!.userDao1().update(emailContact)
     }
 
     private fun pinEntered(): Boolean {
@@ -145,6 +138,7 @@ class EmailVerifyActivity : BaseActivity() {
     private fun unableToProceed() {
         runOnUiThread { progressBar.visibility = View.GONE }
         verifyBt.isClickable = true
+        digitsList.forEach { it.text = Editable.Factory.getInstance().newEditable("") }
         showPopup(message = getString(R.string.unable_to_proceed_with_verification))
     }
 
@@ -178,6 +172,7 @@ class EmailVerifyActivity : BaseActivity() {
                     if (position < 4) {
                         digitsList.elementAt(position).text = Editable.Factory.getInstance().newEditable(keyCode.toString())
                         digitsList.elementAt(position).background = resources.getDrawable(R.drawable.square_edittext_background_dark)
+
                         if (position < 3) digitsList.elementAt(position + 1).requestFocus()
                     }
                 }

@@ -62,11 +62,9 @@ class MnemonicPreviewActivity : BaseActivity() {
     }
 
     private fun mnemonicList(): List<String>{
-        val phraseString = KimlicDB.getInstance()!!.userDao().findById(Prefs.userId).mnemonic
+        val phraseString = KimlicDB.getInstance()!!.userDao1().selectUserById(Prefs.currentId).mnemonic
         val phraseList = phraseString.split(" ")
-        Log.d("TAG", "phrases:"+ phraseList.toString())
         return phraseList
-
     }
 
     private fun copyToBuffer(listToSave: List<String>) {

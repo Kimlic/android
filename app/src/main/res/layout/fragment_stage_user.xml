@@ -31,7 +31,6 @@
       android:layout_height="match_parent"
       android:orientation="vertical"/>
 
-
     <!--<com.kimlic.stage.UserPhotoView-->
     <!--android:id="@+id/userPhotoIv"-->
     <!--android:layout_width="260dp"-->
@@ -101,7 +100,7 @@
     android:layout_gravity="start"
     android:drawablePadding="8dp"
     android:drawableStart="@drawable/ic_profile_warning_red_white_icon"
-    android:text="You have security risks"
+    android:text="@string/you_have_security_risks"
     android:textColor="@android:color/white"
     android:textSize="@dimen/subtitle_text_size"
     android:visibility="gone"
@@ -110,9 +109,9 @@
 
   <ScrollView
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="300dp"
     android:layout_marginTop="8dp"
-    android:layout_marginBottom="100dp"
+    android:layout_marginBottom="8dp"
     android:orientation="vertical"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
@@ -123,6 +122,15 @@
       android:layout_height="wrap_content"
       android:orientation="vertical"
       tools:ignore="ContentDescription">
+
+      <android.support.v7.widget.RecyclerView
+        android:id="@+id/contactsRecycler"
+        android:layout_width="@dimen/content_width"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:scrollbars="none"
+        />
+      <!--android:overScrollMode="never"-->
 
       <RelativeLayout
         android:id="@+id/kimItem"
@@ -155,62 +163,6 @@
         android:layout_height="1dp"
         android:background="@color/lightBlue"/>
 
-
-      <RelativeLayout
-        android:id="@+id/phoneItem"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:focusableInTouchMode="false">
-
-        <ImageView
-          android:id="@+id/phoneIv"
-          style="@style/DetailsItemTextView"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:background="@drawable/ic_phone_in_talk_dark_24dp"/>
-
-        <TextView
-          android:id="@+id/phoneTv"
-          style="@style/DetailsItemTextView"
-          android:layout_marginStart="32dp"
-          android:gravity="center"
-          tools:text="+372 504953839"/>
-
-        <ImageView
-          android:id="@+id/phoneArrow"
-          style="@style/DetailsItemShevron"/>
-
-      </RelativeLayout>
-
-      <View
-        android:layout_width="@dimen/content_width"
-        android:layout_height="1dp"
-        android:background="@color/lightBlue"/>
-
-      <RelativeLayout
-        android:id="@+id/emailItem"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:focusableInTouchMode="false">
-
-        <ImageView
-          android:id="@+id/emailIv"
-          style="@style/DetailsItemTextView"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:background="@drawable/ic_perm_identity_dark_24dp"/>
-
-        <TextView
-          android:id="@+id/emailTv"
-          style="@style/DetailsItemTextView"
-          android:layout_marginStart="32dp"
-          tools:text="Add your email"/>
-
-        <ImageView
-          android:id="@+id/emailArrow"
-          style="@style/DetailsItemShevron"/>
-
-      </RelativeLayout>
 
       <View
         android:layout_width="@dimen/content_width"

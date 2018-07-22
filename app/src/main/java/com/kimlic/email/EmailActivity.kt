@@ -12,9 +12,7 @@ import com.kimlic.API.VolleySingleton
 import com.kimlic.BaseActivity
 import com.kimlic.BlockchainUpdatingFragment
 import com.kimlic.R
-import com.kimlic.db.KimlicDB
 import com.kimlic.managers.PresentationManager
-import com.kimlic.preferences.Prefs
 import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.quorum.crypto.Sha
 import com.kimlic.utils.QuorumURL
@@ -46,14 +44,8 @@ class EmailActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        nextBt.setOnClickListener {
-            // Stub
-            if (isEmailValid()) {
-                val email = emailEt.text.toString()
-                PresentationManager.emailVerify(this, email)
-            }
-            //manageInput()
-        }
+        nextBt.setOnClickListener { manageInput() }
+
         emailEt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -65,6 +57,7 @@ class EmailActivity : BaseActivity() {
         })
 
         backTv.setOnClickListener { finish() }
+        backBt.setOnClickListener { finish() }
     }
 
     private fun manageInput() {
@@ -105,10 +98,7 @@ class EmailActivity : BaseActivity() {
                         VolleySingleton.getInstance(this@EmailActivity).addToRequestQueue(request)
                     } else unableToProceed()
                 }
-//            }).start()
-                // Stub
-            })
-            PresentationManager.emailVerify(this@EmailActivity, emailEt.text.toString())
+            }).start()
         } else {
             emailEt.setError("invalid")
         }
@@ -117,7 +107,7 @@ class EmailActivity : BaseActivity() {
     private fun showProgress() {
         blockchainUpdatingFragment = BlockchainUpdatingFragment.newInstance()
 
-        object : CountDownTimer(1000, 1000) {
+        object : CountDownTimer(500, 500) {
             override fun onFinish() {
                 blockchainUpdatingFragment.show(supportFragmentManager, BlockchainUpdatingFragment.FRAGMENT_KEY)
             }
@@ -133,6 +123,6 @@ class EmailActivity : BaseActivity() {
     private fun unableToProceed() {
         runOnUiThread { hideProgress() }
         nextBt.isClickable = true
-        showPopup(message = "Unable to proceed vith verification")
+        showPopup(message = "Unable to proceed with verification")
     }
 }

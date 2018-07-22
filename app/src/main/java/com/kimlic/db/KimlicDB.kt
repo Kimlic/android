@@ -4,17 +4,17 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
-import android.util.Log
 import com.kimlic.KimlicApp
+import com.kimlic.db.dao.UserDao
+import com.kimlic.db.entity.Address
+import com.kimlic.db.entity.Contact
+import com.kimlic.db.entity.Document
+import com.kimlic.db.entity.User
 
-@Database(entities = arrayOf(User::class), version = 1)
+@Database(entities = arrayOf(User::class, Contact::class, Document::class, Address::class), version = 1)
 abstract class KimlicDB : RoomDatabase() {
 
-    init {
-        Log.d("TAGDATABASE", "Room initializing...")
-    }
-
-    abstract fun userDao(): UserDao
+    abstract fun userDao1(): UserDao
 
     companion object {
         private var INSTANCE: KimlicDB? = null
@@ -32,6 +32,5 @@ abstract class KimlicDB : RoomDatabase() {
             INSTANCE = null
         }
     }
-
 
 }

@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
+import android.util.Log
 import android.view.View
 import com.kimlic.BaseActivity
 import com.kimlic.BaseFragment
@@ -27,8 +28,9 @@ class StageActivity : BaseActivity() {
     }
 
     override fun onResume() {
+        Log.d("TAGMAINSTAGE", "onResume")
         super.onResume()
-        //risks()
+        risks()
     }
 
     override fun onBackPressed() {
@@ -38,7 +40,6 @@ class StageActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        val model = ViewModelProviders.of(this).get(UserStageViewModel::class.java)
         initFragments()
         setupListners()
         profileBt.isSelected = true

@@ -3,18 +3,16 @@ package com.kimlic.stage
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
-import android.util.Log
+import android.util.AttributeSet
 import android.view.View
 import com.kimlic.KimlicApp
 import com.kimlic.R
-import java.io.File
 
 class UserPhotoView : View {
 
     // Variables
 
     private val hexPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-    // private val progressPaint = Paint()
     private var path: Path? = Path()
     private var userPhotoBitmap: Bitmap? = null
     private var userPhotoBackBitmap: Bitmap? = null
@@ -36,16 +34,18 @@ class UserPhotoView : View {
 
     // Constructor
 
-    //    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-//        initialize()
-//    }
-//
-//    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-//        initialize()
-//    }
-//
+    constructor(context: Context, attrs: AttributeSet, fileName: String) : super(context, attrs) {
+        initialize()
+        this.fileName = fileName
+    }
+
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, fileName: String) : super(context, attrs, defStyleAttr) {
+        initialize()
+        this.fileName = fileName
+    }
+
     constructor(context: Context, fileName: String) : super(context) {
-        initialize(fileName)
+        initialize()
         this.fileName = fileName
     }
 
@@ -60,10 +60,9 @@ class UserPhotoView : View {
         viewHeight = (0.9 * width).toInt()
 
         bitmapGradient = blueGradient(viewWidth, viewHeight)
-        // userPhotoBackBitmap = bitmapGradient//bitmapToShow // to remove
-        if(getUserPhotoBitmap(fileName = fileName)!=null) bitmapToShow = getUserPhotoBitmap(fileName) else
-
-        bitmapToShow = bitmapGradient// Removed
+        if (getUserPhotoBitmap(fileName = fileName) != null)
+            bitmapToShow = getUserPhotoBitmap(fileName) else
+            bitmapToShow = bitmapGradient
     }
 
     @SuppressLint("DrawAllocation")
@@ -82,33 +81,18 @@ class UserPhotoView : View {
         val q = Paint(Paint.ANTI_ALIAS_FLAG)
         setLayerType(View.LAYER_TYPE_HARDWARE, q)
         canvas.save()
-        canvas.scale(1.5f,1.5f)
+        canvas.scale(1.4f, 1.4f)
         canvas.drawBitmap(userPhotoBackBitmap, 0f, 0f, q)
         canvas.restore()
         q.xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_IN)
-
         canvas.drawBitmap(userPhotoBitmap, 0f, 0f, q)
         q.xfermode = null
     }
-
-    // Public
-
-//    fun showUserPhoto(fileName: String) {
-//        if (File(KimlicApp.applicationContext().filesDir.toString() + "/" + fileName).exists()) {
-//            this.bitmapToShow = userPhotoBitmap(fileName)
-//        }
-//    }
-//    fun showBlueScreen() {
-//        this.bitmapToShow = bitmapGradient
-//        invalidate()
-//    }
 
     //Private
 
     private fun blueGradient(width: Int, height: Int): Bitmap {
         val gradient = RadialGradient((width / 2).toFloat(), (height / 2).toFloat(), gradientRadius, gradientColorEnd, gradientColorStart, android.graphics.Shader.TileMode.CLAMP)
-        // Linear gradient
-        //val gradient = LinearGradient(0f, 0f, 0f, height.toFloat(), gradientColorStart, gradientColorEnd, android.graphics.Shader.TileMode.CLAMP)
         val p = Paint()
         p.isDither = true
         p.shader = gradient
@@ -119,13 +103,7 @@ class UserPhotoView : View {
         return bitmap
     }
 
-    private fun initialize(fileName: String) {
-        Log.d("TAGUSERPHOTO", "onInitialize!!!!!!!")
-//        bitmapToShow = bitmapGradient // Test - works
-//        bitmapToShow = getUserPhotoBitmap(fileName) // Test - works
-//        if (File(KimlicApp.applicationContext().filesDir.toString() + "/" + fileName).exists()) {
-//            bitmapToShow = blueGradient(width, height)//getUserPhotoBitmap(fileName)
-//        } else bitmapToShow = blueGradient(width, height)
+    private fun initialize() {
         hexPaint.color = Color.WHITE
         hexPaint.style = Paint.Style.FILL_AND_STROKE
         hexPaint.isAntiAlias = true
@@ -133,31 +111,9 @@ class UserPhotoView : View {
     }
 
     private fun getUserPhotoBitmap(fileName: String): Bitmap? {
-        Log.d("TAGUSERPHOTO", "userPhotoBitmap")
         val bitmap = BitmapFactory.decodeFile(KimlicApp.applicationContext().filesDir.toString() + "/" + fileName)
-        //val mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
-        //return getResizedBitmap(mutableBitmap, 1100, 800, -90f, true)
         return bitmap
-
     }
-
-//    private fun getResizedBitmap(bm: Bitmap, newWidth: Int, newHeight: Int, angel: Float, isNecessaryToKeepOrig: Boolean): Bitmap {
-//        val width = bm.width
-//        val height = bm.height
-//        val scaleWidth = newWidth.toFloat() / width
-//        val scaleHeight = newHeight.toFloat() / height
-//        // CREATE A MATRIX FOR THE MANIPULATION
-//        val matrix = Matrix()
-//        // RESIZE THE BIT MAP
-//        matrix.postScale(scaleWidth, scaleHeight)
-//        matrix.postRotate(angel)
-//        // "RECREATE" THE NEW BITMAP
-//        val resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false)
-//        if (!isNecessaryToKeepOrig) {
-//            bm.recycle()
-//        }
-//        return resizedBitmap
-//    }
 
     private fun hexagonPath(cornerWidth: Float = 0f): Path {
         val centerX = width / 2

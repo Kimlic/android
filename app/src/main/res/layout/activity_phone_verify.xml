@@ -27,6 +27,16 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="@id/spacer"/>
 
+  <Button
+    android:id="@+id/backBt"
+    android:layout_width="@dimen/menu_element_square_size"
+    android:layout_height="@dimen/menu_element_square_size"
+    android:layout_marginTop="24dp"
+    android:layout_marginStart="24dp"
+    android:background="@drawable/ic_close_36dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
+
   <LinearLayout
     android:layout_width="@dimen/content_width"
     android:layout_height="wrap_content"
