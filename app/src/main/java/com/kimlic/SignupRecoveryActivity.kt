@@ -3,8 +3,10 @@ package com.kimlic
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import com.android.volley.Request
 import com.android.volley.Response
+import com.android.volley.toolbox.Volley
 import com.kimlic.API.KimlicRequest
 import com.kimlic.API.VolleySingleton
 import com.kimlic.db.KimlicDB
@@ -57,7 +59,7 @@ class SignupRecoveryActivity : BaseActivity() {
 
     private fun setupUI() {
         createBt.setOnClickListener {
-            PresentationManager.tutorials(this)
+            //PresentationManager.tutorials(this)
             initNewUserRegistaration()
 
 //            QuorumKimlic.createInstance(null, this)
@@ -85,29 +87,14 @@ class SignupRecoveryActivity : BaseActivity() {
         val walletAddress = QuorumKimlic.getInstance().walletAddress
 
         // Init new user
-        val user1 = User(Prefs.currentId, mnemonic = mnemonic, walletAddress = walletAddress)
-        val emailContact = Contact(userId = Prefs.currentId, type = "email")
-        val phoneContact = Contact(userId = Prefs.currentId, type = "phone")
-        val passportDocument = Document(userId = Prefs.currentId, type = "passport")
-        val licenceDocument = Document(userId = Prefs.currentId, type = "licence")
-        val idDocument = Document(userId = Prefs.currentId, type = "id")
-        val permitDocument = Document(userId = Prefs.currentId, type = "permit")
-        val address = Address(userId = Prefs.currentId)
-
-        with(KimlicDB.getInstance()!!.userDao1()) {
-            insert(user1)
-            insert(emailContact)
-            insert(phoneContact)
-            insert(passportDocument)
-            insert(licenceDocument)
-            insert(idDocument)
-            insert(permitDocument)
-            insert(address)
-        }
+        val user = User(Prefs.currentId, mnemonic = mnemonic, walletAddress = walletAddress)
+        KimlicDB.getInstance()!!.userDao().insert(user)
 
         // 2. Get entry point of the Quorum
         val headers = mapOf<String, String>(Pair("account-address", walletAddress))
-        val addressRequest = KimlicRequest(Request.Method.GET, QuorumURL.config.url, headers, null, Response.Listener {
+        Log.d("TAGUSER", "wallet address = " + walletAddress)
+
+        val addressRequest = KimlicRequest(method = Request.Method.GET, url = QuorumURL.config.url, requestHeaders = headers, requestParams = null, onSuccess = Response.Listener {
             val json = JSONObject(it)
             val responceCode = json.getJSONObject("meta").optString("code").toString()
 
@@ -121,9 +108,12 @@ class SignupRecoveryActivity : BaseActivity() {
             // 3. Set account storage address
             val accountStorageAdapterAddress = QuorumKimlic.getInstance().accountStorageAdapter
             QuorumKimlic.getInstance().setAccountStorageAdapterAddress(accountStorageAdapterAddress)
-        }, Response.ErrorListener {
+
+        }, onError = Response.ErrorListener {
+            Log.d("TAGUSER", it.networkResponse.statusCode.toString())
             errorPopup(getString(R.string.server_error))
         })
         VolleySingleton.getInstance(this@SignupRecoveryActivity).requestQueue.add(addressRequest)
+
     }
 }

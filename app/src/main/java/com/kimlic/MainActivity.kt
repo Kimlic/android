@@ -2,6 +2,7 @@ package com.kimlic
 
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import com.android.volley.Request
 import com.android.volley.Response
 import com.kimlic.API.KimlicRequest
@@ -33,7 +34,9 @@ class MainActivity : BaseActivity() {
         initFragment()
         splashScreenShow()
 
-        if (Prefs.authenticated) {
+        //if (Prefs.authenticated) {
+        if (false) {
+            //PresentationManager.stage(this)
             quorumRequest()
         } else {
             object : CountDownTimer(3000, 3000) {
@@ -48,8 +51,9 @@ class MainActivity : BaseActivity() {
 
     private fun quorumRequest() {
         // 1. Create Quorum instance vith current user
-        val user = KimlicDB.getInstance()!!.userDao1().selectUserById(Prefs.currentId)
+        val user = KimlicDB.getInstance()!!.userDao().select(id = Prefs.currentId)
         val mnemonic = user.mnemonic
+        //QuorumKimlic.destroyInstance()
         QuorumKimlic.createInstance(mnemonic, this)//Create Quorum instance
         val walletAddress = user.walletAddress
 

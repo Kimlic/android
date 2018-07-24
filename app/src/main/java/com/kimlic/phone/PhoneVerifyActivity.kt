@@ -16,6 +16,7 @@ import com.kimlic.BaseActivity
 import com.kimlic.BaseDialogFragment
 import com.kimlic.R
 import com.kimlic.db.KimlicDB
+import com.kimlic.db.entity.Contact
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
 import com.kimlic.quorum.QuorumKimlic
@@ -95,7 +96,7 @@ class PhoneVerifyActivity : BaseActivity() {
                         val status = JSONObject(response).getJSONObject("data").optString("status").toString()
 
                         if (responceCode.startsWith("2") && status.equals("ok")) {
-                            updatePhone(phone)
+                            insertPhone(phone)
                             Prefs.authenticated = true
                             verifyBt.isClickable = true
                             successfull()
@@ -126,13 +127,9 @@ class PhoneVerifyActivity : BaseActivity() {
         return (count == 4)
     }
 
-    private fun updatePhone(phone: String) {
-        val phoneContact = KimlicDB.getInstance()!!.userDao1().selectContactByUserIdAndType(userId = Prefs.currentId, type = "phone")
-
-        phoneContact.approved = true
-        phoneContact.value = phone
-
-        KimlicDB.getInstance()!!.userDao1().update(phoneContact)
+    private fun insertPhone(phone: String) {
+        val phoneContact = Contact(userId = Prefs.currentId, value = phone, type = "phone", approved = true)
+        KimlicDB.getInstance()!!.contactDao().insert(phoneContact)
     }
 
     private fun successfull() {

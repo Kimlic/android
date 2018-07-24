@@ -20,6 +20,7 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.db.KimlicDB
+import com.kimlic.db.entity.Address
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.BaseCallback
@@ -50,7 +51,6 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
 
         when (requestCode) {
             PICK_FILE_REQUEST_CODE -> if (resultCode == RESULT_OK) {
@@ -133,11 +133,8 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
     }
 
     private fun manageInput() {
-        // TODO chek if fields are empty; use file address
-        val addressDoc = KimlicDB.getInstance()!!.userDao1().selectAddres(userId = Prefs.currentId)
-        addressDoc.value = addressEt.text.toString()
-        KimlicDB.getInstance()!!.userDao1().update(addressDoc)
-
+        val addressDoc = Address(userId = Prefs.currentId, value = addressEt.text.toString())
+        KimlicDB.getInstance()!!.addressDao().insert(addressDoc)
         successfull()
     }
 

@@ -1,5 +1,6 @@
 package com.kimlic.utils
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -32,6 +33,11 @@ class ErrorPopupFragment : BasePopupFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupUI()
+    }
+
+    override fun onDismiss(dialog: DialogInterface?) {
+        super.onDismiss(dialog)
+        activity!!.finish()
     }
 
     // Private

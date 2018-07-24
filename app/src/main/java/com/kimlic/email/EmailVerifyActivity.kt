@@ -16,6 +16,7 @@ import com.kimlic.API.VolleySingleton
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.db.KimlicDB
+import com.kimlic.db.entity.Contact
 import com.kimlic.managers.PresentationManager
 import com.kimlic.phone.PhoneSuccessfullFragment
 import com.kimlic.preferences.Prefs
@@ -84,7 +85,7 @@ class EmailVerifyActivity : BaseActivity() {
             code = StringBuilder()
             digitsList.forEach { code.append(it.text.toString()) }
 
-            val walletAddress = KimlicDB.getInstance()!!.userDao1().selectUserById(Prefs.currentId).walletAddress
+            val walletAddress = KimlicDB.getInstance()!!.userDao().select(Prefs.currentId).walletAddress
             val params = mapOf(Pair("code", code.toString()))
             val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", walletAddress)
 
@@ -94,7 +95,7 @@ class EmailVerifyActivity : BaseActivity() {
                         val status = JSONObject(response).getJSONObject("data").optString("status").toString()
 
                         if (responceCode.startsWith("2") && status.equals("ok")) {
-                            updateEmail(email)
+                            insertEmail(email)
                             verifyBt.isClickable = true
                             successfull()
                         } else {
@@ -109,13 +110,9 @@ class EmailVerifyActivity : BaseActivity() {
         } else showToast(getString(R.string.pin_is_not_enterd))
     }
 
-    private fun updateEmail(email: String) {
-        val emailContact = KimlicDB.getInstance()!!.userDao1().selectContactByUserIdAndType(userId = Prefs.currentId, type = "email")
-
-        emailContact.approved = true
-        emailContact.value = email
-
-        KimlicDB.getInstance()!!.userDao1().update(emailContact)
+    private fun insertEmail(email: String) {
+        val emailContact = Contact(userId = Prefs.currentId, value = email, type = "email", approved = true)
+        KimlicDB.getInstance()!!.contactDao().insert(emailContact)
     }
 
     private fun pinEntered(): Boolean {

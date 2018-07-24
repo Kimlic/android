@@ -68,8 +68,8 @@ class SettingsActivity : BaseActivity() {
     private fun setupUI() {
         setupAdapter()
         signoutBt.setOnClickListener {
-//            KimlicDB.getInstance(this)!!.userDao1().deleteById(Prefs.currentId)
-            KimlicDB.getInstance(this)!!.userDao1().deleteAll()
+//            KimlicDB.getInstance(this)!!.userDao().delete(Prefs.currentId)
+            KimlicDB.getInstance(this)!!.userDao().deleteAll()
             Prefs.clear()
             QuorumKimlic.destroyInstance()
             //deleteUserPhotos()

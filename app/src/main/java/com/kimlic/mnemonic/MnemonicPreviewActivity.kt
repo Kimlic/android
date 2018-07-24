@@ -4,7 +4,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.db.KimlicDB
@@ -62,7 +61,7 @@ class MnemonicPreviewActivity : BaseActivity() {
     }
 
     private fun mnemonicList(): List<String>{
-        val phraseString = KimlicDB.getInstance()!!.userDao1().selectUserById(Prefs.currentId).mnemonic
+        val phraseString = KimlicDB.getInstance()!!.userDao().select(Prefs.currentId).mnemonic
         val phraseList = phraseString.split(" ")
         return phraseList
     }

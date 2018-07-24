@@ -25,7 +25,8 @@ class EmailActivity : BaseActivity() {
 
     // Variables
 
-    private lateinit var blockchainUpdatingFragment: BlockchainUpdatingFragment
+    private var blockchainUpdatingFragment: BlockchainUpdatingFragment? = null
+    private var timer: CountDownTimer? = null
 
     // Life
 
@@ -105,24 +106,22 @@ class EmailActivity : BaseActivity() {
     }
 
     private fun showProgress() {
-        blockchainUpdatingFragment = BlockchainUpdatingFragment.newInstance()
-
-        object : CountDownTimer(500, 500) {
+        timer = object : CountDownTimer(500, 500) {
             override fun onFinish() {
-                blockchainUpdatingFragment.show(supportFragmentManager, BlockchainUpdatingFragment.FRAGMENT_KEY)
+                blockchainUpdatingFragment = BlockchainUpdatingFragment.newInstance()
+                blockchainUpdatingFragment?.show(supportFragmentManager, BlockchainUpdatingFragment.FRAGMENT_KEY)
             }
 
             override fun onTick(millisUntilFinished: Long) {}
         }.start()
     }
 
-    private fun hideProgress() = runOnUiThread { blockchainUpdatingFragment.dismiss() }
+    private fun hideProgress() = runOnUiThread { if (blockchainUpdatingFragment != null) blockchainUpdatingFragment?.dismiss(); timer.let { it?.cancel() } }
 
     private fun isEmailValid() = android.util.Patterns.EMAIL_ADDRESS.matcher(emailEt.text.toString()).matches()
 
     private fun unableToProceed() {
-        runOnUiThread { hideProgress() }
-        nextBt.isClickable = true
-        showPopup(message = "Unable to proceed with verification")
+        hideProgress()
+        runOnUiThread { nextBt.isClickable = true; showPopup(message = "Unable to proceed with verification") }
     }
 }

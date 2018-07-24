@@ -5,6 +5,7 @@ import android.arch.persistence.room.*
 @Entity(tableName = "user")
 
 data class User(
+
         @PrimaryKey(autoGenerate = false)
         @ColumnInfo(name = "id") var id: Long = 0,
         @ColumnInfo(name = "first_name") var firstName: String = "",

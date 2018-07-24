@@ -32,22 +32,31 @@ class ContactsAdapter : RecyclerView.Adapter<ContactsAdapter.ContactsViewHolder>
     // Public
 
     fun setContactsList(contacts: List<Contact>) {
-        this.contactList = contacts
+        val tempList = mutableListOf(Contact(type = "phone"), Contact(type = "email"), Contact(type = "phone"))
+        contacts.forEach {
+            if (it.type.equals("email")) tempList[0] = it
+            if (it.type.equals("phone")) tempList[1] = it
+        }
+
+        this.contactList = tempList
         notifyDataSetChanged()
     }
 
-    //View Holder
+    // View Holder
 
     class ContactsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
         // Variables
 
         private lateinit var onStageItemClick: OnStageItemClick
+        private lateinit var contactType: String
+        private var approved: Boolean = false
 
         // Public
 
         fun bind(itemContact: Contact) {
-
+            contactType = itemContact.type
+            approved = itemContact.approved
             with(itemView) {
                 setOnClickListener(this@ContactsViewHolder)
                 when (itemContact.type) {
@@ -76,7 +85,7 @@ class ContactsAdapter : RecyclerView.Adapter<ContactsAdapter.ContactsViewHolder>
         // OnClick implementation
 
         override fun onClick(v: View?) {
-            onStageItemClick.onClick(v!!, adapterPosition, "email", true)
+            onStageItemClick.onClick(v!!, adapterPosition, contactType, approved)
         }
     }
 }

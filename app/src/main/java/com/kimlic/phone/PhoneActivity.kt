@@ -24,9 +24,11 @@ import com.kimlic.quorum.crypto.Sha
 import com.kimlic.utils.QuorumURL
 import kotlinx.android.synthetic.main.activity_phone.*
 import org.json.JSONObject
+import org.web3j.protocol.core.methods.response.TransactionReceipt
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
+import java.util.concurrent.ExecutionException
 
 class PhoneActivity : BaseActivity() {
 
@@ -67,7 +69,6 @@ class PhoneActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        blockchainUpdatingFragment = BlockchainUpdatingFragment.newInstance()
         countriesList = countries()
 
         phoneEt.addTextChangedListener(object : PhoneNumberFormattingTextWatcher() {
@@ -107,18 +108,26 @@ class PhoneActivity : BaseActivity() {
 
     private fun managePhone() {
         if (!isPhoneValid()) {
-            phoneEt.error = getString(R.string.phone_is_not_valid)
-            return
+            phoneEt.error = getString(R.string.phone_is_not_valid); return
         }
         showProgress()
 
         Thread(Runnable {
             val phone = phoneEt.text.toString().replace(" ", "")
-            val receiptPhone = QuorumKimlic.getInstance().setAccountFieldMainData(Sha.sha256(phone), "phone")
+            val quorumKimlic = QuorumKimlic.getInstance()
+            var receiptPhone: TransactionReceipt? = null
+
+            try {
+                receiptPhone = quorumKimlic.setAccountFieldMainData(Sha.sha256(phone), "phone")
+            } catch (e: ExecutionException) {
+                unableToProceed()
+            } catch (e: InterruptedException) {
+                unableToProceed()
+            }
 
             if (receiptPhone != null && receiptPhone.transactionHash.isNotEmpty()) {
 
-                val headers = mapOf(Pair("account-address", KimlicDB.getInstance()!!.userDao1().selectUserById(Prefs.currentId).walletAddress))
+                val headers = mapOf(Pair("account-address", KimlicDB.getInstance()!!.userDao().select(Prefs.currentId).walletAddress))
                 val params = mapOf(Pair("phone", phone))
 
                 val request = KimlicRequest(Request.Method.POST, QuorumURL.phoneVerify.url, headers, params, Response.Listener { response ->
@@ -137,13 +146,12 @@ class PhoneActivity : BaseActivity() {
     }
 
     private fun unableToProceed() {
-        runOnUiThread { hideProgress() }
-        nextBt.isClickable = true
-        showPopup(message = getString(R.string.unable_to_proceed_with_verification))
+        hideProgress()
+        runOnUiThread { nextBt.isClickable = true; showPopup(message = getString(R.string.unable_to_proceed_with_verification)) }
     }
 
     private fun showProgress() {
-        object : CountDownTimer(500, 500) {
+        timer = object : CountDownTimer(500, 500) {
             override fun onFinish() {
                 blockchainUpdatingFragment = BlockchainUpdatingFragment.newInstance()
                 blockchainUpdatingFragment?.show(supportFragmentManager, BlockchainUpdatingFragment.FRAGMENT_KEY)
@@ -154,7 +162,7 @@ class PhoneActivity : BaseActivity() {
     }
 
     private fun hideProgress() = runOnUiThread {
-        if (blockchainUpdatingFragment != null) blockchainUpdatingFragment?.dismiss()
+        if (blockchainUpdatingFragment != null) blockchainUpdatingFragment?.dismiss(); timer.let { it?.cancel() }
     }
 
     private fun isPhoneValid(): Boolean {

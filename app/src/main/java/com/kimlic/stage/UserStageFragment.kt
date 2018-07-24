@@ -1,14 +1,11 @@
 package com.kimlic.stage
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.kimlic.BaseFragment
 import com.kimlic.R
+import com.kimlic.db.entity.Address
 import com.kimlic.db.entity.Contact
 import com.kimlic.db.entity.User
 import com.kimlic.managers.PresentationManager
@@ -31,14 +29,11 @@ class UserStageFragment : BaseFragment() {
     // Variables
 
     private lateinit var model: UserStageViewModel
-    private lateinit var risksLiveData: MutableLiveData<Boolean>
+    private lateinit var divider: DividerItemDecoration
 
     // Variable fo adapters
+
     lateinit var contactsAdapter: ContactsAdapter
-
-    // New DB implementation
-
-    private lateinit var userLiveData: LiveData<User>
 
     // Companion
 
@@ -67,23 +62,24 @@ class UserStageFragment : BaseFragment() {
 
     private fun setupUI() {
         model = ViewModelProviders.of(activity!!).get(UserStageViewModel::class.java)
+        divider = DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
+        divider.setDrawable(resources.getDrawable(R.drawable.divider_line, null))
 
-        val dividerItemDecoration = DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
-        dividerItemDecoration.setDrawable(resources.getDrawable(R.drawable.divider_line, null))
+        //setupName()
+        //setupContacts()
+        //setupAddress()
+        setupRisks()
 
-        setupContacts()
 
 
-        model.getUserContactLiveData().observe(this, object : Observer<List<Contact>> {
-            override fun onChanged(contacts: List<Contact>?) {
-                contactsAdapter.setContactsList(contacts = contacts!!)
-            }
+        setupListners()
+        setupFielsds()
+    }
 
-        })
+    // Private Helpers
 
-        // New Db implementation
-        userLiveData = model.getUser1LiveData()
-        userLiveData.observe(this@UserStageFragment, object : Observer<User> {
+    private fun setupName() {
+        model.getUserLiveData().observe(this@UserStageFragment, object : Observer<User> {
             override fun onChanged(user: User?) {
                 setupNameField(if (user!!.firstName.isNotEmpty()) {
                     user.firstName + " " + user.lastName
@@ -93,53 +89,46 @@ class UserStageFragment : BaseFragment() {
                 manageCameraIcon("preview_" + user.portraitFile)
             }
         })
-
-        // UserContacts
-        model.getUserContactLiveData().observe(this@UserStageFragment, object : Observer<List<Contact>> {
-            override fun onChanged(contactList: List<Contact>?) {
-                contactsAdapter.setContactsList(contactList!!)
-            }
-        })
-
-
-        // Risks liveData
-        risksLiveData = model.getRisksLiveData()
-        risksLiveData.observe(activity!!, object : Observer<Boolean> {
-            override fun onChanged(risks: Boolean?) {
-                manageRisks(risks!!)
-            }
-        })
-
-        setupListners()
-        setupFielsds()
     }
 
     private fun setupContacts() {
-        val dividerItemDecoration = DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
-        dividerItemDecoration.setDrawable(resources.getDrawable(R.drawable.divider_line, null))
-
         contactsAdapter = ContactsAdapter()
         val layoutManager = LinearLayoutManager(activity, LinearLayout.VERTICAL, false)
         contactsRecycler.layoutManager = layoutManager
         contactsRecycler.hasFixedSize()
         contactsRecycler.adapter = contactsAdapter
-        contactsRecycler.addItemDecoration(dividerItemDecoration)
+        contactsRecycler.addItemDecoration(divider)
         contactsAdapter.onStageItemClick = object : OnStageItemClick {
-            override fun onClick(view: View, position: Int, type: String, aprooved: Boolean) {
+            override fun onClick(view: View, position: Int, type: String, approved: Boolean) {
                 when (type) {
-                    "email" -> {
-
-                        Log.d("TAG", type)
-                        PresentationManager.email(activity!!)
-                    }
-
+                    "email" -> if (!approved) PresentationManager.email(activity!!)
+                    "phone" -> if (!approved) PresentationManager.phoneNumber(activity!!)
                 }
             }
         }
+        model.getUserContactsLiveData().observe(this, object : Observer<List<Contact>> {
+            override fun onChanged(contacts: List<Contact>?) {
+                contactsAdapter.setContactsList(contacts = contacts!!)
+            }
+        })
     }
 
-    private fun manageCameraIcon(fileName: String) {
-        if (File(activity!!.filesDir.toString() + "/" + fileName).exists()) takePhotoLl.visibility = View.GONE else takePhotoLl.visibility = View.VISIBLE
+    private fun setupAddress() {
+        model.getAddressLiveData().observe(this, object : Observer<Address> {
+            override fun onChanged(address: Address?) {
+                setupAddressField(address!!.value)
+            }
+        })
+
+    }
+
+
+    private fun setupRisks() {
+        model.getRisksLiveData().observe(activity!!, object : Observer<Boolean> {
+            override fun onChanged(risks: Boolean?) {
+                manageRisks(risks!!)
+            }
+        })
     }
 
     private fun setupListners() {
@@ -154,6 +143,10 @@ class UserStageFragment : BaseFragment() {
         }
         // Stub?
         //userPhotoIv.setOnClickListener { PresentationManager.portraitPhoto(activity!!) }
+    }
+
+    private fun manageCameraIcon(fileName: String) {
+        if (File(activity!!.filesDir.toString() + "/" + fileName).exists()) takePhotoLl.visibility = View.GONE else takePhotoLl.visibility = View.VISIBLE
     }
 
     // Mocks
@@ -201,30 +194,12 @@ class UserStageFragment : BaseFragment() {
         kimTv.setTextColor(if (kim == 0) resources.getColor(R.color.lightBlue, null) else resources.getColor(android.R.color.white, null))
     }
 
-//    private fun setupEmailField(email: String = "") {
-//        emailIv.background = resources.getDrawable(if (email.equals("")) Icons.EMAIL_BLUE.icon else Icons.EMAIL_WHITE.icon, null)
-//        emailArrow.background = resources.getDrawable(if (email.equals("")) Icons.ARROW_BLUE.icon else Icons.ARROW_WHITE.icon, null)
-//        emailTv.text = if (email.equals("")) getString(R.string.add_your_email) else email
-//        emailTv.setTextColor(if (email.equals("")) resources.getColor(R.color.lightBlue, null) else resources.getColor(android.R.color.white, null))
-//        emailItem.setOnClickListener { PresentationManager.email(activity!!) }
-//        emailItem.isClickable = email.equals("")
-//    }
-
     private fun setupNameField(name: String = "") {
 //        nameIv.background = resources.getDrawable(if (name.equals("")) Icons.NAME_BLUE.icon else Icons.NAME_WHITE.icon, null)
         nameArrow.background = resources.getDrawable(if (name.equals("")) Icons.ARROW_BLUE.icon else Icons.ARROW_WHITE.icon, null)
         nameTv.text = if (name.equals("")) getString(R.string.add_your_full_name) else name
         nameTv.setTextColor(if (name.equals("")) resources.getColor(R.color.lightBlue, null) else resources.getColor(android.R.color.white, null))
     }
-
-//    private fun setupPhoneField(phone: String = "") {
-//        phoneIv.background = resources.getDrawable(if (phone.equals("")) Icons.PHONE_BLUE.icon else Icons.PHONE_WHITE.icon, null)
-//        phoneArrow.background = resources.getDrawable(if (phone.equals("")) Icons.ARROW_BLUE.icon else Icons.ARROW_WHITE.icon, null)
-//        phoneTv.text = if (phone.equals("")) getString(R.string.add_your_phone) else phone
-//        phoneTv.setTextColor(if (phone.equals("")) resources.getColor(R.color.lightBlue, null) else resources.getColor(android.R.color.white, null))
-//        phoneItem.setOnClickListener { PresentationManager.phoneNumber(activity!!) }
-//        phoneItem.isClickable = phone.equals("")
-//    }
 
     private fun setupIDField(id: String = "") {
         idIv.background = resources.getDrawable(if (id.equals("")) Icons.ID_BLUE.icon else Icons.ID_WHITE.icon, null)

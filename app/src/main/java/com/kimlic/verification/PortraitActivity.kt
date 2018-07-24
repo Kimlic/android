@@ -45,9 +45,9 @@ class PortraitActivity : BaseActivity() {
 
         portraitFragment.setCallback(object : BaseCallback {
             override fun callback() {
-                val user1 = KimlicDB.getInstance()!!.userDao1().selectUserById(Prefs.currentId)
+                val user1 = KimlicDB.getInstance()!!.userDao().select(Prefs.currentId)
                 user1.portraitFile = fileName // Name of user by it's id
-                KimlicDB.getInstance()!!.userDao1().updateUser(user = user1)
+                KimlicDB.getInstance()!!.userDao().update(user = user1)
 
                 createPhotoPreview(fileName)
                 finish()
@@ -83,6 +83,7 @@ class PortraitActivity : BaseActivity() {
         matrix.postScale(scaleWidth, scaleHeight)
         matrix.postRotate(angel)
         val resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false)
+
         if (!isNecessaryToKeepOrig) {
             bm.recycle()
         }

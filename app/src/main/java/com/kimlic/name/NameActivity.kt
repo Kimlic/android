@@ -103,10 +103,10 @@ class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
     }
 
     private fun updateName(name: String, lastName: String) {
-        val user1 = KimlicDB.getInstance()!!.userDao1().selectUserById(Prefs.currentId)
+        val user1 = KimlicDB.getInstance()!!.userDao().select(Prefs.currentId)
         user1.firstName = name
         user1.lastName = lastName
-        KimlicDB.getInstance()!!.userDao1().updateUser(user = user1)
+        KimlicDB.getInstance()!!.userDao().update(user = user1)
     }
 
     private fun filter(): InputFilter {
