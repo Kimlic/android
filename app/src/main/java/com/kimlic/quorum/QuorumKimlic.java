@@ -1,9 +1,12 @@
 package com.kimlic.quorum;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.kimlic.quorum.bip44.HdKeyNode;
 import com.kimlic.quorum.bip44.hdpath.HdKeyPath;
+import com.kimlic.quorum.contracts.AccountStorageAdapter;
+import com.kimlic.quorum.contracts.KimlicContractsContext;
 import com.kimlic.quorum.crypto.MnemonicUtils;
 import com.kimlic.quorum.crypto.SecureRandomTools;
 
@@ -71,13 +74,16 @@ public class QuorumKimlic {
 
   // Quorum Transactions
 
-  public TransactionReceipt setAccountFieldMainData(String UDID, String verificationType)
+  public TransactionReceipt setFieldMainData(String value, String type)
       throws ExecutionException, InterruptedException {
     if (mAccountStorageAdapter == null) {
       throw new InterruptedException("Empty contract address");
     }
 
-    return mAccountStorageAdapter.setAccountFieldMainData(UDID, verificationType).sendAsync().get();
+    String data = "{\"" + type + "\": \"" + value + "\"}";
+    Log.e("AAAAAA", data);
+    return mAccountStorageAdapter.setFieldMainData(data, type).sendAsync().get();
+//    return mAccountStorageAdapter.setAccountFieldMainData(UDID, verificationType).sendAsync().get();
   }
 
   // Accessors

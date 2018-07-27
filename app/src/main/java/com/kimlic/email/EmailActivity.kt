@@ -74,7 +74,7 @@ class EmailActivity : BaseActivity() {
                     val quorumKimlic = QuorumKimlic.getInstance()
                     var receiptEmail: TransactionReceipt? = null
                     try {
-                        receiptEmail = quorumKimlic.setAccountFieldMainData(Sha.sha256(email), "email")
+                        receiptEmail = quorumKimlic.setFieldMainData(Sha.sha256(email), "email")
                     } catch (e: ExecutionException) {
                         unableToProceed()
                     } catch (e: InterruptedException) {

@@ -119,7 +119,7 @@ class PhoneActivity : BaseActivity() {
             var receiptPhone: TransactionReceipt? = null
 
             try {
-                receiptPhone = quorumKimlic.setAccountFieldMainData(Sha.sha256(phone), "phone")
+                receiptPhone = quorumKimlic.setFieldMainData(Sha.sha256(phone), "phone")
             } catch (e: ExecutionException) {
                 unableToProceed()
             } catch (e: InterruptedException) {

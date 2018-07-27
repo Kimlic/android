@@ -33,7 +33,7 @@ class MainActivity : BaseActivity() {
         initFragment()
         splashScreenShow()
 
-        if (!Prefs.authenticated) {
+        if (Prefs.authenticated) {
             //PresentationManager.stage(this)
             quorumRequest()
         } else {
@@ -48,11 +48,13 @@ class MainActivity : BaseActivity() {
     }
 
     private fun quorumRequest() {
-        // 1. Create Quorum instance vith current user
+        // 1. Create Quorum instance with current user
         val user = KimlicDB.getInstance()!!.userDao().select(id = Prefs.currentId)
+
         val mnemonic = user.mnemonic
         QuorumKimlic.destroyInstance()
         QuorumKimlic.createInstance(mnemonic, this)//Create Quorum instance
+
         val walletAddress = user.accountAddress
 
         // 2. Get entry point of the Quorum
