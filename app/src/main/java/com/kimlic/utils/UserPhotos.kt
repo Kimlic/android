@@ -20,6 +20,11 @@ enum class UserPhotos(val fileName: String) {
     IDCardFrontSide("ldFront.jpg"),
     IDCardBackSide("ldBack.jpg"),
 
+    PermitPortrait("permitPortrait.jpg"),
+    PermitFrontSide("permitFront.jpg"),
+    PermitBackSide("permitBack.jpg"),
+
+
     bill("bill.jpg"),
 
     default("default.jpg"),

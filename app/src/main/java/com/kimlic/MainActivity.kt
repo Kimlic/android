@@ -7,6 +7,7 @@ import com.android.volley.Response
 import com.kimlic.API.KimlicRequest
 import com.kimlic.API.VolleySingleton
 import com.kimlic.db.KimlicDB
+import com.kimlic.db.entity.User
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
 import com.kimlic.quorum.QuorumKimlic
@@ -34,8 +35,9 @@ class MainActivity : BaseActivity() {
         splashScreenShow()
 
         if (!Prefs.authenticated) {
-            //PresentationManager.stage(this)
-            quorumRequest()
+            //KimlicDB.getInstance()!!.userDao().insert(user = User(id = Prefs.currentId))
+            PresentationManager.stage(this)
+            //quorumRequest()
         } else {
             object : CountDownTimer(3000, 3000) {
                 override fun onFinish() {

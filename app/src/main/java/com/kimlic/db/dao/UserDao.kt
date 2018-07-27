@@ -8,8 +8,6 @@ import com.kimlic.db.entity.User
 @Dao
 interface UserDao {
 
-    // User
-
     @Insert(onConflict = REPLACE)
     fun insert(user: User): Long
 

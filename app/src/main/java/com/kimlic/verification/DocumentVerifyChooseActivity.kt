@@ -62,7 +62,7 @@ class DocumentVerifyChooseActivity : BaseActivity(), View.OnClickListener {
             override fun onChanged(documents: List<Document>?) {
                 documents!!.forEach { types.remove(it.type) }
 
-                Log.d("TAGDOCLIST", types.toString())
+                Log.d("TAGDOCLIST", documents.toString())
                 // Log.d("TAGDOCLIST", documents.toString())
 
                 buttonsList.forEach { it.visibility = View.GONE }

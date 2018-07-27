@@ -63,58 +63,31 @@ class DocumentVerifyActivity : BaseActivity() {
 
         val document = Document(userId = userId, type = documentType)
 
-
         val documentId = KimlicDB.getInstance()!!.documentDao().insert(document = document)
+        Log.d("TAG", "DOCUMENT ID = " + documentId)
 
         showFragment(R.id.container, portraitFragment, PortraitPhotoFragment.FRAGMENT_KEY)
 
-//        portraitFragment.setCallback(object : BaseCallback {
-//            override fun callback() {
-//                showFragment(R.id.container, frontFragment, DocumentFrontFragment.FRAGMENT_KEY)
-//            }
-//        })
 
         portraitFragment.setCallback(object : PhotoCallback {
             override fun callback(fileName: String) {
-                Log.d("TAG", fileName)
                 portraitPhoto = Photo(documentId = documentId, file = fileName, side = "portrait")
                 showFragment(R.id.container, frontFragment, DocumentFrontFragment.FRAGMENT_KEY)
             }
-
         })
-//        frontFragment.setCallback(object : BaseCallback {
-//            override fun callback() {
-//                showFragment(R.id.container, backFragment, DocumentBackFragment.FRAGMENT_KEY)
-//            }
-//        })
 
         frontFragment.setCallback(object : PhotoCallback {
             override fun callback(fileName: String) {
-                Log.d("TAG", fileName)
                 documentFrontPhoto = Photo(documentId = documentId, file = fileName, side = "front")
                 showFragment(R.id.container, backFragment, DocumentBackFragment.FRAGMENT_KEY)
             }
         })
 
-
-//        backFragment.setCallback(object : BaseCallback {
-//            override fun callback() {
-//                Prefs.documentToverify = documentType
-//
-//                val document = Document(userId = Prefs.currentId)
-//
-//
-//                successfull()
-//            }
-//        })
-
         backFragment.setCallback(object : PhotoCallback {
             override fun callback(fileName: String) {
-                Log.d("TAG", fileName)
                 documentBackPhoto = Photo(documentId = documentId, file = fileName, side = "back")
 
-                KimlicDB.getInstance()!!.documentDao().insert(document)
-                //KimlicDB.getInstance()!!.photoDao().insert(photos = listOf(portraitPhoto))//, documentFrontPhoto, documentBackPhoto))
+                KimlicDB.getInstance()!!.photoDao().insert(photos = listOf(portraitPhoto, documentFrontPhoto, documentBackPhoto))
                 successfull()
             }
         })

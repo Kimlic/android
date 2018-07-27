@@ -11,11 +11,16 @@ interface PhotoDao {
     @Insert(onConflict = REPLACE)
     fun insert(photos: List<Photo>): List<Long>
 
+    @Insert(onConflict = REPLACE)
+    fun insert(photo: Photo)
+
     @Update
     fun update(photo: Photo): Int
 
     @Query("SELECT * FROM photo WHERE document_id = :documentId")
     fun selectPhotosLive(documentId: Long): LiveData<List<Photo>>
+
+
 
     @Query("SELECT * FROM photo WHERE document_id = :documentId AND side =:side LIMIT 1")
     fun selectByDocumentIdAndType(documentId: Long, side: String): Photo

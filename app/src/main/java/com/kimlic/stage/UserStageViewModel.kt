@@ -4,10 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.kimlic.db.KimlicDB
-import com.kimlic.db.entity.Address
-import com.kimlic.db.entity.Contact
-import com.kimlic.db.entity.Document
-import com.kimlic.db.entity.User
+import com.kimlic.db.entity.*
 import com.kimlic.preferences.Prefs
 
 class UserStageViewModel : ViewModel() {

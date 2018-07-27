@@ -1,15 +1,13 @@
 package com.kimlic.db.entity
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.ForeignKey
+import android.arch.persistence.room.*
 import android.arch.persistence.room.ForeignKey.CASCADE
-import android.arch.persistence.room.PrimaryKey
 
 //        indices = arrayOf(Index(name = "user_id", unique = true)),
 
-@Entity(tableName = "contact",
-        foreignKeys = arrayOf(ForeignKey(entity = User::class, parentColumns = arrayOf("id"), childColumns = arrayOf("user_id"), onDelete = CASCADE, onUpdate = CASCADE)))
+@Entity(tableName = "contact"
+//        ,indices = arrayOf(Index(name = "type", unique = true))
+        ,foreignKeys = arrayOf(ForeignKey(entity = User::class, parentColumns = arrayOf("id"), childColumns = arrayOf("user_id"), onDelete = CASCADE, onUpdate = CASCADE)))
 
 data class Contact(
         @PrimaryKey(autoGenerate = true)

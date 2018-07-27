@@ -7,6 +7,7 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.Layout
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -14,10 +15,8 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.kimlic.BaseFragment
 import com.kimlic.R
-import com.kimlic.db.entity.Address
-import com.kimlic.db.entity.Contact
-import com.kimlic.db.entity.Document
-import com.kimlic.db.entity.User
+import com.kimlic.db.KimlicDB
+import com.kimlic.db.entity.*
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
 import com.kimlic.stage.adapter.ContactsAdapter
@@ -74,6 +73,7 @@ class UserStageFragment : BaseFragment() {
 
         setupListners()
         setupFielsds()
+        checkPhotos()
     }
 
     // Private Helpers
@@ -147,8 +147,8 @@ class UserStageFragment : BaseFragment() {
 
         documentsAdapter.setOnStageItemClick(object : OnStageItemClick {
             override fun onClick(view: View, position: Int, type: String, approved: Boolean, state: String) {
-                when(type){
-                    "add" ->PresentationManager.documentChooseVerify(activity!!)
+                when (type) {
+                    "add" -> PresentationManager.documentChooseVerify(activity!!)
                 }
 
             }
@@ -163,12 +163,23 @@ class UserStageFragment : BaseFragment() {
 
     }
 
+    private fun checkPhotos() {
+        val document = KimlicDB.getInstance()!!.documentDao().selectByUserIdAndType(Prefs.currentId, "passport")
+
+        if(document!=null)
+            KimlicDB.getInstance()!!.photoDao().selectPhotosLive(documentId = document.id).observe(this, object : Observer<List<Photo>> {
+                override fun onChanged(photos: List<Photo>?) {
+                    photos?.let { Log.d("TAGPHOTLLIVE", photos.toString()) }
+                }
+            })
+
+    }
+
 
     private fun setupListners() {
         settingsBt.setOnClickListener { PresentationManager.settings(activity!!) }
         nameItem.setOnClickListener { PresentationManager.name(activity!!) }
 
-        // idItem.setOnClickListener { PresentationManager.documentChooseVerify(activity!!) }
         addressItem.setOnClickListener { PresentationManager.address(activity!!) }
         takePhotoLl.setOnClickListener {
             PresentationManager.portraitPhoto(activity!!)

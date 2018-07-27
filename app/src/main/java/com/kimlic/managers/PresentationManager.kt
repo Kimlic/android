@@ -150,6 +150,7 @@ object PresentationManager {
 
     fun verifyDriverLicence(presenter: BaseActivity, userId: Long) {
         val params = HashMap<String, String>()
+
         params.put(AppConstants.userId.key, userId.toString())
         params.put(AppConstants.documentType.key, AppConstants.documentLicense.key)
         params.put(UserPhotos.portraitFilePath.fileName, UserPhotos.driverLicensePortrait.fileName)
@@ -161,6 +162,7 @@ object PresentationManager {
 
     fun verifyIDCard(presenter: BaseActivity, userId: Long) {
         val params = HashMap<String, String>()
+
         params.put(AppConstants.userId.key, userId.toString())
         params.put(AppConstants.documentType.key, AppConstants.documentID.key)
         params.put(UserPhotos.portraitFilePath.fileName, UserPhotos.IDCardPortrait.fileName)
@@ -172,8 +174,12 @@ object PresentationManager {
 
     fun verifyPermit(presenter: BaseActivity, userId: Long) {
         val params = HashMap<String, String>()
-        params.put(AppConstants.userId.key, userId.toString())
 
+        params.put(AppConstants.userId.key, userId.toString())
+        params.put(AppConstants.documentType.key, AppConstants.documentPermit.key)
+        params.put(UserPhotos.portraitFilePath.fileName, UserPhotos.PermitFrontSide.fileName)
+        params.put(UserPhotos.frontFilePath.fileName, UserPhotos.PermitFrontSide.fileName)
+        params.put(UserPhotos.backFilePath.fileName, UserPhotos.PermitBackSide.fileName)
 
         present(presenter = presenter, className = DocumentVerifyActivity::class.java, isStarting = false, params = params)
     }
