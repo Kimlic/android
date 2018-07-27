@@ -25,6 +25,7 @@ import com.kimlic.tutorial.TutorialActivity
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.UserPhotos
 import com.kimlic.verification.*
+import org.spongycastle.asn1.ua.DSTU4145NamedCurves.params
 
 object PresentationManager {
 
@@ -135,9 +136,10 @@ object PresentationManager {
 
     // Verification
 
-    fun verifyPassport(presenter: BaseActivity) {
+    fun verifyPassport(presenter: BaseActivity, userId: Long) {
         val params = HashMap<String, String>()
 
+        params.put(AppConstants.userId.key, userId.toString())
         params.put(AppConstants.documentType.key, AppConstants.documentPassport.key)
         params.put(UserPhotos.portraitFilePath.fileName, UserPhotos.passportPortrait.fileName)
         params.put(UserPhotos.frontFilePath.fileName, UserPhotos.passportFrontSide.fileName)
@@ -146,9 +148,9 @@ object PresentationManager {
         present(presenter = presenter, className = DocumentVerifyActivity::class.java, isStarting = false, params = params)
     }
 
-    fun verifyDriverLicence(presenter: BaseActivity) {
+    fun verifyDriverLicence(presenter: BaseActivity, userId: Long) {
         val params = HashMap<String, String>()
-
+        params.put(AppConstants.userId.key, userId.toString())
         params.put(AppConstants.documentType.key, AppConstants.documentLicense.key)
         params.put(UserPhotos.portraitFilePath.fileName, UserPhotos.driverLicensePortrait.fileName)
         params.put(UserPhotos.frontFilePath.fileName, UserPhotos.driverLicensFrontSide.fileName)
@@ -157,13 +159,21 @@ object PresentationManager {
         present(presenter = presenter, className = DocumentVerifyActivity::class.java, isStarting = false, params = params)
     }
 
-    fun verifyIDCard(presenter: BaseActivity) {
+    fun verifyIDCard(presenter: BaseActivity, userId: Long) {
         val params = HashMap<String, String>()
-
+        params.put(AppConstants.userId.key, userId.toString())
         params.put(AppConstants.documentType.key, AppConstants.documentID.key)
         params.put(UserPhotos.portraitFilePath.fileName, UserPhotos.IDCardPortrait.fileName)
         params.put(UserPhotos.frontFilePath.fileName, UserPhotos.IDCardFrontSide.fileName)
         params.put(UserPhotos.backFilePath.fileName, UserPhotos.IDCardBackSide.fileName)
+
+        present(presenter = presenter, className = DocumentVerifyActivity::class.java, isStarting = false, params = params)
+    }
+
+    fun verifyPermit(presenter: BaseActivity, userId: Long) {
+        val params = HashMap<String, String>()
+        params.put(AppConstants.userId.key, userId.toString())
+
 
         present(presenter = presenter, className = DocumentVerifyActivity::class.java, isStarting = false, params = params)
     }

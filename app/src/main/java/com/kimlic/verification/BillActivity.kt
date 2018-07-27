@@ -1,11 +1,13 @@
 package com.kimlic.verification
 
 import android.os.Bundle
+import android.util.Log
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.utils.AppConstants
 import com.kimlic.verification.fragments.PortraitPhotoFragment
 import com.kimlic.utils.BaseCallback
+import com.kimlic.utils.PhotoCallback
 import com.kimlic.utils.UserPhotos
 import com.kimlic.verification.fragments.DocumentBillFragment
 
@@ -34,11 +36,17 @@ class BillActivity : BaseActivity() {
     private fun setupUI() {
         initFragments()
 
-        billFragment.setCallback(object : BaseCallback {
-            override fun callback() {
-                finish()
+        billFragment.setCallback(object : PhotoCallback {
+            override fun callback(fileName: String) {
+                Log.d("TAGBILL", fileName)
             }
         })
+
+//        billFragment.setCallback(object : BaseCallback {
+//            override fun callback() {
+//                finish()
+//            }
+//        })
         showFragment(R.id.container, billFragment, DocumentBillFragment.FRAGMENT_KEY)
     }
 

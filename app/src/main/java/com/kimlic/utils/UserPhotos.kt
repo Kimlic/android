@@ -16,9 +16,9 @@ enum class UserPhotos(val fileName: String) {
     driverLicensFrontSide("licenseFront.jpg"),
     driverLicensBackSide("licenseBack.jpg"),
 
-    IDCardPortrait("idPortrait.jpg"),
-    IDCardFrontSide("idFront.jpg"),
-    IDCardBackSide("idBack.jpg"),
+    IDCardPortrait("ldPortrait.jpg"),
+    IDCardFrontSide("ldFront.jpg"),
+    IDCardBackSide("ldBack.jpg"),
 
     bill("bill.jpg"),
 

@@ -24,6 +24,7 @@ import com.kimlic.KimlicApp
 import com.kimlic.R
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.BaseCallback
+import com.kimlic.utils.PhotoCallback
 import kotlinx.android.synthetic.main.fragment_document_portrait.*
 import java.io.FileOutputStream
 
@@ -46,7 +47,8 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
     private lateinit var camera: Camera
     private var kimlicSurfaceView: KimlicSurfaceView? = null
     private lateinit var filePath: String
-    private lateinit var callback: BaseCallback
+    //private lateinit var callback: BaseCallback
+    private lateinit var callback: PhotoCallback
 
     // Live
 
@@ -89,7 +91,8 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
 
     // Public
 
-    fun setCallback(callback: BaseCallback) {
+    //    fun setCallback(callback: BaseCallback) {
+    fun setCallback(callback: PhotoCallback) {
         this.callback = callback
     }
 
@@ -169,7 +172,8 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
         confirmBt.setOnClickListener {
             closeCamera()
             savePicture(filePath, data)
-            callback.callback()
+            //callback.callback()
+            callback.callback(filePath)
         }
 
         retakelBt.setOnClickListener {

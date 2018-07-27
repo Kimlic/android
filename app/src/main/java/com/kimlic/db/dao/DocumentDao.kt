@@ -2,14 +2,14 @@ package com.kimlic.db.dao
 
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
-import android.arch.persistence.room.OnConflictStrategy.*
+import android.arch.persistence.room.OnConflictStrategy.REPLACE
 import com.kimlic.db.entity.Document
 
 @Dao
-interface DocumentDao{
+interface DocumentDao {
 
     @Insert(onConflict = REPLACE)
-    fun insert(document: Document)
+    fun insert(document: Document): Long
 
     @Update
     fun update(document: Document)

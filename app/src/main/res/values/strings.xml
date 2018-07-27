@@ -47,7 +47,6 @@
   <string name="upper_arc">Upper arc</string>
   <string name="face_contour">Face contour</string>
   <string name="capture">Capture</string>
-  <string name="id_card">ID card</string>
   <string name="id_back_side">ID back side</string>
   <string name="scanning">Scanning…</string>
   <string name="show_the_back_side_your_id_card">Show the Back side your ID-Card</string>
@@ -140,7 +139,6 @@
   <string name="first_name">First Name</string>
   <string name="last_name">Last Name</string>
   <string name="cancel">Cancel</string>
-  <string name="passport">Passport</string>
   <string name="drivers_license">Drivers License</string>
   <string name="document">Document</string>
   <string name="choose_your_document_type">Choose your Document type</string>
@@ -221,6 +219,6 @@
   <string name="show">Show</string>
   <string name="th_word">%1$dth word</string>
   <string name="you_have_security_risks">You have security risks</string>
-
-
+  <string name="passport">Passport</string>
+  <string name="id_card">ID card</string>
 </resources>

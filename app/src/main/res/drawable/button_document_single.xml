@@ -5,24 +5,23 @@
   <item android:state_pressed="true">
     <shape android:shape="rectangle">
       <corners
-        android:bottomLeftRadius="12dp"
-        android:bottomRightRadius="12dp"/>
+        android:radius="12dp"/>
       <gradient
         android:angle="270"
         android:endColor="#505050"
-        android:startColor="#646464"/>
+        android:startColor="#525252"/>
     </shape>
   </item>
 
   <item android:state_pressed="false">
-    <shape android:shape="rectangle">
+    <shape
+      android:shape="rectangle">
       <corners
-        android:bottomLeftRadius="12dp"
-        android:bottomRightRadius="12dp"/>
+        android:radius="12dp"/>
       <gradient
         android:angle="270"
         android:endColor="#505050"
-        android:startColor="#646464"/>
+        android:startColor="#525252"/>
     </shape>
   </item>
 

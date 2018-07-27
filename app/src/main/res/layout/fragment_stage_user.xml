@@ -108,12 +108,14 @@
     app:layout_constraintTop_toBottomOf="@id/nameItem"/>
 
   <ScrollView
+    android:id="@+id/scrollView"
     android:layout_width="wrap_content"
-    android:layout_height="300dp"
+    android:layout_height="400dp"
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
     android:orientation="vertical"
-
+    android:overScrollMode="never"
+    android:scrollbars="none"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
@@ -162,43 +164,14 @@
         android:id="@+id/contactsRecycler"
         android:layout_width="@dimen/content_width"
         android:layout_height="wrap_content"
-        android:overScrollMode="never"/>
+        android:overScrollMode="always"/>
 
+      <!--<View-->
+      <!--android:layout_width="@dimen/content_width"-->
+      <!--android:layout_height="1dp"-->
+      <!--android:background="@color/lightBlue"/>-->
 
-      <View
-        android:layout_width="@dimen/content_width"
-        android:layout_height="1dp"
-        android:background="@color/lightBlue"/>
-
-      <RelativeLayout
-        android:id="@+id/idItem"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:focusableInTouchMode="false">
-
-        <ImageView
-          android:id="@+id/idIv"
-          style="@style/DetailsItemTextView"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:background="@drawable/ic_assignment_ind_dark_24dp"/>
-
-        <TextView
-          android:id="@+id/idTv"
-          style="@style/DetailsItemTextView"
-          android:layout_marginStart="32dp"
-          android:text="@string/verify_your_id"/>
-
-        <ImageView
-          android:id="@+id/idArrow"
-          style="@style/DetailsItemShevron"/>
-
-      </RelativeLayout>
-
-      <View
-        android:layout_width="@dimen/content_width"
-        android:layout_height="1dp"
-        android:background="@color/lightBlue"/>
+      <!--Address-->
 
       <RelativeLayout
         android:id="@+id/addressItem"
@@ -229,6 +202,37 @@
         android:layout_width="@dimen/content_width"
         android:layout_height="1dp"
         android:background="@color/lightBlue"/>
+
+      <android.support.v7.widget.RecyclerView
+        android:id="@+id/documentRecycler"
+        android:layout_width="@dimen/content_width"
+        android:layout_height="wrap_content"
+        android:overScrollMode="always"/>
+
+      <!--<RelativeLayout-->
+      <!--android:id="@+id/idItem"-->
+      <!--android:layout_width="match_parent"-->
+      <!--android:layout_height="48dp"-->
+      <!--android:focusableInTouchMode="false">-->
+
+      <!--<ImageView-->
+      <!--android:id="@+id/idIv"-->
+      <!--style="@style/DetailsItemTextView"-->
+      <!--android:layout_width="wrap_content"-->
+      <!--android:layout_height="wrap_content"-->
+      <!--android:background="@drawable/ic_assignment_ind_dark_24dp"/>-->
+
+      <!--<TextView-->
+      <!--android:id="@+id/idTv"-->
+      <!--style="@style/DetailsItemTextView"-->
+      <!--android:layout_marginStart="32dp"-->
+      <!--android:text="@string/verify_your_id"/>-->
+
+      <!--<ImageView-->
+      <!--android:id="@+id/idArrow"-->
+      <!--style="@style/DetailsItemShevron"/>-->
+
+      <!--</RelativeLayout>-->
 
     </LinearLayout>
 

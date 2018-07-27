@@ -45,48 +45,107 @@
     android:text="@string/choose_your_document_type"
     android:textColor="@android:color/white"
     android:textSize="@dimen/subtitle_text_size"
-    app:layout_constraintBottom_toTopOf="@+id/passportBt"
+    app:layout_constraintBottom_toTopOf="@+id/rootLl"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"/>
 
-  <Button
-    android:id="@+id/passportBt"
-    android:layout_width="@dimen/content_width"
-    android:layout_height="@dimen/button_height"
-    android:background="@drawable/button_document_upper"
-    android:text="@string/passport"
-    android:textAllCaps="false"
-    android:textColor="@android:color/white"
-    android:textSize="@dimen/button_text_size"
-    app:layout_constraintBottom_toTopOf="@+id/driversBt"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"/>
-
-  <Button
-    android:id="@+id/driversBt"
-    android:layout_width="@dimen/content_width"
-    android:layout_height="@dimen/button_height"
-    android:background="@drawable/button_document_middle"
-    android:text="@string/drivers_license"
-    android:textAllCaps="false"
-    android:textColor="@android:color/white"
-    android:textSize="@dimen/button_text_size"
-    app:layout_constraintBottom_toTopOf="@id/idCardBt"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"/>
-
-  <Button
-    android:id="@+id/idCardBt"
-    android:layout_width="@dimen/content_width"
-    android:layout_height="@dimen/button_height"
+  <LinearLayout
+    android:id="@+id/rootLl"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:layout_marginBottom="32dp"
-    android:background="@drawable/button_document_lower"
-    android:text="@string/id_card"
-    android:textAllCaps="false"
-    android:textColor="@android:color/white"
-    android:textSize="@dimen/button_text_size"
-    app:layout_constraintBottom_toBottomOf="parent"
+    android:orientation="vertical"
+    app:layout_constraintBottom_toBottomOf="@+id/container"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"/>
+    app:layout_constraintStart_toStartOf="parent">
+
+    <Button
+      android:id="@+id/firstBt"
+      android:layout_width="@dimen/content_width"
+      android:layout_height="@dimen/button_height"
+      android:background="@drawable/button_document_upper"
+      android:textAllCaps="false"
+      android:textColor="@android:color/white"
+      android:textSize="@dimen/button_text_size"/>
+
+    <Button
+      android:id="@+id/secondBt"
+      android:layout_width="@dimen/content_width"
+      android:layout_height="@dimen/button_height"
+      android:background="@drawable/button_document_middle"
+      android:textAllCaps="false"
+      android:textColor="@android:color/white"
+      android:textSize="@dimen/button_text_size"/>
+
+    <Button
+      android:id="@+id/thirdBt"
+      android:layout_width="@dimen/content_width"
+      android:layout_height="@dimen/button_height"
+      android:background="@drawable/button_document_middle"
+      android:textAllCaps="false"
+      android:textColor="@android:color/white"
+      android:textSize="@dimen/button_text_size"/>
+
+    <Button
+      android:id="@+id/fourthBt"
+      android:layout_width="@dimen/content_width"
+      android:layout_height="@dimen/button_height"
+      android:background="@drawable/button_document_lower"
+      android:textAllCaps="false"
+      android:textColor="@android:color/white"
+      android:textSize="@dimen/button_text_size"/>
+
+    <Button
+      android:id="@+id/fifthBt"
+      android:layout_width="@dimen/content_width"
+      android:layout_height="@dimen/button_height"
+      android:visibility="gone"
+      android:background="@drawable/button_document_single"
+      android:textAllCaps="false"
+      android:textColor="@android:color/white"
+      android:textSize="@dimen/button_text_size"/>
+
+  </LinearLayout>
+
+
+  <!--<Button-->
+  <!--android:id="@+id/secondBt"-->
+  <!--android:layout_width="@dimen/content_width"-->
+  <!--android:layout_height="@dimen/button_height"-->
+  <!--android:background="@drawable/button_document_middle"-->
+  <!--android:text="@string/drivers_license"-->
+  <!--android:textAllCaps="false"-->
+  <!--android:textColor="@android:color/white"-->
+  <!--android:textSize="@dimen/button_text_size"-->
+  <!--app:layout_constraintBottom_toTopOf="@id/thirdBt"-->
+  <!--app:layout_constraintEnd_toEndOf="parent"-->
+  <!--app:layout_constraintStart_toStartOf="parent"/>-->
+
+  <!--<Button-->
+  <!--android:id="@+id/secondBt"-->
+  <!--android:layout_width="@dimen/content_width"-->
+  <!--android:layout_height="@dimen/button_height"-->
+  <!--android:background="@drawable/button_document_middle"-->
+  <!--android:text="@string/drivers_license"-->
+  <!--android:textAllCaps="false"-->
+  <!--android:textColor="@android:color/white"-->
+  <!--android:textSize="@dimen/button_text_size"-->
+  <!--app:layout_constraintBottom_toTopOf="@id/thirdBt"-->
+  <!--app:layout_constraintEnd_toEndOf="parent"-->
+  <!--app:layout_constraintStart_toStartOf="parent"/>-->
+
+  <!--<Button-->
+  <!--android:id="@+id/thirdBt"-->
+  <!--android:layout_width="@dimen/content_width"-->
+  <!--android:layout_height="@dimen/button_height"-->
+  <!--android:layout_marginBottom="32dp"-->
+  <!--android:background="@drawable/button_document_single"-->
+  <!--android:text="@string/id_card"-->
+  <!--android:textAllCaps="false"-->
+  <!--android:textColor="@android:color/white"-->
+  <!--android:textSize="@dimen/button_text_size"-->
+  <!--app:layout_constraintBottom_toBottomOf="parent"-->
+  <!--app:layout_constraintEnd_toEndOf="parent"-->
+  <!--app:layout_constraintStart_toStartOf="parent"/>-->
 
 </android.support.constraint.ConstraintLayout>

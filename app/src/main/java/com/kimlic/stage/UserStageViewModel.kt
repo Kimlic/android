@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModel
 import com.kimlic.db.KimlicDB
 import com.kimlic.db.entity.Address
 import com.kimlic.db.entity.Contact
+import com.kimlic.db.entity.Document
 import com.kimlic.db.entity.User
 import com.kimlic.preferences.Prefs
 
@@ -17,15 +18,17 @@ class UserStageViewModel : ViewModel() {
     private var userLiveData: LiveData<User>?
     private var userContactsLiveData: LiveData<List<Contact>>
     private var addressLiveData: LiveData<Address>
+    private var documentsLiveData: LiveData<List<Document>>
 
     // Init
 
     init {
         risksLiveData = object : MutableLiveData<Boolean>() {}
         risksLiveData!!.setValue((Prefs.isPasscodeEnabled && Prefs.isTouchEnabled))
-        userLiveData = KimlicDB.getInstance()!!.userDao().selectUserLive(Prefs.currentId)
+        userLiveData = KimlicDB.getInstance()!!.userDao().selectLive(Prefs.currentId)
         userContactsLiveData = KimlicDB.getInstance()!!.contactDao().selectLive(userId = Prefs.currentId)
         addressLiveData = KimlicDB.getInstance()!!.addressDao().selectLive(userId = Prefs.currentId)
+        documentsLiveData = KimlicDB.getInstance()!!.documentDao().selectByUserIdLive(Prefs.currentId)
     }
 
     // Live
@@ -52,5 +55,9 @@ class UserStageViewModel : ViewModel() {
 
     fun getAddressLiveData(): LiveData<Address> {
         return addressLiveData
+    }
+
+    fun getDocumentsLiveData(): LiveData<List<Document>> {
+        return documentsLiveData
     }
 }

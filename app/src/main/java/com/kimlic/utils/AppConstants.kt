@@ -4,6 +4,7 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
     appPreferences("KIMLIC_PREFERENCES"),
 
     auth("AUTH"),
+    userId("USERID"),
 
     passcode("PASSCODE"),
 
@@ -28,9 +29,10 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
     // Document type
 
     documentType("DOCUMENT_TYPE"),
-    documentPassport("PASSPORT"),
-    documentLicense("LICENSE"),
-    documentID("ID"),
+    documentPassport("passport"),
+    documentLicense("license"),
+    documentID("id"),
+    documentPermit("permit"),
     documentToVerify("DOCUMENT_TO_VERIFY"),
 
     // File path

@@ -12,9 +12,9 @@ import com.kimlic.db.entity.*
 abstract class KimlicDB : RoomDatabase() {
 
     abstract fun userDao(): UserDao
-    abstract fun documentDao(): DocumentDao
     abstract fun addressDao(): AddressDao
     abstract fun contactDao(): ContactDao
+    abstract fun documentDao(): DocumentDao
     abstract fun photoDao(): PhotoDao
 
     companion object {

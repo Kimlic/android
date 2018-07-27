@@ -3,5 +3,5 @@ package com.kimlic.stage.adapter
 import android.view.View
 
 interface OnStageItemClick {
-    fun onClick(view: View, position: Int, type: String, approved: Boolean)
+    fun onClick(view: View, position: Int, type: String, approved: Boolean = false, state: String = "")
 }

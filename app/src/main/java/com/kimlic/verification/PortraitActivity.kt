@@ -11,6 +11,7 @@ import com.kimlic.db.KimlicDB
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.BaseCallback
+import com.kimlic.utils.PhotoCallback
 import com.kimlic.utils.UserPhotos
 import com.kimlic.verification.fragments.PortraitPhotoFragment
 import java.io.File
@@ -43,16 +44,26 @@ class PortraitActivity : BaseActivity() {
         fileName = Prefs.currentId.toString() + UserPhotos.stagePortrait.fileName
         initFragments()
 
-        portraitFragment.setCallback(object : BaseCallback {
-            override fun callback() {
-                val user1 = KimlicDB.getInstance()!!.userDao().select(Prefs.currentId)
-                user1.portraitFile = fileName // Name of user by it's id
-                KimlicDB.getInstance()!!.userDao().update(user = user1)
-
+        portraitFragment.setCallback(object : PhotoCallback {
+            override fun callback(fileName: String) {
+                val user = KimlicDB.getInstance()!!.userDao().select(Prefs.currentId)
+                user.portraitFile = user.accountAddress + fileName
+                KimlicDB.getInstance()!!.userDao().update(user)
                 createPhotoPreview(fileName)
                 finish()
             }
         })
+
+//        portraitFragment.setCallback(object : BaseCallback {
+//            override fun callback() {
+//                val user1 = KimlicDB.getInstance()!!.userDao().select(Prefs.currentId)
+//                user1.portraitFile = fileName // Name of user by it's id
+//                KimlicDB.getInstance()!!.userDao().update(user = user1)
+//
+//                createPhotoPreview(fileName)
+//                finish()
+//            }
+//        })
         showFragment(R.id.container, portraitFragment, PortraitPhotoFragment.FRAGMENT_KEY)
     }
 
@@ -71,7 +82,7 @@ class PortraitActivity : BaseActivity() {
         val height = resizedBitmap.height
 
         val cropedBitmap = Bitmap.createBitmap(resizedBitmap, (0.15 * vidth).toInt(), (0.12 * height).toInt(), (0.75 * vidth).toInt(), (0.7 * height).toInt())
-        saveBitmap("preview_"+filePath, cropedBitmap)
+        saveBitmap("preview_" + filePath, cropedBitmap)
     }
 
     private fun getResizedBitmap(bm: Bitmap, newWidth: Int, newHeight: Int, angel: Float, isNecessaryToKeepOrig: Boolean): Bitmap {

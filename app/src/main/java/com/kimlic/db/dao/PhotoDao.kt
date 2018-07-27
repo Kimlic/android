@@ -9,7 +9,7 @@ import com.kimlic.db.entity.Photo
 interface PhotoDao {
 
     @Insert(onConflict = REPLACE)
-    fun insert(photo: Photo): Long
+    fun insert(photos: List<Photo>): List<Long>
 
     @Update
     fun update(photo: Photo): Int

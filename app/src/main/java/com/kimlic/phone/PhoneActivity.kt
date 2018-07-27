@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.text.Editable
+import android.util.Log
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
@@ -127,17 +128,18 @@ class PhoneActivity : BaseActivity() {
 
             if (receiptPhone != null && receiptPhone.transactionHash.isNotEmpty()) {
 
-                val headers = mapOf(Pair("account-address", KimlicDB.getInstance()!!.userDao().select(Prefs.currentId).walletAddress))
+                val headers = mapOf(Pair("account-address", KimlicDB.getInstance()!!.userDao().select(Prefs.currentId).accountAddress))
                 val params = mapOf(Pair("phone", phone))
 
                 val request = KimlicRequest(Request.Method.POST, QuorumURL.phoneVerify.url, headers, params, Response.Listener { response ->
                     val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
-
+                    Log.d("TAGRESPONSE", "responce = "+response)
                     if (responceCode.startsWith("2")) {
                         hideProgress();PresentationManager.phoneNumberVerify(this, phoneEt.text.toString())
                     } else
                         unableToProceed()
                 }, Response.ErrorListener {
+                    Log.d("TAGRESPONSE", "responce = "+it.networkResponse.statusCode)
                     unableToProceed()
                 })
                 VolleySingleton.getInstance(this@PhoneActivity).addToRequestQueue(request)

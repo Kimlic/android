@@ -85,7 +85,7 @@ class EmailVerifyActivity : BaseActivity() {
             code = StringBuilder()
             digitsList.forEach { code.append(it.text.toString()) }
 
-            val walletAddress = KimlicDB.getInstance()!!.userDao().select(Prefs.currentId).walletAddress
+            val walletAddress = KimlicDB.getInstance()!!.userDao().select(Prefs.currentId).accountAddress
             val params = mapOf(Pair("code", code.toString()))
             val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", walletAddress)
 

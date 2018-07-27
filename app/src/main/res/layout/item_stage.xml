@@ -20,8 +20,7 @@
     style="@style/DetailsItemTextView"
     android:layout_marginStart="32dp"
     android:gravity="center"
-    android:text="My mobile phone"
-    tools:text="+372 504953839"/>
+    tools:text="Item description"/>
 
   <ImageView
     android:id="@+id/arrowIv"

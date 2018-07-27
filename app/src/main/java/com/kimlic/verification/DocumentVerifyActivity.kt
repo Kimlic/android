@@ -4,10 +4,14 @@ import android.os.Bundle
 import android.util.Log
 import com.kimlic.BaseActivity
 import com.kimlic.R
+import com.kimlic.db.KimlicDB
+import com.kimlic.db.entity.Document
+import com.kimlic.db.entity.Photo
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.BaseCallback
+import com.kimlic.utils.PhotoCallback
 import com.kimlic.utils.UserPhotos
 import com.kimlic.verification.fragments.DocumentBackFragment
 import com.kimlic.verification.fragments.DocumentFrontFragment
@@ -26,6 +30,13 @@ class DocumentVerifyActivity : BaseActivity() {
     private lateinit var documentBackSideFilePath: String
     private lateinit var documentType: String
     private val defaultPath = UserPhotos.default.fileName
+
+    private lateinit var portraitPhoto: Photo
+    private lateinit var documentFrontPhoto: Photo
+    private lateinit var documentBackPhoto: Photo
+
+
+    //private val files = mutableListOf<>()
 
     // Life
 
@@ -47,39 +58,83 @@ class DocumentVerifyActivity : BaseActivity() {
 
     private fun setupUI() {
         documentType = intent.extras.getString(AppConstants.documentType.key, "")
+        val userId = intent.extras.getString(AppConstants.userId.key, "0").toLong()
         initFragmentas()
+
+        val document = Document(userId = userId, type = documentType)
+
+
+        val documentId = KimlicDB.getInstance()!!.documentDao().insert(document = document)
 
         showFragment(R.id.container, portraitFragment, PortraitPhotoFragment.FRAGMENT_KEY)
 
-        portraitFragment.setCallback(object : BaseCallback {
-            override fun callback() {
+//        portraitFragment.setCallback(object : BaseCallback {
+//            override fun callback() {
+//                showFragment(R.id.container, frontFragment, DocumentFrontFragment.FRAGMENT_KEY)
+//            }
+//        })
+
+        portraitFragment.setCallback(object : PhotoCallback {
+            override fun callback(fileName: String) {
+                Log.d("TAG", fileName)
+                portraitPhoto = Photo(documentId = documentId, file = fileName, side = "portrait")
                 showFragment(R.id.container, frontFragment, DocumentFrontFragment.FRAGMENT_KEY)
             }
+
         })
-        frontFragment.setCallback(object : BaseCallback {
-            override fun callback() {
+//        frontFragment.setCallback(object : BaseCallback {
+//            override fun callback() {
+//                showFragment(R.id.container, backFragment, DocumentBackFragment.FRAGMENT_KEY)
+//            }
+//        })
+
+        frontFragment.setCallback(object : PhotoCallback {
+            override fun callback(fileName: String) {
+                Log.d("TAG", fileName)
+                documentFrontPhoto = Photo(documentId = documentId, file = fileName, side = "front")
                 showFragment(R.id.container, backFragment, DocumentBackFragment.FRAGMENT_KEY)
             }
         })
-        backFragment.setCallback(object : BaseCallback {
-            override fun callback() {
-                Prefs.documentToverify = documentType
+
+
+//        backFragment.setCallback(object : BaseCallback {
+//            override fun callback() {
+//                Prefs.documentToverify = documentType
+//
+//                val document = Document(userId = Prefs.currentId)
+//
+//
+//                successfull()
+//            }
+//        })
+
+        backFragment.setCallback(object : PhotoCallback {
+            override fun callback(fileName: String) {
+                Log.d("TAG", fileName)
+                documentBackPhoto = Photo(documentId = documentId, file = fileName, side = "back")
+
+                KimlicDB.getInstance()!!.documentDao().insert(document)
+                //KimlicDB.getInstance()!!.photoDao().insert(photos = listOf(portraitPhoto))//, documentFrontPhoto, documentBackPhoto))
                 successfull()
             }
         })
-
     }
 
     private fun initFragmentas() {
-        portraitFilePath = intent.extras.getString(UserPhotos.portraitFilePath.fileName, defaultPath)
-        documentFrontSideFilePath = intent.extras.getString(UserPhotos.frontFilePath.fileName, defaultPath)
-        documentBackSideFilePath = intent.extras.getString(UserPhotos.backFilePath.fileName, defaultPath)
+        val userId = intent.extras.getString(AppConstants.userId.key)
+
+        val accountAddress = KimlicDB.getInstance()!!.userDao().select(Prefs.currentId).accountAddress
+
+        portraitFilePath = accountAddress + "_" + intent.extras.getString(UserPhotos.portraitFilePath.fileName, defaultPath)
+        documentFrontSideFilePath = accountAddress + "_" + intent.extras.getString(UserPhotos.frontFilePath.fileName, defaultPath)
+        documentBackSideFilePath = accountAddress + "_" + intent.extras.getString(UserPhotos.backFilePath.fileName, defaultPath)
 
         val portraitBundle = Bundle()
         val frontBundle = Bundle()
         val backBundle = Bundle()
 
         portraitBundle.putInt(AppConstants.cameraType.key, AppConstants.cameraFront.intKey)
+
         portraitBundle.putString(AppConstants.filePathRezult.key, portraitFilePath)
         frontBundle.putString(AppConstants.filePathRezult.key, documentFrontSideFilePath)
         backBundle.putString(AppConstants.filePathRezult.key, documentBackSideFilePath)
@@ -96,6 +151,7 @@ class DocumentVerifyActivity : BaseActivity() {
                 PresentationManager.stage(this@DocumentVerifyActivity)
             }
         })
+
         fragment.show(supportFragmentManager, VerifySuccessfullFragment.FRAGMENT_KEY)
     }
 

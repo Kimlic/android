@@ -8,8 +8,7 @@ import android.arch.persistence.room.PrimaryKey
 
 @Entity(tableName = "photo",
         foreignKeys = arrayOf(
-                ForeignKey(entity = Document::class, parentColumns = arrayOf("id"), childColumns = arrayOf("document_id"), onDelete = CASCADE, onUpdate = CASCADE),
-                ForeignKey(entity = Address::class, parentColumns = arrayOf("id"), childColumns = arrayOf("document_id"), onDelete = CASCADE, onUpdate = CASCADE)))
+                ForeignKey(entity = Document::class, parentColumns = arrayOf("id"), childColumns = arrayOf("document_id"), onDelete = CASCADE, onUpdate = CASCADE)))//,ForeignKey(entity = Address::class, parentColumns = arrayOf("id"), childColumns = arrayOf("document_id"), onDelete = CASCADE, onUpdate = CASCADE)))
 
 data class Photo(
         @PrimaryKey(autoGenerate = true)
