@@ -81,7 +81,6 @@ public class QuorumKimlic {
     }
 
     String data = "{\"" + type + "\": \"" + value + "\"}";
-    Log.e("AAAAAA", data);
     return mAccountStorageAdapter.setFieldMainData(data, type).sendAsync().get();
 //    return mAccountStorageAdapter.setAccountFieldMainData(UDID, verificationType).sendAsync().get();
   }
