@@ -4,6 +4,8 @@ enum class QuorumURL(val url: String) {
 
     config("https://mobile-api-dev.kimlic.com/api/config"),
 
+    profileSync("https://mobile-api-dev.kimlic.com/api/sync"),
+
     emailVerify("https://mobile-api-dev.kimlic.com/api/verifications/email"),
     emailVerifyApprove("https://mobile-api-dev.kimlic.com/api/verifications/email/approve"),
 

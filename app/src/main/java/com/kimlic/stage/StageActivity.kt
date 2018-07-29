@@ -1,13 +1,9 @@
 package com.kimlic.stage
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
-import android.util.Log
 import android.view.View
 import com.kimlic.BaseActivity
-import com.kimlic.BaseFragment
 import com.kimlic.R
 import com.kimlic.preferences.Prefs
 import kotlinx.android.synthetic.main.activity_stage.*
@@ -28,7 +24,6 @@ class StageActivity : BaseActivity() {
     }
 
     override fun onResume() {
-        Log.d("TAGMAINSTAGE", "onResume")
         super.onResume()
         risks()
     }
@@ -43,7 +38,6 @@ class StageActivity : BaseActivity() {
         initFragments()
         setupListners()
         profileBt.isSelected = true
-
         replaceStageFragment()
     }
 
@@ -52,15 +46,12 @@ class StageActivity : BaseActivity() {
             profileBt.isSelected = true; accountsBt.isSelected = false; profileLineV.visibility = View.VISIBLE; accountsLineV.visibility = View.INVISIBLE
             replaceStageFragment()
         }
-
         accountsBt.setOnClickListener {
             accountsBt.isSelected = true; profileBt.isSelected = false; accountsLineV.visibility = View.VISIBLE; profileLineV.visibility = View.INVISIBLE
             replaceAccountsFragment()
         }
-
         scanBt.setOnClickListener { showToast("Scan button is pressed") }
     }
-
     private fun initFragments() {
         userStageFragment = UserStageFragment.newInstance()
         accountsStageFragment = AccountsStageFragment.newInstance()

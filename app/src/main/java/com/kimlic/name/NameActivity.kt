@@ -1,5 +1,6 @@
 package com.kimlic.name
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.text.InputFilter
 import android.view.KeyEvent
@@ -13,6 +14,7 @@ import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.db.KimlicDB
 import com.kimlic.preferences.Prefs
+import com.kimlic.ProfileViewModel
 import com.kimlic.utils.BaseCallback
 
 import kotlinx.android.synthetic.main.activity_name.*
@@ -26,6 +28,10 @@ class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
     lateinit var name: EditText
     @BindView(R.id.lastNameEt)
     lateinit var lastName: EditText
+
+    // Variables
+
+    private lateinit var model: ProfileViewModel
 
     // Life
 
@@ -54,6 +60,8 @@ class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
     // Private
 
     private fun setupUI() {
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+
         saveBt.setOnClickListener {
             manageInput()
         }
@@ -69,7 +77,8 @@ class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
 
     private fun manageInput() {
         if (validFields()) {
-            updateName(nameEt.text.toString(), lastName.text.toString())
+            //updateName(nameEt.text.toString(), lastName.text.toString())
+            model.addUserName(Prefs.currentAccountAddress,nameEt.text.toString(), lastName.text.toString() )
             succesfull()
         }
     }

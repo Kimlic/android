@@ -20,6 +20,10 @@ interface AddressDao {
     @Query("SELECT * FROM address WHERE user_id=:userId LIMIT 1")
     fun selectLive(userId: Long): LiveData<Address>
 
+    // new
+    @Query("SELECT * FROM address INNER JOIN user ON address.user_id = user.id WHERE user.account_address =:accountAddress ")
+    fun selectLive(accountAddress: String): LiveData<Address>
+
     @Delete
     fun delete(address: Address)
 }

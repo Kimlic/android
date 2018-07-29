@@ -1,19 +1,20 @@
-package com.kimlic.verification
+package com.kimlic.documents
 
+import android.arch.lifecycle.ViewModelProviders
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.os.Bundle
 import com.kimlic.BaseActivity
 import com.kimlic.KimlicApp
+import com.kimlic.ProfileViewModel
 import com.kimlic.R
 import com.kimlic.db.KimlicDB
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.AppConstants
-import com.kimlic.utils.BaseCallback
 import com.kimlic.utils.PhotoCallback
 import com.kimlic.utils.UserPhotos
-import com.kimlic.verification.fragments.PortraitPhotoFragment
+import com.kimlic.documents.fragments.PortraitPhotoFragment
 import java.io.File
 import java.io.FileOutputStream
 
@@ -23,6 +24,7 @@ class PortraitActivity : BaseActivity() {
 
     private lateinit var portraitFragment: PortraitPhotoFragment
     private lateinit var fileName: String
+    private lateinit var model: ProfileViewModel
 
     // Life
 
@@ -41,33 +43,26 @@ class PortraitActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        fileName = Prefs.currentId.toString() + UserPhotos.stagePortrait.fileName
-        initFragments()
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+
+        val user = KimlicDB.getInstance()!!.userDao().select(Prefs.currentId)
+
+        fileName = Prefs.currentAccountAddress + "_" + UserPhotos.stagePortrait.fileName
+        initFragment()
 
         portraitFragment.setCallback(object : PhotoCallback {
             override fun callback(fileName: String) {
-                val user = KimlicDB.getInstance()!!.userDao().select(Prefs.currentId)
-                user.portraitFile = user.accountAddress + fileName
-                KimlicDB.getInstance()!!.userDao().update(user)
+                model.addUserPhoto(Prefs.currentAccountAddress, fileName)
                 createPhotoPreview(fileName)
+                //user.portraitFile = fileName
+                //KimlicDB.getInstance()!!.userDao().update(user)
                 finish()
             }
         })
-
-//        portraitFragment.setCallback(object : BaseCallback {
-//            override fun callback() {
-//                val user1 = KimlicDB.getInstance()!!.userDao().select(Prefs.currentId)
-//                user1.portraitFile = fileName // Name of user by it's id
-//                KimlicDB.getInstance()!!.userDao().update(user = user1)
-//
-//                createPhotoPreview(fileName)
-//                finish()
-//            }
-//        })
         showFragment(R.id.container, portraitFragment, PortraitPhotoFragment.FRAGMENT_KEY)
     }
 
-    private fun initFragments() {
+    private fun initFragment() {
         val bundle = Bundle()
         bundle.putInt(AppConstants.cameraType.key, AppConstants.cameraFront.intKey)
         bundle.putString(AppConstants.filePathRezult.key, fileName)
@@ -78,10 +73,10 @@ class PortraitActivity : BaseActivity() {
         val path = filesDir.toString() + "/" + filePath
         val bitmapOriginal = BitmapFactory.decodeFile(path)// absolute path
         val resizedBitmap = getResizedBitmap(bitmapOriginal, 1024, 768, -90f, true)
-        val vidth = resizedBitmap.width
+        val width = resizedBitmap.width
         val height = resizedBitmap.height
 
-        val cropedBitmap = Bitmap.createBitmap(resizedBitmap, (0.15 * vidth).toInt(), (0.12 * height).toInt(), (0.75 * vidth).toInt(), (0.7 * height).toInt())
+        val cropedBitmap = Bitmap.createBitmap(resizedBitmap, (0.15 * width).toInt(), (0.12 * height).toInt(), (0.75 * width).toInt(), (0.7 * height).toInt())
         saveBitmap("preview_" + filePath, cropedBitmap)
     }
 

@@ -221,4 +221,7 @@
   <string name="you_have_security_risks">You have security risks</string>
   <string name="passport">Passport</string>
   <string name="id_card">ID card</string>
+  <string name="life_permit">Life Permit</string>
+  <string name="add_new_document">Add new Document</string>
+  <string name="residence_permit">Residence Permit</string>
 </resources>

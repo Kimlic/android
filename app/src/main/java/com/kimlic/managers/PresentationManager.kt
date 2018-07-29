@@ -24,8 +24,7 @@ import com.kimlic.terms.TermsActivity
 import com.kimlic.tutorial.TutorialActivity
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.UserPhotos
-import com.kimlic.verification.*
-import org.spongycastle.asn1.ua.DSTU4145NamedCurves.params
+import com.kimlic.documents.*
 
 object PresentationManager {
 
@@ -139,7 +138,6 @@ object PresentationManager {
     fun verifyPassport(presenter: BaseActivity, userId: Long) {
         val params = HashMap<String, String>()
 
-        params.put(AppConstants.userId.key, userId.toString())
         params.put(AppConstants.documentType.key, AppConstants.documentPassport.key)
         params.put(UserPhotos.portraitFilePath.fileName, UserPhotos.passportPortrait.fileName)
         params.put(UserPhotos.frontFilePath.fileName, UserPhotos.passportFrontSide.fileName)
@@ -151,7 +149,6 @@ object PresentationManager {
     fun verifyDriverLicence(presenter: BaseActivity, userId: Long) {
         val params = HashMap<String, String>()
 
-        params.put(AppConstants.userId.key, userId.toString())
         params.put(AppConstants.documentType.key, AppConstants.documentLicense.key)
         params.put(UserPhotos.portraitFilePath.fileName, UserPhotos.driverLicensePortrait.fileName)
         params.put(UserPhotos.frontFilePath.fileName, UserPhotos.driverLicensFrontSide.fileName)
@@ -163,7 +160,6 @@ object PresentationManager {
     fun verifyIDCard(presenter: BaseActivity, userId: Long) {
         val params = HashMap<String, String>()
 
-        params.put(AppConstants.userId.key, userId.toString())
         params.put(AppConstants.documentType.key, AppConstants.documentID.key)
         params.put(UserPhotos.portraitFilePath.fileName, UserPhotos.IDCardPortrait.fileName)
         params.put(UserPhotos.frontFilePath.fileName, UserPhotos.IDCardFrontSide.fileName)
@@ -175,7 +171,6 @@ object PresentationManager {
     fun verifyPermit(presenter: BaseActivity, userId: Long) {
         val params = HashMap<String, String>()
 
-        params.put(AppConstants.userId.key, userId.toString())
         params.put(AppConstants.documentType.key, AppConstants.documentPermit.key)
         params.put(UserPhotos.portraitFilePath.fileName, UserPhotos.PermitFrontSide.fileName)
         params.put(UserPhotos.frontFilePath.fileName, UserPhotos.PermitFrontSide.fileName)

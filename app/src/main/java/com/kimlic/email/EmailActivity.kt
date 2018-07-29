@@ -13,6 +13,7 @@ import com.kimlic.BaseActivity
 import com.kimlic.BlockchainUpdatingFragment
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
+import com.kimlic.preferences.Prefs
 import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.quorum.crypto.Sha
 import com.kimlic.utils.QuorumURL
@@ -74,7 +75,7 @@ class EmailActivity : BaseActivity() {
                     val quorumKimlic = QuorumKimlic.getInstance()
                     var receiptEmail: TransactionReceipt? = null
                     try {
-                        receiptEmail = quorumKimlic.setAccountFieldMainData(Sha.sha256(email), "email")
+                        receiptEmail = quorumKimlic.setFieldMainData(Sha.sha256(email), "email")
                     } catch (e: ExecutionException) {
                         unableToProceed()
                     } catch (e: InterruptedException) {
@@ -83,7 +84,7 @@ class EmailActivity : BaseActivity() {
 
                     if (receiptEmail != null && receiptEmail.transactionHash.isNotEmpty()) {
                         val params = emptyMap<String, String>().toMutableMap(); params.put("email", email)
-                        val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", quorumKimlic.walletAddress)
+                        val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", Prefs.currentAccountAddress)
 
                         val request = KimlicRequest(Request.Method.POST, QuorumURL.emailVerify.url, headers, params, Response.Listener { response ->
                             hideProgress()

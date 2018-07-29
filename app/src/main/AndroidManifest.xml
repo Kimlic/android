@@ -114,7 +114,7 @@
 
     <activity
       android:label="Verify ID document"
-      android:name=".verification.DocumentVerifyChooseActivity"/>
+      android:name=".documents.DocumentVerifyChooseActivity"/>
 
     <activity
       android:label="Email"
@@ -126,7 +126,7 @@
 
     <activity
       android:label="Document Verify"
-      android:name=".verification.DocumentVerifyActivity"/>
+      android:name=".documents.DocumentVerifyActivity"/>
 
     <activity
       android:label="Address"
@@ -135,15 +135,15 @@
 
     <activity
       android:label="Portrait"
-      android:name=".verification.PortraitActivity"/>
+      android:name=".documents.PortraitActivity"/>
 
     <activity
       android:label="Document verify details"
-      android:name=".verification.VerifyDetails"/>
+      android:name=".documents.VerifyDetails"/>
 
     <activity
       android:label="Bill"
-      android:name=".verification.BillActivity"/>
+      android:name=".documents.BillActivity"/>
   </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.kimlic.verification
+package com.kimlic.documents
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -6,7 +6,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -18,7 +17,6 @@ import com.kimlic.db.entity.Document
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
 import kotlinx.android.synthetic.main.activity_verify_document.*
-import java.io.File
 
 class DocumentVerifyChooseActivity : BaseActivity(), View.OnClickListener {
 
@@ -54,16 +52,18 @@ class DocumentVerifyChooseActivity : BaseActivity(), View.OnClickListener {
     // Private
 
     private fun setupUI() {
-        types = mutableMapOf<String, String>(Pair("passport", this.getString(R.string.passport)), Pair("id", this.getString(R.string.id_card)), Pair("license", this.getString(R.string.drivers_license)), Pair("permit", "Life Permit"))
         model = ViewModelProviders.of(this).get(DocumentVerifyChooseViewModel::class.java)
-        //setupBackground(model.getUser().portraitFile)
+        setupBackground(model.getUser().portraitFile)
 
         model.getDocumentsLiveData().observe(this, object : Observer<List<Document>> {
             override fun onChanged(documents: List<Document>?) {
-                documents!!.forEach { types.remove(it.type) }
+                types = mutableMapOf(
+                        Pair("passport", getString(R.string.passport)),
+                        Pair("id", getString(R.string.id_card)),
+                        Pair("license", getString(R.string.drivers_license)),
+                        Pair("permit", getString(R.string.life_permit)))
 
-                Log.d("TAGDOCLIST", documents.toString())
-                // Log.d("TAGDOCLIST", documents.toString())
+                documents!!.forEach { types.remove(it.type) }
 
                 buttonsList.forEach { it.visibility = View.GONE }
 
@@ -104,15 +104,16 @@ class DocumentVerifyChooseActivity : BaseActivity(), View.OnClickListener {
     // Private helpers
 
     private fun setupBackground(fileName: String) {
-        val filePath = this.applicationContext.filesDir.toString() + "/" + fileName//UserPhotos.portraitFilePath.fileName
-        val file = File(filePath)
+        val filePath = this.applicationContext.filesDir.toString() + "/" + fileName
+        val bitmap = BitmapFactory.decodeFile(filePath)
 
-        rootIv.scaleType = ImageView.ScaleType.CENTER_CROP
-        if (file.exists()) rootIv.setImageBitmap(croped(fileName))
+        if(bitmap!=null){
+            rootIv.scaleType = ImageView.ScaleType.CENTER_CROP
+            rootIv.setImageBitmap(croped(bitmap))
+        }
     }
 
-    private fun croped(fileName: String): Bitmap {
-        val bitmap = BitmapFactory.decodeFile(this.applicationContext.filesDir.toString() + "/" + fileName)
+    private fun croped(bitmap: Bitmap): Bitmap {
         val rotated = rotateBitmap(bitmap, -90f)
         val width = rotated.width
         val height = rotated.height

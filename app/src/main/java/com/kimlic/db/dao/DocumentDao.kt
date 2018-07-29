@@ -20,6 +20,11 @@ interface DocumentDao {
     @Query("SELECT * FROM document WHERE user_id =:userId")
     fun selectByUserIdLive(userId: Long): LiveData<List<Document>>
 
+    // New
+
+    @Query("SELECT * FROM document INNER JOIN user on document.user_id = user_id WHERE user.account_address =:accountAddress")
+    fun selectLive(accountAddress: String): LiveData<List<Document>>
+
     @Query("DELETE FROM document WHERE id = :id")
     fun delete(id: Long)
 

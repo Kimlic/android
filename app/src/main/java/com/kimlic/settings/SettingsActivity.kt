@@ -1,6 +1,7 @@
 package com.kimlic.settings
 
 import android.app.Activity
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -9,6 +10,7 @@ import android.widget.LinearLayout
 import butterknife.ButterKnife
 import com.kimlic.BaseActivity
 import com.kimlic.KimlicApp
+import com.kimlic.ProfileViewModel
 import com.kimlic.R
 import com.kimlic.db.KimlicDB
 import com.kimlic.managers.PresentationManager
@@ -30,6 +32,7 @@ class SettingsActivity : BaseActivity() {
 
     private lateinit var settingsList: MutableList<Setting>
     private val adapter: SettingsAdapter
+    private lateinit var model: ProfileViewModel
 
     // Init
 
@@ -66,14 +69,12 @@ class SettingsActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         setupAdapter()
         signoutBt.setOnClickListener {
-//            KimlicDB.getInstance(this)!!.userDao().delete(Prefs.currentId)
-            KimlicDB.getInstance(this)!!.userDao().deleteAll()
+            model.dropUser(accountAddres = Prefs.currentAccountAddress)
             Prefs.clear()
             QuorumKimlic.destroyInstance()
-            //deleteUserPhotos()
-
             PresentationManager.signupRecovery(this)
         }
         deleteBt.setOnClickListener { showToast("delete id Clicked") }
@@ -136,10 +137,7 @@ class SettingsActivity : BaseActivity() {
     }
 
     private fun deleteUserPhotos() {
-        UserPhotos.values().forEach {
-            val file = File(KimlicApp.applicationContext().filesDir.toString() + "/" + it.fileName)
-            if (file.exists()) file.delete()
-        }
+
     }
 }
 

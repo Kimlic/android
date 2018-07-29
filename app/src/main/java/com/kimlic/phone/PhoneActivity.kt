@@ -1,12 +1,12 @@
 package com.kimlic.phone
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.text.Editable
-import android.util.Log
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
@@ -17,9 +17,9 @@ import com.kimlic.API.VolleySingleton
 import com.kimlic.BaseActivity
 import com.kimlic.BlockchainUpdatingFragment
 import com.kimlic.R
-import com.kimlic.db.KimlicDB
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
+import com.kimlic.ProfileViewModel
 import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.quorum.crypto.Sha
 import com.kimlic.utils.QuorumURL
@@ -40,6 +40,8 @@ class PhoneActivity : BaseActivity() {
     private var countryCode = 0
     private var blockchainUpdatingFragment: BlockchainUpdatingFragment? = null
     private var timer: CountDownTimer? = null
+
+    private lateinit var model: ProfileViewModel
 
     // Life
 
@@ -70,6 +72,7 @@ class PhoneActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
+        model = ViewModelProviders.of(this@PhoneActivity).get(ProfileViewModel::class.java)
         countriesList = countries()
 
         phoneEt.addTextChangedListener(object : PhoneNumberFormattingTextWatcher() {
@@ -119,7 +122,7 @@ class PhoneActivity : BaseActivity() {
             var receiptPhone: TransactionReceipt? = null
 
             try {
-                receiptPhone = quorumKimlic.setAccountFieldMainData(Sha.sha256(phone), "phone")
+                receiptPhone = quorumKimlic.setFieldMainData(Sha.sha256(phone), "phone")
             } catch (e: ExecutionException) {
                 unableToProceed()
             } catch (e: InterruptedException) {
@@ -128,18 +131,16 @@ class PhoneActivity : BaseActivity() {
 
             if (receiptPhone != null && receiptPhone.transactionHash.isNotEmpty()) {
 
-                val headers = mapOf(Pair("account-address", KimlicDB.getInstance()!!.userDao().select(Prefs.currentId).accountAddress))
+                val headers = mapOf(Pair("account-address", Prefs.currentAccountAddress))
                 val params = mapOf(Pair("phone", phone))
 
                 val request = KimlicRequest(Request.Method.POST, QuorumURL.phoneVerify.url, headers, params, Response.Listener { response ->
                     val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
-                    Log.d("TAGRESPONSE", "responce = "+response)
                     if (responceCode.startsWith("2")) {
                         hideProgress();PresentationManager.phoneNumberVerify(this, phoneEt.text.toString())
                     } else
                         unableToProceed()
                 }, Response.ErrorListener {
-                    Log.d("TAGRESPONSE", "responce = "+it.networkResponse.statusCode)
                     unableToProceed()
                 })
                 VolleySingleton.getInstance(this@PhoneActivity).addToRequestQueue(request)

@@ -1,15 +1,13 @@
-package com.kimlic.verification
+package com.kimlic.documents
 
 import android.os.Bundle
 import android.util.Log
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.utils.AppConstants
-import com.kimlic.verification.fragments.PortraitPhotoFragment
-import com.kimlic.utils.BaseCallback
 import com.kimlic.utils.PhotoCallback
 import com.kimlic.utils.UserPhotos
-import com.kimlic.verification.fragments.DocumentBillFragment
+import com.kimlic.documents.fragments.DocumentBillFragment
 
 class BillActivity : BaseActivity() {
 

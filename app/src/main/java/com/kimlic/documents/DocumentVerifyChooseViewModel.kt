@@ -1,4 +1,4 @@
-package com.kimlic.verification
+package com.kimlic.documents
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel

@@ -1,13 +1,13 @@
 package com.kimlic
 
 import android.app.Activity
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import com.android.volley.Request
 import com.android.volley.Response
 import com.kimlic.API.KimlicRequest
 import com.kimlic.API.VolleySingleton
-import com.kimlic.db.KimlicDB
 import com.kimlic.db.entity.User
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
@@ -18,6 +18,10 @@ import kotlinx.android.synthetic.main.activity_signup_recovery.*
 import org.json.JSONObject
 
 class SignupRecoveryActivity : BaseActivity() {
+
+    // Variables
+
+    private lateinit var model: ProfileViewModel
 
     // Constants
 
@@ -53,13 +57,14 @@ class SignupRecoveryActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+
         createBt.setOnClickListener {
             initNewUserRegistaration()
         }
         recoverBt.setOnClickListener {
             termsToAccept(TERMS_ACCEPT_RECOVERY_REQUEST_CODE)
         }
-
     }
 
     private fun termsToAccept(requestCode: Int) {
@@ -77,8 +82,10 @@ class SignupRecoveryActivity : BaseActivity() {
         val walletAddress = QuorumKimlic.getInstance().walletAddress
 
         // Init new user
+
         val user = User(Prefs.currentId, mnemonic = mnemonic, accountAddress = walletAddress)
-        KimlicDB.getInstance()!!.userDao().insert(user)
+        Prefs.currentAccountAddress = walletAddress
+        model.insertUser(user)
 
         // 2. Get entry point of the Quorum
         val headers = mapOf<String, String>(Pair("account-address", walletAddress))

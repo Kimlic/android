@@ -1,4 +1,4 @@
-package com.kimlic.verification
+package com.kimlic.documents
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -9,7 +9,6 @@ import com.kimlic.R
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.UserPhotos
 import kotlinx.android.synthetic.main.activity_verify_details.*
-import java.io.File
 
 class VerifyDetails : BaseActivity() {
 

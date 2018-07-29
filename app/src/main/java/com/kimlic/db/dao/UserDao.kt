@@ -17,8 +17,19 @@ interface UserDao {
     @Query("SELECT * FROM user WHERE id =:id ")
     fun select(id: Long): User
 
+    // new
+    @Query("SELECT * FROM user WHERE account_address =:accountAddress")
+    fun select(accountAddress: String): User
+
     @Query("SELECT * FROM user WHERE id =:id ")
     fun selectLive(id: Long): LiveData<User>
+
+    // new
+    @Query("SELECT * FROM user WHERE account_address =:accountAddress")
+    fun selectLive(accountAddress: String): LiveData<User>
+
+    @Query("DELETE FROM user WHERE account_address = :accountAddress")
+    fun delete(accountAddress: String)
 
     @Delete
     fun delete(user: User)

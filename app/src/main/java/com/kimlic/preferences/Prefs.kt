@@ -2,6 +2,7 @@ package com.kimlic.preferences
 
 import com.kimlic.KimlicApp
 import com.kimlic.utils.AppConstants
+import org.spongycastle.crypto.agreement.srp.SRP6Client
 
 object Prefs : BasePreferences(KimlicApp.applicationContext()) {
 
@@ -26,6 +27,7 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
         // User profile preferences
 
         auth = ""
+        currentAccountAddress = ""
         documentToverify = ""
     }
 
@@ -87,8 +89,11 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
         get() = getString(AppConstants.userAuth.key)
         set(value) = setString(AppConstants.userAuth.key, value)
 
-    val currentId: Long = 0L
+    var currentAccountAddress: String
+        get() = getString(AppConstants.accountAddress.key)
+        set(value) = setString(AppConstants.accountAddress.key, value)
 
+    val currentId: Long = 0L
 
     var documentToverify: String
         get() = getString(AppConstants.documentToVerify.key)

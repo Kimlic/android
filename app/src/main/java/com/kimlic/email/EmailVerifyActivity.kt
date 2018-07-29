@@ -1,5 +1,6 @@
 package com.kimlic.email
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.text.Editable
 import android.view.KeyEvent
@@ -15,11 +16,11 @@ import com.kimlic.API.KimlicRequest
 import com.kimlic.API.VolleySingleton
 import com.kimlic.BaseActivity
 import com.kimlic.R
-import com.kimlic.db.KimlicDB
 import com.kimlic.db.entity.Contact
 import com.kimlic.managers.PresentationManager
 import com.kimlic.phone.PhoneSuccessfullFragment
 import com.kimlic.preferences.Prefs
+import com.kimlic.ProfileViewModel
 import com.kimlic.utils.BaseCallback
 import com.kimlic.utils.QuorumURL
 import kotlinx.android.synthetic.main.activity_email_verify.*
@@ -37,6 +38,7 @@ class EmailVerifyActivity : BaseActivity() {
     private var currentHolder = 0
     private lateinit var code: StringBuilder
     private lateinit var email: String
+    private lateinit var model: ProfileViewModel
 
     // Life
 
@@ -56,6 +58,7 @@ class EmailVerifyActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         email = intent.extras.getString("email", "")
         titleTv.text = Editable.Factory.getInstance().newEditable(this.getString(R.string.code_sent_to_email, email))
 
@@ -85,9 +88,8 @@ class EmailVerifyActivity : BaseActivity() {
             code = StringBuilder()
             digitsList.forEach { code.append(it.text.toString()) }
 
-            val walletAddress = KimlicDB.getInstance()!!.userDao().select(Prefs.currentId).accountAddress
             val params = mapOf(Pair("code", code.toString()))
-            val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", walletAddress)
+            val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", Prefs.currentAccountAddress)
 
             val request = KimlicRequest(Request.Method.POST, QuorumURL.emailVerifyApprove.url, headers, params,
                     Response.Listener { response ->
@@ -111,8 +113,8 @@ class EmailVerifyActivity : BaseActivity() {
     }
 
     private fun insertEmail(email: String) {
-        val emailContact = Contact(userId = Prefs.currentId, value = email, type = "email", approved = true)
-        KimlicDB.getInstance()!!.contactDao().insert(emailContact)
+        val emailContact = Contact(value = email, type = "email", approved = true)
+        model.addUserContact(Prefs.currentAccountAddress, emailContact)
     }
 
     private fun pinEntered(): Boolean {

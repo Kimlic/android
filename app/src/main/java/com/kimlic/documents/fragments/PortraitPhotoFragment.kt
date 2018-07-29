@@ -1,6 +1,5 @@
-package com.kimlic.verification.fragments
+package com.kimlic.documents.fragments
 
-import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -10,17 +9,19 @@ import android.view.View
 import android.view.ViewGroup
 import com.kimlic.R
 import com.kimlic.camera.CameraBaseFragment
-import kotlinx.android.synthetic.main.fragment_document_card.*
+import com.kimlic.utils.AppConstants
+import kotlinx.android.synthetic.main.fragment_document_portrait.*
 
-class DocumentFrontFragment : CameraBaseFragment() {
+class PortraitPhotoFragment : CameraBaseFragment() {
 
     // Companion
 
     companion object {
         val FRAGMENT_KEY = this::class.java.simpleName
 
-        fun newInstance(bundle: Bundle? = Bundle()): DocumentFrontFragment {
-            val fragment = DocumentFrontFragment()
+        fun newInstance(bundle: Bundle = Bundle()): PortraitPhotoFragment {
+            val fragment = PortraitPhotoFragment()
+            bundle.putInt(AppConstants.cameraType.key, AppConstants.cameraFront.intKey)
             fragment.arguments = bundle
             return fragment
         }
@@ -29,7 +30,7 @@ class DocumentFrontFragment : CameraBaseFragment() {
     // Life
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_document_card, container, false)
+        return inflater.inflate(R.layout.fragment_document_portrait, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,23 +39,21 @@ class DocumentFrontFragment : CameraBaseFragment() {
         setupUI()
     }
 
-
     // Private
 
     private fun setupUI() {
         backBt.setOnClickListener { activity!!.finish() }
-        documentTypeIv.setBackgroundResource(R.drawable.ic_camera_screen_card_frontside_icon)
         setupTitle()
     }
 
     private fun setupTitle() {
-        val spanText = getString(R.string.front_side_of_your_drivers_license)
+        val spanText = getString(R.string.take_your_portrait_photo)
         val words = spanText.split(" ")
-        val spanEnd = words[0].length + words[1].length + 1
+        val spanStart = words[0].length + words[1].length + 2
         val spannableBuilder = SpannableStringBuilder(spanText)
-        val boldStyle = StyleSpan(Typeface.BOLD)
+        val boldStyle = StyleSpan(android.graphics.Typeface.BOLD)
 
-        spannableBuilder.setSpan(boldStyle, 0, spanEnd, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+        spannableBuilder.setSpan(boldStyle, spanStart, spanText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
         documenTitleTv.text = spannableBuilder
     }
 

@@ -1,4 +1,4 @@
-package com.kimlic.verification.fragments
+package com.kimlic.documents.fragments
 
 import android.graphics.Typeface
 import android.os.Bundle
@@ -12,15 +12,15 @@ import com.kimlic.R
 import com.kimlic.camera.CameraBaseFragment
 import kotlinx.android.synthetic.main.fragment_document_card.*
 
-class DocumentBackFragment : CameraBaseFragment() {
+class DocumentFrontFragment : CameraBaseFragment() {
 
     // Companion
 
     companion object {
         val FRAGMENT_KEY = this::class.java.simpleName
 
-        fun newInstance(bundle: Bundle? = Bundle()): DocumentBackFragment {
-            val fragment = DocumentBackFragment()
+        fun newInstance(bundle: Bundle? = Bundle()): DocumentFrontFragment {
+            val fragment = DocumentFrontFragment()
             fragment.arguments = bundle
             return fragment
         }
@@ -34,19 +34,19 @@ class DocumentBackFragment : CameraBaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         setupUI()
     }
-
-    // Prvate
+    // Private
 
     private fun setupUI() {
         backBt.setOnClickListener { activity!!.finish() }
-        documentTypeIv.setBackgroundResource(R.drawable.ic_camera_screen_card_backside_icon)
+        documentTypeIv.setBackgroundResource(R.drawable.ic_camera_screen_card_frontside_icon)
         setupTitle()
     }
 
     private fun setupTitle() {
-        val spanText = getString(R.string.back_side_your_drivers_license)
+        val spanText = getString(R.string.front_side_of_your_drivers_license)
         val words = spanText.split(" ")
         val spanEnd = words[0].length + words[1].length + 1
         val spannableBuilder = SpannableStringBuilder(spanText)
@@ -55,4 +55,5 @@ class DocumentBackFragment : CameraBaseFragment() {
         spannableBuilder.setSpan(boldStyle, 0, spanEnd, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
         documenTitleTv.text = spannableBuilder
     }
+
 }

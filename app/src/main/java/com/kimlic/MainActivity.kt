@@ -1,13 +1,16 @@
 package com.kimlic
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
 import com.android.volley.Request
 import com.android.volley.Response
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.kimlic.API.KimlicRequest
+import com.kimlic.API.SyncObject
 import com.kimlic.API.VolleySingleton
-import com.kimlic.db.KimlicDB
-import com.kimlic.db.entity.User
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
 import com.kimlic.quorum.QuorumKimlic
@@ -20,6 +23,7 @@ class MainActivity : BaseActivity() {
     // Variables
 
     private lateinit var splashFragment: SplashScreenFragment
+    private lateinit var model: ProfileViewModel
 
     // Life
 
@@ -34,10 +38,13 @@ class MainActivity : BaseActivity() {
         initFragment()
         splashScreenShow()
 
-        if (!Prefs.authenticated) {
-            //KimlicDB.getInstance()!!.userDao().insert(user = User(id = Prefs.currentId))
-            PresentationManager.stage(this)
-            //quorumRequest()
+//        val user = User(id = Prefs.currentId, accountAddress = "sdcadvaffvervevcxaervrvrisjdbfiedejbvkekrjbvkjbvb", mnemonic = "efvcvefvcefvcervrvrwgwrgvefveveverc")
+//        KimlicDB.getInstance()!!.userDao().insert(user)
+//        PresentationManager.stage(this)
+
+        if (Prefs.authenticated) {
+            Handler().post({ profileSynckRequest(Prefs.currentAccountAddress) })
+            quorumRequest()
         } else {
             object : CountDownTimer(3000, 3000) {
                 override fun onFinish() {
@@ -50,11 +57,16 @@ class MainActivity : BaseActivity() {
     }
 
     private fun quorumRequest() {
-        // 1. Create Quorum instance vith current user
-        val user = KimlicDB.getInstance()!!.userDao().select(id = Prefs.currentId)
+        model = ViewModelProviders.of(this@MainActivity).get(ProfileViewModel::class.java)
+        val user = model.getUser(Prefs.currentAccountAddress)
+        // 1. Create Quorum instance with current user
+        //val user = KimlicDB.getInstance()!!.userDao().select(id = Prefs.currentId)
+        //val user = KimlicDB.getInstance()!!.userDao().select(id = Prefs.currentId)
+
         val mnemonic = user.mnemonic
         QuorumKimlic.destroyInstance()
         QuorumKimlic.createInstance(mnemonic, this)//Create Quorum instance
+
         val walletAddress = user.accountAddress
 
         // 2. Get entry point of the Quorum
@@ -91,6 +103,28 @@ class MainActivity : BaseActivity() {
             errorPopup(getString(R.string.server_error))
         })
         VolleySingleton.getInstance(this@MainActivity).requestQueue.add(addressRequest)
+    }
+
+    private fun profileSynckRequest(accountAddress: String) {
+        val headers = mapOf(Pair("account-address", accountAddress))
+
+        val syncRequest = KimlicRequest(Request.Method.GET, QuorumURL.profileSync.url, headers, null,
+                Response.Listener {
+                    val responceCode = JSONObject(it).getJSONObject("meta").optString("code").toString()
+
+                    if (!responceCode.startsWith("2")) return@Listener
+
+                    val jsonToParce = JSONObject(it).getJSONObject("data").getJSONArray("data_fields").toString()
+                    val type = object : TypeToken<List<SyncObject>>() {}.type
+                    val approvedObjects: List<SyncObject> = Gson().fromJson(jsonToParce, type)
+                    val approved = approvedObjects.map { it.name }
+
+                    if (!approved.contains("phone")) model.dropUserContact(Prefs.currentAccountAddress, "phone")
+                    if (!approved.contains("email")) model.dropUserContact(Prefs.currentAccountAddress, "email")
+                },
+                Response.ErrorListener {})
+
+        VolleySingleton.getInstance(this@MainActivity).requestQueue.add(syncRequest)
     }
 
     private fun initFragment() {

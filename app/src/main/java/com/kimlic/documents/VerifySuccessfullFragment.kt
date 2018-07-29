@@ -1,4 +1,4 @@
-package com.kimlic.verification
+package com.kimlic.documents
 
 import android.os.Bundle
 import android.view.LayoutInflater

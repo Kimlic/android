@@ -5,6 +5,8 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
 
     auth("AUTH"),
     userId("USERID"),
+    accountAddress("ACCOUNT_ADDRESS"),
+
 
     passcode("PASSCODE"),
 

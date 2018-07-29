@@ -1,5 +1,6 @@
 package com.kimlic.address
 
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
@@ -19,10 +20,10 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.kimlic.BaseActivity
 import com.kimlic.R
-import com.kimlic.db.KimlicDB
 import com.kimlic.db.entity.Address
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
+import com.kimlic.ProfileViewModel
 import com.kimlic.utils.BaseCallback
 import kotlinx.android.synthetic.main.activity_address.*
 import java.io.File
@@ -39,6 +40,7 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
     private var mGoogleApiClient: GoogleApiClient? = null
     private val LAT_LNG_BOUNDS = LatLngBounds(LatLng(-40.0, -168.0), LatLng(71.0, 136.0))
     private var isSearchActive = false
+    private lateinit var model: ProfileViewModel
 
     // Life
 
@@ -93,6 +95,7 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
     // Private
 
     private fun setupUI() {
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         mGoogleApiClient = GoogleApiClient.Builder(this)
                 .addApi(Places.GEO_DATA_API)
                 .addApi(Places.PLACE_DETECTION_API)
@@ -133,8 +136,8 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
     }
 
     private fun manageInput() {
-        val addressDoc = Address(userId = Prefs.currentId, value = addressEt.text.toString())
-        KimlicDB.getInstance()!!.addressDao().insert(addressDoc)
+        val address = Address(userId = Prefs.currentId, value = addressEt.text.toString())
+        model.addUserAddress(Prefs.currentAccountAddress, address)
         successfull()
     }
 

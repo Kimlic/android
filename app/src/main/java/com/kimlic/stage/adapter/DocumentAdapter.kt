@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.kimlic.R
 import com.kimlic.db.entity.Document
+import com.kimlic.utils.AppConstants
 import kotlinx.android.synthetic.main.item_stage.view.*
 
 class DocumentAdapter : RecyclerView.Adapter<DocumentAdapter.DocumentHolder>() {
@@ -37,7 +38,7 @@ class DocumentAdapter : RecyclerView.Adapter<DocumentAdapter.DocumentHolder>() {
         documents.forEach {
             if (it.type.equals("passport")) tempList.add(it)
             if (it.type.equals("id")) tempList.add(it)
-            if (it.type.equals("lecense")) tempList.add(it)
+            if (it.type.equals("license")) tempList.add(it)
             if (it.type.equals("permit")) tempList.add(it)
         }
 
@@ -75,26 +76,25 @@ class DocumentAdapter : RecyclerView.Adapter<DocumentAdapter.DocumentHolder>() {
                 arrowIv.background = resources.getDrawable(Icons_.ARROW_WHITE.icon, null)
 
                 when (itemDocument.type) {
-                    "passport" -> {
+                    AppConstants.documentPassport.key -> {
                         contentTv.text = context.getString(R.string.passport)
                     }
-                    "id" -> {
+                    AppConstants.documentID.key -> {
                         contentTv.text = context.getString(R.string.id_card)
                     }
-                    "license" -> {
+                    AppConstants.documentLicense.key -> {
                         contentTv.text = context.getString(R.string.drivers_license)
                     }
-                    "permit" -> {
-                        contentTv.text = "Permit"
+                    AppConstants.documentPermit.key -> {
+                        contentTv.text = context.getString(R.string.residence_permit)
                     }
 
                     "add" -> {
-                        contentTv.text = "Add new Document"
+                        contentTv.text = context.getString(R.string.add_new_document)
                         contentTv.setTextColor(resources.getColor(R.color.lightBlue, null))
                         arrowIv.background = resources.getDrawable(Icons_.ARROW_BLUE.icon, null)
                         iconIv.background = resources.getDrawable(Icons_.ID_BLUE.icon, null)
                     }
-
                 }
             }
         }

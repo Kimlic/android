@@ -1,5 +1,6 @@
-package com.kimlic.verification.fragments
+package com.kimlic.documents.fragments
 
+import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -9,19 +10,17 @@ import android.view.View
 import android.view.ViewGroup
 import com.kimlic.R
 import com.kimlic.camera.CameraBaseFragment
-import com.kimlic.utils.AppConstants
-import kotlinx.android.synthetic.main.fragment_document_portrait.*
+import kotlinx.android.synthetic.main.fragment_document_card.*
 
-class PortraitPhotoFragment : CameraBaseFragment() {
+class DocumentBillFragment : CameraBaseFragment() {
 
     // Companion
 
     companion object {
         val FRAGMENT_KEY = this::class.java.simpleName
 
-        fun newInstance(bundle: Bundle = Bundle()): PortraitPhotoFragment {
-            val fragment = PortraitPhotoFragment()
-            bundle.putInt(AppConstants.cameraType.key, AppConstants.cameraFront.intKey)
+        fun newInstance(bundle: Bundle? = Bundle()): DocumentBillFragment {
+            val fragment = DocumentBillFragment()
             fragment.arguments = bundle
             return fragment
         }
@@ -30,7 +29,7 @@ class PortraitPhotoFragment : CameraBaseFragment() {
     // Life
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_document_portrait, container, false)
+        return inflater.inflate(R.layout.fragment_document_bill, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,11 +46,11 @@ class PortraitPhotoFragment : CameraBaseFragment() {
     }
 
     private fun setupTitle() {
-        val spanText = getString(R.string.take_your_portrait_photo)
+        val spanText = getString(R.string.take_a_photo_of_bill)
         val words = spanText.split(" ")
-        val spanStart = words[0].length + words[1].length + 2
+        val spanStart = words[0].length + words[1].length + words[2].length + words[3].length + 4
         val spannableBuilder = SpannableStringBuilder(spanText)
-        val boldStyle = StyleSpan(android.graphics.Typeface.BOLD)
+        val boldStyle = StyleSpan(Typeface.BOLD)
 
         spannableBuilder.setSpan(boldStyle, spanStart, spanText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
         documenTitleTv.text = spannableBuilder

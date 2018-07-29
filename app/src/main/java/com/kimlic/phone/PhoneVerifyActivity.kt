@@ -1,5 +1,6 @@
 package com.kimlic.phone
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.text.Editable
 import android.view.KeyEvent
@@ -19,7 +20,7 @@ import com.kimlic.db.KimlicDB
 import com.kimlic.db.entity.Contact
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
-import com.kimlic.quorum.QuorumKimlic
+import com.kimlic.ProfileViewModel
 import com.kimlic.utils.BaseCallback
 import com.kimlic.utils.QuorumURL
 import kotlinx.android.synthetic.main.activity_phone_verify.*
@@ -37,6 +38,7 @@ class PhoneVerifyActivity : BaseActivity() {
     private lateinit var fragment: BaseDialogFragment
     private lateinit var phone: String
     private lateinit var code: StringBuilder
+    private lateinit var model: ProfileViewModel
 
     // Life
 
@@ -56,6 +58,8 @@ class PhoneVerifyActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+
         verifyBt.setOnClickListener { managePin() }
         backBt.setOnClickListener { finish() }
 
@@ -84,10 +88,8 @@ class PhoneVerifyActivity : BaseActivity() {
             code = StringBuilder()
             digitsList.forEach { code.append(it.text.toString()) }
 
-            val quorumKimlic = QuorumKimlic.getInstance()
-
             val params = mapOf(Pair("code", code.toString()))
-            val headers = mapOf(Pair("account-address", quorumKimlic.walletAddress))
+            val headers = mapOf(Pair("account-address", Prefs.currentAccountAddress))
 
             val request = KimlicRequest(Request.Method.POST, QuorumURL.phoneVierifyApprove.url, headers, params,
                     Response.Listener<String> { response ->
@@ -128,7 +130,8 @@ class PhoneVerifyActivity : BaseActivity() {
     }
 
     private fun insertPhone(phone: String) {
-        val phoneContact = Contact(userId = Prefs.currentId, value = phone, type = "phone", approved = true)
+        val phoneContact = Contact(value = phone, type = "phone", approved = true)
+        model.addUserContact(Prefs.currentAccountAddress, phoneContact)
         KimlicDB.getInstance()!!.contactDao().insert(phoneContact)
     }
 

@@ -6,7 +6,7 @@
   android:layout_height="match_parent"
   android:overScrollMode="never"
   android:scrollbars="none"
-  tools:context=".verification.VerifyDetails">
+  tools:context=".documents.VerifyDetails">
 
   <android.support.constraint.ConstraintLayout
     android:layout_width="match_parent"
