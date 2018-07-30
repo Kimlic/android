@@ -1,5 +1,7 @@
 package com.kimlic.documents
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -45,12 +47,11 @@ class BillActivity : BaseActivity() {
             override fun callback(fileName: String) {
                 //val billDocument = Document(type = "bill", )
                 Log.d("TAGBILL", fileName)
-                val bundle = Bundle()
-
-                bundle.putString(AppConstants.filePathRezult.key, fileName)
                 val intent = Intent()
+                intent.putExtra(AppConstants.filePathRezult.key, fileName)
 
-                //setResult(Request)
+                setResult(Activity.RESULT_OK, intent)
+                finish()
             }
         })
 

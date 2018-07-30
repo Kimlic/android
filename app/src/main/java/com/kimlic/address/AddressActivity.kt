@@ -1,15 +1,22 @@
 package com.kimlic.address
 
+import android.app.Activity
 import android.content.Intent
 import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.os.Bundle
 import android.provider.OpenableColumns
+import android.support.constraint.ConstraintLayout
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
@@ -20,8 +27,11 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.db.entity.Address
+import com.kimlic.db.entity.Photo
+import com.kimlic.documents.BillActivity
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
+import com.kimlic.utils.AppConstants
 import com.kimlic.utils.BaseCallback
 import kotlinx.android.synthetic.main.activity_address.*
 import java.io.File
@@ -31,11 +41,13 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
     // Constants
 
     private val PICK_FILE_REQUEST_CODE = 105
+    private val TAKE_PHOTO_REQUEST_CODE = 106
 
     // Variables
 
     private lateinit var placeAutocompleteAdapter: PlaceAutocompleteAdapter
     private lateinit var address: Address
+    private lateinit var photo: Photo
     private var addressId: Long = 0
     private var mGoogleApiClient: GoogleApiClient? = null
     private val LAT_LNG_BOUNDS = LatLngBounds(LatLng(-40.0, -168.0), LatLng(71.0, 136.0))
@@ -54,8 +66,10 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+        if (resultCode != Activity.RESULT_OK) return
+
         when (requestCode) {
-            PICK_FILE_REQUEST_CODE -> if (resultCode == RESULT_OK) {
+            PICK_FILE_REQUEST_CODE -> {
                 // Get the Uri of the selected file
                 val uri = data!!.getData()
                 val uriString = uri.toString()
@@ -81,7 +95,15 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
                 Log.d("TAG", "display name = " + displayName)
                 data.extras.getByteArray("")
                 addBt.setOnClickListener({})
+            }
 
+            TAKE_PHOTO_REQUEST_CODE -> {
+                val fileName = data?.extras?.getString(AppConstants.filePathRezult.key, "")
+
+                showPickedFile(fileName!!)
+                photo = Photo(file = fileName, documentId = addressId, type = "address")
+
+                isPhotoPresent = true
             }
         }
     }
@@ -106,7 +128,6 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
 
     private fun manageInput() {
         if (fieldsAreValid()) {
-
             address.value = addressEt.text.toString()
             model.addUserAddress(Prefs.currentAccountAddress, address)
             successfull()
@@ -122,10 +143,7 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
             addressEt.setError(null); noError = true
         }
 
-        // TODO check if photo present
-        noError = isPhotoPresent
-
-        return noError
+        return (noError && isPhotoPresent)
     }
 
     private fun setupAddressSerch() {
@@ -164,8 +182,22 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
         cancelAddressBt.visibility = View.INVISIBLE
     }
 
+    private fun showPickedFile(fileName: String) {
+        addBt.visibility = View.GONE
+        val bitmapImage = BitmapFactory.decodeFile(filesDir.toString() + "/" + fileName)
+
+        val layoutParams = ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        documentIv.layoutParams = layoutParams
+
+        documentIv.setImageBitmap(rotateBitmap(bitmapImage, 90f))
+
+    }
+
     private fun pickFile() {
         PresentationManager.verifyBill(this)
+
+        val intent = Intent(this, BillActivity::class.java)
+        startActivityForResult(intent, TAKE_PHOTO_REQUEST_CODE)
     }
 
     private fun moveDown() {
@@ -213,4 +245,12 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
     // Implementation
 
     override fun onConnectionFailed(p0: ConnectionResult) {}
+
+    // Private helpers
+
+    private fun rotateBitmap(sourse: Bitmap, angel: Float): Bitmap {
+        val matrix = Matrix()
+        matrix.postRotate(angel)
+        return Bitmap.createBitmap(sourse, 0, 0, sourse.width, sourse.height, matrix, true)
+    }
 }

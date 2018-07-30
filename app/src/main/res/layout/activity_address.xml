@@ -107,8 +107,10 @@
     app:layout_constraintTop_toBottomOf="@+id/addressTv">
 
     <ImageView
+      android:id="@+id/documentIv"
       android:layout_width="96dp"
       android:layout_height="80dp"
+      android:scaleType="center"
       android:background="@drawable/ic_multiple_files_icon"
       android:contentDescription="@string/upload_file_icon"
       app:layout_constraintBottom_toTopOf="@id/addBt"
