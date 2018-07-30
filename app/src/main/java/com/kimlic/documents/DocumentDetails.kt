@@ -60,7 +60,7 @@ class DocumentDetails : BaseActivity() {
             AppConstants.documentPassport.key -> titleTv.text = getString(R.string.passport)
             AppConstants.documentLicense.key -> titleTv.text = getString(R.string.driver_licence)
             AppConstants.documentID.key -> titleTv.text = getString(R.string.id_card)
-            AppConstants.documentPermit.key -> titleTv.text = getString(R.string.life_permit)
+            AppConstants.documentPermit.key -> titleTv.text = getString(R.string.residence_permit)
             else -> throw Exception("Wrong document type")
         }
     }

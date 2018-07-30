@@ -16,7 +16,6 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
@@ -47,7 +46,7 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
 
     private lateinit var placeAutocompleteAdapter: PlaceAutocompleteAdapter
     private lateinit var address: Address
-    private lateinit var photo: Photo
+    private lateinit var addressPhoto: Photo
     private var addressId: Long = 0
     private var mGoogleApiClient: GoogleApiClient? = null
     private val LAT_LNG_BOUNDS = LatLngBounds(LatLng(-40.0, -168.0), LatLng(71.0, 136.0))
@@ -101,8 +100,7 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
                 val fileName = data?.extras?.getString(AppConstants.filePathRezult.key, "")
 
                 showPickedFile(fileName!!)
-                photo = Photo(file = fileName, documentId = addressId, type = "address")
-
+                addressPhoto = Photo(file = fileName, type = "address", addressId = addressId)
                 isPhotoPresent = true
             }
         }
@@ -129,7 +127,8 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
     private fun manageInput() {
         if (fieldsAreValid()) {
             address.value = addressEt.text.toString()
-            model.addUserAddress(Prefs.currentAccountAddress, address)
+            model.updateUserAddress(address = address)
+            model.addDocumentPhoto(photos = addressPhoto)
             successfull()
         }
     }
@@ -184,18 +183,16 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
 
     private fun showPickedFile(fileName: String) {
         addBt.visibility = View.GONE
-        val bitmapImage = BitmapFactory.decodeFile(filesDir.toString() + "/" + fileName)
 
         val layoutParams = ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        layoutParams.setMargins(16, 16, 16, 16)
         documentIv.layoutParams = layoutParams
-
-        documentIv.setImageBitmap(rotateBitmap(bitmapImage, 90f))
+        documentIv.background = null
+        documentIv.setImageBitmap(croped(fileName))
 
     }
 
     private fun pickFile() {
-        PresentationManager.verifyBill(this)
-
         val intent = Intent(this, BillActivity::class.java)
         startActivityForResult(intent, TAKE_PHOTO_REQUEST_CODE)
     }
@@ -252,5 +249,15 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
         val matrix = Matrix()
         matrix.postRotate(angel)
         return Bitmap.createBitmap(sourse, 0, 0, sourse.width, sourse.height, matrix, true)
+    }
+
+    private fun croped(fileName: String): Bitmap {
+        val bitmap = BitmapFactory.decodeFile(this.applicationContext.filesDir.toString() + "/" + fileName)
+        val originalbitmap = rotateBitmap(bitmap, 90f)
+        val width = originalbitmap.width
+        val height = originalbitmap.height
+        val bitmapCroped = Bitmap.createBitmap(originalbitmap, (0.15 * width).toInt(), (0.08 * height).toInt(), (0.7 * width).toInt(), (0.5 * height).toInt())
+
+        return bitmapCroped
     }
 }

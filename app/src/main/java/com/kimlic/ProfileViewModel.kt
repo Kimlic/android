@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModel
 import com.kimlic.db.KimlicDB
 import com.kimlic.db.entity.*
 import com.kimlic.preferences.Prefs
-import org.w3c.dom.DocumentType
 
 class ProfileViewModel : ViewModel() {
 
@@ -72,8 +71,6 @@ class ProfileViewModel : ViewModel() {
 
     fun deleteAddres(addressId: Long) = db.addressDao().delete(addressId)
 
-    //fun updateUserAddress(addressId:Long, address){}
-
     fun getUserLive(accountAddress: String) = db.userDao().selectLive(accountAddress = accountAddress)
 
     fun getUserAddressesLive(accountAddress: String) = db.addressDao().selectLive(accountAddress)
@@ -85,6 +82,8 @@ class ProfileViewModel : ViewModel() {
     fun getUserDocumentsLive(accountAddress: String) = db.documentDao().selectLive(accountAddress = accountAddress)
 
     fun getUserDocumentPhotos(accountAddress: String, documentType: String) = db.photoDao().selectUserPhotosByDocument(accountAddress = accountAddress, documentType = documentType)
+
+    fun getUserAddressPhoto(accountAddress: String) = db.photoDao().selectUserAddresPhoto(accountAddress = accountAddress)
 
     fun addUserDocument(accountAddress: String, document: Document): Long {
         val user = db.userDao().select(accountAddress = accountAddress)
@@ -104,7 +103,7 @@ class ProfileViewModel : ViewModel() {
         db.documentDao().delete(id = documentId)
     }
 
-    fun addPhotosForDocument(vararg photos: Photo) {
+    fun addDocumentPhoto(vararg photos: Photo) {
         db.photoDao().insert(photos.asList())
     }
 

@@ -60,7 +60,10 @@ class UserStageFragment : BaseFragment() {
 
     override fun onResume() {
         //checkPhotos()
-        Log.d("TAGACCOUNTADDRES", "account-addres = _" + Prefs.currentAccountAddress)
+//        Log.d("TAGACCOUNTADDRES", "account-addres = _" + Prefs.currentAccountAddress)
+//        Log.d("TAGACCOUNTADDRES", "user address" + model.getUserAddress(Prefs.currentAccountAddress)?.toString())
+//        Log.d("TAGACCOUNTADDRES", "user address photo"+ model.getUserAddressPhoto(Prefs.currentAccountAddress)?.toString())
+
         super.onResume()
     }
 
@@ -165,26 +168,6 @@ class UserStageFragment : BaseFragment() {
         })
 
     }
-
-//    private fun checkPhotos() {
-//        val documentP = KimlicDB.getInstance()!!.documentDao().selectByUserIdAndType(Prefs.currentId, "passport")
-//
-//        if (documentP != null)
-//            KimlicDB.getInstance()!!.photoDao().selectPhotosLive(documentId = documentP.id).observe(this, object : Observer<List<Photo>> {
-//                override fun onChanged(photos: List<Photo>?) {
-//                    photos?.let { Log.d("TAGPHOTLLIVE", photos.toString()) }
-//                }
-//            })
-//
-//        val documentI = KimlicDB.getInstance()!!.documentDao().selectByUserIdAndType(Prefs.currentId, "id")
-//
-//        if (documentI != null)
-//            KimlicDB.getInstance()!!.photoDao().selectPhotosLive(documentId = documentP.id).observe(this, object : Observer<List<Photo>> {
-//                override fun onChanged(photos: List<Photo>?) {
-//                    photos?.let { Log.d("TAGPHOTLLIVE", photos.toString()) }
-//                }
-//            })
-//    }
 
     private fun setupListners() {
         settingsBt.setOnClickListener { PresentationManager.settings(activity!!) }

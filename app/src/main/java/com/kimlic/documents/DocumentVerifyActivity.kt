@@ -87,7 +87,7 @@ class DocumentVerifyActivity : BaseActivity() {
                 filesList.add(fileName)
                 documentBackPhoto = Photo(documentId = documentId, file = fileName, type = "back")
                 Log.d("TAGPHOTO", documentBackPhoto.toString())
-                model.addPhotosForDocument(portraitPhoto, documentFrontPhoto, documentBackPhoto)
+                model.addDocumentPhoto(portraitPhoto, documentFrontPhoto, documentBackPhoto)
                 successfull()
             }
         })

@@ -39,13 +39,11 @@ class BillActivity : BaseActivity() {
 
     private fun setupUI() {
         fileName = Prefs.currentAccountAddress + "_" + UserPhotos.bill.fileName
-        val documentBillId = model.addUserDocument(Prefs.currentAccountAddress, Document(type = "bill"))
 
         initFragments()
 
         billFragment.setCallback(object : PhotoCallback {
             override fun callback(fileName: String) {
-                //val billDocument = Document(type = "bill", )
                 Log.d("TAGBILL", fileName)
                 val intent = Intent()
                 intent.putExtra(AppConstants.filePathRezult.key, fileName)

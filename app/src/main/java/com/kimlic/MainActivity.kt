@@ -11,6 +11,8 @@ import com.google.gson.reflect.TypeToken
 import com.kimlic.API.KimlicRequest
 import com.kimlic.API.SyncObject
 import com.kimlic.API.VolleySingleton
+import com.kimlic.db.KimlicDB
+import com.kimlic.db.entity.User
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
 import com.kimlic.quorum.QuorumKimlic
@@ -23,7 +25,7 @@ class MainActivity : BaseActivity() {
     // Variables
 
     private lateinit var splashFragment: SplashScreenFragment
-   // private lateinit var model: ProfileViewModel
+    // private lateinit var model: ProfileViewModel
 
     // Life
 
@@ -38,6 +40,7 @@ class MainActivity : BaseActivity() {
         initFragment()
         splashScreenShow()
 
+//        Prefs.currentAccountAddress = "sdcadvaffvervevcxaervrvrisjdbfiedejbvkekrjbvkjbvb"
 //        val user = User(id = Prefs.currentId, accountAddress = "sdcadvaffvervevcxaervrvrisjdbfiedejbvkekrjbvkjbvb", mnemonic = "efvcvefvcefvcervrvrwgwrgvefveveverc")
 //        KimlicDB.getInstance()!!.userDao().insert(user)
 //        PresentationManager.stage(this)
@@ -57,7 +60,6 @@ class MainActivity : BaseActivity() {
     }
 
     private fun quorumRequest() {
-        //model = ViewModelProviders.of(this@MainActivity).get(ProfileViewModel::class.java)
         val user = model.getUser(Prefs.currentAccountAddress)
         // 1. Create Quorum instance with current user
         //val user = KimlicDB.getInstance()!!.userDao().select(id = Prefs.currentId)
