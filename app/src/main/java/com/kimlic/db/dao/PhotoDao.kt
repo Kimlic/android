@@ -1,8 +1,7 @@
 package com.kimlic.db.dao
 
-import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
-import android.arch.persistence.room.OnConflictStrategy.*
+import android.arch.persistence.room.OnConflictStrategy.REPLACE
 import com.kimlic.db.entity.Photo
 
 @Dao
@@ -17,11 +16,8 @@ interface PhotoDao {
     @Update
     fun update(photo: Photo): Int
 
-    @Query("SELECT * FROM photo WHERE document_id = :documentId")
-    fun selectPhotosLive(documentId: Long): LiveData<List<Photo>>
-
-    @Query("SELECT * FROM photo WHERE document_id = :documentId AND side =:side LIMIT 1")
-    fun selectByDocumentIdAndType(documentId: Long, side: String): Photo
+    @Query("SELECT P.id, P.document_id, P.type, P.file, P.inserted_at FROM photo as P INNER JOIN document ON (p.document_id = document.id AND document.type=:documentType )INNER JOIN user ON document.user_id = user.id WHERE user.account_address =:accountAddress")//INNER JOIN document ON photo.document_id = document.id ")
+    fun selectUserPhotosByDocument(accountAddress: String, documentType: String): List<Photo>
 
     @Delete
     fun delete(photo: Photo)

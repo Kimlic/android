@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModel
 import com.kimlic.db.KimlicDB
 import com.kimlic.db.entity.*
 import com.kimlic.preferences.Prefs
+import org.w3c.dom.DocumentType
 
 class ProfileViewModel : ViewModel() {
 
@@ -50,7 +51,7 @@ class ProfileViewModel : ViewModel() {
         db.contactDao().insert(contact)
     }
 
-    fun dropUserContact(accountAddress: String, contactType: String){
+    fun dropUserContact(accountAddress: String, contactType: String) {
         db.contactDao().drop(accountAddress = accountAddress, type = contactType)
     }
 
@@ -60,20 +61,30 @@ class ProfileViewModel : ViewModel() {
         db.userDao().update(user = user)
     }
 
-    fun addUserAddress(accountAddress: String, address: Address) {
+    fun addUserAddress(accountAddress: String, address: Address): Long {
         val user = db.userDao().select(accountAddress)
         val userId = user.id
         address.userId = userId
-        db.addressDao().insert(address = address)
+        return db.addressDao().insert(address = address)
     }
+
+    fun updateUserAddress(address: Address) = db.addressDao().update(address = address)
+
+    fun deleteAddres(addressId: Long) = db.addressDao().delete(addressId)
+
+    //fun updateUserAddress(addressId:Long, address){}
 
     fun getUserLive(accountAddress: String) = db.userDao().selectLive(accountAddress = accountAddress)
 
     fun getUserAddressesLive(accountAddress: String) = db.addressDao().selectLive(accountAddress)
 
+    fun getUserAddress(accountAddress: String) = db.addressDao().select(accountAddress = accountAddress)
+
     fun getUserContactsLive(accountAddress: String) = db.contactDao().selectLive(accountAddress = accountAddress)
 
     fun getUserDocumentsLive(accountAddress: String) = db.documentDao().selectLive(accountAddress = accountAddress)
+
+    fun getUserDocumentPhotos(accountAddress: String, documentType: String) = db.photoDao().selectUserPhotosByDocument(accountAddress = accountAddress, documentType = documentType)
 
     fun addUserDocument(accountAddress: String, document: Document): Long {
         val user = db.userDao().select(accountAddress = accountAddress)

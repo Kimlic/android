@@ -1,7 +1,7 @@
 package com.kimlic.documents
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.db.KimlicDB
@@ -9,7 +9,6 @@ import com.kimlic.db.entity.Document
 import com.kimlic.db.entity.Photo
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
-import com.kimlic.ProfileViewModel
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.BaseCallback
 import com.kimlic.utils.PhotoCallback
@@ -39,7 +38,6 @@ class DocumentVerifyActivity : BaseActivity() {
 
     private var documentId: Long = 0
     private var filesList = mutableListOf<String>()
-    private lateinit var model: ProfileViewModel
 
     // Life
 
@@ -60,7 +58,6 @@ class DocumentVerifyActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         documentType = intent.extras.getString(AppConstants.documentType.key, "")
         initFragments()
 
@@ -71,7 +68,7 @@ class DocumentVerifyActivity : BaseActivity() {
         portraitFragment.setCallback(object : PhotoCallback {
             override fun callback(fileName: String) {
                 filesList.add(fileName)
-                portraitPhoto = Photo(documentId = documentId, file = fileName, side = "portrait")
+                portraitPhoto = Photo(documentId = documentId, file = fileName, type = "portrait")
                 showFragment(R.id.container, frontFragment, DocumentFrontFragment.FRAGMENT_KEY)
             }
         })
@@ -79,7 +76,8 @@ class DocumentVerifyActivity : BaseActivity() {
         frontFragment.setCallback(object : PhotoCallback {
             override fun callback(fileName: String) {
                 filesList.add(fileName)
-                documentFrontPhoto = Photo(documentId = documentId, file = fileName, side = "front")
+                documentFrontPhoto = Photo(documentId = documentId, file = fileName, type = "front")
+
                 showFragment(R.id.container, backFragment, DocumentBackFragment.FRAGMENT_KEY)
             }
         })
@@ -87,7 +85,8 @@ class DocumentVerifyActivity : BaseActivity() {
         backFragment.setCallback(object : PhotoCallback {
             override fun callback(fileName: String) {
                 filesList.add(fileName)
-                documentBackPhoto = Photo(documentId = documentId, file = fileName, side = "back")
+                documentBackPhoto = Photo(documentId = documentId, file = fileName, type = "back")
+                Log.d("TAGPHOTO", documentBackPhoto.toString())
                 model.addPhotosForDocument(portraitPhoto, documentFrontPhoto, documentBackPhoto)
                 successfull()
             }

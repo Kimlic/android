@@ -179,11 +179,12 @@ object PresentationManager {
         present(presenter = presenter, className = DocumentVerifyActivity::class.java, isStarting = false, params = params)
     }
 
-    fun verifyDetails(presenter: BaseActivity, documentType: String) {
+    fun verifyDetails(presenter: BaseActivity, accountAddres:String, documentType: String) {
         val params = HashMap<String, String>()
         params.put(AppConstants.documentType.key, documentType)
+        params.put(AppConstants.accountAddress.key, accountAddres)
 
-        present(presenter = presenter, className = VerifyDetails::class.java, isStarting = false, params = params)
+        present(presenter = presenter, className = DocumentDetails::class.java, isStarting = false, params = params)
     }
 
     fun verifyBill(presenter: BaseActivity) {

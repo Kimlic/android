@@ -1,20 +1,17 @@
 package com.kimlic.documents
 
-import android.arch.lifecycle.ViewModelProviders
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.os.Bundle
 import com.kimlic.BaseActivity
 import com.kimlic.KimlicApp
-import com.kimlic.ProfileViewModel
 import com.kimlic.R
-import com.kimlic.db.KimlicDB
+import com.kimlic.documents.fragments.PortraitPhotoFragment
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.PhotoCallback
 import com.kimlic.utils.UserPhotos
-import com.kimlic.documents.fragments.PortraitPhotoFragment
 import java.io.File
 import java.io.FileOutputStream
 
@@ -24,7 +21,6 @@ class PortraitActivity : BaseActivity() {
 
     private lateinit var portraitFragment: PortraitPhotoFragment
     private lateinit var fileName: String
-    private lateinit var model: ProfileViewModel
 
     // Life
 
@@ -43,10 +39,6 @@ class PortraitActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-
-        val user = KimlicDB.getInstance()!!.userDao().select(Prefs.currentId)
-
         fileName = Prefs.currentAccountAddress + "_" + UserPhotos.stagePortrait.fileName
         initFragment()
 
@@ -54,8 +46,6 @@ class PortraitActivity : BaseActivity() {
             override fun callback(fileName: String) {
                 model.addUserPhoto(Prefs.currentAccountAddress, fileName)
                 createPhotoPreview(fileName)
-                //user.portraitFile = fileName
-                //KimlicDB.getInstance()!!.userDao().update(user)
                 finish()
             }
         })

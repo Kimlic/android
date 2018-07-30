@@ -224,4 +224,5 @@
   <string name="life_permit">Life Permit</string>
   <string name="add_new_document">Add new Document</string>
   <string name="residence_permit">Residence Permit</string>
+  <string name="add_file">Add File</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.kimlic
 
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.DialogInterface
 import android.content.pm.ActivityInfo
@@ -16,6 +17,10 @@ import com.kimlic.utils.ErrorPopupFragment
 
 abstract class BaseActivity : AppCompatActivity() {
 
+    // Variables
+
+    protected lateinit var model: ProfileViewModel
+
     // Companion
 
     companion object {
@@ -26,7 +31,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         setupUI()
     }
 
@@ -51,9 +56,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     protected fun hideKeyboard() {
         val view = currentFocus ?: return
-
         val imm = applicationContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-
         imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 

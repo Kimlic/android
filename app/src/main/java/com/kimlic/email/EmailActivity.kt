@@ -86,15 +86,16 @@ class EmailActivity : BaseActivity() {
                         val params = emptyMap<String, String>().toMutableMap(); params.put("email", email)
                         val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", Prefs.currentAccountAddress)
 
-                        val request = KimlicRequest(Request.Method.POST, QuorumURL.emailVerify.url, headers, params, Response.Listener { response ->
-                            hideProgress()
-                            val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
+                        val request = KimlicRequest(Request.Method.POST, QuorumURL.emailVerify.url, headers, params,
+                                Response.Listener { response ->
+                                    hideProgress()
+                                    val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
 
-                            if (responceCode.startsWith("2")) {
-                                nextBt.isClickable = true
-                                PresentationManager.emailVerify(this@EmailActivity, emailEt.text.toString())
-                            } else unableToProceed()
-                        },
+                                    if (responceCode.startsWith("2")) {
+                                        nextBt.isClickable = true
+                                        PresentationManager.emailVerify(this@EmailActivity, emailEt.text.toString())
+                                    } else unableToProceed()
+                                },
                                 Response.ErrorListener { unableToProceed() }
                         )
                         VolleySingleton.getInstance(this@EmailActivity).addToRequestQueue(request)

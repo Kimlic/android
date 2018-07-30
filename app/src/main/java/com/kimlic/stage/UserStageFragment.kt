@@ -31,12 +31,7 @@ class UserStageFragment : BaseFragment() {
 
     // Variables
 
-    //private lateinit var model: UserStageViewModel
-    private lateinit var model_: ProfileViewModel
     private lateinit var divider: DividerItemDecoration
-
-    // Variables for adapters
-
     lateinit var contactsAdapter: ContactsAdapter
     lateinit var documentsAdapter: DocumentAdapter
 
@@ -72,8 +67,6 @@ class UserStageFragment : BaseFragment() {
     // Private
 
     private fun setupUI() {
-        model_ = ViewModelProviders.of(activity!!).get(ProfileViewModel::class.java)
-
         initDivider()
         setupRisks()
         setupUser()
@@ -86,7 +79,7 @@ class UserStageFragment : BaseFragment() {
     // Private Helpers
 
     private fun setupRisks() {
-        model_.getRisksLiveData()!!.observe(activity!!, object : Observer<Boolean> {
+        model.getRisksLiveData()!!.observe(activity!!, object : Observer<Boolean> {
             override fun onChanged(risks: Boolean?) {
                 manageRisks(risks!!)
             }
@@ -94,7 +87,7 @@ class UserStageFragment : BaseFragment() {
     }
 
     private fun setupUser() {
-        model_.getUserLive(Prefs.currentAccountAddress).observe(this@UserStageFragment, object : Observer<User> {
+        model.getUserLive(Prefs.currentAccountAddress).observe(this@UserStageFragment, object : Observer<User> {
             override fun onChanged(user: User?) {
                 setupNameField(if (user!!.firstName.isNotEmpty()) {
                     "${user.firstName} ${user.lastName}"
@@ -125,7 +118,7 @@ class UserStageFragment : BaseFragment() {
             }
         })
 
-        model_.getUserContactsLive(Prefs.currentAccountAddress).observe(this, object : Observer<List<Contact>> {
+        model.getUserContactsLive(Prefs.currentAccountAddress).observe(this, object : Observer<List<Contact>> {
             override fun onChanged(contacts: List<Contact>?) {
                 contactsAdapter.setContactsList(contacts = contacts!!)
             }
@@ -133,7 +126,7 @@ class UserStageFragment : BaseFragment() {
     }
 
     private fun setupAddress() {
-        model_.getUserAddressesLive(Prefs.currentAccountAddress).observe(this, object : Observer<Address> {
+        model.getUserAddressesLive(Prefs.currentAccountAddress).observe(this, object : Observer<Address> {
             override fun onChanged(address: Address?) {
                 setupAddressField(address?.value ?: "")
             }
@@ -156,21 +149,16 @@ class UserStageFragment : BaseFragment() {
         documentsAdapter.setOnStageItemClick(object : OnStageItemClick {
             override fun onClick(view: View, position: Int, type: String, approved: Boolean, state: String) {
                 when (type) {
-                    AppConstants.documentPassport.key -> {
-                    }
-                    AppConstants.documentLicense.key -> {
-                    }
-                    AppConstants.documentID.key -> {
-                    }
-                    AppConstants.documentPermit.key -> {
-                    }
+                    AppConstants.documentPassport.key -> PresentationManager.verifyDetails(activity!!, Prefs.currentAccountAddress, AppConstants.documentPassport.key)
+                    AppConstants.documentLicense.key -> PresentationManager.verifyDetails(activity!!, Prefs.currentAccountAddress, AppConstants.documentLicense.key)
+                    AppConstants.documentID.key -> PresentationManager.verifyDetails(activity!!, Prefs.currentAccountAddress, AppConstants.documentID.key)
+                    AppConstants.documentPermit.key -> PresentationManager.verifyDetails(activity!!, Prefs.currentAccountAddress, AppConstants.documentPermit.key)
                     "add" -> PresentationManager.documentChooseVerify(activity!!)
                 }
-
             }
         })
 
-        model_.getUserDocumentsLive(Prefs.currentAccountAddress).observe(this@UserStageFragment, object : Observer<List<Document>> {
+        model.getUserDocumentsLive(Prefs.currentAccountAddress).observe(this@UserStageFragment, object : Observer<List<Document>> {
             override fun onChanged(documents: List<Document>?) {
                 documentsAdapter.setDocumentsList(documents!!)
             }

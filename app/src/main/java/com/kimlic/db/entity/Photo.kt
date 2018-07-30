@@ -6,16 +6,16 @@ import android.arch.persistence.room.ForeignKey
 import android.arch.persistence.room.ForeignKey.*
 import android.arch.persistence.room.PrimaryKey
 
-@Entity(tableName = "photo"
+@Entity(tableName = "photo"//, primaryKeys = arrayOf("id")
 
-        ,foreignKeys = arrayOf(ForeignKey(entity = Document::class, parentColumns = arrayOf("id"), childColumns = arrayOf("document_id"), onDelete = CASCADE, onUpdate = CASCADE))
+        , foreignKeys = arrayOf(ForeignKey(entity = Document::class, parentColumns = arrayOf("id"), childColumns = arrayOf("document_id"), onDelete = CASCADE, onUpdate = CASCADE))
         //,ForeignKey(entity = Address::class, parentColumns = arrayOf("id"), childColumns = arrayOf("document_id"), onDelete = CASCADE, onUpdate = CASCADE))
 )
 data class Photo(
         @PrimaryKey(autoGenerate = true)
-        @ColumnInfo(name = "id") var id: Long = 0,
-        @ColumnInfo(name = "document_id") var documentId: Long ,
+        @ColumnInfo(name = "id") var id: Long? = null,
+        @ColumnInfo(name = "document_id") var documentId: Long,
         @ColumnInfo(name = "file") var file: String = "",
-        @ColumnInfo(name = "side") var side: String = "front",
+        @ColumnInfo(name = "type") var type: String = "front",
         @ColumnInfo(name = "inserted_at") var insertedAt: Long = System.currentTimeMillis()
 )

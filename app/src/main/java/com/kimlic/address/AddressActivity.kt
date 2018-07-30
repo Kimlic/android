@@ -1,6 +1,5 @@
 package com.kimlic.address
 
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
@@ -23,7 +22,6 @@ import com.kimlic.R
 import com.kimlic.db.entity.Address
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
-import com.kimlic.ProfileViewModel
 import com.kimlic.utils.BaseCallback
 import kotlinx.android.synthetic.main.activity_address.*
 import java.io.File
@@ -37,10 +35,12 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
     // Variables
 
     private lateinit var placeAutocompleteAdapter: PlaceAutocompleteAdapter
+    private lateinit var address: Address
+    private var addressId: Long = 0
     private var mGoogleApiClient: GoogleApiClient? = null
     private val LAT_LNG_BOUNDS = LatLngBounds(LatLng(-40.0, -168.0), LatLng(71.0, 136.0))
     private var isSearchActive = false
-    private lateinit var model: ProfileViewModel
+    private var isPhotoPresent: Boolean = false
 
     // Life
 
@@ -80,22 +80,55 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
 
                 Log.d("TAG", "display name = " + displayName)
                 data.extras.getByteArray("")
-                browsBt.setOnClickListener({})
+                addBt.setOnClickListener({})
 
             }
         }
     }
 
     override fun onBackPressed() {
-        if (isSearchActive) {
+        if (isSearchActive)
             moveDown()
-        } else
+        else
             super.onBackPressed()
     }
     // Private
 
     private fun setupUI() {
-        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        setupAddressSerch()
+        addressId = model.addUserAddress(Prefs.currentAccountAddress, Address())
+        address = model.getUserAddress(Prefs.currentAccountAddress)
+
+        saveBt.setOnClickListener { manageInput() }
+        addBt.setOnClickListener { pickFile() }
+        cancelTv.setOnClickListener { model.deleteAddres(addressId = addressId); finish() }
+    }
+
+    private fun manageInput() {
+        if (fieldsAreValid()) {
+
+            address.value = addressEt.text.toString()
+            model.addUserAddress(Prefs.currentAccountAddress, address)
+            successfull()
+        }
+    }
+
+    private fun fieldsAreValid(): Boolean {
+        var noError = true
+
+        if (addressEt.text.length < 3) {
+            addressEt.setError("error"); noError = false
+        } else {
+            addressEt.setError(null); noError = true
+        }
+
+        // TODO check if photo present
+        noError = isPhotoPresent
+
+        return noError
+    }
+
+    private fun setupAddressSerch() {
         mGoogleApiClient = GoogleApiClient.Builder(this)
                 .addApi(Places.GEO_DATA_API)
                 .addApi(Places.PLACE_DETECTION_API)
@@ -127,18 +160,8 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
 
-        // Button listners
         cancelAddressBt.setOnClickListener { addressEt.text = Editable.Factory().newEditable(""); moveDown() }
-        cancelTv.setOnClickListener { finish() }
         cancelAddressBt.visibility = View.INVISIBLE
-        saveBt.setOnClickListener { manageInput() }
-        browsBt.setOnClickListener { pickFile() }
-    }
-
-    private fun manageInput() {
-        val address = Address(userId = Prefs.currentId, value = addressEt.text.toString())
-        model.addUserAddress(Prefs.currentAccountAddress, address)
-        successfull()
     }
 
     private fun pickFile() {

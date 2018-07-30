@@ -139,7 +139,7 @@
 
     <activity
       android:label="Document verify details"
-      android:name=".documents.VerifyDetails"/>
+      android:name=".documents.DocumentDetails"/>
 
     <activity
       android:label="Bill"

@@ -1,6 +1,5 @@
 package com.kimlic.name
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.text.InputFilter
 import android.view.KeyEvent
@@ -9,14 +8,10 @@ import android.widget.EditText
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
-
 import com.kimlic.BaseActivity
 import com.kimlic.R
-import com.kimlic.db.KimlicDB
 import com.kimlic.preferences.Prefs
-import com.kimlic.ProfileViewModel
 import com.kimlic.utils.BaseCallback
-
 import kotlinx.android.synthetic.main.activity_name.*
 
 
@@ -28,10 +23,6 @@ class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
     lateinit var name: EditText
     @BindView(R.id.lastNameEt)
     lateinit var lastName: EditText
-
-    // Variables
-
-    private lateinit var model: ProfileViewModel
 
     // Life
 
@@ -60,11 +51,7 @@ class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
     // Private
 
     private fun setupUI() {
-        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-
-        saveBt.setOnClickListener {
-            manageInput()
-        }
+        saveBt.setOnClickListener { manageInput() }
         nameEt.setOnEditorActionListener(this)
         lastNameEt.setOnEditorActionListener(this)
 
@@ -77,8 +64,7 @@ class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
 
     private fun manageInput() {
         if (validFields()) {
-            //updateName(nameEt.text.toString(), lastName.text.toString())
-            model.addUserName(Prefs.currentAccountAddress,nameEt.text.toString(), lastName.text.toString() )
+            model.addUserName(Prefs.currentAccountAddress, nameEt.text.toString(), lastName.text.toString())
             succesfull()
         }
     }
@@ -109,13 +95,6 @@ class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
         }
 
         return noError
-    }
-
-    private fun updateName(name: String, lastName: String) {
-        val user1 = KimlicDB.getInstance()!!.userDao().select(Prefs.currentId)
-        user1.firstName = name
-        user1.lastName = lastName
-        KimlicDB.getInstance()!!.userDao().update(user = user1)
     }
 
     private fun filter(): InputFilter {

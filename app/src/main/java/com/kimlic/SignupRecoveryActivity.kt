@@ -21,7 +21,7 @@ class SignupRecoveryActivity : BaseActivity() {
 
     // Variables
 
-    private lateinit var model: ProfileViewModel
+    //private lateinit var model: ProfileViewModel
 
     // Constants
 
@@ -57,7 +57,7 @@ class SignupRecoveryActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        //model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
         createBt.setOnClickListener {
             initNewUserRegistaration()

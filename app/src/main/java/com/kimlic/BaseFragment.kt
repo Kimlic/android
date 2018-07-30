@@ -1,5 +1,6 @@
 package com.kimlic
 
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Bundle
@@ -13,11 +14,13 @@ abstract class BaseFragment : Fragment() {
     // Variables
 
     var activity: BaseActivity? = null
+    protected lateinit var model: ProfileViewModel
 
     // Life
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
         if (context is BaseActivity)
             activity = context

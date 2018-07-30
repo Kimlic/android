@@ -1,6 +1,5 @@
 package com.kimlic.phone
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
@@ -19,7 +18,6 @@ import com.kimlic.BlockchainUpdatingFragment
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
-import com.kimlic.ProfileViewModel
 import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.quorum.crypto.Sha
 import com.kimlic.utils.QuorumURL
@@ -40,8 +38,6 @@ class PhoneActivity : BaseActivity() {
     private var countryCode = 0
     private var blockchainUpdatingFragment: BlockchainUpdatingFragment? = null
     private var timer: CountDownTimer? = null
-
-    private lateinit var model: ProfileViewModel
 
     // Life
 
@@ -72,7 +68,6 @@ class PhoneActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        model = ViewModelProviders.of(this@PhoneActivity).get(ProfileViewModel::class.java)
         countriesList = countries()
 
         phoneEt.addTextChangedListener(object : PhoneNumberFormattingTextWatcher() {

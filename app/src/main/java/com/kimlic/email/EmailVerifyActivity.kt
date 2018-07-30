@@ -38,7 +38,6 @@ class EmailVerifyActivity : BaseActivity() {
     private var currentHolder = 0
     private lateinit var code: StringBuilder
     private lateinit var email: String
-    private lateinit var model: ProfileViewModel
 
     // Life
 
@@ -58,7 +57,6 @@ class EmailVerifyActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         email = intent.extras.getString("email", "")
         titleTv.text = Editable.Factory.getInstance().newEditable(this.getString(R.string.code_sent_to_email, email))
 

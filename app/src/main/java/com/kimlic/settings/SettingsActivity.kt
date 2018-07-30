@@ -1,7 +1,6 @@
 package com.kimlic.settings
 
 import android.app.Activity
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -9,18 +8,13 @@ import android.view.View
 import android.widget.LinearLayout
 import butterknife.ButterKnife
 import com.kimlic.BaseActivity
-import com.kimlic.KimlicApp
-import com.kimlic.ProfileViewModel
 import com.kimlic.R
-import com.kimlic.db.KimlicDB
 import com.kimlic.managers.PresentationManager
 import com.kimlic.passcode.PasscodeActivity
 import com.kimlic.preferences.Prefs
 import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.utils.AppConstants
-import com.kimlic.utils.UserPhotos
 import kotlinx.android.synthetic.main.activity_settings.*
-import java.io.File
 
 class SettingsActivity : BaseActivity() {
 
@@ -32,7 +26,6 @@ class SettingsActivity : BaseActivity() {
 
     private lateinit var settingsList: MutableList<Setting>
     private val adapter: SettingsAdapter
-    private lateinit var model: ProfileViewModel
 
     // Init
 
@@ -69,7 +62,6 @@ class SettingsActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         setupAdapter()
         signoutBt.setOnClickListener {
             model.dropUser(accountAddres = Prefs.currentAccountAddress)
@@ -116,7 +108,6 @@ class SettingsActivity : BaseActivity() {
         settingsList = mutableListOf(
                 SwitchSetting(getString(R.string.passcode), getString(R.string.protect_my_id), "passcode", AppConstants.settingSwitch.intKey, Prefs.isPasscodeEnabled),
                 SwitchSetting(getString(R.string.enable_touch_id), getString(R.string.use_my_touch_id), "touch", AppConstants.settingSwitch.intKey, Prefs.isTouchEnabled),
-//                SwitchSetting(getString(R.string.account_recovery), getString(R.string.back_up_your_credentials), "recovery", AppConstants.settingSwitch.intKey, Prefs.isRecoveryEnabled),
                 IntentSetting(getString(R.string.account_recovery), getString(R.string.back_up_your_credentials), "recovery", AppConstants.settingIntent.intKey),
                 IntentSetting(getString(R.string.terms_and_conditions), getString(R.string.last_modified_23_july_2017), "terms", AppConstants.settingIntent.intKey),
                 IntentSetting(getString(R.string.about_kimlic), "", "about", AppConstants.settingIntent.intKey))

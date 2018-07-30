@@ -23,7 +23,7 @@ class MainActivity : BaseActivity() {
     // Variables
 
     private lateinit var splashFragment: SplashScreenFragment
-    private lateinit var model: ProfileViewModel
+   // private lateinit var model: ProfileViewModel
 
     // Life
 
@@ -57,7 +57,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun quorumRequest() {
-        model = ViewModelProviders.of(this@MainActivity).get(ProfileViewModel::class.java)
+        //model = ViewModelProviders.of(this@MainActivity).get(ProfileViewModel::class.java)
         val user = model.getUser(Prefs.currentAccountAddress)
         // 1. Create Quorum instance with current user
         //val user = KimlicDB.getInstance()!!.userDao().select(id = Prefs.currentId)

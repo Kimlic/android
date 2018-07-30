@@ -27,7 +27,7 @@ class DocumentVerifyChooseActivity : BaseActivity(), View.OnClickListener {
 
     // Variables
 
-    private lateinit var model: DocumentVerifyChooseViewModel
+   // private lateinit var model: DocumentVerifyChooseViewModel
     private lateinit var types: MutableMap<String, String>
 
     // Life
@@ -52,10 +52,9 @@ class DocumentVerifyChooseActivity : BaseActivity(), View.OnClickListener {
     // Private
 
     private fun setupUI() {
-        model = ViewModelProviders.of(this).get(DocumentVerifyChooseViewModel::class.java)
-        setupBackground(model.getUser().portraitFile)
+        setupBackground(model.getUser(Prefs.currentAccountAddress).portraitFile)
 
-        model.getDocumentsLiveData().observe(this, object : Observer<List<Document>> {
+        model.getUserDocumentsLive(Prefs.currentAccountAddress).observe(this, object : Observer<List<Document>> {
             override fun onChanged(documents: List<Document>?) {
                 types = mutableMapOf(
                         Pair("passport", getString(R.string.passport)),

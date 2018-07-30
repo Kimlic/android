@@ -7,14 +7,14 @@ import android.os.Bundle
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.utils.AppConstants
-import com.kimlic.utils.UserPhotos
 import kotlinx.android.synthetic.main.activity_verify_details.*
 
-class VerifyDetails : BaseActivity() {
+class DocumentDetails : BaseActivity() {
 
     // Variables
 
-    private lateinit var verifyTraget: String
+    private lateinit var documentType: String
+    private lateinit var accountAddres: String
 
     // Life
 
@@ -28,38 +28,39 @@ class VerifyDetails : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        verifyTraget = intent.extras.getString(AppConstants.documentType.key, "")
-        filData()
+        documentType = intent.extras.getString(AppConstants.documentType.key, "")
+        accountAddres = intent.extras.getString(AppConstants.accountAddress.key, "")
+        val photoList = model.getUserDocumentPhotos(accountAddress = accountAddres, documentType = documentType)
+        val photoMap = photoList.map { it.type to it.file }.toMap()
+
+        fillData(photos = photoMap, documentType = documentType)
 
         backBt.setOnClickListener { finish() }
 
         addBt.setOnClickListener {
-
             if (validFields())
-                finish()
-            // Handle Data
+                manageInput()
 
+            finish()
+            // Handle Data
         }
     }
 
+    private fun manageInput() {
+        //accountAddres
+        // photos list
 
-    private fun filData() {
-        when (verifyTraget) {
-            AppConstants.documentPassport.key -> {
-                titleTv.text = getString(R.string.passport)
-                frontIv.setImageBitmap(croped(UserPhotos.passportFrontSide.fileName))
-                backIv.setImageBitmap(croped(UserPhotos.passportBackSide.fileName))
-            }
-            AppConstants.documentLicense.key -> {
-                titleTv.text = getString(R.string.driver_licence)
-                frontIv.setImageBitmap(croped(UserPhotos.driverLicensFrontSide.fileName))
-                backIv.setImageBitmap(croped(UserPhotos.driverLicensBackSide.fileName))
-            }
-            AppConstants.documentID.key -> {
-                titleTv.text = getString(R.string.id_card)
-                frontIv.setImageBitmap(croped(UserPhotos.IDCardFrontSide.fileName))
-                backIv.setImageBitmap(croped(UserPhotos.IDCardBackSide.fileName))
-            }
+    }
+
+    private fun fillData(photos: Map<String, String>, documentType: String) {
+        frontIv.setImageBitmap(croped(photos.get("front")!!))
+        backIv.setImageBitmap(croped(photos.get("back")!!))
+
+        when (documentType) {
+            AppConstants.documentPassport.key -> titleTv.text = getString(R.string.passport)
+            AppConstants.documentLicense.key -> titleTv.text = getString(R.string.driver_licence)
+            AppConstants.documentID.key -> titleTv.text = getString(R.string.id_card)
+            AppConstants.documentPermit.key -> titleTv.text = getString(R.string.life_permit)
             else -> throw Exception("Wrong document type")
         }
     }
@@ -104,7 +105,6 @@ class VerifyDetails : BaseActivity() {
         val bitmapCroped = Bitmap.createBitmap(originalbitmap, (0.15 * width).toInt(), (0.22 * height).toInt(), (0.7 * width).toInt(), (0.35 * height).toInt())
 
         return bitmapCroped
-        //frontIv.setImageBitmap(bitmapCroped)
     }
 
     private fun rotateBitmap(sourse: Bitmap, angel: Float): Bitmap {

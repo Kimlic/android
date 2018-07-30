@@ -1,19 +1,23 @@
 package com.kimlic.documents
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import com.kimlic.BaseActivity
 import com.kimlic.R
+import com.kimlic.db.entity.Document
+import com.kimlic.documents.fragments.DocumentBillFragment
+import com.kimlic.preferences.Prefs
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.PhotoCallback
 import com.kimlic.utils.UserPhotos
-import com.kimlic.documents.fragments.DocumentBillFragment
 
 class BillActivity : BaseActivity() {
 
     // Variables
 
     private lateinit var billFragment: DocumentBillFragment
+    private lateinit var fileName: String
 
     // Life
 
@@ -32,26 +36,31 @@ class BillActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
+        fileName = Prefs.currentAccountAddress + "_" + UserPhotos.bill.fileName
+        val documentBillId = model.addUserDocument(Prefs.currentAccountAddress, Document(type = "bill"))
+
         initFragments()
 
         billFragment.setCallback(object : PhotoCallback {
             override fun callback(fileName: String) {
+                //val billDocument = Document(type = "bill", )
                 Log.d("TAGBILL", fileName)
+                val bundle = Bundle()
+
+                bundle.putString(AppConstants.filePathRezult.key, fileName)
+                val intent = Intent()
+
+                //setResult(Request)
             }
         })
 
-//        billFragment.setCallback(object : BaseCallback {
-//            override fun callback() {
-//                finish()
-//            }
-//        })
         showFragment(R.id.container, billFragment, DocumentBillFragment.FRAGMENT_KEY)
     }
 
     private fun initFragments() {
         val bundle = Bundle()
         bundle.putInt(AppConstants.cameraType.key, AppConstants.cameraRear.intKey)
-        bundle.putString(AppConstants.filePathRezult.key, UserPhotos.bill.fileName)
+        bundle.putString(AppConstants.filePathRezult.key, fileName)
         billFragment = DocumentBillFragment.newInstance(bundle)
     }
 }
