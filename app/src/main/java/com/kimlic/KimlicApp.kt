@@ -9,33 +9,35 @@ import io.fabric.sdk.android.Fabric
 
 class KimlicApp : Application() {
 
-    // Constants
+  // Constants
 
-    private val TAG = this.javaClass.simpleName
+  private val TAG = this.javaClass.simpleName
 
-    // Companion
+  // Companion
 
-    companion object {
-        private var instance: KimlicApp? = null
+  companion object {
+    private var instance: KimlicApp? = null
 
-        fun applicationContext(): Context = instance!!.applicationContext
-    }
+    fun applicationContext(): Context = instance!!.applicationContext
+  }
 
-    // Life
+  // Life
 
-    init {
-        instance = this
-    }
+  init {
+    instance = this
+  }
 
-    override fun onCreate() {
-        super.onCreate()
-        Fabric.with(this@KimlicApp, Crashlytics())
-    }
+  override fun onCreate() {
+    super.onCreate()
+    Fabric.with(this@KimlicApp, Crashlytics())
 
-    fun registerReceiver() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+  }
+
+  fun registerReceiver() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //            val intentFilter = IntentFilter()
-        }
-
     }
+
+  }
 }

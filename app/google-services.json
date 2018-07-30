@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "814769737943",
+    "firebase_url": "https://kimlic-e8cf6.firebaseio.com",
+    "project_id": "kimlic-e8cf6",
+    "storage_bucket": "kimlic-e8cf6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:814769737943:android:87a1cd13f287186b",
+        "android_client_info": {
+          "package_name": "com.kimlic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "814769737943-817g7i52c9p09ftmmpg3nhqk1nfaoukr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kimlic",
+            "certificate_hash": "158d094689ec70a5256f16fa7065d9001937a54f"
+          }
+        },
+        {
+          "client_id": "814769737943-hvsprmp5btpbk4hga9j3sq3rkjes3sad.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFoB2CwGn0qdyDFLsLNuXFWa8HnSstNrg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "814769737943-hvsprmp5btpbk4hga9j3sq3rkjes3sad.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
