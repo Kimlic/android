@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.db.KimlicDB
@@ -34,8 +35,6 @@ class MnemonicPreviewActivity : BaseActivity() {
         phraseBt.setOnClickListener {
             when (it.tag) {
                 "show" -> {
-                    // Import phrases
-                    // Use moks
                     phraseList = mnemonicList()
                     setPhrases(phraseList)
                     phraseBt.tag = "copy"
@@ -56,15 +55,10 @@ class MnemonicPreviewActivity : BaseActivity() {
     }
 
     private fun setPhrases(list: List<String>) {
-        val adapter = PhraseAdapter(this, R.layout.item_phrase, list)
-        listView.adapter = adapter
+        listView.adapter = PhraseAdapter(this, R.layout.item_phrase, list)
     }
 
-    private fun mnemonicList(): List<String>{
-        val phraseString = KimlicDB.getInstance()!!.userDao().select(Prefs.currentId).mnemonic
-        val phraseList = phraseString.split(" ")
-        return phraseList
-    }
+    private fun mnemonicList() = model.getUser(Prefs.currentAccountAddress).mnemonic.split(" ")
 
     private fun copyToBuffer(listToSave: List<String>) {
         val clipBoard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager

@@ -35,8 +35,6 @@ class DocumentDetails : BaseActivity() {
 
         fillData(photos = photoMap, documentType = documentType)
 
-        backBt.setOnClickListener { finish() }
-
         addBt.setOnClickListener {
             if (validFields())
                 manageInput()
@@ -44,6 +42,7 @@ class DocumentDetails : BaseActivity() {
             finish()
             // Handle Data
         }
+        backBt.setOnClickListener { finish() }
     }
 
     private fun manageInput() {
@@ -105,11 +104,5 @@ class DocumentDetails : BaseActivity() {
         val bitmapCroped = Bitmap.createBitmap(originalbitmap, (0.15 * width).toInt(), (0.22 * height).toInt(), (0.7 * width).toInt(), (0.35 * height).toInt())
 
         return bitmapCroped
-    }
-
-    private fun rotateBitmap(sourse: Bitmap, angel: Float): Bitmap {
-        val matrix = Matrix()
-        matrix.postRotate(angel)
-        return Bitmap.createBitmap(sourse, 0, 0, sourse.width, sourse.height, matrix, true)
     }
 }

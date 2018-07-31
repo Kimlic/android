@@ -60,6 +60,12 @@ class ProfileViewModel : ViewModel() {
         db.userDao().update(user = user)
     }
 
+    fun addUserPhotoPreview(accountAddress: String, fileName: String) {
+        val user = db.userDao().select(accountAddress = accountAddress)
+        user.portraitPreviewFile = fileName
+        db.userDao().update(user)
+    }
+
     fun addUserAddress(accountAddress: String, address: Address): Long {
         val user = db.userDao().select(accountAddress)
         val userId = user.id
@@ -99,13 +105,9 @@ class ProfileViewModel : ViewModel() {
         db.userDao().update(user)
     }
 
-    fun dropDocument(documentId: Long) {
-        db.documentDao().delete(id = documentId)
-    }
+    fun dropDocument(documentId: Long) = db.documentDao().delete(id = documentId)
 
-    fun addDocumentPhoto(vararg photos: Photo) {
-        db.photoDao().insert(photos.asList())
-    }
+    fun addDocumentPhoto(vararg photos: Photo) = db.photoDao().insert(photos.asList())
 
     fun getRisksLiveData() = risksLiveData
 

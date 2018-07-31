@@ -97,7 +97,7 @@ class UserStageFragment : BaseFragment() {
                 } else "")
 
                 setupKimField(user.kimQuantity)
-                showPhoto("preview_" + user.portraitFile)
+                showPhoto(user.portraitPreviewFile)
                 manageCameraIcon("preview_" + user.portraitFile)
             }
         })

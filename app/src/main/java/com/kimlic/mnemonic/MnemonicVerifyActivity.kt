@@ -45,7 +45,10 @@ class MnemonicVerifyActivity : BaseActivity() {
                 if (phrasesMatch()) {
                     Prefs.isRecoveryEnabled = true
                     successfull()
-                } else errorPopup(getString(R.string.mnemonic_phrases_do_not_match))
+                } else
+                    showPopup(message = getString(R.string.mnemonic_phrases_do_not_match))
+//                    errorPopup(getString(R.string.mnemonic_phrases_do_not_match))
+
             }
         }
 
@@ -74,7 +77,8 @@ class MnemonicVerifyActivity : BaseActivity() {
 
     private fun phrasesMatch(): Boolean {
         var noError = true
-        val mnemonicList = KimlicDB.getInstance()!!.userDao().select(Prefs.currentId).mnemonic.split(" ")
+//        val mnemonicList = KimlicDB.getInstance()!!.userDao().select(Prefs.currentId).mnemonic.split(" ")
+        val mnemonicList = model.getUser(Prefs.currentAccountAddress).mnemonic.split(" ")
 
         for (i in 0 until hintList.size) noError = mnemonicList[hintList[i] - 1].equals(editTextList[i].text.toString())
 

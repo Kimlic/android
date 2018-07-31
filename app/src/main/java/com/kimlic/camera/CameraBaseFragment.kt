@@ -46,8 +46,7 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
     private var cameraId = 0
     private lateinit var camera: Camera
     private var kimlicSurfaceView: KimlicSurfaceView? = null
-    private lateinit var filePath: String
-    //private lateinit var callback: BaseCallback
+    private var filePath: String = ""
     private lateinit var callback: PhotoCallback
 
     // Live
@@ -91,7 +90,6 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
 
     // Public
 
-    //    fun setCallback(callback: BaseCallback) {
     fun setCallback(callback: PhotoCallback) {
         this.callback = callback
     }
@@ -100,8 +98,6 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
 
     private fun setupUI() {
         cameraId = arguments!!.getInt(AppConstants.cameraType.key, AppConstants.cameraRear.intKey)
-        filePath = arguments!!.getString(AppConstants.filePathRezult.key, "default.jpg")
-
         captureBt.setOnClickListener { takePicture() }
     }
 
@@ -158,23 +154,13 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
         return true
     }
 
-
-    /*
-    * Fun shows result photo
-    * */
     private fun showResultPhoto(data: ByteArray?) {
         val bitmap = BitmapFactory.decodeByteArray(data, 0, data!!.size)
         captureBt.visibility = View.GONE
         previewIv.setImageBitmap(rotateBitmap(bitmap, if (cameraId == 1) -90f else 90f))
         confirmLl.visibility = View.VISIBLE
 
-        // Confirm layout save button listner
-        confirmBt.setOnClickListener {
-            closeCamera()
-            savePicture(filePath, data)
-            //callback.callback()
-            callback.callback(filePath)
-        }
+        confirmBt.setOnClickListener { closeCamera(); callback.callback(filePath, data) }
 
         retakelBt.setOnClickListener {
             confirmLl.visibility = View.GONE
@@ -185,26 +171,9 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
         }
     }
 
-    // CameraPicture BaseCallback
-
     override fun onPictureTaken(data: ByteArray?, camera: Camera?) {
-        // Save File
-        // send file URI to activity
         closeCamera()
         showResultPhoto(data)
-        //camera?.startPreview()
-        //callback.callback()
-    }
-
-    private fun savePicture(filePath: String, data: ByteArray?) {
-        val fos: FileOutputStream?
-        try {
-            fos = KimlicApp.applicationContext().openFileOutput(filePath, Context.MODE_PRIVATE)
-            fos.write(data)
-            fos.close()
-        } catch (e: Exception) {
-            throw Exception("Can't write data to internal storage")
-        }
 
     }
 

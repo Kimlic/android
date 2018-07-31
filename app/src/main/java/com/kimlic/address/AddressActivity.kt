@@ -32,6 +32,7 @@ import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.BaseCallback
+import com.kimlic.utils.UserPhotos
 import kotlinx.android.synthetic.main.activity_address.*
 import java.io.File
 
@@ -47,6 +48,7 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
     private lateinit var placeAutocompleteAdapter: PlaceAutocompleteAdapter
     private lateinit var address: Address
     private lateinit var addressPhoto: Photo
+    private lateinit var addressBitmap: Bitmap
     private var addressId: Long = 0
     private var mGoogleApiClient: GoogleApiClient? = null
     private val LAT_LNG_BOUNDS = LatLngBounds(LatLng(-40.0, -168.0), LatLng(71.0, 136.0))
@@ -97,10 +99,12 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
             }
 
             TAKE_PHOTO_REQUEST_CODE -> {
-                val fileName = data?.extras?.getString(AppConstants.filePathRezult.key, "")
+                val dataArray = data?.extras?.getByteArray(AppConstants.documentByteArray.key)
+                addressBitmap = BitmapFactory.decodeByteArray(dataArray, 0, dataArray!!.size)
 
-                showPickedFile(fileName!!)
-                addressPhoto = Photo(file = fileName, type = "address", addressId = addressId)
+
+                showPickedBitmap(addressBitmap)
+                addressPhoto = Photo(file = Prefs.currentAccountAddress+UserPhotos.bill.fileName, type = "address", addressId = addressId)
                 isPhotoPresent = true
             }
         }
@@ -181,14 +185,14 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
         cancelAddressBt.visibility = View.INVISIBLE
     }
 
-    private fun showPickedFile(fileName: String) {
+    private fun showPickedBitmap(bitmap: Bitmap) {
         addBt.visibility = View.GONE
 
         val layoutParams = ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         layoutParams.setMargins(16, 16, 16, 16)
         documentIv.layoutParams = layoutParams
         documentIv.background = null
-        documentIv.setImageBitmap(croped(fileName))
+        documentIv.setImageBitmap(croped(bitmap))
 
     }
 
@@ -245,19 +249,11 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
 
     // Private helpers
 
-    private fun rotateBitmap(sourse: Bitmap, angel: Float): Bitmap {
-        val matrix = Matrix()
-        matrix.postRotate(angel)
-        return Bitmap.createBitmap(sourse, 0, 0, sourse.width, sourse.height, matrix, true)
-    }
-
-    private fun croped(fileName: String): Bitmap {
-        val bitmap = BitmapFactory.decodeFile(this.applicationContext.filesDir.toString() + "/" + fileName)
+    private fun croped(bitmap: Bitmap): Bitmap {
         val originalbitmap = rotateBitmap(bitmap, 90f)
         val width = originalbitmap.width
         val height = originalbitmap.height
         val bitmapCroped = Bitmap.createBitmap(originalbitmap, (0.15 * width).toInt(), (0.08 * height).toInt(), (0.7 * width).toInt(), (0.5 * height).toInt())
-
         return bitmapCroped
     }
 }

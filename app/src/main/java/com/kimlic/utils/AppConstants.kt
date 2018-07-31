@@ -36,6 +36,7 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
     documentID("id"),
     documentPermit("permit"),
     documentToVerify("DOCUMENT_TO_VERIFY"),
+    documentByteArray("DOCUMENT_BYTE_ARRAY"),
 
     // File path
 

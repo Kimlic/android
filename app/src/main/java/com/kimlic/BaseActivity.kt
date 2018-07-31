@@ -4,6 +4,8 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.DialogInterface
 import android.content.pm.ActivityInfo
+import android.graphics.Bitmap
+import android.graphics.Matrix
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
@@ -14,6 +16,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.ErrorPopupFragment
+import java.io.File
+import java.io.FileOutputStream
 
 abstract class BaseActivity : AppCompatActivity() {
 
@@ -99,5 +103,24 @@ abstract class BaseActivity : AppCompatActivity() {
 
         val dialog = builder.create()
         dialog.show()
+    }
+
+    fun saveBitmap(fileName: String, bitmap: Bitmap) {
+        val fos: FileOutputStream?
+        val file = File(KimlicApp.applicationContext().filesDir.toString() + "/" + fileName)
+        try {
+            fos = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 60, fos)
+            fos.flush()
+            fos.close()
+        } catch (e: Exception) {
+            throw Exception("Can't write data to internal storage")
+        }
+    }
+
+    fun rotateBitmap(sourse: Bitmap, angel: Float): Bitmap {
+        val matrix = Matrix()
+        matrix.postRotate(angel)
+        return Bitmap.createBitmap(sourse, 0, 0, sourse.width, sourse.height, matrix, true)
     }
 }

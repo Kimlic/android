@@ -1,25 +1,20 @@
 package com.kimlic.documents
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import com.kimlic.BaseActivity
 import com.kimlic.R
-import com.kimlic.db.entity.Document
 import com.kimlic.documents.fragments.DocumentBillFragment
-import com.kimlic.preferences.Prefs
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.PhotoCallback
-import com.kimlic.utils.UserPhotos
 
 class BillActivity : BaseActivity() {
 
     // Variables
 
     private lateinit var billFragment: DocumentBillFragment
-    private lateinit var fileName: String
 
     // Life
 
@@ -38,16 +33,13 @@ class BillActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        fileName = Prefs.currentAccountAddress + "_" + UserPhotos.bill.fileName
-
         initFragments()
 
         billFragment.setCallback(object : PhotoCallback {
-            override fun callback(fileName: String) {
+            override fun callback(fileName: String, data: ByteArray) {// TODO byte array
                 Log.d("TAGBILL", fileName)
                 val intent = Intent()
-                intent.putExtra(AppConstants.filePathRezult.key, fileName)
-
+                intent.putExtra(AppConstants.documentByteArray.key, data)
                 setResult(Activity.RESULT_OK, intent)
                 finish()
             }
@@ -59,7 +51,6 @@ class BillActivity : BaseActivity() {
     private fun initFragments() {
         val bundle = Bundle()
         bundle.putInt(AppConstants.cameraType.key, AppConstants.cameraRear.intKey)
-        bundle.putString(AppConstants.filePathRezult.key, fileName)
         billFragment = DocumentBillFragment.newInstance(bundle)
     }
 }

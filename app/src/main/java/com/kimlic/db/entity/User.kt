@@ -13,6 +13,7 @@ data class User(
         @ColumnInfo(name = "kim_quantity") var kimQuantity: Int = 0,
         @ColumnInfo(name = "mnemonic") var mnemonic: String = "",
         @ColumnInfo(name = "portrait_file") var portraitFile: String = "",
+        @ColumnInfo(name = "portrait_preview_file") var portraitPreviewFile: String = "",
         @ColumnInfo(name = "account_address") var accountAddress: String = "",
         @ColumnInfo(name = "inserted_at") var insertedAt: Long = System.currentTimeMillis()
 )

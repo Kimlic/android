@@ -27,7 +27,6 @@ class DocumentVerifyChooseActivity : BaseActivity(), View.OnClickListener {
 
     // Variables
 
-   // private lateinit var model: DocumentVerifyChooseViewModel
     private lateinit var types: MutableMap<String, String>
 
     // Life
@@ -63,7 +62,6 @@ class DocumentVerifyChooseActivity : BaseActivity(), View.OnClickListener {
                         Pair("permit", getString(R.string.life_permit)))
 
                 documents!!.forEach { types.remove(it.type) }
-
                 buttonsList.forEach { it.visibility = View.GONE }
 
                 when (types.size) {
@@ -118,11 +116,6 @@ class DocumentVerifyChooseActivity : BaseActivity(), View.OnClickListener {
         val height = rotated.height
         val bitmapCroped = Bitmap.createBitmap(rotated, (0.25 * width).toInt(), (0.1 * height).toInt(), (0.5 * width).toInt(), (0.7 * height).toInt())
         return bitmapCroped
-    }
-
-    private fun rotateBitmap(source: Bitmap, angel: Float): Bitmap {
-        val matrix = Matrix(); matrix.postRotate(angel)
-        return Bitmap.createBitmap(source, 0, 0, source.width, source.height, matrix, true)
     }
 
 }
