@@ -1,14 +1,21 @@
 package com.kimlic.stage
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.FragmentTransaction
+import android.util.Log
 import android.view.View
+import android.widget.Toast
+import com.google.zxing.integration.android.IntentIntegrator
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.preferences.Prefs
+import com.kimlic.scanner.ScannerActivity
 import kotlinx.android.synthetic.main.activity_stage.*
 
 class StageActivity : BaseActivity() {
+
+    val SCAN_REQUEST_CODE = 1100
 
     // Variables
 
@@ -32,6 +39,21 @@ class StageActivity : BaseActivity() {
         moveTaskToBack(true)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == SCAN_REQUEST_CODE) {
+
+            val result = IntentIntegrator.parseActivityResult(resultCode, data)
+
+            if (result.getContents() == null) {
+                Log.d("TAGSCANNER", "Cancelled scan")
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show()
+            } else {
+                Log.d("TAGSCANNER", "Scanned")
+                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
     // Private
 
     private fun setupUI() {
@@ -50,8 +72,12 @@ class StageActivity : BaseActivity() {
             accountsBt.isSelected = true; profileBt.isSelected = false; accountsLineV.visibility = View.VISIBLE; profileLineV.visibility = View.INVISIBLE
             replaceAccountsFragment()
         }
-        scanBt.setOnClickListener { showToast("Scan button is pressed") }
+        scanBt.setOnClickListener {
+
+            IntentIntegrator(this).setOrientationLocked(true).setRequestCode(SCAN_REQUEST_CODE).setCaptureActivity(ScannerActivity::class.java).initiateScan()
+        }
     }
+
     private fun initFragments() {
         userStageFragment = UserStageFragment.newInstance()
         accountsStageFragment = AccountsStageFragment.newInstance()

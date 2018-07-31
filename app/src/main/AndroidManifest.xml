@@ -1,162 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.kimlic">
+  package="com.kimlic">
 
-    <uses-feature
-        android:name="android.permission.USE_FINGERPRINT"
-        android:required="false" />
+  <uses-feature
+    android:name="android.permission.USE_FINGERPRINT"
+    android:required="false"/>
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
+  <uses-permission android:name="android.permission.CAMERA"/>
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
-    <application
-        android:name=".KimlicApp"
-        android:allowBackup="false"
-        android:hardwareAccelerated="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:largeHeap="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDSjiySTrfkIkTwZhim9aroVIb7r5_CUlU" />
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="a5f149222cca55fee6eb72b0c20f2347242e97a2" />
+  <application
+    android:allowBackup="false"
+    android:hardwareAccelerated="true"
+    android:icon="@mipmap/ic_launcher"
+    android:label="@string/app_name"
+    android:largeHeap="true"
+    android:name=".KimlicApp"
+    android:roundIcon="@mipmap/ic_launcher_round"
+    android:supportsRtl="true"
+    android:theme="@style/AppTheme">
+    <meta-data
+      android:name="com.google.android.geo.API_KEY"
+      android:value="AIzaSyDSjiySTrfkIkTwZhim9aroVIb7r5_CUlU"/>
+    <meta-data
+      android:name="com.google.android.gms.version"
+      android:value="@integer/google_play_services_version"/>
+    <meta-data
+      android:name="io.fabric.ApiKey"
+      android:value="a5f149222cca55fee6eb72b0c20f2347242e97a2"/>
 
-        <service android:name=".Firebase">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
+    <service android:name=".Firebase">
+      <intent-filter>
+        <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+      </intent-filter>
+    </service>
 
-        <service
-            android:name=".MessagingService">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-            </intent-filter>
-        </service>
+    <service
+      android:name=".MessagingService">
+      <intent-filter>
+        <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+      </intent-filter>
+    </service>
 
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+    <activity android:name=".MainActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+        <category android:name="android.intent.category.LAUNCHER"/>
 
-                <action android:name="android.intent.action.VIEW" />
+        <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+        <category android:name="android.intent.category.DEFAULT"/>
+      </intent-filter>
+    </activity>
 
-        <receiver android:name=".notification.KimlicReceiver">
-            <intent-filter>
-                <action android:name="mock" />
-            </intent-filter>
-        </receiver>
+    <receiver android:name=".notification.KimlicReceiver">
+      <intent-filter>
+        <action android:name="mock"/>
+      </intent-filter>
+    </receiver>
 
-        <activity
-            android:name=".splash.SplashScreenActivity"
-            android:label="Splash Screen"
-            android:screenOrientation="portrait" />
+    <activity
+      android:label="Splash Screen"
+      android:name=".splash.SplashScreenActivity"
+      android:screenOrientation="portrait"/>
 
-        <activity
-            android:name=".passcode.PasscodeActivity"
-            android:label="Passcode"
-            android:screenOrientation="portrait" />
+    <activity
+      android:label="Passcode"
+      android:name=".passcode.PasscodeActivity"
+      android:screenOrientation="portrait"/>
 
-        <activity
-            android:name=".tutorial.TutorialActivity"
-            android:label="Tutorial"
-            android:screenOrientation="portrait" />
+    <activity
+      android:label="Tutorial"
+      android:name=".tutorial.TutorialActivity"
+      android:screenOrientation="portrait"/>
 
-        <activity
-            android:name=".auth.TouchIdActivity"
-            android:label="Touch ID"
-            android:screenOrientation="portrait" />
+    <activity
+      android:label="Touch ID"
+      android:name=".auth.TouchIdActivity"
+      android:screenOrientation="portrait"/>
 
-        <activity
-            android:name=".mnemonic.MnemonicVerifyActivity"
-            android:label="Verify"
-            android:screenOrientation="portrait" />
+    <activity
+      android:label="Verify"
+      android:name=".mnemonic.MnemonicVerifyActivity"
+      android:screenOrientation="portrait"/>
 
-        <activity
-            android:name=".mnemonic.MnemonicPreviewActivity"
-            android:label="Mnemonic Phrase"
-            android:screenOrientation="portrait" />
+    <activity
+      android:label="Mnemonic Phrase"
+      android:name=".mnemonic.MnemonicPreviewActivity"
+      android:screenOrientation="portrait"/>
 
-        <activity
-            android:name=".recovery.AccountRecoveryActivity"
-            android:label="Account recovery" />
+    <activity
+      android:label="Account recovery"
+      android:name=".recovery.AccountRecoveryActivity"/>
 
-        <activity
-            android:name=".terms.TermsActivity"
-            android:label="Terms &amp; Privacy" />
+    <activity
+      android:label="Terms &amp; Privacy"
+      android:name=".terms.TermsActivity"/>
 
-        <activity
-            android:name=".SignupRecoveryActivity"
-            android:label="Signup Recovery" />
+    <activity
+      android:label="Signup Recovery"
+      android:name=".SignupRecoveryActivity"/>
 
-        <activity
-            android:name=".settings.SettingsActivity"
-            android:label="Settings" />
+    <activity
+      android:label="Settings"
+      android:name=".settings.SettingsActivity"/>
 
-        <activity
-            android:name=".stage.StageActivity"
-            android:label="Main Stage"
-            android:launchMode="singleTask" />
+    <activity
+      android:label="Main Stage"
+      android:launchMode="singleTask"
+      android:name=".stage.StageActivity"/>
 
-        <activity
-            android:name=".phone.PhoneActivity"
-            android:label="Phone" />
+    <activity
+      android:label="Phone"
+      android:name=".phone.PhoneActivity"/>
 
-        <activity
-            android:name=".phone.PhoneVerifyActivity"
-            android:label="Phone Verify" />
+    <activity
+      android:label="Phone Verify"
+      android:name=".phone.PhoneVerifyActivity"/>
 
-        <activity
-            android:name=".name.NameActivity"
-            android:label="Name" />
+    <activity
+      android:label="Name"
+      android:name=".name.NameActivity"/>
 
-        <activity
-            android:name=".documents.DocumentVerifyChooseActivity"
-            android:label="Verify ID document" />
+    <activity
+      android:label="Verify ID document"
+      android:name=".documents.DocumentVerifyChooseActivity"/>
 
-        <activity
-            android:name=".email.EmailActivity"
-            android:label="Email" />
+    <activity
+      android:label="Email"
+      android:name=".email.EmailActivity"/>
 
-        <activity
-            android:name=".email.EmailVerifyActivity"
-            android:label="Email verify" />
+    <activity
+      android:label="Email verify"
+      android:name=".email.EmailVerifyActivity"/>
 
-        <activity
-            android:name=".documents.DocumentVerifyActivity"
-            android:label="Document Verify" />
+    <activity
+      android:label="Document Verify"
+      android:name=".documents.DocumentVerifyActivity"/>
 
-        <activity
-            android:name=".address.AddressActivity"
-            android:label="Address"
-            android:windowSoftInputMode="adjustResize|adjustPan" />
+    <activity
+      android:label="Address"
+      android:name=".address.AddressActivity"
+      android:windowSoftInputMode="adjustResize|adjustPan"/>
 
-        <activity
-            android:name=".documents.PortraitActivity"
-            android:label="Portrait" />
+    <activity
+      android:label="Portrait"
+      android:name=".documents.PortraitActivity"/>
 
-        <activity
-            android:name=".documents.DocumentDetails"
-            android:label="Document verify details" />
+    <activity
+      android:label="Document verify details"
+      android:name=".documents.DocumentDetails"/>
 
-        <activity
-            android:name=".documents.BillActivity"
-            android:label="Bill" />
-    </application>
+    <activity
+      android:label="Bill"
+      android:name=".documents.BillActivity"/>
+
+    <activity
+      android:label="Scanner"
+      android:name=".scanner.ScannerActivity"/>
+
+  </application>
 
 </manifest>

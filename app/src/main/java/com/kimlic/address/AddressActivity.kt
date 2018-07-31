@@ -104,7 +104,7 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
 
 
                 showPickedBitmap(addressBitmap)
-                addressPhoto = Photo(file = Prefs.currentAccountAddress+UserPhotos.bill.fileName, type = "address", addressId = addressId)
+                addressPhoto = Photo(file = Prefs.currentAccountAddress + UserPhotos.bill.fileName, type = "address", addressId = addressId)
                 isPhotoPresent = true
             }
         }
@@ -132,7 +132,7 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
         if (fieldsAreValid()) {
             address.value = addressEt.text.toString()
             model.updateUserAddress(address = address)
-            model.addDocumentPhoto(photos = addressPhoto)
+            model.addDocumentPhoto(photos = *arrayOf(addressPhoto))
             successfull()
         }
     }

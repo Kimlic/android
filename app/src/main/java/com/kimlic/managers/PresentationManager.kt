@@ -8,14 +8,15 @@ import com.kimlic.R
 import com.kimlic.SignupRecoveryActivity
 import com.kimlic.address.AddressActivity
 import com.kimlic.auth.TouchIdActivity
+import com.kimlic.documents.*
 import com.kimlic.email.EmailActivity
 import com.kimlic.email.EmailVerifyActivity
+import com.kimlic.mnemonic.MnemonicPreviewActivity
+import com.kimlic.mnemonic.MnemonicVerifyActivity
 import com.kimlic.name.NameActivity
 import com.kimlic.passcode.PasscodeActivity
 import com.kimlic.phone.PhoneActivity
 import com.kimlic.phone.PhoneVerifyActivity
-import com.kimlic.mnemonic.MnemonicPreviewActivity
-import com.kimlic.mnemonic.MnemonicVerifyActivity
 import com.kimlic.recovery.AccountRecoveryActivity
 import com.kimlic.settings.SettingsActivity
 import com.kimlic.splash.SplashScreenActivity
@@ -24,7 +25,6 @@ import com.kimlic.terms.TermsActivity
 import com.kimlic.tutorial.TutorialActivity
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.UserPhotos
-import com.kimlic.documents.*
 
 object PresentationManager {
 
@@ -179,16 +179,12 @@ object PresentationManager {
         present(presenter = presenter, className = DocumentVerifyActivity::class.java, isStarting = false, params = params)
     }
 
-    fun verifyDetails(presenter: BaseActivity, accountAddres:String, documentType: String) {
+    fun verifyDetails(presenter: BaseActivity, accountAddres: String, documentType: String) {
         val params = HashMap<String, String>()
         params.put(AppConstants.documentType.key, documentType)
         params.put(AppConstants.accountAddress.key, accountAddres)
 
         present(presenter = presenter, className = DocumentDetails::class.java, isStarting = false, params = params)
-    }
-
-    fun verifyBill(presenter: BaseActivity) {
-        present(presenter = presenter, className = BillActivity::class.java, isStarting = false)
     }
 
     fun signupRecovery(presenter: BaseActivity) {

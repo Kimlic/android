@@ -225,4 +225,6 @@
   <string name="add_new_document">Add new Document</string>
   <string name="residence_permit">Residence Permit</string>
   <string name="add_file">Add File</string>
+  <string name="scan_the_qr_code_to_login">Scan the QR code to login</string>
+  <string name="qrcode">QRcode</string>
 </resources>
