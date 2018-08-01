@@ -101,6 +101,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.2'
 
     // Zxing
-    compile 'com.journeyapps:zxing-android-embedded:3.6.0'
+    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 }
 apply plugin: 'com.google.gms.google-services'

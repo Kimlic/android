@@ -1,12 +1,10 @@
 package com.kimlic.stage
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +15,6 @@ import com.kimlic.R
 import com.kimlic.db.entity.*
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
-import com.kimlic.ProfileViewModel
 import com.kimlic.stage.adapter.ContactsAdapter
 import com.kimlic.stage.adapter.DocumentAdapter
 import com.kimlic.stage.adapter.Icons_

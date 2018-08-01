@@ -1,6 +1,5 @@
 package com.kimlic
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
@@ -11,8 +10,6 @@ import com.google.gson.reflect.TypeToken
 import com.kimlic.API.KimlicRequest
 import com.kimlic.API.SyncObject
 import com.kimlic.API.VolleySingleton
-import com.kimlic.db.KimlicDB
-import com.kimlic.db.entity.User
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
 import com.kimlic.quorum.QuorumKimlic
@@ -121,8 +118,8 @@ class MainActivity : BaseActivity() {
                     val approvedObjects: List<SyncObject> = Gson().fromJson(jsonToParce, type)
                     val approved = approvedObjects.map { it.name }
 
-                    if (!approved.contains("phone")) model.dropUserContact(Prefs.currentAccountAddress, "phone")
-                    if (!approved.contains("email")) model.dropUserContact(Prefs.currentAccountAddress, "email")
+                    if (!approved.contains("phone")) model.deleteUserContact(Prefs.currentAccountAddress, "phone")
+                    if (!approved.contains("email")) model.deleteUserContact(Prefs.currentAccountAddress, "email")
                 },
                 Response.ErrorListener {})
 
