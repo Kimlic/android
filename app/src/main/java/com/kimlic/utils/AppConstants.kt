@@ -1,6 +1,7 @@
 package com.kimlic.utils
 
 enum class AppConstants(val key: String, val intKey: Int = -1) {
+
     appPreferences("KIMLIC_PREFERENCES"),
 
     auth("AUTH"),
@@ -15,6 +16,8 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
     isTouchEnabled("IS_TOUCH_ENABLED"),
     isRecoveryEnabled("IS_RECOVERY_ENABLED"),
     isRecoveryOffered("IS_RECOVERY_OFFERED"),
+
+    isGoogleSigneIn("IS_GOOGLE_SIGNE_IN"),
 
     terms("TERMS"),
     privacy("PRIVACY"),

@@ -2,13 +2,15 @@ package com.kimlic.utils
 
 enum class QuorumURL(val url: String) {
 
-    config("https://mobile-api-dev.kimlic.com/api/config"),
 
-    profileSync("https://mobile-api-dev.kimlic.com/api/sync"),
+    quorum("https://mobile-api-test.kimlic.com/api/quorum"),
+    config("https://mobile-api-test.kimlic.com/api/config"),
 
-    emailVerify("https://mobile-api-dev.kimlic.com/api/verifications/email"),
-    emailVerifyApprove("https://mobile-api-dev.kimlic.com/api/verifications/email/approve"),
+    profileSync("https://mobile-api-test.kimlic.com/api/sync"),
 
-    phoneVerify("https://mobile-api-dev.kimlic.com/api/verifications/phone"),
-    phoneVierifyApprove("https://mobile-api-dev.kimlic.com/api/verifications/phone/approve")
+    emailVerify("https://mobile-api-test.kimlic.com/api/verifications/email"),
+    emailVerifyApprove("https://mobile-api-test.kimlic.com/api/verifications/email/approve"),
+
+    phoneVerify("https://mobile-api-test.kimlic.com/api/verifications/phone"),
+    phoneVierifyApprove("https://mobile-api-test.kimlic.com/api/verifications/phone/approve")
 }

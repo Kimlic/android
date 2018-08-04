@@ -23,6 +23,7 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
         isPasscodeOffered = false
         isRecoveryOffered = false
         isUserPhotoTaken = false
+        isUserGoogleSigned = false
 
         // User profile preferences
 
@@ -76,6 +77,11 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
     var useFingerprint: Boolean
         get() = getBoolean(AppConstants.fingerprint.key)
         set(value) = setBoolean(AppConstants.fingerprint.key, value)
+
+    var isUserGoogleSigned: Boolean
+        get() = getBoolean(AppConstants.isGoogleSigneIn.key)
+        set(value) = setBoolean(AppConstants.isGoogleSigneIn.key, value)
+
 
     // User photo
 

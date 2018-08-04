@@ -14,8 +14,10 @@ import butterknife.ButterKnife
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.db.entity.Document
+import com.kimlic.db.entity.User
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
+import com.kimlic.utils.mappers.FileNameTxtBase64ToBitmap
 import kotlinx.android.synthetic.main.activity_verify_document.*
 
 class DocumentVerifyChooseActivity : BaseActivity(), View.OnClickListener {
@@ -51,9 +53,13 @@ class DocumentVerifyChooseActivity : BaseActivity(), View.OnClickListener {
     // Private
 
     private fun setupUI() {
-        setupBackground(model.getUser(Prefs.currentAccountAddress).portraitFile)
+        model.getUserLive().observe(this, object : Observer<User> {
+            override fun onChanged(user: User?) {
+                setupBackground(user!!.portraitFile)
+            }
+        })
 
-        model.getUserDocumentsLive(Prefs.currentAccountAddress).observe(this, object : Observer<List<Document>> {
+        model.getUserDocumentsLive().observe(this, object : Observer<List<Document>> {
             override fun onChanged(documents: List<Document>?) {
                 types = mutableMapOf(
                         Pair("passport", getString(R.string.passport)),
@@ -102,9 +108,9 @@ class DocumentVerifyChooseActivity : BaseActivity(), View.OnClickListener {
 
     private fun setupBackground(fileName: String) {
         val filePath = this.applicationContext.filesDir.toString() + "/" + fileName
-        val bitmap = BitmapFactory.decodeFile(filePath)
+        val bitmap = FileNameTxtBase64ToBitmap().transform(fileName)
 
-        if(bitmap!=null){
+        if (bitmap != null) {
             rootIv.scaleType = ImageView.ScaleType.CENTER_CROP
             rootIv.setImageBitmap(croped(bitmap))
         }

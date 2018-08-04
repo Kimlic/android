@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -55,15 +56,6 @@ class UserStageFragment : BaseFragment() {
         setupUI()
     }
 
-    override fun onResume() {
-        //checkPhotos()
-//        Log.d("TAGACCOUNTADDRES", "account-addres = _" + Prefs.currentAccountAddress)
-//        Log.d("TAGACCOUNTADDRES", "user address" + model.getUserAddress(Prefs.currentAccountAddress)?.toString())
-//        Log.d("TAGACCOUNTADDRES", "user address photo"+ model.getUserAddressPhoto(Prefs.currentAccountAddress)?.toString())
-
-        super.onResume()
-    }
-
     // Private
 
     private fun setupUI() {
@@ -87,12 +79,13 @@ class UserStageFragment : BaseFragment() {
     }
 
     private fun setupUser() {
-        model.getUserLive(Prefs.currentAccountAddress).observe(this@UserStageFragment, object : Observer<User> {
+        model.getUserLive().observe(this@UserStageFragment, object : Observer<User> {
             override fun onChanged(user: User?) {
                 setupNameField(if (user!!.firstName.isNotEmpty()) {
                     "${user.firstName} ${user.lastName}"
                 } else "")
 
+                Log.d("TAGU", "user preview file = " + user.portraitPreviewFile.toString())
                 setupKimField(user.kimQuantity)
                 showPhoto(user.portraitPreviewFile)
                 manageCameraIcon("preview_" + user.portraitFile)
@@ -158,7 +151,7 @@ class UserStageFragment : BaseFragment() {
             }
         })
 
-        model.getUserDocumentsLive(Prefs.currentAccountAddress).observe(this@UserStageFragment, object : Observer<List<Document>> {
+        model.getUserDocumentsLive().observe(this@UserStageFragment, object : Observer<List<Document>> {
             override fun onChanged(documents: List<Document>?) {
                 documentsAdapter.setDocumentsList(documents!!)
             }
@@ -201,7 +194,7 @@ class UserStageFragment : BaseFragment() {
         userPhotoLl.addView(userPhoto)
     }
 
-    // Setup profile Fields
+// Setup profile Fields
 
     private fun setupKimField(kim: Int = 0) {
         kimItem.iconIv.background = resources.getDrawable(if (kim == 0) Icons_.KIM_BLUE.icon else Icons_.KIM_WHITE.icon, null)

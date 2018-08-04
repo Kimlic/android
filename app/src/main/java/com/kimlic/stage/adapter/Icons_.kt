@@ -4,8 +4,8 @@ import com.kimlic.R
 
 enum class Icons_(val icon: Int) {
 
-    KIM_BLUE(R.drawable.ic_profile_name_icon_blue),
-    KIM_WHITE(R.drawable.ic_profile_name_icon_white),
+    KIM_BLUE(R.drawable.ic_balance_blue_icon),
+    KIM_WHITE(R.drawable.ic_balance_white_icon),
 
     NAME_BLUE(R.drawable.ic_profile_name_icon_blue),
     NAME_WHITE(R.drawable.ic_profile_name_icon_white),

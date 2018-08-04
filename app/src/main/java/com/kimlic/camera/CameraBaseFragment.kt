@@ -46,7 +46,6 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
     private var cameraId = 0
     private lateinit var camera: Camera
     private var kimlicSurfaceView: KimlicSurfaceView? = null
-    private var filePath: String = ""
     private lateinit var callback: PhotoCallback
 
     // Live
@@ -160,7 +159,7 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
         previewIv.setImageBitmap(rotateBitmap(bitmap, if (cameraId == 1) -90f else 90f))
         confirmLl.visibility = View.VISIBLE
 
-        confirmBt.setOnClickListener { closeCamera(); callback.callback(filePath, data) }
+        confirmBt.setOnClickListener { closeCamera(); callback.callback(data) }
 
         retakelBt.setOnClickListener {
             confirmLl.visibility = View.GONE

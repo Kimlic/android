@@ -2,30 +2,30 @@ package com.kimlic.utils
 
 enum class UserPhotos(val fileName: String) {
 
-    stagePortrait("portrait.jpg"),
+    //    stagePortrait("portrait.jpg"),
+    stagePortrait("portrait.txt"),
 
     portraitFilePath("PORTRAIT_FILE_PATH"),
     frontFilePath("FRONT_FILE_PATH"),
     backFilePath("BACK_FILE_PATH"),
 
-    passportPortrait("passportPortrait.jpg"),
-    passportFrontSide("passportFront.jpg"),
-    passportBackSide("passportBack.jpg"),
+    passportPortrait("passportPortrait.txt"),
+    passportFront("passportFront.txt"),
+    passportBack("passportBack.txt"),
 
-    driverLicensePortrait("licensePortait.jpg"),
-    driverLicensFrontSide("licenseFront.jpg"),
-    driverLicensBackSide("licenseBack.jpg"),
+    licensePortrait("licensePortait.txt"),
+    licensFront("licenseFront.txt"),
+    licensBack("licenseBack.txt"),
 
-    IDCardPortrait("ldPortrait.jpg"),
-    IDCardFrontSide("ldFront.jpg"),
-    IDCardBackSide("ldBack.jpg"),
+    idPortrait("ldPortrait.txt"),
+    idFront("ldFront.txt"),
+    idBack("ldBack.txt"),
 
-    PermitPortrait("permitPortrait.jpg"),
-    PermitFrontSide("permitFront.jpg"),
-    PermitBackSide("permitBack.jpg"),
+    permitPortrait("permitPortrait.txt"),
+    permitFront("permitFront.txt"),
+    permitBack("permitBack.txt"),
 
-
-    bill("bill.jpg"),
+    bill("bill.txt"),
 
     default("default.jpg"),
 }

@@ -9,6 +9,7 @@ import android.widget.Toast
 import com.google.zxing.integration.android.IntentIntegrator
 import com.kimlic.BaseActivity
 import com.kimlic.R
+import com.kimlic.googledrive.NewGoogleActivity
 import com.kimlic.preferences.Prefs
 import com.kimlic.scanner.ScannerActivity
 import kotlinx.android.synthetic.main.activity_stage.*
@@ -73,7 +74,6 @@ class StageActivity : BaseActivity() {
             replaceAccountsFragment()
         }
         scanBt.setOnClickListener {
-
             IntentIntegrator(this).setOrientationLocked(true).setRequestCode(SCAN_REQUEST_CODE).setCaptureActivity(ScannerActivity::class.java).initiateScan()
         }
     }

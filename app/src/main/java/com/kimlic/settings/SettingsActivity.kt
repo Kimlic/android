@@ -126,9 +126,5 @@ class SettingsActivity : BaseActivity() {
         intent.putExtra("action", "set")
         startActivityForResult(intent, PASSCODE_REQUEST_CODE)
     }
-
-    private fun deleteUserPhotos() {
-
-    }
 }
 

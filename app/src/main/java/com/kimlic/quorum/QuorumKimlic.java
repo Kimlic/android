@@ -10,6 +10,7 @@ import com.kimlic.quorum.contracts.KimlicContractsContext;
 import com.kimlic.quorum.crypto.MnemonicUtils;
 import com.kimlic.quorum.crypto.SecureRandomTools;
 
+import com.kimlic.utils.QuorumURL;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.concurrent.ExecutionException;
@@ -68,7 +69,7 @@ public class QuorumKimlic {
     if (mKimlicContractsContext == null) {
       throw new InterruptedException("Empty contract address");
     }
-
+    //TODO catch quorum server Error!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     return mKimlicContractsContext.getAccountStorageAdapter().sendAsync().get();
   }
 
@@ -118,7 +119,8 @@ public class QuorumKimlic {
     sInstance = this;
     mMnemonic = mnemonic;
 
-    mWeb3 = Web3.getInstance(QUORUM_URL).getWeb3();
+//    mWeb3 = Web3.getInstance(QUORUM_URL).getWeb3();
+    mWeb3 = Web3.getInstance(QuorumURL.quorum.getUrl()).getWeb3();
     ECKeyPair keyPair = generateKeyPair(mMnemonic);
     mWalletAddress = generateAddress(keyPair);
     mCredentials = credentialsFrom(keyPair);

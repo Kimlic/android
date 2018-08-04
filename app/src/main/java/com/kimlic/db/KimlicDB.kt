@@ -24,6 +24,7 @@ abstract class KimlicDB : RoomDatabase() {
             if (INSTANCE == null) {
                 synchronized(KimlicDB::class) {
                     INSTANCE = Room.databaseBuilder(KimlicApp.applicationContext(), KimlicDB::class.java, "kimlic.db").allowMainThreadQueries().build()
+                    INSTANCE
                 }
             }
             return INSTANCE

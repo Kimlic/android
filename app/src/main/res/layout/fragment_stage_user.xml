@@ -108,7 +108,7 @@
         android:layout_height="24dp"
         android:layout_gravity="start"
         android:drawablePadding="8dp"
-        android:drawableStart="@drawable/ic_profile_warning_red_white_icon"
+        android:drawableStart="@drawable/ic_blue_warning_icon"
         android:text="@string/you_have_security_risks"
         android:textColor="@android:color/white"
         android:textSize="@dimen/subtitle_text_size"

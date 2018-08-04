@@ -5,7 +5,6 @@ import android.content.Intent
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Matrix
 import android.os.Bundle
 import android.provider.OpenableColumns
 import android.support.constraint.ConstraintLayout
@@ -26,13 +25,11 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.db.entity.Address
-import com.kimlic.db.entity.Photo
 import com.kimlic.documents.BillActivity
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.BaseCallback
-import com.kimlic.utils.UserPhotos
 import kotlinx.android.synthetic.main.activity_address.*
 import java.io.File
 
@@ -46,9 +43,8 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
     // Variables
 
     private lateinit var placeAutocompleteAdapter: PlaceAutocompleteAdapter
-    private lateinit var address: Address
-    private lateinit var addressPhoto: Photo
     private lateinit var addressBitmap: Bitmap
+    private lateinit var addressData: ByteArray
     private var addressId: Long = 0
     private var mGoogleApiClient: GoogleApiClient? = null
     private val LAT_LNG_BOUNDS = LatLngBounds(LatLng(-40.0, -168.0), LatLng(71.0, 136.0))
@@ -99,12 +95,11 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
             }
 
             TAKE_PHOTO_REQUEST_CODE -> {
-                val dataArray = data?.extras?.getByteArray(AppConstants.documentByteArray.key)
-                addressBitmap = BitmapFactory.decodeByteArray(dataArray, 0, dataArray!!.size)
-
+                val data_ = data?.extras?.getByteArray(AppConstants.documentByteArray.key)
+                addressBitmap = BitmapFactory.decodeByteArray(data_, 0, data_!!.size)
+                addressData = data_
 
                 showPickedBitmap(addressBitmap)
-                addressPhoto = Photo(file = Prefs.currentAccountAddress + UserPhotos.bill.fileName, type = "address", addressId = addressId)
                 isPhotoPresent = true
             }
         }
@@ -116,12 +111,11 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
         else
             super.onBackPressed()
     }
+
     // Private
 
     private fun setupUI() {
         setupAddressSerch()
-        addressId = model.addUserAddress(Prefs.currentAccountAddress, Address())
-        address = model.getUserAddress(Prefs.currentAccountAddress)
 
         saveBt.setOnClickListener { manageInput() }
         addBt.setOnClickListener { pickFile() }
@@ -130,9 +124,7 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
 
     private fun manageInput() {
         if (fieldsAreValid()) {
-            address.value = addressEt.text.toString()
-            model.updateUserAddress(address = address)
-            model.addDocumentPhoto(photos = *arrayOf(addressPhoto))
+            model.addUserAddress(value = addressEt.text.toString(), data = addressData)
             successfull()
         }
     }
@@ -193,7 +185,6 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
         documentIv.layoutParams = layoutParams
         documentIv.background = null
         documentIv.setImageBitmap(croped(bitmap))
-
     }
 
     private fun pickFile() {

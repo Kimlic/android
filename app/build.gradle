@@ -102,5 +102,10 @@ dependencies {
 
     // Zxing
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
+
+    // Google Drive
+    implementation 'com.google.android.gms:play-services-drive:15.0.1'
+    implementation 'com.google.android.gms:play-services-auth:15.0.1'
+
 }
 apply plugin: 'com.google.gms.google-services'

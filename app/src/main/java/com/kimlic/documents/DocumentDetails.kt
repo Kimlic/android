@@ -7,6 +7,7 @@ import android.os.Bundle
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.utils.AppConstants
+import com.kimlic.utils.mappers.FileNameTxtBase64ToBitmap
 import kotlinx.android.synthetic.main.activity_verify_details.*
 
 class DocumentDetails : BaseActivity() {
@@ -30,6 +31,8 @@ class DocumentDetails : BaseActivity() {
     private fun setupUI() {
         documentType = intent.extras.getString(AppConstants.documentType.key, "")
         accountAddres = intent.extras.getString(AppConstants.accountAddress.key, "")
+
+
         val photoList = model.getUserDocumentPhotos(accountAddress = accountAddres, documentType = documentType)
         val photoMap = photoList.map { it.type to it.file }.toMap()
 
@@ -45,6 +48,7 @@ class DocumentDetails : BaseActivity() {
         backBt.setOnClickListener { finish() }
     }
 
+    // TODO manage document details
     private fun manageInput() {
         //accountAddres
         // photos list
@@ -97,12 +101,11 @@ class DocumentDetails : BaseActivity() {
     }
 
     private fun croped(fileName: String): Bitmap {
-        val bitmap = BitmapFactory.decodeFile(this.applicationContext.filesDir.toString() + "/" + fileName)
-        val originalbitmap = rotateBitmap(bitmap, 90f)
+        val bitmap = FileNameTxtBase64ToBitmap().transform(fileName)
+        val originalbitmap = rotateBitmap(bitmap!!, 90f)
         val width = originalbitmap.width
         val height = originalbitmap.height
         val bitmapCroped = Bitmap.createBitmap(originalbitmap, (0.15 * width).toInt(), (0.22 * height).toInt(), (0.7 * width).toInt(), (0.35 * height).toInt())
-
         return bitmapCroped
     }
 }

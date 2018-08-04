@@ -2,7 +2,6 @@ package com.kimlic
 
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.os.Handler
 import com.android.volley.Request
 import com.android.volley.Response
 import com.google.gson.Gson
@@ -22,7 +21,6 @@ class MainActivity : BaseActivity() {
     // Variables
 
     private lateinit var splashFragment: SplashScreenFragment
-    // private lateinit var model: ProfileViewModel
 
     // Life
 
@@ -36,14 +34,15 @@ class MainActivity : BaseActivity() {
     private fun setupUI() {
         initFragment()
         splashScreenShow()
-
+//
 //        Prefs.currentAccountAddress = "sdcadvaffvervevcxaervrvrisjdbfiedejbvkekrjbvkjbvb"
 //        val user = User(id = Prefs.currentId, accountAddress = "sdcadvaffvervevcxaervrvrisjdbfiedejbvkekrjbvkjbvb", mnemonic = "efvcvefvcefvcervrvrwgwrgvefveveverc")
-//        KimlicDB.getInstance()!!.userDao().insert(user)
+//        model.insertUser(user)
+//
 //        PresentationManager.stage(this)
-
+//
         if (Prefs.authenticated) {
-            Handler().post({ profileSynckRequest(Prefs.currentAccountAddress) })
+            //Handler().post({ profileSynckRequest(Prefs.currentAccountAddress) })
             quorumRequest()
         } else {
             object : CountDownTimer(3000, 3000) {

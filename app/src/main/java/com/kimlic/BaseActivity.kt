@@ -14,7 +14,7 @@ import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import com.kimlic.profile.ProfileViewModel
+import com.kimlic.model.ProfileViewModel
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.ErrorPopupFragment
 import java.io.File

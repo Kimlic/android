@@ -140,8 +140,8 @@ object PresentationManager {
 
         params.put(AppConstants.documentType.key, AppConstants.documentPassport.key)
         params.put(UserPhotos.portraitFilePath.fileName, UserPhotos.passportPortrait.fileName)
-        params.put(UserPhotos.frontFilePath.fileName, UserPhotos.passportFrontSide.fileName)
-        params.put(UserPhotos.backFilePath.fileName, UserPhotos.passportBackSide.fileName)
+        params.put(UserPhotos.frontFilePath.fileName, UserPhotos.passportFront.fileName)
+        params.put(UserPhotos.backFilePath.fileName, UserPhotos.passportBack.fileName)
 
         present(presenter = presenter, className = DocumentVerifyActivity::class.java, isStarting = false, params = params)
     }
@@ -150,9 +150,9 @@ object PresentationManager {
         val params = HashMap<String, String>()
 
         params.put(AppConstants.documentType.key, AppConstants.documentLicense.key)
-        params.put(UserPhotos.portraitFilePath.fileName, UserPhotos.driverLicensePortrait.fileName)
-        params.put(UserPhotos.frontFilePath.fileName, UserPhotos.driverLicensFrontSide.fileName)
-        params.put(UserPhotos.backFilePath.fileName, UserPhotos.driverLicensBackSide.fileName)
+        params.put(UserPhotos.portraitFilePath.fileName, UserPhotos.licensePortrait.fileName)
+        params.put(UserPhotos.frontFilePath.fileName, UserPhotos.licensFront.fileName)
+        params.put(UserPhotos.backFilePath.fileName, UserPhotos.licensBack.fileName)
 
         present(presenter = presenter, className = DocumentVerifyActivity::class.java, isStarting = false, params = params)
     }
@@ -161,9 +161,9 @@ object PresentationManager {
         val params = HashMap<String, String>()
 
         params.put(AppConstants.documentType.key, AppConstants.documentID.key)
-        params.put(UserPhotos.portraitFilePath.fileName, UserPhotos.IDCardPortrait.fileName)
-        params.put(UserPhotos.frontFilePath.fileName, UserPhotos.IDCardFrontSide.fileName)
-        params.put(UserPhotos.backFilePath.fileName, UserPhotos.IDCardBackSide.fileName)
+        params.put(UserPhotos.portraitFilePath.fileName, UserPhotos.idPortrait.fileName)
+        params.put(UserPhotos.frontFilePath.fileName, UserPhotos.idFront.fileName)
+        params.put(UserPhotos.backFilePath.fileName, UserPhotos.idBack.fileName)
 
         present(presenter = presenter, className = DocumentVerifyActivity::class.java, isStarting = false, params = params)
     }
@@ -172,9 +172,9 @@ object PresentationManager {
         val params = HashMap<String, String>()
 
         params.put(AppConstants.documentType.key, AppConstants.documentPermit.key)
-        params.put(UserPhotos.portraitFilePath.fileName, UserPhotos.PermitFrontSide.fileName)
-        params.put(UserPhotos.frontFilePath.fileName, UserPhotos.PermitFrontSide.fileName)
-        params.put(UserPhotos.backFilePath.fileName, UserPhotos.PermitBackSide.fileName)
+        params.put(UserPhotos.portraitFilePath.fileName, UserPhotos.permitFront.fileName)
+        params.put(UserPhotos.frontFilePath.fileName, UserPhotos.permitFront.fileName)
+        params.put(UserPhotos.backFilePath.fileName, UserPhotos.permitBack.fileName)
 
         present(presenter = presenter, className = DocumentVerifyActivity::class.java, isStarting = false, params = params)
     }

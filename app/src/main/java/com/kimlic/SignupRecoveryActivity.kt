@@ -1,7 +1,6 @@
 package com.kimlic
 
 import android.app.Activity
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import com.android.volley.Request
@@ -9,6 +8,7 @@ import com.android.volley.Response
 import com.kimlic.API.KimlicRequest
 import com.kimlic.API.VolleySingleton
 import com.kimlic.db.entity.User
+import com.kimlic.db.SyncServise
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
 import com.kimlic.quorum.QuorumKimlic
@@ -21,12 +21,11 @@ class SignupRecoveryActivity : BaseActivity() {
 
     // Variables
 
-    //private lateinit var model: ProfileViewModel
-
     // Constants
 
     private val TERMS_ACCEPT_RECOVERY_REQUEST_CODE = 101
     private val TERMS_ACCEPT_CREATE_REQUEST_CODE = 102
+    private val GOOGLE_SIGNE_IN_REQUEST_CODE = 103
 
     // Life
 
@@ -51,13 +50,19 @@ class SignupRecoveryActivity : BaseActivity() {
                     PresentationManager.recovery(this)
                 }
             }
+            GOOGLE_SIGNE_IN_REQUEST_CODE -> {
+                if (resultCode != Activity.RESULT_OK) {
+                    Prefs.isUserGoogleSigned = false; return
+                }
+                Prefs.isUserGoogleSigned = true
+            }
         }
     }
 
     // Private
 
     private fun setupUI() {
-        //model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        SyncServise.signIn(this, GOOGLE_SIGNE_IN_REQUEST_CODE)
 
         createBt.setOnClickListener {
             initNewUserRegistaration()

@@ -5,8 +5,8 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
-import com.kimlic.KimlicApp
 import com.kimlic.R
+import com.kimlic.utils.mappers.FileNameTxtBase64ToBitmap
 
 class UserPhotoView : View {
 
@@ -110,10 +110,8 @@ class UserPhotoView : View {
         hexPaint.pathEffect = pathEffect
     }
 
-    private fun getUserPhotoBitmap(fileName: String): Bitmap? {
-        val bitmap = BitmapFactory.decodeFile(KimlicApp.applicationContext().filesDir.toString() + "/" + fileName)
-        return bitmap
-    }
+    // getsFileName in byte64Format
+    private fun getUserPhotoBitmap(fileName: String): Bitmap? = FileNameTxtBase64ToBitmap().transform(fileName)
 
     private fun hexagonPath(cornerWidth: Float = 0f): Path {
         val centerX = width / 2

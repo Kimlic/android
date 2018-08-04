@@ -36,8 +36,7 @@ class BillActivity : BaseActivity() {
         initFragments()
 
         billFragment.setCallback(object : PhotoCallback {
-            override fun callback(fileName: String, data: ByteArray) {// TODO byte array
-                Log.d("TAGBILL", fileName)
+            override fun callback(data: ByteArray) {
                 val intent = Intent()
                 intent.putExtra(AppConstants.documentByteArray.key, data)
                 setResult(Activity.RESULT_OK, intent)

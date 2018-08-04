@@ -1,12 +1,18 @@
 package com.kimlic.phone
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
+
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.text.Editable
+import android.util.Log
+
 import android.view.KeyEvent
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import com.android.volley.Request
@@ -27,6 +33,7 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
+import java.util.*
 import java.util.concurrent.ExecutionException
 
 class PhoneActivity : BaseActivity() {
@@ -103,19 +110,21 @@ class PhoneActivity : BaseActivity() {
         })
         nextBt.setOnClickListener { managePhone() }
         backBt.setOnClickListener { finish() }
+        countryEt.setOnClickListener { initDropList() }
     }
 
     private fun managePhone() {
         if (!isPhoneValid()) {
             phoneEt.error = getString(R.string.phone_is_not_valid); return
         }
+        nextBt.isClickable = false
         showProgress()
 
         Thread(Runnable {
             val phone = phoneEt.text.toString().replace(" ", "")
             val quorumKimlic = QuorumKimlic.getInstance()
             var receiptPhone: TransactionReceipt? = null
-
+            
             try {
                 receiptPhone = quorumKimlic.setFieldMainData(Sha.sha256(phone), "phone")
             } catch (e: ExecutionException) {
@@ -123,9 +132,7 @@ class PhoneActivity : BaseActivity() {
             } catch (e: InterruptedException) {
                 unableToProceed()
             }
-
             if (receiptPhone != null && receiptPhone.transactionHash.isNotEmpty()) {
-
                 val headers = mapOf(Pair("account-address", Prefs.currentAccountAddress))
                 val params = mapOf(Pair("phone", phone))
 
@@ -141,6 +148,19 @@ class PhoneActivity : BaseActivity() {
                 VolleySingleton.getInstance(this@PhoneActivity).addToRequestQueue(request)
             }
         }).start()
+    }
+
+    private fun initDropList() {
+        val types = countriesList.map { it.country }.toList().toTypedArray()
+
+        AlertDialog.Builder(this)
+                .setItems(types, object : DialogInterface.OnClickListener {
+                    override fun onClick(dialog: DialogInterface?, which: Int) {
+                        countryEt.text = Editable.Factory.getInstance().newEditable(countriesList.get(which).country)
+                        phoneEt.text = Editable.Factory.getInstance().newEditable("+" + countriesList.get(which).code)
+                        phoneEt.setSelection(phoneEt.text.length)
+                    }
+                }).show()
     }
 
     private fun unableToProceed() {
