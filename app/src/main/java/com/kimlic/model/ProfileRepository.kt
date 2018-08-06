@@ -15,6 +15,7 @@ import com.kimlic.db.KimlicDB
 import com.kimlic.db.SyncServise
 import com.kimlic.db.dao.*
 import com.kimlic.db.entity.*
+import com.kimlic.preferences.Prefs
 import com.kimlic.utils.mappers.BitmapToByteArrayMapper
 import org.spongycastle.util.encoders.Base64
 import java.io.*
@@ -152,9 +153,9 @@ class ProfileRepository private constructor() {
         val userId = userDao.select(accountAddress = accountAddres).id
         val documentId = documentDao.insert(document = Document(type = documentType, userId = userId))
 
-        savePhoto_(portraitName, portraitData); syncPhoto(portraitName)
-        savePhoto_(frontName, frontData); syncPhoto(frontName)
-        savePhoto_(backName, backData);syncPhoto(backName)
+        savePhoto_(portraitName, portraitData)
+        savePhoto_(frontName, frontData)
+        savePhoto_(backName, backData)
 
         val r = photoDao.insert(photos =
         arrayOf(
@@ -177,7 +178,8 @@ class ProfileRepository private constructor() {
         googleSignInAccount.let {
             Handler().postDelayed({
                 //               if (Prefs.isUserGoogleSigned)
-                SyncServise.getInstance().updateDataBase(dataBaseName = "kimlic.db")
+                //SyncServise.getInstance().updateDataBase(dataBaseName = "kimlic.db")
+                SyncServise.getInstance().createOrUpdateDataBaseFileInFolder(folderName = Prefs.currentAccountAddress, appFolder = false)
             }, 1000)
         }
 
@@ -190,7 +192,8 @@ class ProfileRepository private constructor() {
 
     private fun syncPhoto(fileName: String) {
         googleSignInAccount.let {
-            SyncServise.getInstance().updateFile(fileName = fileName)
+            //SyncServise.getInstance().updateFileInFolder(fileName = fileName)
+            SyncServise.getInstance().createOrUpdateFileInFolder(folderName = Prefs.currentAccountAddress, fileName = fileName, appFolder = false)
         }
     }
 
