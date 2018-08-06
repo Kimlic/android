@@ -60,10 +60,8 @@ class SyncServise private constructor(val context: Context) {
 
     init {
         mGoogleSignInAccount = GoogleSignIn.getLastSignedInAccount(context)
-
         mDriveResourceClient = Drive.getDriveResourceClient(context, mGoogleSignInAccount!!)
     }
-
 
     // Public
 
@@ -82,6 +80,7 @@ class SyncServise private constructor(val context: Context) {
                 .addOnFailureListener { }
     }
 
+    // Implemented
     fun updateDataBase(dataBaseName: String) {
         val dataBasePath = context.getDatabasePath(dataBaseName).toString()
         val query = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, "application/db")).addFilter(Filters.eq(SearchableField.TITLE, dataBaseName)).build()
@@ -97,33 +96,51 @@ class SyncServise private constructor(val context: Context) {
                 .addOnFailureListener {
                     Log.d("TAG", " failru - " + it.toString())
                 }
-        createOrUpdateDatabaseInFolder(Prefs.currentAccountAddress)
+        createOrUpdateFileInFolder(Prefs.currentAccountAddress)
     }
 
-    fun createUpdateFolder(folderName: String, d: String) {
-        val querryFolder = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, folderName)).build()
+    // 1 querry file in folder
+    // 2 if absent - create databaseFile in folder
+    // 3 if present - rewrite database in folder
 
-        mDriveResourceClient!!.query(querryFolder).addOnSuccessListener { metadataBuffer ->
-            metadataBuffer.forEach { Log.d("TAG", "folder is found") }
+    private fun updataDatabaseInFolder(dataBaseName: String, driveFolder: DriveFolder) {
+        val databasePath = context.getDatabasePath(dataBaseName)
 
+        val dbFileQuerry = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, "application/db")).addFilter(Filters.eq(SearchableField.TITLE, dataBaseName)).build()
+
+        val queryTask = mDriveResourceClient!!.queryChildren(driveFolder, dbFileQuerry)
+
+        queryTask
+                .addOnSuccessListener {
+                    Log.d("TAGTASK", "count of found files = " + it.count)
+
+
+                }.continueWithTask {
+                    Log.d("TAGTASK", "count of found files in next step = " + it.getResult().count)
+                    if (it.result.count == 0) {
+                        Log.d("TAGTASK", "in database file update - file is created file is created!!!")
+                        createDBFileInFolder("kimlic.db", driveFolder)
+                    } else {
+                        Log.d("TAGTASK", "file is rewrited!!!")
+                        rewriteDatabase("kimlic.db", it.result[0].driveId.asDriveFile())
+
+                    }
+
+                    deleteDatabase("fff")
+                }
+
+    }
+
+    fun deleteDatabase(dataBaseName: String): Task<MetadataBuffer> {
+        val dataBasePath = context.getDatabasePath(dataBaseName)
+        val query = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, "application/db")).addFilter(Filters.eq(SearchableField.TITLE, dataBaseName)).build()
+        val querryTask = mDriveResourceClient!!.query(query)
+
+        querryTask.addOnSuccessListener { metadataBuffer ->
+            metadataBuffer.forEach { deleteFile(driveFile = it.driveId.asDriveFile()) }
         }
-    }
 
-//    fun deleteDatabase(dataBaseName: String) {
-//        val dataBasePath = context.getDatabasePath(dataBaseName)
-//        val query = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, "application/db")).addFilter(Filters.eq(SearchableField.TITLE, dataBaseName)).build()
-//        val querryTask = mDriveResourceClient!!.query(query)
-//
-//        querryTask.addOnSuccessListener { metadataBuffer ->
-//            metadataBuffer.forEach { deleteFile(driveFile = it.driveId.asDriveFile()) }
-//        }
-//    }
-
-    fun deleteFile(driveFile: DriveFile) {
-        val driveResource = mDriveResourceClient!!.delete(driveFile)
-        driveResource
-                .addOnCompleteListener {}
-                .addOnFailureListener {}
+        return mDriveResourceClient!!.query(query)
     }
 
 
@@ -156,6 +173,28 @@ class SyncServise private constructor(val context: Context) {
                 }
     }
 
+    // calls from update dbfile in folder!
+    private fun createDBFileInFolder(dataBaseName: String, parentFolder: DriveFolder): Task<DriveContents> {
+        val dataBasePath = context.getDatabasePath(dataBaseName).toString()
+        val createContentTasks = mDriveResourceClient!!.createContents()
+        createContentTasks
+                .continueWithTask {
+                    val parent = parentFolder
+                    val driveContents = createContentTasks.result
+                    try {
+                        val dbFile = File(dataBasePath)
+                        val fis = FileInputStream(dbFile)
+                        val outputStream_ = driveContents.outputStream
+                        val buffer = ByteArray(1024)
+                        while (fis.read(buffer) > 0) outputStream_.write(buffer, 0, fis.read(buffer))
+                    } catch (e: IOException) {
+                    }
+                    val metadataChangeSet = MetadataChangeSet.Builder().setTitle("kimlic.db").setMimeType("application/db").build()
+                    mDriveResourceClient!!.createFile(parent, metadataChangeSet, driveContents)
+                }
+        return createContentTasks
+    }
+
     private fun createFile(fileName: String) {
         val filePath = context.fileList().toString() + "/" + fileName
 
@@ -184,10 +223,11 @@ class SyncServise private constructor(val context: Context) {
                 }
     }
 
-    private fun rewriteDatabase(driveFile: DriveFile, databasePath: String) {
+    private fun rewriteDatabase(databasePath: String, driveFile: DriveFile) {
         val openTask = mDriveResourceClient!!.openFile(driveFile, DriveFile.MODE_WRITE_ONLY)
         openTask
                 .continueWithTask {
+                    Log.d("TAGTASK", "Inside rewrite database!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                     val driveContents = it.getResult()
                     try {
                         val dbFile = File(databasePath)
@@ -200,10 +240,27 @@ class SyncServise private constructor(val context: Context) {
                     }
                     mDriveResourceClient!!.commitContents(driveContents, null)
                 }
-//                .addOnSuccessListener {}
-//                .addOnFailureListener {}
+                .addOnSuccessListener {
+                    Log.d("TAGTASK", "DATABASE REWRITED SUUCESSFULLY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                }
+                .addOnFailureListener {
+                    Log.d("TAGTASK", "DATABASE REWRITED ERRORRRRRRRR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                }
     }
 
+    private fun createFolder(folderName: String) {
+        mDriveResourceClient!!
+                .appFolder
+                .continueWithTask {
+                    val parentFolder = it.getResult()
+                    val metadataChangeSet = MetadataChangeSet.Builder().setTitle(folderName).setMimeType(DriveFolder.MIME_TYPE).setStarred(true).build()
+
+                    mDriveResourceClient!!.createFolder(parentFolder, metadataChangeSet)
+                }
+    }
+    // folderName = currentAccountAddress accountAddress
+
+    // Function use driveId and file name from files
     private fun rewriteFile(driveFile: DriveFile, fileName: String) {
         val filePath = context.filesDir.toString() + "/" + fileName
         val openTask = mDriveResourceClient!!.openFile(driveFile, DriveFile.MODE_WRITE_ONLY)
@@ -226,59 +283,7 @@ class SyncServise private constructor(val context: Context) {
         //        .addOnFailureListener {}
     }
 
-    private fun createFolder(folderName: String) {
-        mDriveResourceClient!!
-                .appFolder
-                .continueWithTask {
-                    val parentFolder = it.getResult()
-                    val metadataChangeSet = MetadataChangeSet.Builder().setTitle(folderName).setMimeType(DriveFolder.MIME_TYPE).setStarred(true).build()
-
-                    mDriveResourceClient!!.createFolder(parentFolder, metadataChangeSet)
-                }
-    }
-    // folderName = currentAccountAddress accountAddress
-
-    private fun createOrUpdateDatabaseInFolder(folderName: String, task: Task<DriveFile>? = null) {
-        val rootFolder = mDriveResourceClient!!.rootFolder
-
-        val changeSet = MetadataChangeSet.Builder()
-                .setTitle(folderName)
-                .setMimeType(DriveFolder.MIME_TYPE)
-                .setStarred(true)
-                .build()
-
-
-//        val fff = mDriveResourceClient!!
-//                .createFolder(rootFolder.result, changeSet)
-//                .addOnSuccessListener {}
-//                .addOnFailureListener {}
-
-        // val driveFolder = fff.getResult()
-
-        val rootFolderQuery = mDriveResourceClient!!.rootFolder
-
-        rootFolderQuery.continueWithTask {
-
-            val backupFolderQuerry = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, folderName)).build()
-
-            mDriveResourceClient!!.query(backupFolderQuerry).addOnSuccessListener { metaDataBuffer ->
-                Log.d("TAGTASK", "count = " + metaDataBuffer.count)
-
-                when (metaDataBuffer.count) {
-                    0 -> {
-                        Log.d("TAGTASK", "FolderNotFound and witl be created")
-                        createFolderInFolder(it.result, folderName)
-                    }
-                    1, 2, 3, 4, 5, 6, 7, 8, 9 -> {
-                        Log.d("TAGTASK", "folder found!!!")
-
-                    }
-                }
-            }
-        }
-
-    }
-
+    // Native function
     private fun createFileInFolder(parent: DriveFolder, folderName: String) {
         val fileTask =
                 mDriveResourceClient!!
@@ -296,19 +301,95 @@ class SyncServise private constructor(val context: Context) {
 
                             mDriveResourceClient!!.createFile(parent, changeSet, contents)
                         })
-
     }
 
-    private fun createFolderInFolder(parent: DriveFolder, folderName: String) {
+    // Native function
+
+
+    private fun createOrUpdateFileInFolder(folderName: String) {
+        // Этот запрос ищес в корневом каталоге папу с названием, которое передано на входк функции это будет аккаунт адрес пользователя
+        val backupFolderQuerry = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, folderName)).build()
+
+        val rootFolder = mDriveResourceClient!!.rootFolder // в качестве DriveFolder передаётся rootFolder
+        // Это входной таск в качестве которого приходть DriverFolder
+        rootFolder.continueWithTask {
+
+            // это выходной task
+            mDriveResourceClient!!
+                    .query(backupFolderQuerry)
+                    .addOnSuccessListener { metaDataBuffer ->
+                        Log.d("TAGTASK", "count of folder ${folderName} = " + metaDataBuffer.count)
+                    }.continueWithTask {
+
+                        Log.d("TAGTASK", "count in continue in folderName ${folderName} = " + it.getResult().count)
+
+                        if (it.getResult().count == 0) {
+                            Log.d("TAGTASK", "FolderNotFound and wil be created be created")
+                            createFolderInFolder(rootFolder.getResult(), folderName)
+                            createOrUpdateFileInFolder(folderName)
+                        } else {
+                            //deleteFolderAsDriveResource(it.result[0].driveId.asDriveFolder())
+                            //createDBFileInFolder(folderName, it.result[0].driveId.asDriveFolder())
+
+
+                            Log.d("TAGTASK", "Foldre already exists and next tu create or upadte database file ")
+                            updataDatabaseInFolder("kimlic.db", it.result[0].driveId.asDriveFolder())
+                        }
+                        deleteFolderAsDriveResource(1 as DriveResource)
+
+                    }
+        }
+    }
+
+    // private helpers
+
+    fun deleteFile(driveFile: DriveFile) {
+        val driveResource = mDriveResourceClient!!.delete(driveFile)
+        driveResource
+                .addOnCompleteListener { Log.d("TAGTASK", "inFileDeleted!!!!!!") }
+                .addOnFailureListener {}
+    }
+
+    private fun createFolderInFolder(parent: DriveFolder, folderName: String): Task<DriveFolder> {
         val changeSet = MetadataChangeSet.Builder()
                 .setTitle(folderName)
                 .setMimeType(DriveFolder.MIME_TYPE)
-                .setStarred(true)
+                .setStarred(false)
+                .setDescription("Account address")
                 .build()
-
-        mDriveResourceClient!!
+        return mDriveResourceClient!!
                 .createFolder(parent, changeSet)
-
+                .addOnSuccessListener {
+                    Log.d("TAGTASK", " creata folder in folder success created")
+                }
+                .addOnFailureListener {}
     }
+
+    fun deleteFolderAsDriveResource(driveResource: DriveResource): Task<Void> {
+        Log.d("TAGTASK", "Delete folder as drive resource")
+        val driveResource_ = mDriveResourceClient!!.delete(driveResource)
+        driveResource_
+                .addOnCompleteListener {}
+                .addOnFailureListener {}
+
+        return driveResource_
+    }
+
+    // Unused
+
+    // In future change rootFoldre for appFolder! this is task.
+    fun createFolderInRootFolder(folderName: String) {
+        mDriveResourceClient!!
+                .rootFolder
+                .continueWithTask {
+                    // init
+                    val parentFolder = it.getResult()// in this case it's driveFolder is root folder
+
+                    val metadataChangeSet = MetadataChangeSet.Builder().setMimeType(DriveFolder.MIME_TYPE).setTitle(folderName).build()
+
+                    mDriveResourceClient!!.createFolder(parentFolder, metadataChangeSet)
+                }
+    }
+
 }
 
