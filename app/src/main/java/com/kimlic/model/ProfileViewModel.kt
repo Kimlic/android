@@ -18,13 +18,10 @@ class ProfileViewModel : ViewModel() {
 
     private var db: KimlicDB
 
-
     init {
         db = KimlicDB.getInstance()!!
-
         risksLiveData = object : MutableLiveData<Boolean>() {}
         risksLiveData!!.value = (Prefs.isPasscodeEnabled && Prefs.isTouchEnabled)
-
         repository = ProfileRepository.instance
     }
 
@@ -107,4 +104,9 @@ class ProfileViewModel : ViewModel() {
     //fun addDocumentPhoto(vararg photos: Photo) = repository.addDocumentPhoto(photos = *photos)
 
     fun getRisksLiveData() = risksLiveData
+
+    // SyncRequest
+
+    fun syncProfile(accountAddress: String) = repository.syncProfile(accountAddress = accountAddress)
+
 }

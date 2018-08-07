@@ -70,7 +70,7 @@ class SyncServise private constructor(val context: Context) {
         backupFile(rootFolderName = accountAddress, filePath = databaseFilePath, appFolder = false, mimeType = MYME_TYPE_DATABASE)
     }
 
-    fun backupFile(rootFolderName: String, filePath: String, mimeType: String, appFolder: Boolean = true) {
+    fun backupFile(rootFolderName: String, filePath: String, mimeType: String, appFolder: Boolean) {
         val fileName = filePath.split("/").last()
 
         val backupFolderQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, rootFolderName)).build()
@@ -126,7 +126,7 @@ class SyncServise private constructor(val context: Context) {
                     val metadataChangeSet = MetadataChangeSet.Builder().setTitle(fileName).setMimeType(mimeType).build()
 
                     mDriveResourceClient!!.createFile(parentFolder, metadataChangeSet, driveContents)
-                }.addOnSuccessListener { }
+                }.addOnSuccessListener { Log.d("TAGTASK", "file created!!!")}
     }
 
     private fun rewriteFile(filePath: String, driveFile: DriveFile) {

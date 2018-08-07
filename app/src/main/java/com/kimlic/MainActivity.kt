@@ -2,6 +2,8 @@ package com.kimlic
 
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
+import android.util.Log
 import com.android.volley.Request
 import com.android.volley.Response
 import com.google.gson.Gson
@@ -34,14 +36,9 @@ class MainActivity : BaseActivity() {
     private fun setupUI() {
         initFragment()
         splashScreenShow()
-//
-//        Prefs.currentAccountAddress = "sdcadvaffvervevcxaervrvrisjdbfiedejbvkekrjbvkjbvb"
-//        val user = User(id = Prefs.currentId, accountAddress = "sdcadvaffvervevcxaervrvrisjdbfiedejbvkekrjbvkjbvb", mnemonic = "efvcvefvcefvcervrvrwgwrgvefveveverc")
-//        model.insertUser(user)
-//        PresentationManager.stage(this)
-//
+
         if (Prefs.authenticated) {
-            //Handler().post({ profileSynckRequest(Prefs.currentAccountAddress) })
+            model.syncProfile(Prefs.currentAccountAddress)
             quorumRequest()
         } else {
             object : CountDownTimer(3000, 3000) {
@@ -76,7 +73,6 @@ class MainActivity : BaseActivity() {
             if (!responceCode.startsWith("2")) {
                 errorPopup(getString(R.string.server_error)); return@Listener
             }
-
             val contextContractAddress = JSONObject(it).getJSONObject("data").optString("context_contract")
             QuorumKimlic.getInstance().setKimlicContractsContextAddress(contextContractAddress)
 
@@ -90,7 +86,6 @@ class MainActivity : BaseActivity() {
 
                 override fun onTick(millisUntilFinished: Long) {}
             }.start()
-
         }, Response.ErrorListener {
             //            object : CountDownTimer(1500, 1500) {
 //                override fun onFinish() { quorumRequest() }
@@ -100,28 +95,6 @@ class MainActivity : BaseActivity() {
             errorPopup(getString(R.string.server_error))
         })
         VolleySingleton.getInstance(this@MainActivity).requestQueue.add(addressRequest)
-    }
-
-    private fun profileSynckRequest(accountAddress: String) {
-        val headers = mapOf(Pair("account-address", accountAddress))
-
-        val syncRequest = KimlicRequest(Request.Method.GET, QuorumURL.profileSync.url, headers, null,
-                Response.Listener {
-                    val responceCode = JSONObject(it).getJSONObject("meta").optString("code").toString()
-
-                    if (!responceCode.startsWith("2")) return@Listener
-
-                    val jsonToParce = JSONObject(it).getJSONObject("data").getJSONArray("data_fields").toString()
-                    val type = object : TypeToken<List<SyncObject>>() {}.type
-                    val approvedObjects: List<SyncObject> = Gson().fromJson(jsonToParce, type)
-                    val approved = approvedObjects.map { it.name }
-
-                    if (!approved.contains("phone")) model.deleteUserContact(Prefs.currentAccountAddress, "phone")
-                    if (!approved.contains("email")) model.deleteUserContact(Prefs.currentAccountAddress, "email")
-                },
-                Response.ErrorListener {})
-
-        VolleySingleton.getInstance(this@MainActivity).requestQueue.add(syncRequest)
     }
 
     private fun initFragment() {
