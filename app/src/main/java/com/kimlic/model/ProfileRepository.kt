@@ -18,7 +18,9 @@ import com.kimlic.db.entity.*
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.mappers.BitmapToByteArrayMapper
 import org.spongycastle.util.encoders.Base64
-import java.io.*
+import java.io.File
+import java.io.IOException
+import java.io.OutputStreamWriter
 
 class ProfileRepository private constructor() {
 
@@ -164,7 +166,7 @@ class ProfileRepository private constructor() {
                 Photo(documentId = documentId, file = backName, type = "back")).asList())
     }
 
-// Photo
+    // Photo
 
     fun userDocumentPhotos(accountAddress: String, documentType: String) = photoDao.selectUserPhotosByDocument(accountAddress = accountAddress, documentType = documentType)
 
@@ -172,33 +174,7 @@ class ProfileRepository private constructor() {
 
     //fun addDocumentPhoto(vararg photos: Photo) = { photoDao.insert(photos = photos.asList()); syncDataBase() }
 
-// Private
-
-    private fun syncDataBase() {
-        googleSignInAccount.let {
-            Handler().postDelayed({
-                //               if (Prefs.isUserGoogleSigned)
-                //SyncServise.getInstance().updateDataBase(dataBaseName = "kimlic.db")
-                SyncServise.getInstance().createOrUpdateDataBaseFileInFolder(folderName = Prefs.currentAccountAddress, appFolder = false)
-            }, 1000)
-        }
-
-//        if (googleSignInAccount != null)
-//            Handler().postDelayed({
-//                if (Prefs.isUserGoogleSigned)
-//                    SyncServise.getInstance().updateDataBase(dataBaseName = "kimlic.db")
-//            }, 1000)
-    }
-
-    private fun syncPhoto(fileName: String) {
-        googleSignInAccount.let {
-            //SyncServise.getInstance().updateFileInFolder(fileName = fileName)
-            SyncServise.getInstance().createOrUpdateFileInFolder(folderName = Prefs.currentAccountAddress, fileName = fileName, appFolder = false)
-        }
-    }
-
-    // new Implementation
-
+    // Private
 
     // Ptivate helpers
 
@@ -266,4 +242,18 @@ class ProfileRepository private constructor() {
         return cropedPrevireByteArray
     }
 
+    // Backup
+
+    private fun syncDataBase() {
+        googleSignInAccount.let {
+            Handler().postDelayed({ SyncServise.getInstance().backupDatabase(Prefs.currentAccountAddress, "kimlic.db") }, 1000)
+        }
+    }
+
+    private fun syncPhoto(fileName: String) {
+        googleSignInAccount.let {
+            val filePath = KimlicApp.applicationContext().filesDir.toString() + "/" + fileName
+            SyncServise.getInstance().backupFile(rootFolderName = Prefs.currentAccountAddress, filePath = filePath, appFolder = false, mimeType = SyncServise.MYME_TYPE_IMAGE)
+        }
+    }
 }

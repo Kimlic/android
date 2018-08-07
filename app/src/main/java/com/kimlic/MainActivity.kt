@@ -38,7 +38,6 @@ class MainActivity : BaseActivity() {
 //        Prefs.currentAccountAddress = "sdcadvaffvervevcxaervrvrisjdbfiedejbvkekrjbvkjbvb"
 //        val user = User(id = Prefs.currentId, accountAddress = "sdcadvaffvervevcxaervrvrisjdbfiedejbvkekrjbvkjbvb", mnemonic = "efvcvefvcefvcervrvrwgwrgvefveveverc")
 //        model.insertUser(user)
-//
 //        PresentationManager.stage(this)
 //
         if (Prefs.authenticated) {
