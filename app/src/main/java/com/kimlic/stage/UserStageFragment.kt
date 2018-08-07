@@ -1,6 +1,7 @@
 package com.kimlic.stage
 
 import android.arch.lifecycle.Observer
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -15,6 +16,7 @@ import com.kimlic.BaseFragment
 import com.kimlic.R
 import com.kimlic.db.entity.*
 import com.kimlic.managers.PresentationManager
+import com.kimlic.passcode.PasscodeActivity
 import com.kimlic.preferences.Prefs
 import com.kimlic.stage.adapter.ContactsAdapter
 import com.kimlic.stage.adapter.DocumentAdapter
@@ -26,6 +28,10 @@ import kotlinx.android.synthetic.main.item_stage.view.*
 import java.io.File
 
 class UserStageFragment : BaseFragment() {
+
+    // Constants
+
+    private val SECURITY_SEQUEST_CODE = 151
 
     // Variables
 
@@ -76,6 +82,16 @@ class UserStageFragment : BaseFragment() {
                 manageRisks(risks!!)
             }
         })
+
+        risksTv.setOnClickListener {
+            if (!Prefs.isPasscodeEnabled) {
+                passcodeForResult(); return@setOnClickListener
+            }
+
+            if (Prefs.isTouchEnabled) PresentationManager.touchDisable(activity!!)
+            else PresentationManager.touchCreate(activity!!)
+            Log.d("TAGRISKS", "pressed")
+        }
     }
 
     private fun setupUser() {
@@ -156,7 +172,6 @@ class UserStageFragment : BaseFragment() {
                 documentsAdapter.setDocumentsList(documents!!)
             }
         })
-
     }
 
     private fun setupListners() {
@@ -194,7 +209,13 @@ class UserStageFragment : BaseFragment() {
         userPhotoLl.addView(userPhoto)
     }
 
-// Setup profile Fields
+    private fun passcodeForResult() {
+        val intent = Intent(activity, PasscodeActivity::class.java)
+        intent.putExtra("action", "set")
+        getActivity()!!.startActivityForResult(intent, SECURITY_SEQUEST_CODE)
+    }
+
+    // Setup profile Fields
 
     private fun setupKimField(kim: Int = 0) {
         kimItem.iconIv.background = resources.getDrawable(if (kim == 0) Icons_.KIM_BLUE.icon else Icons_.KIM_WHITE.icon, null)

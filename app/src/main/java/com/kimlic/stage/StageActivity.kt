@@ -9,7 +9,7 @@ import android.widget.Toast
 import com.google.zxing.integration.android.IntentIntegrator
 import com.kimlic.BaseActivity
 import com.kimlic.R
-import com.kimlic.googledrive.NewGoogleActivity
+import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
 import com.kimlic.scanner.ScannerActivity
 import kotlinx.android.synthetic.main.activity_stage.*
@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.activity_stage.*
 class StageActivity : BaseActivity() {
 
     val SCAN_REQUEST_CODE = 1100
+    val SECURITY_REQUESTCODE = 151
 
     // Variables
 
@@ -41,17 +42,26 @@ class StageActivity : BaseActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == SCAN_REQUEST_CODE) {
 
-            val result = IntentIntegrator.parseActivityResult(resultCode, data)
+        Log.d("TAGINSTAGE", "from fragment, requestCode = " + requestCode)
+        when (requestCode) {
+            SCAN_REQUEST_CODE -> {
+                val result = IntentIntegrator.parseActivityResult(resultCode, data)
 
-            if (result.getContents() == null) {
-                Log.d("TAGSCANNER", "Cancelled scan")
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show()
-            } else {
-                Log.d("TAGSCANNER", "Scanned")
-                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show()
+                if (result.getContents() == null) {
+                    Log.d("TAGSCANNER", "Cancelled scan")
+                    Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show()
+                } else {
+                    Log.d("TAGSCANNER", "Scanned")
+                    Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show()
+                }
             }
+
+            SECURITY_REQUESTCODE -> {
+                Log.d("TAGINSTAGE", "from fragment, touch is enabled " + Prefs.isTouchEnabled)
+                if (!Prefs.isTouchEnabled) PresentationManager.touchCreate(this)
+            }
+
         }
     }
 

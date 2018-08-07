@@ -234,13 +234,18 @@ class ProfileRepository private constructor() {
     // Backup
 
     private fun syncDataBase() {
-        googleSignInAccount.let {
+        googleSignInAccount?.let { Log.d("TAGSIGNIN", "   =" + it.toString()) }
+
+        googleSignInAccount?.let {
+
             Handler().postDelayed({ SyncServise.getInstance().backupDatabase(Prefs.currentAccountAddress, "kimlic.db") }, 1000)
         }
     }
 
     private fun syncPhoto(fileName: String) {
-        googleSignInAccount.let {
+        googleSignInAccount?.let { Log.d("TAGSIGNIN", "   =" + it.toString()) }
+
+        googleSignInAccount?.let {
             val filePath = KimlicApp.applicationContext().filesDir.toString() + "/" + fileName
             Handler().postDelayed({ SyncServise.getInstance().backupFile(rootFolderName = Prefs.currentAccountAddress, filePath = filePath, appFolder = false, mimeType = SyncServise.MYME_TYPE_DATABASE) }, 1000)
         }
