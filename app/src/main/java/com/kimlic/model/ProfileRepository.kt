@@ -234,20 +234,22 @@ class ProfileRepository private constructor() {
     // Backup
 
     private fun syncDataBase() {
-        googleSignInAccount?.let { Log.d("TAGSIGNIN", "   =" + it.toString()) }
-
         googleSignInAccount?.let {
-
+            Log.d("TAG", "in repository create database backup")
             Handler().postDelayed({ SyncServise.getInstance().backupDatabase(Prefs.currentAccountAddress, "kimlic.db") }, 1000)
+            Handler().postDelayed({ SyncServise.getInstance().retriveFile(Prefs.currentAccountAddress, "kimlic.db", SyncServise.MIME_TYPE_DATABASE, false, fileDescription = "photo") }, 2000)
+
+            Handler().postDelayed({ SyncServise.getInstance().retriveDatabase(accountAddress = Prefs.currentAccountAddress, databaseName = "kimlic.db", mimeType = SyncServise.MIME_TYPE_DATABASE, appFolder = false, fileName = "") }, 3000)
         }
+
     }
 
     private fun syncPhoto(fileName: String) {
-        googleSignInAccount?.let { Log.d("TAGSIGNIN", "   =" + it.toString()) }
-
         googleSignInAccount?.let {
             val filePath = KimlicApp.applicationContext().filesDir.toString() + "/" + fileName
-            Handler().postDelayed({ SyncServise.getInstance().backupFile(rootFolderName = Prefs.currentAccountAddress, filePath = filePath, appFolder = false, mimeType = SyncServise.MYME_TYPE_DATABASE) }, 1000)
+            Handler().postDelayed({
+                SyncServise.getInstance().backupFile(rootFolderName = Prefs.currentAccountAddress, filePath = filePath, appFolder = false, mimeType = SyncServise.MIME_TYPE_DATABASE, fileDescription = "photo")
+            }, 1000)
         }
     }
 
