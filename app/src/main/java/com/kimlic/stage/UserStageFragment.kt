@@ -97,14 +97,16 @@ class UserStageFragment : BaseFragment() {
     private fun setupUser() {
         model.getUserLive().observe(this@UserStageFragment, object : Observer<User> {
             override fun onChanged(user: User?) {
-                setupNameField(if (user!!.firstName.isNotEmpty()) {
-                    "${user.firstName} ${user.lastName}"
-                } else "")
+                user?.let {
+                    setupNameField(if (user.firstName.isNotEmpty()) {
+                        "${user.firstName} ${user.lastName}"
+                    } else "")
 
-                Log.d("TAGU", "user preview file = " + user.portraitPreviewFile.toString())
-                setupKimField(user.kimQuantity)
-                showPhoto(user.portraitPreviewFile)
-                manageCameraIcon("preview_" + user.portraitFile)
+                    Log.d("TAGU", "user preview file = " + user.portraitPreviewFile)
+                    setupKimField(user.kimQuantity)
+                    showPhoto(user.portraitPreviewFile)
+                    manageCameraIcon("preview_" + user.portraitFile)
+                }
             }
         })
     }

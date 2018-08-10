@@ -1,5 +1,6 @@
 package com.kimlic.mnemonic
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.TextInputLayout
 import android.widget.EditText
@@ -9,6 +10,7 @@ import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.db.KimlicDB
 import com.kimlic.managers.PresentationManager
+import com.kimlic.model.ProfileViewModel
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.BaseCallback
 import kotlinx.android.synthetic.main.activity_verify_passphrase.*
@@ -26,6 +28,7 @@ class MnemonicVerifyActivity : BaseActivity() {
     // Variables
 
     private val hintList: List<Int> = listOf(2, 4, 7, 11)
+    private lateinit var model: ProfileViewModel
 
     // Life
 
@@ -40,6 +43,7 @@ class MnemonicVerifyActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         verifyBt.setOnClickListener {
             if (validEmptyFields()) {
                 if (phrasesMatch()) {

@@ -1,13 +1,22 @@
 package com.kimlic.recovery
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import com.kimlic.BaseActivity
 import com.kimlic.R
+import com.kimlic.db.KimlicDB
 import com.kimlic.managers.PresentationManager
+import com.kimlic.preferences.Prefs
+import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.utils.BaseCallback
 import kotlinx.android.synthetic.main.activity_account_recovery.*
 
 class AccountRecoveryActivity : BaseActivity() {
+
+    // Variables
+
+    private var recoveryViewModel: RecoveryViewModel? = null
 
     // Life
 
@@ -21,6 +30,7 @@ class AccountRecoveryActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
+        recoveryViewModel = ViewModelProviders.of(this).get(RecoveryViewModel::class.java)
         backTv.setOnClickListener {
             PresentationManager.signupRecovery(this)
         }
@@ -28,13 +38,34 @@ class AccountRecoveryActivity : BaseActivity() {
         verifyBt.setOnClickListener {
             //TODO use pgraseList
             //getPhraseItemsList()
-            successfull()
+
+
+            Log.d("TAGPHRASELIST", "phrase = " + getPhraseList())
+            val mnemonic = phraseEt.text.toString().trim()
+            QuorumKimlic.destroyInstance()
+
+            val quorumKimlic = QuorumKimlic.createInstance(mnemonic, this)//Create Quorum instance
+            val accountAddress = quorumKimlic.walletAddress
+
+            Log.d("TAGPHRASELIST", "account address = " + accountAddress)
+
+
+
+            recoveryViewModel!!.retrivePhoto(accountAddress)
+
+            KimlicDB.getInstance()!!.close()
+            recoveryViewModel!!.retriveDatabase(accountAddress = accountAddress, onSuccess = {
+                Prefs.authenticated = true
+                Prefs.currentAccountAddress = accountAddress
+                successfull()
+            })
+
         }
     }
 
     private fun getPhraseList(): List<String> {
         val phraseText = phraseEt.text.toString()
-        val phraseList: List<String> = phraseText.split(" ")
+        val phraseList: List<String> = phraseText.trim().split(" ")
         return phraseList
     }
 

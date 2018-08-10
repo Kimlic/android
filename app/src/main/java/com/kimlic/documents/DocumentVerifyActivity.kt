@@ -1,5 +1,6 @@
 package com.kimlic.documents
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import com.kimlic.BaseActivity
 import com.kimlic.R
@@ -7,6 +8,7 @@ import com.kimlic.documents.fragments.DocumentBackFragment
 import com.kimlic.documents.fragments.DocumentFrontFragment
 import com.kimlic.documents.fragments.PortraitPhotoFragment
 import com.kimlic.managers.PresentationManager
+import com.kimlic.model.ProfileViewModel
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.BaseCallback
 import com.kimlic.utils.PhotoCallback
@@ -24,6 +26,7 @@ class DocumentVerifyActivity : BaseActivity() {
     private lateinit var portraitData: ByteArray
     private lateinit var frontData: ByteArray
     private lateinit var backData: ByteArray
+    private lateinit var model: ProfileViewModel
 
     // Life
 
@@ -42,6 +45,7 @@ class DocumentVerifyActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         documentType = intent.extras.getString(AppConstants.documentType.key, "")
         initFragments()
 

@@ -1,6 +1,7 @@
 package com.kimlic.address
 
 import android.app.Activity
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.Bitmap
@@ -27,6 +28,7 @@ import com.kimlic.R
 import com.kimlic.db.entity.Address
 import com.kimlic.documents.BillActivity
 import com.kimlic.managers.PresentationManager
+import com.kimlic.model.ProfileViewModel
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.BaseCallback
@@ -51,6 +53,7 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
     private var isSearchActive = false
     private var isPhotoPresent: Boolean = false
 
+    private lateinit var model:ProfileViewModel
     // Life
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -116,7 +119,7 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
 
     private fun setupUI() {
         setupAddressSerch()
-
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         saveBt.setOnClickListener { manageInput() }
         addBt.setOnClickListener { pickFile() }
         cancelTv.setOnClickListener { model.deleteAddres(addressId = addressId); finish() }

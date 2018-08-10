@@ -16,6 +16,7 @@ import com.kimlic.R
 import com.kimlic.db.entity.Document
 import com.kimlic.db.entity.User
 import com.kimlic.managers.PresentationManager
+import com.kimlic.model.ProfileViewModel
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.mappers.FileNameTxtBase64ToBitmap
 import kotlinx.android.synthetic.main.activity_verify_document.*
@@ -30,6 +31,7 @@ class DocumentVerifyChooseActivity : BaseActivity(), View.OnClickListener {
     // Variables
 
     private lateinit var types: MutableMap<String, String>
+    private lateinit var model: ProfileViewModel
 
     // Life
 
@@ -53,6 +55,7 @@ class DocumentVerifyChooseActivity : BaseActivity(), View.OnClickListener {
     // Private
 
     private fun setupUI() {
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         model.getUserLive().observe(this, object : Observer<User> {
             override fun onChanged(user: User?) {
                 setupBackground(user!!.portraitFile)

@@ -24,7 +24,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     // Variables
 
-    protected lateinit var model: ProfileViewModel
+    //protected lateinit var model: ProfileViewModel
 
     // Companion
 
@@ -32,11 +32,14 @@ abstract class BaseActivity : AppCompatActivity() {
         val TAG = this::class.java.simpleName
     }
 
+    open val TAG = this::class.java.simpleName
+
     // Life
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        setContentView(R.layout.activity_main)
+        //model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         setupUI()
     }
 

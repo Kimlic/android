@@ -1,6 +1,7 @@
 package com.kimlic.settings
 
 import android.app.Activity
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -9,7 +10,9 @@ import android.widget.LinearLayout
 import butterknife.ButterKnife
 import com.kimlic.BaseActivity
 import com.kimlic.R
+import com.kimlic.db.KimlicDB
 import com.kimlic.managers.PresentationManager
+import com.kimlic.model.ProfileViewModel
 import com.kimlic.passcode.PasscodeActivity
 import com.kimlic.preferences.Prefs
 import com.kimlic.quorum.QuorumKimlic
@@ -26,6 +29,7 @@ class SettingsActivity : BaseActivity() {
 
     private lateinit var settingsList: MutableList<Setting>
     private val adapter: SettingsAdapter
+    private lateinit var model: ProfileViewModel
 
     // Init
 
@@ -62,6 +66,7 @@ class SettingsActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         setupAdapter()
         signoutBt.setOnClickListener {
             model.dropUser(accountAddres = Prefs.currentAccountAddress)

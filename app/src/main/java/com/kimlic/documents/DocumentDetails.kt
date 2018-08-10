@@ -1,11 +1,13 @@
 package com.kimlic.documents
 
+import android.arch.lifecycle.ViewModelProviders
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.os.Bundle
 import com.kimlic.BaseActivity
 import com.kimlic.R
+import com.kimlic.model.ProfileViewModel
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.mappers.FileNameTxtBase64ToBitmap
 import kotlinx.android.synthetic.main.activity_verify_details.*
@@ -16,6 +18,8 @@ class DocumentDetails : BaseActivity() {
 
     private lateinit var documentType: String
     private lateinit var accountAddres: String
+
+    private lateinit var model: ProfileViewModel
 
     // Life
 
@@ -29,6 +33,8 @@ class DocumentDetails : BaseActivity() {
     // Private
 
     private fun setupUI() {
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+
         documentType = intent.extras.getString(AppConstants.documentType.key, "")
         accountAddres = intent.extras.getString(AppConstants.accountAddress.key, "")
 

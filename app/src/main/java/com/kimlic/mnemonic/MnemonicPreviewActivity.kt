@@ -1,5 +1,6 @@
 package com.kimlic.mnemonic
 
+import android.arch.lifecycle.ViewModelProviders
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -9,6 +10,7 @@ import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.db.KimlicDB
 import com.kimlic.managers.PresentationManager
+import com.kimlic.model.ProfileViewModel
 import com.kimlic.preferences.Prefs
 import kotlinx.android.synthetic.main.activity_mnemonic_preview.*
 
@@ -17,6 +19,7 @@ class MnemonicPreviewActivity : BaseActivity() {
     // Variables
 
     private var phraseList: List<String> = emptyList()
+    private lateinit var model: ProfileViewModel
 
     // Life
 
@@ -30,6 +33,7 @@ class MnemonicPreviewActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         phraseBt.tag = "show"
 
         phraseBt.setOnClickListener {

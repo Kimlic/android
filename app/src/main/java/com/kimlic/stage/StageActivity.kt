@@ -1,5 +1,7 @@
 package com.kimlic.stage
 
+import android.arch.lifecycle.LifecycleObserver
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.FragmentTransaction
@@ -10,6 +12,7 @@ import com.google.zxing.integration.android.IntentIntegrator
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
+import com.kimlic.model.ProfileViewModel
 import com.kimlic.preferences.Prefs
 import com.kimlic.scanner.ScannerActivity
 import kotlinx.android.synthetic.main.activity_stage.*
@@ -23,6 +26,7 @@ class StageActivity : BaseActivity() {
 
     private lateinit var userStageFragment: UserStageFragment
     private lateinit var accountsStageFragment: AccountsStageFragment
+    private lateinit var model: ProfileViewModel
 
     // Life
 
@@ -68,6 +72,8 @@ class StageActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        lifecycle.addObserver(model)
         initFragments()
         setupListners()
         profileBt.isSelected = true

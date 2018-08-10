@@ -1,5 +1,6 @@
 package com.kimlic.name
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.text.InputFilter
 import android.view.KeyEvent
@@ -10,12 +11,17 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.kimlic.BaseActivity
 import com.kimlic.R
+import com.kimlic.model.ProfileViewModel
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.BaseCallback
 import kotlinx.android.synthetic.main.activity_name.*
 
 
 class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
+
+    // Variables
+
+    private lateinit var model: ProfileViewModel
 
     // Binding
 
@@ -51,6 +57,7 @@ class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
     // Private
 
     private fun setupUI() {
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         saveBt.setOnClickListener { manageInput() }
         nameEt.setOnEditorActionListener(this)
         lastNameEt.setOnEditorActionListener(this)

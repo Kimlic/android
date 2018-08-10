@@ -1,5 +1,6 @@
 package com.kimlic.email
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.text.Editable
 import android.view.KeyEvent
@@ -17,6 +18,7 @@ import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.db.entity.Contact
 import com.kimlic.managers.PresentationManager
+import com.kimlic.model.ProfileViewModel
 import com.kimlic.phone.PhoneSuccessfullFragment
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.BaseCallback
@@ -36,6 +38,7 @@ class EmailVerifyActivity : BaseActivity() {
     private var currentHolder = 0
     private lateinit var code: StringBuilder
     private lateinit var email: String
+    private lateinit var model: ProfileViewModel
 
     // Life
 
@@ -55,6 +58,7 @@ class EmailVerifyActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         email = intent.extras.getString("email", "")
         titleTv.text = Editable.Factory.getInstance().newEditable(this.getString(R.string.code_sent_to_email, email))
 

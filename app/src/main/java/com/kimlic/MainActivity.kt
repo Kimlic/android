@@ -1,5 +1,6 @@
 package com.kimlic
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
@@ -12,6 +13,7 @@ import com.kimlic.API.KimlicRequest
 import com.kimlic.API.SyncObject
 import com.kimlic.API.VolleySingleton
 import com.kimlic.managers.PresentationManager
+import com.kimlic.model.ProfileViewModel
 import com.kimlic.preferences.Prefs
 import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.splash.SplashScreenFragment
@@ -23,6 +25,7 @@ class MainActivity : BaseActivity() {
     // Variables
 
     private lateinit var splashFragment: SplashScreenFragment
+    private lateinit var model: ProfileViewModel
 
     // Life
 
@@ -38,6 +41,7 @@ class MainActivity : BaseActivity() {
         splashScreenShow()
 
         if (Prefs.authenticated) {
+            model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
             model.syncProfile(Prefs.currentAccountAddress)
             quorumRequest()
         } else {
@@ -52,6 +56,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun quorumRequest() {
+        Log.d(TAG, "account address = " + Prefs.currentAccountAddress)
         val user = model.getUser(Prefs.currentAccountAddress)
         // 1. Create Quorum instance with current user
         //val user = KimlicDB.getInstance()!!.userDao().select(id = Prefs.currentId)

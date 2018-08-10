@@ -1,9 +1,11 @@
 package com.kimlic.documents
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.documents.fragments.PortraitPhotoFragment
+import com.kimlic.model.ProfileViewModel
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.PhotoCallback
 
@@ -12,6 +14,7 @@ class PortraitActivity : BaseActivity() {
     // Variables
 
     private lateinit var portraitFragment: PortraitPhotoFragment
+    private lateinit var model: ProfileViewModel
 
     // Life
 
@@ -30,6 +33,7 @@ class PortraitActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         initFragment()
 
         portraitFragment.setCallback(object : PhotoCallback {

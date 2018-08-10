@@ -1,15 +1,19 @@
-package com.kimlic
+package com.kimlic.recovery
 
 import android.app.Activity
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import com.android.volley.Request
 import com.android.volley.Response
 import com.kimlic.API.KimlicRequest
 import com.kimlic.API.VolleySingleton
+import com.kimlic.BaseActivity
+import com.kimlic.R
 import com.kimlic.db.entity.User
 import com.kimlic.db.SyncServise
 import com.kimlic.managers.PresentationManager
+import com.kimlic.model.ProfileViewModel
 import com.kimlic.preferences.Prefs
 import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.terms.TermsActivity
@@ -20,6 +24,8 @@ import org.json.JSONObject
 class SignupRecoveryActivity : BaseActivity() {
 
     // Variables
+
+    private lateinit var model: ProfileViewModel
 
     // Constants
 
@@ -62,6 +68,7 @@ class SignupRecoveryActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         SyncServise.signIn(this, GOOGLE_SIGNE_IN_REQUEST_CODE)
 
         createBt.setOnClickListener {

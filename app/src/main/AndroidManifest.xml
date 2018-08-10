@@ -100,7 +100,7 @@
 
     <activity
       android:label="Signup Recovery"
-      android:name=".SignupRecoveryActivity"/>
+      android:name=".recovery.SignupRecoveryActivity"/>
 
     <activity
       android:label="Settings"

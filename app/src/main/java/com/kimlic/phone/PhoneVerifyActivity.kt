@@ -1,5 +1,6 @@
 package com.kimlic.phone
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.text.Editable
 import android.view.KeyEvent
@@ -18,6 +19,7 @@ import com.kimlic.R
 import com.kimlic.db.KimlicDB
 import com.kimlic.db.entity.Contact
 import com.kimlic.managers.PresentationManager
+import com.kimlic.model.ProfileViewModel
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.BaseCallback
 import com.kimlic.utils.QuorumURL
@@ -36,6 +38,7 @@ class PhoneVerifyActivity : BaseActivity() {
     private lateinit var fragment: BaseDialogFragment
     private lateinit var phone: String
     private lateinit var code: StringBuilder
+    private lateinit var model: ProfileViewModel
 
     // Life
 
@@ -55,6 +58,7 @@ class PhoneVerifyActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         verifyBt.setOnClickListener { managePin() }
         backBt.setOnClickListener { finish() }
 
@@ -127,7 +131,7 @@ class PhoneVerifyActivity : BaseActivity() {
     private fun insertPhone(phone: String) {
         val phoneContact = Contact(value = phone, type = "phone", approved = true)
         model.addUserContact(Prefs.currentAccountAddress, phoneContact)
-        KimlicDB.getInstance()!!.contactDao().insert(phoneContact)
+        //KimlicDB.getInstance()!!.contactDao().insert(phoneContact)
     }
 
     private fun successfull() {

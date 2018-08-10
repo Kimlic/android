@@ -5,7 +5,7 @@ import android.content.Intent
 import android.support.v4.app.Fragment
 import com.kimlic.BaseActivity
 import com.kimlic.R
-import com.kimlic.SignupRecoveryActivity
+import com.kimlic.recovery.SignupRecoveryActivity
 import com.kimlic.address.AddressActivity
 import com.kimlic.auth.TouchIdActivity
 import com.kimlic.documents.*

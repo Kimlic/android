@@ -1,13 +1,13 @@
 package com.kimlic.model
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.*
+import android.util.Log
 import com.kimlic.db.KimlicDB
 import com.kimlic.db.entity.*
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.UserPhotos
 
-class ProfileViewModel : ViewModel() {
+class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     // Variables
 
@@ -16,10 +16,10 @@ class ProfileViewModel : ViewModel() {
 
     // Database
 
-    private var db: KimlicDB
+   // private var db: KimlicDB
 
     init {
-        db = KimlicDB.getInstance()!!
+       // db = KimlicDB.getInstance()!!
         risksLiveData = object : MutableLiveData<Boolean>() {}
         risksLiveData!!.value = (Prefs.isPasscodeEnabled && Prefs.isTouchEnabled)
         repository = ProfileRepository.instance
@@ -28,7 +28,9 @@ class ProfileViewModel : ViewModel() {
     //Life
 
     override fun onCleared() {
+        //repository.syncDataBase_()
         super.onCleared()
+
     }
 
     // Publick
@@ -108,5 +110,16 @@ class ProfileViewModel : ViewModel() {
     // SyncRequest
 
     fun syncProfile(accountAddress: String) = repository.syncProfile(accountAddress = accountAddress)
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    fun onStageActivityPause() {
+        Log.d("TAG", "Lifecycle components on Lifecycle PAUSE!!!!")
+        repository.syncDataBaseonPause()
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun onActivitiResume() {
+        Log.d("TAG", "Lifecycle components on Lifecycle RESUME!!!")
+    }
 
 }

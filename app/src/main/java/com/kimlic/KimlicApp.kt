@@ -18,7 +18,7 @@ class KimlicApp : Application() {
   companion object {
     private var instance: KimlicApp? = null
 
-    fun applicationContext(): Context = instance!!.applicationContext
+    fun applicationContext(): Context =  instance!!.applicationContext
   }
 
   // Life
@@ -30,8 +30,6 @@ class KimlicApp : Application() {
   override fun onCreate() {
     super.onCreate()
     Fabric.with(this@KimlicApp, Crashlytics())
-
-
   }
 
   fun registerReceiver() {

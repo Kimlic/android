@@ -1,6 +1,8 @@
 package com.kimlic.model
 
 import android.annotation.SuppressLint
+import android.arch.lifecycle.LifecycleObserver
+import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
 import android.content.Context
 import android.graphics.Bitmap
@@ -57,6 +59,7 @@ class ProfileRepository private constructor() {
     private var context: Context
 
     init {
+        Log.d("TAG", "PROFILEREPOSITORY initializing")
         db = KimlicDB.getInstance()!!
         userDao = db.userDao()
         contactDao = db.contactDao()
@@ -234,22 +237,33 @@ class ProfileRepository private constructor() {
     // Backup
 
     private fun syncDataBase() {
+        Log.d("TAG", "sync database")
         googleSignInAccount?.let {
-            Log.d("TAG", "in repository create database backup")
-            Handler().postDelayed({ SyncServise.getInstance().backupDatabase(Prefs.currentAccountAddress, "kimlic.db") }, 1000)
-            Handler().postDelayed({ SyncServise.getInstance().retriveFile(Prefs.currentAccountAddress, "kimlic.db", SyncServise.MIME_TYPE_DATABASE, false, fileDescription = "photo") }, 2000)
-
-            Handler().postDelayed({ SyncServise.getInstance().retriveDatabase(accountAddress = Prefs.currentAccountAddress, databaseName = "kimlic.db", mimeType = SyncServise.MIME_TYPE_DATABASE, appFolder = false, fileName = "") }, 3000)
+            Log.d("TAG", "inside sincdatabase")
+            //db.close()
+            Handler().postDelayed({ SyncServise.getInstance().backupDatabase(Prefs.currentAccountAddress, "kimlic.db", appFolder = false, onSuccess = {}) }, 0)
         }
+    }
 
+    fun syncDataBaseonPause() {
+        Log.d("TAG", "sync database")
+        googleSignInAccount?.let {
+            Log.d("TAG", "inside sincdatabase Signed user accepter!!!!!!!!!!!!!!!!!!!!!!!!")
+            db.close()
+            Handler().postDelayed({
+                SyncServise.getInstance().backupDatabase(Prefs.currentAccountAddress, "kimlic.db", appFolder = false, onSuccess = {
+                    db = KimlicDB.getInstance()!!
+                })
+            }, 0)
+        }
     }
 
     private fun syncPhoto(fileName: String) {
         googleSignInAccount?.let {
             val filePath = KimlicApp.applicationContext().filesDir.toString() + "/" + fileName
-            Handler().postDelayed({
-                SyncServise.getInstance().backupFile(rootFolderName = Prefs.currentAccountAddress, filePath = filePath, appFolder = false, mimeType = SyncServise.MIME_TYPE_DATABASE, fileDescription = "photo")
-            }, 1000)
+            //Handler().postDelayed({
+            SyncServise.getInstance().backupFile(accountAddress = Prefs.currentAccountAddress, filePath = filePath, appFolder = false, fileDescription = "photo")
+            //  }, 1000)
         }
     }
 
@@ -270,7 +284,7 @@ class ProfileRepository private constructor() {
 
                     if (!approved.contains("phone")) contactDao.delete(Prefs.currentAccountAddress, "phone")
                     if (!approved.contains("email")) contactDao.delete(Prefs.currentAccountAddress, "email")
-                    syncDataBase()
+                    //syncDataBase()!!!
                 },
                 Response.ErrorListener {})
 
