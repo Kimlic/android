@@ -67,10 +67,10 @@ class SyncServise private constructor(val context: Context) {
 
     fun backupDatabase(accountAddress: String, dataBaseName: String, appFolder: Boolean, onSuccess: () -> Unit) {
         val db = KimlicApp.applicationContext().getDatabasePath(dataBaseName).toString()
-        backupFile(accountAddress = accountAddress, filePath = db, appFolder = appFolder, fileDescription = DATABASE_DECRIPTION)
+        backupFile(accountAddress = accountAddress, filePath = db, appFolder = appFolder, fileDescription = DATABASE_DECRIPTION, onSuccess = onSuccess)
     }
 
-    fun backupFile(accountAddress: String, filePath: String, appFolder: Boolean, fileDescription: String = PHOTO_DESCRIPTION): Task<DriveFolder> {
+    fun backupFile(accountAddress: String, filePath: String, appFolder: Boolean, fileDescription: String = PHOTO_DESCRIPTION, onSuccess: () -> Unit): Task<DriveFolder> {
         val backupFolderQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, accountAddress)).build()
         val rootFolder = getRootFolder(appFolder)
         rootFolder.continueWithTask {
@@ -79,9 +79,12 @@ class SyncServise private constructor(val context: Context) {
                     .continueWithTask {
                         if (it.getResult().count == 0) {
                             createFolderInFolder(parent = rootFolder.getResult(), folderName = accountAddress)
-                            backupFile(accountAddress = accountAddress, filePath = filePath, appFolder = appFolder, fileDescription = fileDescription)
+                            backupFile(accountAddress = accountAddress, filePath = filePath, appFolder = appFolder, fileDescription = fileDescription, onSuccess = {})
                         }
                         updateFile(filePath = filePath, driveFolder = it.result[0].driveId.asDriveFolder(), fileDescription = fileDescription)
+                    }.addOnSuccessListener {
+                        Log.d("TAG", "ON success in backupFile")
+                        onSuccess()
                     }
         }
         return rootFolder

@@ -37,8 +37,16 @@ class StageActivity : BaseActivity() {
     }
 
     override fun onResume() {
+
+//        model.onActivitiResume()
+//        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         super.onResume()
         risks()
+    }
+
+    override fun onPause() {
+        // model.onStageActivityPause()
+        super.onPause()
     }
 
     override fun onBackPressed() {
@@ -51,13 +59,13 @@ class StageActivity : BaseActivity() {
         when (requestCode) {
             SCAN_REQUEST_CODE -> {
                 val result = IntentIntegrator.parseActivityResult(resultCode, data)
-
                 if (result.getContents() == null) {
                     Log.d("TAGSCANNER", "Cancelled scan")
                     Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show()
                 } else {
                     Log.d("TAGSCANNER", "Scanned")
                     Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show()
+                    PresentationManager.vendors(this)
                 }
             }
 
@@ -65,7 +73,6 @@ class StageActivity : BaseActivity() {
                 Log.d("TAGINSTAGE", "from fragment, touch is enabled " + Prefs.isTouchEnabled)
                 if (!Prefs.isTouchEnabled) PresentationManager.touchCreate(this)
             }
-
         }
     }
 

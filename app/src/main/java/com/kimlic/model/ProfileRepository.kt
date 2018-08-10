@@ -1,8 +1,6 @@
 package com.kimlic.model
 
 import android.annotation.SuppressLint
-import android.arch.lifecycle.LifecycleObserver
-import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
 import android.content.Context
 import android.graphics.Bitmap
@@ -43,13 +41,13 @@ class ProfileRepository private constructor() {
     // Companion
 
     companion object {
-        val instance: ProfileRepository by lazy { Holder.INSTANCE }
+        val instance: ProfileRepository by lazy(LazyThreadSafetyMode.SYNCHRONIZED) { Holder.INSTANCE }
     }
 
     // Variables
 
     private var db: KimlicDB
-    private var userDao: UserDao
+    // private var `KimlicDb.getInstance()!!.userDao()`: UserDao
     private var contactDao: ContactDao
     private var documentDao: DocumentDao
     private var addressDao: AddressDao
@@ -61,7 +59,7 @@ class ProfileRepository private constructor() {
     init {
         Log.d("TAG", "PROFILEREPOSITORY initializing")
         db = KimlicDB.getInstance()!!
-        userDao = db.userDao()
+        //`KimlicDb.getInstance()!!.userDao()` = db.userDao()
         contactDao = db.contactDao()
         documentDao = db.documentDao()
         addressDao = db.addressDao()
@@ -72,41 +70,52 @@ class ProfileRepository private constructor() {
 
     // Public
 
+    private fun init() {
+        Log.d("TAG", "MY CUSTOM INITILISA")
+        db = KimlicDB.getInstance()!!
+        // `KimlicDb.getInstance()!!.userDao()` = db.`KimlicDb.getInstance()!!.userDao()`()
+        contactDao = db.contactDao()
+        documentDao = db.documentDao()
+        addressDao = db.addressDao()
+        photoDao = db.photoDao()
+    }
+
     // User
     fun insertUser(user: User) {
-        userDao.insert(user); syncDataBase()
+        KimlicDB.getInstance()!!.userDao().insert(user); syncDataBase()
     }
 
-    fun getUser(accountAddress: String) = userDao.select(accountAddress)
+    fun getUser(accountAddress: String) = KimlicDB.getInstance()!!.userDao().select(accountAddress)
 
     fun deleteUser(accountAddress: String) {
-        userDao.delete(accountAddress); syncDataBase()
+        KimlicDB.getInstance()!!.userDao().delete(accountAddress); syncDataBase()
     }
 
-    fun userLive(accountAddress: String): LiveData<User> = userDao.selectLive(accountAddress)
+    fun userLive(accountAddress: String): LiveData<User> = KimlicDB.getInstance()!!.userDao().selectLive(accountAddress)
 
     fun addUserPhoto(accountAddress: String, fileName: String, data: ByteArray) {
+        db = KimlicDB.getInstance()!!
         savePhoto_(fileName = fileName, data = data) // Add this name to user profile
         savePhoto_(fileName = "preview_" + fileName, data = cropedPreviewInByteArray(data)) //  save portrait preview in base64
-        val user = userDao.select(accountAddress = accountAddress)
+        val user = KimlicDB.getInstance()!!.userDao().select(accountAddress = accountAddress)
         user.portraitFile = fileName
         user.portraitPreviewFile = "preview_" + fileName
-        userDao.update(user = user)
+        KimlicDB.getInstance()!!.userDao().update(user = user)
         syncDataBase()
     }
 
     fun addUserName(accountAddress: String, firstName: String, lastName: String) {
-        val user = userDao.select(accountAddress = accountAddress)
+        val user = KimlicDB.getInstance()!!.userDao().select(accountAddress = accountAddress)
         user.firstName = firstName
         user.lastName = lastName
-        userDao.update(user)
+        KimlicDB.getInstance()!!.userDao().update(user)
         syncDataBase()
     }
 
     // Address
 
     fun addUserAddress_(accountAddress: String, value: String, fileName: String, data: ByteArray) {
-        val userId = userDao.select(accountAddress = accountAddress).id
+        val userId = KimlicDB.getInstance()!!.userDao().select(accountAddress = accountAddress).id
         val address = Address(userId = userId, value = value)
         val addressId = addressDao.insert(address)
         val addressPhoto = Photo(addressId = addressId, type = "address", file = fileName)
@@ -132,7 +141,7 @@ class ProfileRepository private constructor() {
     fun userContactsLive(accountAddress: String): LiveData<List<Contact>> = contactDao.selectLive(accountAddress = accountAddress)
 
     fun contactAdd(accountAddress: String, contact: Contact) {
-        val user = userDao.select(accountAddress)
+        val user = KimlicDB.getInstance()!!.userDao().select(accountAddress)
         val userId = user.id
         contact.userId = userId
         contactDao.insert(contact)
@@ -148,7 +157,7 @@ class ProfileRepository private constructor() {
     fun documentDelete(documentId: Long) = { documentDao.delete(id = documentId); syncDataBase() }
 
     fun addDocument(accountAddres: String, documentType: String, portraitName: String, portraitData: ByteArray, frontName: String, frontData: ByteArray, backName: String, backData: ByteArray) {
-        val userId = userDao.select(accountAddress = accountAddres).id
+        val userId = KimlicDB.getInstance()!!.userDao().select(accountAddress = accountAddres).id
         val documentId = documentDao.insert(document = Document(type = documentType, userId = userId))
 
         photoDao.insert(photos =
@@ -185,7 +194,6 @@ class ProfileRepository private constructor() {
 //            }
 //
 //        }
-
         return File(fileName).inputStream().readBytes()
     }
 
@@ -237,22 +245,23 @@ class ProfileRepository private constructor() {
     // Backup
 
     private fun syncDataBase() {
-        Log.d("TAG", "sync database")
-        googleSignInAccount?.let {
-            Log.d("TAG", "inside sincdatabase")
-            //db.close()
-            Handler().postDelayed({ SyncServise.getInstance().backupDatabase(Prefs.currentAccountAddress, "kimlic.db", appFolder = false, onSuccess = {}) }, 0)
-        }
+        //Log.d("TAG", "sync database")
+        //googleSignInAccount?.let {
+        //  Log.d("TAG", "inside sincdatabase")
+        //db.close()
+        //Handler().postDelayed({ SyncServise.getInstance().backupDatabase(Prefs.currentAccountAddress, "kimlic.db", appFolder = false, onSuccess = {}) }, 0)
+        //}
     }
 
     fun syncDataBaseonPause() {
-        Log.d("TAG", "sync database")
+        Log.d("TAG", "sync database is active account on this moment = " + GoogleSignIn.getLastSignedInAccount(context))
         googleSignInAccount?.let {
             Log.d("TAG", "inside sincdatabase Signed user accepter!!!!!!!!!!!!!!!!!!!!!!!!")
             db.close()
             Handler().postDelayed({
                 SyncServise.getInstance().backupDatabase(Prefs.currentAccountAddress, "kimlic.db", appFolder = false, onSuccess = {
-                    db = KimlicDB.getInstance()!!
+                    Log.d("TAGDATABASE", "in sync database on pause before opening fdatabase")
+                    KimlicDB.getInstance()!!.userDao().select("3333")
                 })
             }, 0)
         }
@@ -261,13 +270,13 @@ class ProfileRepository private constructor() {
     private fun syncPhoto(fileName: String) {
         googleSignInAccount?.let {
             val filePath = KimlicApp.applicationContext().filesDir.toString() + "/" + fileName
-            //Handler().postDelayed({
-            SyncServise.getInstance().backupFile(accountAddress = Prefs.currentAccountAddress, filePath = filePath, appFolder = false, fileDescription = "photo")
-            //  }, 1000)
+            Handler().postDelayed({
+                SyncServise.getInstance().backupFile(accountAddress = Prefs.currentAccountAddress, filePath = filePath, appFolder = false, fileDescription = "photo", onSuccess = {})
+            }, 100)
         }
     }
 
-    // Sync user
+// Sync user
 
     fun syncProfile(accountAddress: String) {
         val headers = mapOf(Pair("account-address", accountAddress))

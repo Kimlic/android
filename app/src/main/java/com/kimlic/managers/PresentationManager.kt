@@ -25,6 +25,7 @@ import com.kimlic.terms.TermsActivity
 import com.kimlic.tutorial.TutorialActivity
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.UserPhotos
+import com.kimlic.vendors.VendorsActivity
 
 object PresentationManager {
 
@@ -235,6 +236,12 @@ object PresentationManager {
 
     fun address(presenter: BaseActivity) {
         present(presenter = presenter, className = AddressActivity::class.java, isStarting = false)
+    }
+
+    fun vendors(presenter: BaseActivity) {
+
+
+        present(presenter = presenter, className = VendorsActivity::class.java)
     }
 
     // Private

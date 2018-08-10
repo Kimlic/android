@@ -16,10 +16,9 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     // Database
 
-   // private var db: KimlicDB
+
 
     init {
-       // db = KimlicDB.getInstance()!!
         risksLiveData = object : MutableLiveData<Boolean>() {}
         risksLiveData!!.value = (Prefs.isPasscodeEnabled && Prefs.isTouchEnabled)
         repository = ProfileRepository.instance
@@ -28,9 +27,7 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
     //Life
 
     override fun onCleared() {
-        //repository.syncDataBase_()
         super.onCleared()
-
     }
 
     // Publick
@@ -111,13 +108,13 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     fun syncProfile(accountAddress: String) = repository.syncProfile(accountAddress = accountAddress)
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    //@OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onStageActivityPause() {
         Log.d("TAG", "Lifecycle components on Lifecycle PAUSE!!!!")
-        repository.syncDataBaseonPause()
+        //repository.syncDataBaseonPause()
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    //@OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onActivitiResume() {
         Log.d("TAG", "Lifecycle components on Lifecycle RESUME!!!")
     }

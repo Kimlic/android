@@ -39,7 +39,6 @@ class AccountRecoveryActivity : BaseActivity() {
             //TODO use pgraseList
             //getPhraseItemsList()
 
-
             Log.d("TAGPHRASELIST", "phrase = " + getPhraseList())
             val mnemonic = phraseEt.text.toString().trim()
             QuorumKimlic.destroyInstance()
@@ -49,14 +48,14 @@ class AccountRecoveryActivity : BaseActivity() {
 
             Log.d("TAGPHRASELIST", "account address = " + accountAddress)
 
-
-
             recoveryViewModel!!.retrivePhoto(accountAddress)
 
             KimlicDB.getInstance()!!.close()
             recoveryViewModel!!.retriveDatabase(accountAddress = accountAddress, onSuccess = {
                 Prefs.authenticated = true
                 Prefs.currentAccountAddress = accountAddress
+                KimlicDB.getInstance()
+                Log.d(TAG, "Database restored successfully")
                 successfull()
             })
 

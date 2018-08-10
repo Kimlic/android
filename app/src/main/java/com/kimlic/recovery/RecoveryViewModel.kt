@@ -45,11 +45,12 @@ class RecoveryViewModel : ViewModel() {
             db!!.close()
 
             if (!db!!.isOpen) {
-                Log.i(TAG, "Database is closed - " + db!!.isOpen)
+                Log.d(TAG, "Database is closed - " + db!!.isOpen)
                 Handler().postDelayed({
                     syncService.retriveDataBase(accountAddress = accountAddress, dataBaseName = "kimlic.db", appFolder = false, onSuccess = {
                         onSuccess()
-                        Log.i(TAG, "Database restored successfully")
+                        KimlicDB.getInstance()
+                        Log.d(TAG, "Database restored successfully")
                     })
                 }, 10000)
             }
