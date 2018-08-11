@@ -125,11 +125,12 @@ class PhoneActivity : BaseActivity() {
     private fun sendDoc() {
         val image = imageBase64(this)
         val sha = Sha.sha256(image)
-        val url = "https://d34b2ac7.ngrok.io/api/medias"
+//    val url = "https://elixir.aws.pp.ua/api/medias"
+        val url = "https://67a9c1a3.ngrok.io/api/medias"
 
         val receipt = QuorumKimlic.getInstance().setFieldMainData(
-                "{\"face\":${sha},\"document-front\":${sha},\"document-back\":${sha}}",
-                "documents.id_card")
+            "{\"face\":${sha},\"document-front\":${sha},\"document-back\":${sha}}",
+            "documents.id_card")
         Log.e("RECEIPT", receipt.toString())
 
         Log.e("ACCOUNT", Prefs.currentAccountAddress)
@@ -153,9 +154,9 @@ class PhoneActivity : BaseActivity() {
             @Throws(AuthFailureError::class)
             override fun getHeaders(): Map<String, String> {
                 return mapOf(
-                        Pair("Account-Address", Prefs.currentAccountAddress),
-                        Pair("Content-Type", "application/json; charset=utf-8"),
-                        Pair("Accept", "application/vnd.mobile-api.v1+json")
+                    Pair("Account-Address", Prefs.currentAccountAddress),
+                    Pair("Content-Type", "application/json; charset=utf-8"),
+                    Pair("Accept", "application/vnd.mobile-api.v1+json")
                 )
             }
         }
