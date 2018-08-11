@@ -1,8 +1,6 @@
 package com.kimlic.model
 
 import android.arch.lifecycle.*
-import android.util.Log
-import com.kimlic.db.KimlicDB
 import com.kimlic.db.entity.*
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.UserPhotos
@@ -68,11 +66,12 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
             }
         }
         repository.addDocument(Prefs.currentAccountAddress, documentType, portritName, portraitData, frontName, frontData, backName, backData)
+
     }
 
     fun addUserAddress(value: String, data: ByteArray) {
         val fileName = Prefs.currentAccountAddress + "_" + UserPhotos.bill.fileName
-        repository.addUserAddress_(accountAddress = Prefs.currentAccountAddress, value = value, fileName = fileName, data = data)
+        repository.addUserAddress(accountAddress = Prefs.currentAccountAddress, value = value, fileName = fileName, data = data)
     }
 
     fun updateUserAddress(address: Address) = repository.addressUpdate(address = address)
@@ -106,16 +105,5 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
     // SyncRequest
 
     fun syncProfile(accountAddress: String) = repository.syncProfile(accountAddress = accountAddress)
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    fun onStageActivityPause() {
-        Log.d("TAG", "Lifecycle components on Lifecycle PAUSE!!!!")
-        //repository.syncDataBaseonPause()
-    }
-
-    //@OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun onActivitiResume() {
-        Log.d("TAG", "Lifecycle components on Lifecycle RESUME!!!")
-    }
 
 }

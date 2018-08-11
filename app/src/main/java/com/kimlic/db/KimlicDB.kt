@@ -36,7 +36,6 @@ abstract class KimlicDB : RoomDatabase() {
                             .build()
                     INSTANCE!!.openHelper.setWriteAheadLoggingEnabled(false)
                     INSTANCE!!.invalidationTracker
-
                 }
             }
             return INSTANCE

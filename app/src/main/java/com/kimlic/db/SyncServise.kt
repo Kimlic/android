@@ -19,6 +19,7 @@ import java.io.*
 class SyncServise private constructor(val context: Context) {
 
     // Variables
+
     private val TAG = this::class.java.simpleName
     private var mGoogleSignInAccount: GoogleSignInAccount? = null // SignIn account
     private var mDriveResourceClient: DriveResourceClient? = null // Handle access to Drive resources/files.
@@ -142,14 +143,11 @@ class SyncServise private constructor(val context: Context) {
         rootFolder.continueWithTask {
             mDriveResourceClient!!
                     .queryChildren(rootFolder.getResult(), backupFolderQuerry)
-                    .addOnFailureListener {
-                        Log.d(TAG, " before check found folders querry")
-                        onError() }
+                    .addOnFailureListener { onError() }
                     .continueWithTask {
                         mDriveResourceClient!!.queryChildren(it.result[0].driveId.asDriveFolder(), fileQuerry)
                     }.addOnSuccessListener {
 
-                        Log.d(TAG, " before check found folders = ${it.count}")
                         if (it.count == 0) {
                             Log.d(TAG, "found folders = ${it.count}")
                             onError(); return@addOnSuccessListener
@@ -165,7 +163,6 @@ class SyncServise private constructor(val context: Context) {
 
     private fun saveDataBaseToDisc(dataBaseName: String, driveFile: DriveFile, onSuccess: () -> Unit) {
         val dataBasePath = context.getDatabasePath(dataBaseName).toString()
-        Log.d("TAGTASK", "database path = " + dataBasePath)
         val openFileTask = mDriveResourceClient!!.openFile(driveFile, DriveFile.MODE_READ_ONLY)
         openFileTask
                 .addOnSuccessListener {
