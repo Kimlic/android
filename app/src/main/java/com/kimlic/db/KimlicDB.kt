@@ -32,11 +32,16 @@ abstract class KimlicDB : RoomDatabase() {
                 synchronized(KimlicDB::class) {
                     INSTANCE = Room.databaseBuilder(KimlicApp.applicationContext(), KimlicDB::class.java, "kimlic.db")
                             .allowMainThreadQueries()
+
                             .build()
-                    INSTANCE
+                    INSTANCE!!.openHelper.setWriteAheadLoggingEnabled(false)
+                    INSTANCE!!.invalidationTracker
+
                 }
             }
             return INSTANCE
         }
     }
+
+
 }

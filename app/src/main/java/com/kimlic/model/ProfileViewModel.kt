@@ -17,7 +17,6 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
     // Database
 
 
-
     init {
         risksLiveData = object : MutableLiveData<Boolean>() {}
         risksLiveData!!.value = (Prefs.isPasscodeEnabled && Prefs.isTouchEnabled)
@@ -94,7 +93,7 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     fun getUserAddressPhoto(accountAddress: String) = repository.userAddressPhoto(accountAddress = accountAddress)
 
-    //fun addUserDocument(accountAddress: String, document: Document): Long = repository.documentAdd(accountAddress = accountAddress, document = document)
+    //fun addUserDocument(accountAddress: String, document: Document_): Long = repository.documentAdd(accountAddress = accountAddress, document = document)
 
     fun addUserName(accountAddress: String, firstName: String, lastName: String) = repository.addUserName(accountAddress = accountAddress, firstName = firstName, lastName = lastName)
 
@@ -108,7 +107,7 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     fun syncProfile(accountAddress: String) = repository.syncProfile(accountAddress = accountAddress)
 
-    //@OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun onStageActivityPause() {
         Log.d("TAG", "Lifecycle components on Lifecycle PAUSE!!!!")
         //repository.syncDataBaseonPause()

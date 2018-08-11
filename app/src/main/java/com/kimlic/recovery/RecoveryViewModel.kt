@@ -38,7 +38,7 @@ class RecoveryViewModel : ViewModel() {
         super.onCleared()
     }
 
-    fun retriveDatabase(accountAddress: String, onSuccess: () -> Unit) {
+    fun retriveDatabase(accountAddress: String, onSuccess: () -> Unit, onError: () -> Unit) {
         db!!.openHelper.close()
         googleSignInAccount = GoogleSignIn.getLastSignedInAccount(KimlicApp.applicationContext())
         googleSignInAccount?.let {
@@ -49,10 +49,10 @@ class RecoveryViewModel : ViewModel() {
                 Handler().postDelayed({
                     syncService.retriveDataBase(accountAddress = accountAddress, dataBaseName = "kimlic.db", appFolder = false, onSuccess = {
                         onSuccess()
-                        KimlicDB.getInstance()
+                        //KimlicDB.getInstance()
                         Log.d(TAG, "Database restored successfully")
-                    })
-                }, 10000)
+                    }, onError = onError)
+                }, 10)
             }
         }
     }

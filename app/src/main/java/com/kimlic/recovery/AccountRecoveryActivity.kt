@@ -36,13 +36,13 @@ class AccountRecoveryActivity : BaseActivity() {
         }
 
         verifyBt.setOnClickListener {
-            //TODO use pgraseList
-            //getPhraseItemsList()
-
-            Log.d("TAGPHRASELIST", "phrase = " + getPhraseList())
             val mnemonic = phraseEt.text.toString().trim()
-            QuorumKimlic.destroyInstance()
 
+            if (!mnemonicValid(mnemonic)) {
+                showPopup(title = "Error", message = "Missing mnemonic phrases"); return@setOnClickListener
+            }
+
+            QuorumKimlic.destroyInstance()
             val quorumKimlic = QuorumKimlic.createInstance(mnemonic, this)//Create Quorum instance
             val accountAddress = quorumKimlic.walletAddress
 
@@ -57,6 +57,9 @@ class AccountRecoveryActivity : BaseActivity() {
                 KimlicDB.getInstance()
                 Log.d(TAG, "Database restored successfully")
                 successfull()
+            }, onError = {
+                showPopup("Error", "Recovery Error")
+                return@retriveDatabase
             })
 
         }
@@ -77,5 +80,9 @@ class AccountRecoveryActivity : BaseActivity() {
             }
         })
         fragment.show(supportFragmentManager, RecoverySuccesfullFragment.FRAGMENT_KEY)
+    }
+
+    private fun mnemonicValid(mnemonic: String): Boolean {
+        return mnemonic.split(" ").size == 12
     }
 }

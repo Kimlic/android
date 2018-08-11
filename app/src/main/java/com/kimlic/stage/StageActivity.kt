@@ -37,15 +37,11 @@ class StageActivity : BaseActivity() {
     }
 
     override fun onResume() {
-
-//        model.onActivitiResume()
-//        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         super.onResume()
         risks()
     }
 
     override fun onPause() {
-        // model.onStageActivityPause()
         super.onPause()
     }
 
@@ -59,10 +55,7 @@ class StageActivity : BaseActivity() {
         when (requestCode) {
             SCAN_REQUEST_CODE -> {
                 val result = IntentIntegrator.parseActivityResult(resultCode, data)
-                if (result.getContents() == null) {
-                    Log.d("TAGSCANNER", "Cancelled scan")
-                    Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show()
-                } else {
+                if (result.getContents() != null) {
                     Log.d("TAGSCANNER", "Scanned")
                     Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show()
                     PresentationManager.vendors(this)

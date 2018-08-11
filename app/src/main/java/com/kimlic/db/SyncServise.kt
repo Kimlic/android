@@ -134,7 +134,7 @@ class SyncServise private constructor(val context: Context) {
         }
     }
 
-    fun retriveDataBase(accountAddress: String, dataBaseName: String, appFolder: Boolean, onSuccess: () -> Unit) {
+    fun retriveDataBase(accountAddress: String, dataBaseName: String, appFolder: Boolean, onSuccess: () -> Unit, onError: () -> Unit) {
         val rootFolder = getRootFolder(appFolder)
         val backupFolderQuerry = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, accountAddress)).build()
         val fileQuerry = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, MIME_TYPE_DATABASE)).addFilter(Filters.eq(SearchableField.TITLE, dataBaseName)).build()
@@ -142,15 +142,24 @@ class SyncServise private constructor(val context: Context) {
         rootFolder.continueWithTask {
             mDriveResourceClient!!
                     .queryChildren(rootFolder.getResult(), backupFolderQuerry)
+                    .addOnFailureListener {
+                        Log.d(TAG, " before check found folders querry")
+                        onError() }
                     .continueWithTask {
                         mDriveResourceClient!!.queryChildren(it.result[0].driveId.asDriveFolder(), fileQuerry)
                     }.addOnSuccessListener {
 
+                        Log.d(TAG, " before check found folders = ${it.count}")
+                        if (it.count == 0) {
+                            Log.d(TAG, "found folders = ${it.count}")
+                            onError(); return@addOnSuccessListener
+                        }
                         it.forEach {
                             Log.d(TAG, "files in folder description ${it.description}")
                             if (it.description.equals(DATABASE_DECRIPTION)) saveDataBaseToDisc(it.title, it.driveId.asDriveFile(), onSuccess)
                         }
                     }
+
         }
     }
 

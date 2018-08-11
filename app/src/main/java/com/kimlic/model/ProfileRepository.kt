@@ -12,6 +12,7 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.common.util.IOUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.kimlic.API.KimlicRequest
@@ -152,6 +153,8 @@ class ProfileRepository private constructor() {
 
     // Document
 
+    fun documents(accountAddres: String) = documentDao.select(accountAddress = accountAddres)
+
     fun documentsLive(accountAddress: String) = documentDao.selectLive(accountAddress = accountAddress)
 
     fun documentDelete(documentId: Long) = { documentDao.delete(id = documentId); syncDataBase() }
@@ -245,12 +248,12 @@ class ProfileRepository private constructor() {
     // Backup
 
     private fun syncDataBase() {
-        //Log.d("TAG", "sync database")
-        //googleSignInAccount?.let {
-        //  Log.d("TAG", "inside sincdatabase")
-        //db.close()
-        //Handler().postDelayed({ SyncServise.getInstance().backupDatabase(Prefs.currentAccountAddress, "kimlic.db", appFolder = false, onSuccess = {}) }, 0)
-        //}
+//        Log.d("TAG", "sync database")
+//        googleSignInAccount?.let {
+//          Log.d("TAG", "inside sincdatabase")
+//        db.close()
+//        Handler().postDelayed({ SyncServise.getInstance().backupDatabase(Prefs.currentAccountAddress, "kimlic.db", appFolder = false, onSuccess = {}) }, 0)
+//        }
     }
 
     fun syncDataBaseonPause() {
@@ -258,12 +261,22 @@ class ProfileRepository private constructor() {
         googleSignInAccount?.let {
             Log.d("TAG", "inside sincdatabase Signed user accepter!!!!!!!!!!!!!!!!!!!!!!!!")
             db.close()
-            Handler().postDelayed({
-                SyncServise.getInstance().backupDatabase(Prefs.currentAccountAddress, "kimlic.db", appFolder = false, onSuccess = {
-                    Log.d("TAGDATABASE", "in sync database on pause before opening fdatabase")
-                    KimlicDB.getInstance()!!.userDao().select("3333")
-                })
-            }, 0)
+
+            val file = context.getDatabasePath("kimlic.db")
+            val fileBackup = File(context.filesDir.toString() + "/" + "backup.db")
+            db.documentDao().select("ddd")
+
+
+            fileBackup.outputStream().write(IOUtils.toByteArray(file.inputStream()))
+
+            init()
+            Log.d("TAG", "database in open = " + db.isOpen)
+
+//            Handler().postDelayed({
+//                SyncServise.getInstance().backupDatabase(Prefs.currentAccountAddress, "kimlic.db", appFolder = false, onSuccess = {
+//                    //Log.d("TAGDATABASE", "in sync database on pause before opening fdatabase")
+//                })
+//            }, 0)
         }
     }
 

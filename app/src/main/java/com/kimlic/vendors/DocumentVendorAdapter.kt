@@ -1,16 +1,17 @@
-package com.kimlic.stage.adapter
+package com.kimlic.vendors
 
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kimlic.R
 import com.kimlic.db.entity.Document
+import com.kimlic.stage.adapter.Icons_
+import com.kimlic.stage.adapter.OnStageItemClick
 import com.kimlic.utils.AppConstants
 import kotlinx.android.synthetic.main.item_stage.view.*
 
-open class DocumentAdapter : RecyclerView.Adapter<DocumentAdapter.DocumentHolder>() {
+open class DocumentVendorAdapter : RecyclerView.Adapter<DocumentVendorAdapter.DocumentHolder>() {
 
     // Variables
 
@@ -42,7 +43,7 @@ open class DocumentAdapter : RecyclerView.Adapter<DocumentAdapter.DocumentHolder
             if (it.type.equals("permit")) tempList.add(it)
         }
 
-        if (documents.size < 4) tempList.add(Document(type = "add"))
+//        if (documents.size < 4) tempList.add(Document(type = "add"))
 
         this.documentList = tempList
         notifyDataSetChanged()
