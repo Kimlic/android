@@ -24,105 +24,106 @@ import org.json.JSONObject
 
 class SignupRecoveryActivity : BaseActivity() {
 
-  // Variables
+    // Variables
 
-  private lateinit var model: ProfileViewModel
+    private lateinit var model: ProfileViewModel
 
-  // Constants
+    // Constants
 
-  private val TERMS_ACCEPT_RECOVERY_REQUEST_CODE = 101
-  private val TERMS_ACCEPT_CREATE_REQUEST_CODE = 102
-  private val GOOGLE_SIGNE_IN_REQUEST_CODE = 103
+    private val TERMS_ACCEPT_RECOVERY_REQUEST_CODE = 101
+    private val TERMS_ACCEPT_CREATE_REQUEST_CODE = 102
+    private val GOOGLE_SIGNE_IN_REQUEST_CODE = 103
 
-  // Life
+    // Life
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_signup_recovery)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_signup_recovery)
 
-    setupUI()
-  }
-
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    when (requestCode) {
-      TERMS_ACCEPT_RECOVERY_REQUEST_CODE -> {
-        if (resultCode == Activity.RESULT_OK) {
-          Prefs.termsAccepted = true
-          PresentationManager.recovery(this)
-        }
-      }
-      TERMS_ACCEPT_CREATE_REQUEST_CODE -> {
-        if (resultCode == Activity.RESULT_OK) {
-          Prefs.termsAccepted = true
-          PresentationManager.recovery(this)
-        }
-      }
-      GOOGLE_SIGNE_IN_REQUEST_CODE -> {
-        if (resultCode != Activity.RESULT_OK) {
-          Prefs.isUserGoogleSigned = false; return
-        }
-        Prefs.isUserGoogleSigned = true
-      }
+        setupUI()
     }
-  }
 
-  // Private
-
-  private fun setupUI() {
-    model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-    SyncServise.signIn(this, GOOGLE_SIGNE_IN_REQUEST_CODE)
-
-    createBt.setOnClickListener {
-      initNewUserRegistaration()
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            TERMS_ACCEPT_RECOVERY_REQUEST_CODE -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    Prefs.termsAccepted = true
+                    PresentationManager.recovery(this)
+                }
+            }
+            TERMS_ACCEPT_CREATE_REQUEST_CODE -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    Prefs.termsAccepted = true
+                    PresentationManager.recovery(this)
+                }
+            }
+            GOOGLE_SIGNE_IN_REQUEST_CODE -> {
+                if (resultCode != Activity.RESULT_OK) {
+                    Prefs.isUserGoogleSigned = false; return
+                }
+                Prefs.isUserGoogleSigned = true
+            }
+        }
     }
-    recoverBt.setOnClickListener {
-      termsToAccept(TERMS_ACCEPT_RECOVERY_REQUEST_CODE)
+
+    // Private
+
+    private fun setupUI() {
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        SyncServise.signIn(this, GOOGLE_SIGNE_IN_REQUEST_CODE)
+
+        createBt.setOnClickListener {
+            initNewUserRegistaration()
+        }
+        recoverBt.setOnClickListener {
+            termsToAccept(TERMS_ACCEPT_RECOVERY_REQUEST_CODE)
+        }
     }
-  }
 
-  private fun termsToAccept(requestCode: Int) {
-    val intent = Intent(this, TermsActivity::class.java)
-    intent.putExtra("action", "accept")
-    intent.putExtra("content", "terms")
-    startActivityForResult(intent, requestCode)
-  }
+    private fun termsToAccept(requestCode: Int) {
+        val intent = Intent(this, TermsActivity::class.java)
+        intent.putExtra("action", "accept")
+        intent.putExtra("content", "terms")
+        startActivityForResult(intent, requestCode)
+    }
 
-  private fun initNewUserRegistaration() {
-    // 1. Create Quorum instance locally - mnemonic and address
-    QuorumKimlic.destroyInstance()
-    QuorumKimlic.createInstance(null, this) // moved to quorum request
-    val mnemonic = QuorumKimlic.getInstance().mnemonic
-    val walletAddress = QuorumKimlic.getInstance().walletAddress
+    private fun initNewUserRegistaration() {
+        // 1. Create Quorum instance locally - mnemonic and address
+        QuorumKimlic.destroyInstance()
+        QuorumKimlic.createInstance(null, this) // moved to quorum request
+        val mnemonic = QuorumKimlic.getInstance().mnemonic
+        val walletAddress = QuorumKimlic.getInstance().walletAddress
 
-    // Init new user
+        // Init new user
 
-    val user = User(Prefs.currentId, mnemonic = mnemonic, accountAddress = walletAddress)
-    Prefs.currentAccountAddress = walletAddress
-    model.insertUser(user)
+//    val user = User(Prefs.currentId, mnemonic = mnemonic, accountAddress = walletAddress)
+        val user = User(accountAddress = walletAddress, mnemonic = mnemonic)
+        Prefs.currentAccountAddress = walletAddress
+        model.insertUser(user)
 
-    // 2. Get entry point of the Quorum
-    val headers = mapOf<String, String>(Pair("account-address", walletAddress))
-    val addressRequest = KimlicRequest(method = Request.Method.GET, url = QuorumURL.config.url, requestHeaders = headers, requestParams = null, onSuccess = Response.Listener {
-      val json = JSONObject(it)
-      val responceCode = json.getJSONObject("meta").optString("code").toString()
+        // 2. Get entry point of the Quorum
+        val headers = mapOf<String, String>(Pair("account-address", walletAddress))
+        val addressRequest = KimlicRequest(method = Request.Method.GET, url = QuorumURL.config.url, requestHeaders = headers, requestParams = null, onSuccess = Response.Listener {
+            val json = JSONObject(it)
+            val responceCode = json.getJSONObject("meta").optString("code").toString()
 
-      if (!responceCode.startsWith("2")) {
-        errorPopup(getString(R.string.server_error))
-        return@Listener
-      }
-      // 3. Get context contract address
-      val contextContractAddress = json.getJSONObject("data").optString("context_contract")
-      QuorumKimlic.getInstance().setKimlicContractsContextAddress(contextContractAddress)
-      // 3. Set account storage address
-      val accountStorageAdapterAddress = QuorumKimlic.getInstance().accountStorageAdapter
-      QuorumKimlic.getInstance().setAccountStorageAdapterAddress(accountStorageAdapterAddress)
-      PresentationManager.tutorials(this)
-    }, onError = Response.ErrorListener {
-      val json = it.networkResponse.toString()
-      Log.e("LOG_TAG", json)
-      errorPopup(getString(R.string.server_error))
-    })
-    VolleySingleton.getInstance(this@SignupRecoveryActivity).requestQueue.add(addressRequest)
+            if (!responceCode.startsWith("2")) {
+                errorPopup(getString(R.string.server_error))
+                return@Listener
+            }
+            // 3. Get context contract address
+            val contextContractAddress = json.getJSONObject("data").optString("context_contract")
+            QuorumKimlic.getInstance().setKimlicContractsContextAddress(contextContractAddress)
+            // 3. Set account storage address
+            val accountStorageAdapterAddress = QuorumKimlic.getInstance().accountStorageAdapter
+            QuorumKimlic.getInstance().setAccountStorageAdapterAddress(accountStorageAdapterAddress)
+            PresentationManager.tutorials(this)
+        }, onError = Response.ErrorListener {
+            val json = it.networkResponse.toString()
+            Log.e("LOG_TAG", json)
+            errorPopup(getString(R.string.server_error))
+        })
+        VolleySingleton.getInstance(this@SignupRecoveryActivity).requestQueue.add(addressRequest)
 
-  }
+    }
 }

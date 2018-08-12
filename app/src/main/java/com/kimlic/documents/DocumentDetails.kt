@@ -18,7 +18,6 @@ class DocumentDetails : BaseActivity() {
 
     private lateinit var documentType: String
     private lateinit var accountAddres: String
-
     private lateinit var model: ProfileViewModel
 
     // Life
@@ -51,6 +50,7 @@ class DocumentDetails : BaseActivity() {
             finish()
             // Handle Data
         }
+
         backBt.setOnClickListener { finish() }
     }
 
@@ -58,7 +58,7 @@ class DocumentDetails : BaseActivity() {
     private fun manageInput() {
         //accountAddres
         // photos list
-
+        // send docs to RP
     }
 
     private fun fillData(photos: Map<String, String>, documentType: String) {

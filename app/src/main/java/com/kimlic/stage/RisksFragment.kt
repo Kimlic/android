@@ -62,7 +62,7 @@ class RisksFragment : BasePopupFragment() {
         if (!recoveryOffered) {
             views[count].visibility = View.VISIBLE
             buttons[count].text = getString(R.string.enable_account_recovery)
-            buttons[count++].setOnClickListener { Prefs.isRecoveryOffered = true; dismiss(); PresentationManager.passhraseCreate(activity!!) }
+            buttons[count++].setOnClickListener { Prefs.isRecoveryOffered = true; dismiss(); PresentationManager.passphraseCreate(activity!!) }
         }
 
         if (!passcodeOffered) {

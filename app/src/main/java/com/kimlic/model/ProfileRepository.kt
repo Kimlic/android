@@ -8,8 +8,11 @@ import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.os.Handler
 import android.util.Log
+import com.android.volley.AuthFailureError
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.util.IOUtils
@@ -24,6 +27,8 @@ import com.kimlic.db.SyncServise
 import com.kimlic.db.dao.*
 import com.kimlic.db.entity.*
 import com.kimlic.preferences.Prefs
+import com.kimlic.quorum.QuorumKimlic
+import com.kimlic.quorum.crypto.Sha
 import com.kimlic.utils.QuorumURL
 import com.kimlic.utils.mappers.BitmapToByteArrayMapper
 import org.json.JSONObject
@@ -277,4 +282,47 @@ class ProfileRepository private constructor() {
 
         Handler().post { VolleySingleton.getInstance(context = context).requestQueue.add(syncRequest) }
     }
+
+    // RP request
+
+//    private fun sendDoc() {
+//        val image = imageBase64(this)
+//        val sha = Sha.sha256(image)
+////    val url = "https://elixir.aws.pp.ua/api/medias"
+//        val url = "https://67a9c1a3.ngrok.io/api/medias"
+//
+//        val receipt = QuorumKimlic.getInstance().setFieldMainData(
+//                "{\"face\":${sha},\"document-front\":${sha},\"document-back\":${sha}}",
+//                "documents.id_card")
+//        Log.e("RECEIPT", receipt.toString())
+//
+//        Log.e("ACCOUNT", Prefs.currentAccountAddress)
+//
+//        val params = JSONObject()
+//        params.put("attestator", "Veriff.me")
+//        params.put("doc", "ID_CARD")
+//        params.put("type", "face")
+//        params.put("file", image)
+//        Log.e("PARAMS", params.toString())
+//
+//        val request = object : JsonObjectRequest(Request.Method.POST, url, params, Response.Listener<JSONObject> { response ->
+//            Log.e("DOC RESPONSE", response.toString())
+//        }, Response.ErrorListener { error ->
+//            unableToProceed()
+//        }) {
+//            init {
+//                setRetryPolicy(DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))
+//            }
+//
+//            @Throws(AuthFailureError::class)
+//            override fun getHeaders(): Map<String, String> {
+//                return mapOf(
+//                        Pair("Account-Address", Prefs.currentAccountAddress),
+//                        Pair("Content-Type", "application/json; charset=utf-8"),
+//                        Pair("Accept", "application/vnd.mobile-api.v1+json")
+//                )
+//            }
+//        }
+//        VolleySingleton.getInstance(this).addToRequestQueue(request)
+//    }
 }

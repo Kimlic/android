@@ -3,8 +3,6 @@ package com.kimlic.documents
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Matrix
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -17,7 +15,6 @@ import com.kimlic.db.entity.Document
 import com.kimlic.db.entity.User
 import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
-import com.kimlic.preferences.Prefs
 import com.kimlic.utils.mappers.FileNameTxtBase64ToBitmap
 import kotlinx.android.synthetic.main.activity_verify_document.*
 
@@ -45,10 +42,10 @@ class DocumentVerifyChooseActivity : BaseActivity(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v!!.tag) {
-            "passport" -> PresentationManager.verifyPassport(this@DocumentVerifyChooseActivity, Prefs.currentId)
-            "id" -> PresentationManager.verifyIDCard(this@DocumentVerifyChooseActivity, Prefs.currentId)
-            "license" -> PresentationManager.verifyDriverLicence(this@DocumentVerifyChooseActivity, Prefs.currentId)
-            "permit" -> PresentationManager.verifyPermit(this@DocumentVerifyChooseActivity, Prefs.currentId)
+            "passport" -> PresentationManager.verifyPassport(this@DocumentVerifyChooseActivity)
+            "id" -> PresentationManager.verifyIDCard(this@DocumentVerifyChooseActivity)
+            "license" -> PresentationManager.verifyDriverLicence(this@DocumentVerifyChooseActivity)
+            "permit" -> PresentationManager.verifyPermit(this@DocumentVerifyChooseActivity)
         }
     }
 
@@ -110,13 +107,8 @@ class DocumentVerifyChooseActivity : BaseActivity(), View.OnClickListener {
     // Private helpers
 
     private fun setupBackground(fileName: String) {
-        val filePath = this.applicationContext.filesDir.toString() + "/" + fileName
         val bitmap = FileNameTxtBase64ToBitmap().transform(fileName)
-
-        if (bitmap != null) {
-            rootIv.scaleType = ImageView.ScaleType.CENTER_CROP
-            rootIv.setImageBitmap(croped(bitmap))
-        }
+        bitmap?.let { rootIv.setImageBitmap(croped(bitmap)); rootIv.scaleType = ImageView.ScaleType.CENTER_CROP }
     }
 
     private fun croped(bitmap: Bitmap): Bitmap {

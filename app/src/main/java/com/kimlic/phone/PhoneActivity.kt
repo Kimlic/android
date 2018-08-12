@@ -49,13 +49,13 @@ class PhoneActivity : BaseActivity() {
 
     // Life
 
-    private var base64Img: List<String> = ArrayList()
-
-    fun imageBase64(context: Context): String {
-        val stream = context.resources.openRawResource(R.raw.base64example)
-
-        return BufferedReader(InputStreamReader(stream, "UTF-8")).readLine()!!
-    }
+//    private var base64Img: List<String> = ArrayList()
+//
+//    fun imageBase64(context: Context): String {
+//        val stream = context.resources.openRawResource(R.raw.base64example)
+//
+//        return BufferedReader(InputStreamReader(stream, "UTF-8")).readLine()!!
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -120,47 +120,6 @@ class PhoneActivity : BaseActivity() {
         nextBt.setOnClickListener { managePhone() }
         countryEt.setOnClickListener { initDropList() }
         backBt.setOnClickListener { finish() }
-    }
-
-    private fun sendDoc() {
-        val image = imageBase64(this)
-        val sha = Sha.sha256(image)
-//    val url = "https://elixir.aws.pp.ua/api/medias"
-        val url = "https://67a9c1a3.ngrok.io/api/medias"
-
-        val receipt = QuorumKimlic.getInstance().setFieldMainData(
-            "{\"face\":${sha},\"document-front\":${sha},\"document-back\":${sha}}",
-            "documents.id_card")
-        Log.e("RECEIPT", receipt.toString())
-
-        Log.e("ACCOUNT", Prefs.currentAccountAddress)
-
-        val params = JSONObject()
-        params.put("attestator", "Veriff.me")
-        params.put("doc", "ID_CARD")
-        params.put("type", "face")
-        params.put("file", image)
-        Log.e("PARAMS", params.toString())
-
-        val request = object : JsonObjectRequest(Request.Method.POST, url, params, Response.Listener<JSONObject> { response ->
-            Log.e("DOC RESPONSE", response.toString())
-        }, Response.ErrorListener { error ->
-            unableToProceed()
-        }) {
-            init {
-                setRetryPolicy(DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))
-            }
-
-            @Throws(AuthFailureError::class)
-            override fun getHeaders(): Map<String, String> {
-                return mapOf(
-                    Pair("Account-Address", Prefs.currentAccountAddress),
-                    Pair("Content-Type", "application/json; charset=utf-8"),
-                    Pair("Accept", "application/vnd.mobile-api.v1+json")
-                )
-            }
-        }
-        VolleySingleton.getInstance(this).addToRequestQueue(request)
     }
 
     private fun managePhone() {

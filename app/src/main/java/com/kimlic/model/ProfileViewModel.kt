@@ -1,9 +1,15 @@
 package com.kimlic.model
 
-import android.arch.lifecycle.*
-import com.kimlic.db.entity.*
+import android.arch.lifecycle.LifecycleObserver
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.ViewModel
+import com.fasterxml.jackson.annotation.ObjectIdGenerators
+import com.kimlic.db.entity.Address
+import com.kimlic.db.entity.Contact
+import com.kimlic.db.entity.User
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.UserPhotos
+import java.util.*
 
 class ProfileViewModel : ViewModel(), LifecycleObserver {
 
@@ -41,36 +47,20 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     fun addUserPortraitPhoto(data: ByteArray) {
         val accountAddress = Prefs.currentAccountAddress
-        val fileName = accountAddress + "_" + UserPhotos.stagePortrait.fileName
+        val fileName = UUID.nameUUIDFromBytes(data).toString()
         repository.addUserPhoto(accountAddress, fileName, data)
     }
 
     fun saveDocumentAndPhoto(documentType: String, portraitData: ByteArray, frontData: ByteArray, backData: ByteArray) {
-        val prefix = Prefs.currentAccountAddress + "_"
-        var portritName: String = ""
-        var frontName: String = ""
-        var backName: String = ""
-
-        when (documentType) {
-            "passport" -> {
-                portritName = prefix + UserPhotos.passportPortrait.fileName; frontName = prefix + UserPhotos.passportFront.fileName; backName = prefix + UserPhotos.passportBack.fileName
-            }
-            "id" -> {
-                portritName = prefix + UserPhotos.idPortrait.fileName; frontName = prefix + UserPhotos.idFront.fileName; backName = prefix + UserPhotos.idBack.fileName
-            }
-            "license" -> {
-                portritName = prefix + UserPhotos.licensePortrait.fileName; frontName = prefix + UserPhotos.licensFront.fileName; backName = prefix + UserPhotos.licensBack.fileName
-            }
-            "permit" -> {
-                portritName = prefix + UserPhotos.permitPortrait.fileName; frontName = prefix + UserPhotos.permitFront.fileName; backName = prefix + UserPhotos.permitBack.fileName
-            }
-        }
+        val portritName: String = UUID.nameUUIDFromBytes(portraitData).toString()
+        val frontName: String = UUID.nameUUIDFromBytes(frontData).toString()
+        val backName: String = UUID.nameUUIDFromBytes(backData).toString()
         repository.addDocument(Prefs.currentAccountAddress, documentType, portritName, portraitData, frontName, frontData, backName, backData)
 
     }
 
     fun addUserAddress(value: String, data: ByteArray) {
-        val fileName = Prefs.currentAccountAddress + "_" + UserPhotos.bill.fileName
+        val fileName = UUID.nameUUIDFromBytes(data).toString()
         repository.addUserAddress(accountAddress = Prefs.currentAccountAddress, value = value, fileName = fileName, data = data)
     }
 
@@ -82,7 +72,7 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     fun getUserAddressesLive(accountAddress: String) = repository.addressLive(accountAddress = accountAddress)
 
-    fun getUserAddress(accountAddress: String) = repository.address(accountAddress = accountAddress)
+    //fun getUserAddress(accountAddress: String) = repository.address(accountAddress = accountAddress)
 
     fun getUserContactsLive(accountAddress: String) = repository.userContactsLive(accountAddress)
 
@@ -90,7 +80,7 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     fun getUserDocumentPhotos(accountAddress: String, documentType: String) = repository.userDocumentPhotos(accountAddress = accountAddress, documentType = documentType)
 
-    fun getUserAddressPhoto(accountAddress: String) = repository.userAddressPhoto(accountAddress = accountAddress)
+    //fun getUserAddressPhoto(accountAddress: String) = repository.userAddressPhoto(accountAddress = accountAddress)
 
     //fun addUserDocument(accountAddress: String, document: Document_): Long = repository.documentAdd(accountAddress = accountAddress, document = document)
 
@@ -105,5 +95,6 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
     // SyncRequest
 
     fun syncProfile(accountAddress: String) = repository.syncProfile(accountAddress = accountAddress)
+
 
 }

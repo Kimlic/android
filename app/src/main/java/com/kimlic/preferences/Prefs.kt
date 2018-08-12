@@ -27,7 +27,7 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
 
         // User profile preferences
 
-        auth = ""
+       // auth = ""
         currentAccountAddress = ""
         documentToverify = ""
     }
@@ -91,15 +91,15 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
 
     // Profile preferences
 
-    var auth: String
-        get() = getString(AppConstants.userAuth.key)
-        set(value) = setString(AppConstants.userAuth.key, value)
+//    var auth: String
+//        get() = getString(AppConstants.userAuth.key)
+//        set(value) = setString(AppConstants.userAuth.key, value)
 
     var currentAccountAddress: String
         get() = getString(AppConstants.accountAddress.key)
         set(value) = setString(AppConstants.accountAddress.key, value)
 
-    val currentId: Long = 0L
+    //val currentId: Long = 0L
 
     var documentToverify: String
         get() = getString(AppConstants.documentToVerify.key)
