@@ -43,7 +43,7 @@ class TouchIdActivity : BaseActivity() {
             }
             "unlock" -> {
                 propouseTouch()
-                fingerprintService = FingerprintService(this, { unlock() }, {  fingerprintService = null; showToast(it); passcodeUnlock() })
+                fingerprintService = FingerprintService(this, { unlock() }, { fingerprintService = null; showToast(it); passcodeUnlock() })
             }
             else -> throw RuntimeException("Invalid action")
         }
@@ -53,7 +53,7 @@ class TouchIdActivity : BaseActivity() {
 
     private fun create() {
         Prefs.isTouchEnabled = true
-        successfull()
+        successful()
     }
 
     private fun disable() {
@@ -90,13 +90,13 @@ class TouchIdActivity : BaseActivity() {
                 .playOn(image)
     }
 
-    private fun successfull() {
-        val fragment = TouchSuccessfullFragment.newInstance()
+    private fun successful() {
+        val fragment = TouchSuccessfulFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
                 PresentationManager.stage(this@TouchIdActivity)
             }
         })
-        fragment.show(supportFragmentManager, TouchSuccessfullFragment.FRAGMENT_KEY)
+        fragment.show(supportFragmentManager, TouchSuccessfulFragment.FRAGMENT_KEY)
     }
 }

@@ -49,6 +49,6 @@ class TouchIDFragment : BasePopupFragment() {
 
     private fun setupUI() {
         isCancelable = false
-        retakelBt.setOnClickListener{dismiss(); PresentationManager.passcodeUnlock(activity!!)}
+        retakelBt.setOnClickListener { dismiss(); PresentationManager.passcodeUnlock(activity!!) }
     }
 }

@@ -15,8 +15,8 @@ class PhraseAdapter(var phraseCntext: Context, var resource: Int, var list: List
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view: View
 
-        if (convertView == null) view = LayoutInflater.from(phraseCntext).inflate(R.layout.item_phrase, parent, false)
-        else view = convertView
+        view = if (convertView == null) LayoutInflater.from(phraseCntext).inflate(R.layout.item_phrase, parent, false)
+        else convertView
 
         val phrasePosition = view.findViewById<TextView>(R.id.positionTv)
         val phrase = view.findViewById<TextView>(R.id.phrase)

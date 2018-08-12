@@ -19,7 +19,7 @@ import com.kimlic.R
 import com.kimlic.db.entity.Contact
 import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
-import com.kimlic.phone.PhoneSuccessfullFragment
+import com.kimlic.phone.PhoneSuccessfulFragment
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.BaseCallback
 import com.kimlic.utils.QuorumURL
@@ -125,13 +125,13 @@ class EmailVerifyActivity : BaseActivity() {
     }
 
     private fun successfull() {
-        val fragment = EmailSuccesfullFragment.newInstance()
+        val fragment = EmailSuccesfulFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
                 PresentationManager.stage(this@EmailVerifyActivity)
             }
         })
-        fragment.show(supportFragmentManager, PhoneSuccessfullFragment.FRAGMENT_KEY)
+        fragment.show(supportFragmentManager, PhoneSuccessfulFragment.FRAGMENT_KEY)
     }
 
     private fun unableToProceed() {

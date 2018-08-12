@@ -72,14 +72,14 @@ class AccountRecoveryActivity : BaseActivity() {
     }
 
     private fun successfull() {
-        val fragment = RecoverySuccesfullFragment.newInstance()
+        val fragment = RecoverySuccesfulFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
                 finishAffinity()
                 PresentationManager.stage(this@AccountRecoveryActivity)
             }
         })
-        fragment.show(supportFragmentManager, RecoverySuccesfullFragment.FRAGMENT_KEY)
+        fragment.show(supportFragmentManager, RecoverySuccesfulFragment.FRAGMENT_KEY)
     }
 
     private fun mnemonicValid(mnemonic: String): Boolean {

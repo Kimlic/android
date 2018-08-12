@@ -15,7 +15,6 @@ import butterknife.ButterKnife
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
-import com.kimlic.phone.PhoneSuccessfullFragment
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.BaseCallback
 import kotlinx.android.synthetic.main.activity_passcode.*
@@ -245,7 +244,7 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun successfull() {
-        val fragment = PasscodeSuccessfullFragment.newInstance()
+        val fragment = PasscodeSuccessfulFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
                 setResult(Activity.RESULT_OK)
@@ -253,6 +252,6 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
                 //PresentationManager.stage(this@PasscodeActivity)
             }
         })
-        fragment.show(supportFragmentManager, PasscodeSuccessfullFragment.FRAGMENT_KEY)
+        fragment.show(supportFragmentManager, PasscodeSuccessfulFragment.FRAGMENT_KEY)
     }
 }

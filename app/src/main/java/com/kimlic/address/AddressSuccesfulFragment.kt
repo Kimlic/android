@@ -1,4 +1,4 @@
-package com.kimlic.documents
+package com.kimlic.address
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,19 +7,24 @@ import android.view.ViewGroup
 import com.kimlic.BaseDialogFragment
 import com.kimlic.R
 
-class VerifySuccessfullFragment : BaseDialogFragment() {
+class AddressSuccesfulFragment : BaseDialogFragment() {
 
     // Companion
 
     companion object {
         val FRAGMENT_KEY = this::class.java.simpleName
 
-        fun newInstance() = VerifySuccessfullFragment()
+        fun newInstance(bundle: Bundle = Bundle()): AddressSuccesfulFragment {
+            val fragment = AddressSuccesfulFragment()
+            fragment.arguments = bundle
+            return fragment
+        }
     }
 
     // Life
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_id_successfull, container, false)
+        return inflater.inflate(R.layout.fragment_address_successfull, container, false)
     }
+
 }

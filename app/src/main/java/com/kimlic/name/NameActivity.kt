@@ -5,9 +5,7 @@ import android.os.Bundle
 import android.text.InputFilter
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
 import android.widget.TextView
-import butterknife.BindView
 import butterknife.ButterKnife
 import com.kimlic.BaseActivity
 import com.kimlic.R
@@ -16,19 +14,11 @@ import com.kimlic.preferences.Prefs
 import com.kimlic.utils.BaseCallback
 import kotlinx.android.synthetic.main.activity_name.*
 
-
 class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
 
     // Variables
 
     private lateinit var model: ProfileViewModel
-
-    // Binding
-
-    @BindView(R.id.nameEt)
-    lateinit var name: EditText
-    @BindView(R.id.lastNameEt)
-    lateinit var lastName: EditText
 
     // Life
 
@@ -63,53 +53,45 @@ class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
         lastNameEt.setOnEditorActionListener(this)
 
         cancelTv.setOnClickListener { finish() }
-        name.filters = arrayOf(lengthFilter(20))//,filter())
-        lastName.filters = arrayOf(lengthFilter(20))//,filter())
+
+        nameEt.filters = arrayOf(lengthFilter(20))//,filter())
+        lastNameEt.filters = arrayOf(lengthFilter(20))//,filter())
     }
 
     // Filters
 
     private fun manageInput() {
         if (validFields()) {
-            model.addUserName(Prefs.currentAccountAddress, nameEt.text.toString(), lastName.text.toString())
-            succesfull()
+            model.addUserName(Prefs.currentAccountAddress, nameEt.text.toString(), lastNameEt.text.toString())
+            succesful()
         }
     }
 
-    private fun succesfull() {
-        val fragment = NameSuccessfullFragment.newInstance()
+    private fun succesful() {
+        val fragment = NameSuccessfulFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
                 finish()
             }
         })
-        fragment.show(supportFragmentManager, NameSuccessfullFragment.FRAGMENT_KEY.name)
+        fragment.show(supportFragmentManager, NameSuccessfulFragment.FRAGMENT_KEY.name)
     }
 
+
+    // @formatter:off
     private fun validFields(): Boolean {
-        var noError = true
-
-        if (name.text.length < 3) {
-            name.setError("error"); noError = false
-        } else {
-            name.setError(null); noError = true
-        }
-
-        if (lastName.text.length < 3) {
-            lastName.setError("error"); noError = false
-        } else {
-            lastName.setError(null); noError = true
-        }
-
-        return noError
+        val nameError = if (nameEt.text.length < 3) { nameEt.error = "error"; false } else { nameEt.error = null; true }
+        val lastNameError =  if (lastNameEt.text.length < 3) { lastNameEt.error = "error"; false } else { lastNameEt.error = null; true }
+        return (nameError && lastNameError)
     }
+    //@formatter:on
+
 
     private fun filter(): InputFilter {
-        val filter = InputFilter { src, start, end, dst, dstart, dend ->
+        return InputFilter { src, start, end, dst, dstart, dend ->
             if (src == "") return@InputFilter src
             if (Character.isLetter(src.last()) && !Character.isWhitespace(src.last())) return@InputFilter src else ""
         }
-        return filter
     }
 
     private fun lengthFilter(length: Int): InputFilter.LengthFilter = InputFilter.LengthFilter(length)

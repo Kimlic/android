@@ -25,11 +25,9 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.kimlic.BaseActivity
 import com.kimlic.R
-import com.kimlic.db.entity.Address
 import com.kimlic.documents.BillActivity
 import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
-import com.kimlic.preferences.Prefs
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.BaseCallback
 import kotlinx.android.synthetic.main.activity_address.*
@@ -118,8 +116,8 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
     // Private
 
     private fun setupUI() {
-        setupAddressSerch()
         model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        setupAddressSerch()
         saveBt.setOnClickListener { manageInput() }
         addBt.setOnClickListener { pickFile() }
         cancelTv.setOnClickListener { model.deleteAddres(addressId = addressId); finish() }
@@ -128,17 +126,17 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
     private fun manageInput() {
         if (fieldsAreValid()) {
             model.addUserAddress(value = addressEt.text.toString(), data = addressData)
-            successfull()
+            successful()
         }
     }
 
     private fun fieldsAreValid(): Boolean {
         var noError = true
 
-        if (addressEt.text.length < 3) {
-            addressEt.setError("error"); noError = false
+        noError = if (addressEt.text.length < 3) {
+            addressEt.setError("error"); false
         } else {
-            addressEt.setError(null); noError = true
+            addressEt.setError(null); true
         }
 
         return (noError && isPhotoPresent)
@@ -151,7 +149,7 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
                 .enableAutoManage(this, this)
                 .build()
 
-        placeAutocompleteAdapter = PlaceAutocompleteAdapter(this, mGoogleApiClient, LAT_LNG_BOUNDS, citieFilter())
+        placeAutocompleteAdapter = PlaceAutocompleteAdapter(this, mGoogleApiClient, LAT_LNG_BOUNDS, cityFilter())
 
         addressEt.setAdapter(placeAutocompleteAdapter)
         addressEt.setDropDownBackgroundResource(R.color.transparent)
@@ -225,16 +223,16 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
         isSearchActive = true
     }
 
-    private fun citieFilter() = AutocompleteFilter.Builder().setTypeFilter(AutocompleteFilter.TYPE_FILTER_NONE).build()
+    private fun cityFilter() = AutocompleteFilter.Builder().setTypeFilter(AutocompleteFilter.TYPE_FILTER_NONE).build()
 
-    private fun successfull() {
-        val fragment = AddressSuccesfullFragment.newInstance()
+    private fun successful() {
+        val fragment = AddressSuccesfulFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
                 PresentationManager.stage(this@AddressActivity)
             }
         })
-        fragment.show(supportFragmentManager, AddressSuccesfullFragment.FRAGMENT_KEY)
+        fragment.show(supportFragmentManager, AddressSuccesfulFragment.FRAGMENT_KEY)
     }
 
     // Implementation

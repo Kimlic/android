@@ -1,4 +1,4 @@
-package com.kimlic.phone
+package com.kimlic.recovery
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,22 +7,21 @@ import android.view.ViewGroup
 import com.kimlic.BaseDialogFragment
 import com.kimlic.R
 
-class PhoneSuccessfullFragment() : BaseDialogFragment() {
+class RecoverySuccesfulFragment : BaseDialogFragment() {
 
     // Companion
 
     companion object {
         val FRAGMENT_KEY = this::class.java.simpleName
 
-        fun newInstance(): PhoneSuccessfullFragment {
-            return PhoneSuccessfullFragment()
+        fun newInstance(): RecoverySuccesfulFragment {
+            return RecoverySuccesfulFragment()
         }
     }
 
     // Life
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_phone_successfull, container, false)
+        return inflater.inflate(R.layout.fragment_recovery_successfull, container, false)
     }
-
 }

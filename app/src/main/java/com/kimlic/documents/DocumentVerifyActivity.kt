@@ -83,14 +83,14 @@ class DocumentVerifyActivity : BaseActivity() {
     }
 
     private fun successfull() {
-        val fragment = VerifySuccessfullFragment.newInstance()
+        val fragment = VerifySuccessfulFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
                 PresentationManager.stage(this@DocumentVerifyActivity)
             }
         })
 
-        fragment.show(supportFragmentManager, VerifySuccessfullFragment.FRAGMENT_KEY)
+        fragment.show(supportFragmentManager, VerifySuccessfulFragment.FRAGMENT_KEY)
     }
 
     private fun saveDocument(documentType: String, portaitData: ByteArray, frontData: ByteArray, backData: ByteArray) {

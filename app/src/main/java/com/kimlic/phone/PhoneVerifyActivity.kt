@@ -16,7 +16,6 @@ import com.kimlic.API.VolleySingleton
 import com.kimlic.BaseActivity
 import com.kimlic.BaseDialogFragment
 import com.kimlic.R
-import com.kimlic.db.KimlicDB
 import com.kimlic.db.entity.Contact
 import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
@@ -135,14 +134,14 @@ class PhoneVerifyActivity : BaseActivity() {
     }
 
     private fun successfull() {
-        fragment = PhoneSuccessfullFragment.newInstance()
+        fragment = PhoneSuccessfulFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
 
             override fun callback() {
                 finishAffinity(); PresentationManager.stage(this@PhoneVerifyActivity)
             }
         })
-        fragment.show(supportFragmentManager, PhoneSuccessfullFragment.FRAGMENT_KEY)
+        fragment.show(supportFragmentManager, PhoneSuccessfulFragment.FRAGMENT_KEY)
     }
 
     private fun setupDigitListner() {

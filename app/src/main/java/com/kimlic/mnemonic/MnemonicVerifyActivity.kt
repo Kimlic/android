@@ -8,7 +8,6 @@ import butterknife.BindViews
 import butterknife.ButterKnife
 import com.kimlic.BaseActivity
 import com.kimlic.R
-import com.kimlic.db.KimlicDB
 import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.preferences.Prefs
@@ -70,13 +69,13 @@ class MnemonicVerifyActivity : BaseActivity() {
     }
 
     private fun successfull() {
-        val fragment = MnemonicSuccessfullFragment.newInstance()
+        val fragment = MnemonicSuccessfulFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
                 PresentationManager.stage(this@MnemonicVerifyActivity)
             }
         })
-        fragment.show(supportFragmentManager, MnemonicSuccessfullFragment.FRAGMENT_KEY)
+        fragment.show(supportFragmentManager, MnemonicSuccessfulFragment.FRAGMENT_KEY)
     }
 
     private fun phrasesMatch(): Boolean {
