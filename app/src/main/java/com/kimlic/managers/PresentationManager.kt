@@ -92,14 +92,6 @@ object PresentationManager {
         present(presenter = presenter, className = MnemonicVerifyActivity::class.java)
     }
 
-    // TODO probably will be changed
-//    fun recoveryDisable(presenter: BaseActivity) {
-//        val params = HashMap<String, String>()
-//        params["action"] = "disable"
-//        params["content"] = "terms"
-//        present(presenter = presenter, className = MnemonicVerifyActivity::class.java, params = params)
-//    }
-
     // Phone validation
 
     fun phoneNumber(presenter: BaseActivity) {
@@ -164,9 +156,17 @@ object PresentationManager {
         present(presenter = presenter, className = DocumentVerifyActivity::class.java, isStarting = false, params = params)
     }
 
-    fun verifyDetails(presenter: BaseActivity, accountAddress: String, documentType: String) {
+    fun detailsDocument(presenter: BaseActivity, accountAddress: String, documentType: String) {
         val params = HashMap<String, String>()
         params[AppConstants.documentType.key] = documentType
+        params[AppConstants.accountAddress.key] = accountAddress
+        present(presenter = presenter, className = DocumentDetails::class.java, isStarting = false, params = params)
+    }
+
+    fun detailsDocumentSend(presenter: BaseActivity, accountAddress: String, documentType: String) {
+        val params = HashMap<String, String>()
+        params[AppConstants.documentType.key] = documentType
+        params["target"] = "send"
         params[AppConstants.accountAddress.key] = accountAddress
         present(presenter = presenter, className = DocumentDetails::class.java, isStarting = false, params = params)
     }

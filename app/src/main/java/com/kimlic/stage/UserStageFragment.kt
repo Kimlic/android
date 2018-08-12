@@ -102,7 +102,6 @@ class UserStageFragment : BaseFragment() {
                         "${user.firstName} ${user.lastName}"
                     } else "")
 
-                    Log.d("TAGU", "user preview file = " + user.portraitPreviewFile)
                     setupKimField(user.kimQuantity)
                     showPhoto(user.portraitPreviewFile)
                     manageCameraIcon("preview_" + user.portraitFile)
@@ -160,10 +159,10 @@ class UserStageFragment : BaseFragment() {
         documentsAdapter.setOnStageItemClick(object : OnStageItemClick {
             override fun onClick(view: View, position: Int, type: String, approved: Boolean, state: String) {
                 when (type) {
-                    AppConstants.documentPassport.key -> PresentationManager.verifyDetails(activity!!, Prefs.currentAccountAddress, AppConstants.documentPassport.key)
-                    AppConstants.documentLicense.key -> PresentationManager.verifyDetails(activity!!, Prefs.currentAccountAddress, AppConstants.documentLicense.key)
-                    AppConstants.documentID.key -> PresentationManager.verifyDetails(activity!!, Prefs.currentAccountAddress, AppConstants.documentID.key)
-                    AppConstants.documentPermit.key -> PresentationManager.verifyDetails(activity!!, Prefs.currentAccountAddress, AppConstants.documentPermit.key)
+                    AppConstants.documentPassport.key -> PresentationManager.detailsDocument(activity!!, Prefs.currentAccountAddress, AppConstants.documentPassport.key)
+                    AppConstants.documentLicense.key -> PresentationManager.detailsDocument(activity!!, Prefs.currentAccountAddress, AppConstants.documentLicense.key)
+                    AppConstants.documentID.key -> PresentationManager.detailsDocument(activity!!, Prefs.currentAccountAddress, AppConstants.documentID.key)
+                    AppConstants.documentPermit.key -> PresentationManager.detailsDocument(activity!!, Prefs.currentAccountAddress, AppConstants.documentPermit.key)
                     "add" -> PresentationManager.documentChooseVerify(activity!!)
                 }
             }

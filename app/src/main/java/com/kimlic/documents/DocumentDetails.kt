@@ -5,8 +5,11 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.os.Bundle
+import android.util.Log
+import com.android.volley.Response
 import com.kimlic.BaseActivity
 import com.kimlic.R
+import com.kimlic.db.entity.Photo
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.mappers.FileNameTxtBase64ToBitmap
@@ -19,6 +22,12 @@ class DocumentDetails : BaseActivity() {
     private lateinit var documentType: String
     private lateinit var accountAddres: String
     private lateinit var model: ProfileViewModel
+
+    private lateinit var photoList: List<Photo>
+    private lateinit var photoMap: Map<String, String>
+
+    private var target: String = "preview"
+
 
     // Life
 
@@ -36,30 +45,55 @@ class DocumentDetails : BaseActivity() {
 
         documentType = intent.extras.getString(AppConstants.documentType.key, "")
         accountAddres = intent.extras.getString(AppConstants.accountAddress.key, "")
+        target = intent.extras.getString("target", "preview")
 
 
-        val photoList = model.getUserDocumentPhotos(accountAddress = accountAddres, documentType = documentType)
-        val photoMap = photoList.map { it.type to it.file }.toMap()
+        photoList = model.getUserDocumentPhotos(accountAddress = accountAddres, documentType = documentType)
+        photoMap = photoList.map { it.type to it.file }.toMap()
 
         fillData(photos = photoMap, documentType = documentType)
 
-        addBt.setOnClickListener {
-            if (validFields())
-                manageInput()
 
-            finish()
-            // Handle Data
+        when (target) {
+            "send" -> {
+                addBt.setOnClickListener {
+                    if (validFields()) {
+
+                        val listNames = photoList.map { it.file }.toList()
+//                        photoList.iterator().forEach {
+//                            model.senDoc(it.file, onSuccess = {}, onError = {})
+//                        }
+                        model.senDoc(docType = documentType, onSuccess = {}, onError = {})
+                    }
+                }
+            }
+            "preview" -> {
+//                addBt.text = "Ok"
+//                addBt.setOnClickListener {
+//                    if (validFields()) {
+//                        Log.d("TAG", "preview clicked!!!!!!!!!!!!!!!!!!")
+//
+//
+//                    }
+//                }
+
+                addBt.setOnClickListener {
+                    if (validFields()) {
+
+                        val listNames = photoList.map { it.file }.toList()
+//                        photoList.iterator().forEach {
+//                            model.senDoc(it.file, onSuccess = {}, onError = {})
+//                        }
+                        model.senDoc(docType = documentType, onSuccess = {}, onError = {})
+                    }
+                }
+            }
         }
+
 
         backBt.setOnClickListener { finish() }
     }
 
-    // TODO manage document details
-    private fun manageInput() {
-        //accountAddres
-        // photos list
-        // send docs to RP
-    }
 
     private fun fillData(photos: Map<String, String>, documentType: String) {
         frontIv.setImageBitmap(croped(photos.get("front")!!))
@@ -76,36 +110,17 @@ class DocumentDetails : BaseActivity() {
 
     // Private helpers
 
+    // @formatter:off
     private fun validFields(): Boolean {
-        var noError = true
+        val error = getString(R.string.error)
+        val docError = if (documentEt.text.length < 3) { documentEt.error = error; false } else { documentEt.error= null; true }
+        val dateError =  if (expireDateEt.text.length < 3) { expireDateEt.error = error; false } else { expireDateEt.error = null; true }
+        val countryError =  if (countryEt.text.length < 3) { countryEt.error = error; false  } else { countryEt.error = null; true}
 
-        if (documentEt.text.length < 3) {
-            documentEt.setError("error")
-            noError = false
-        } else {
-            documentEt.setError(null)
-            noError = true
-        }
-
-        if (expireDateEt.text.length < 3) {
-            expireDateEt.setError("error")
-            noError = false
-        } else {
-            expireDateEt.setError(null)
-            noError = true
-        }
-
-        if (countryEt.text.length < 3) {
-            countryEt.setError("error")
-            noError = false
-        } else {
-            countryEt.setError(null)
-            noError = true
-        }
-
-        return noError
+        return (docError && dateError && countryError)
     }
 
+    // @formatrter:on
     private fun croped(fileName: String): Bitmap {
         val bitmap = FileNameTxtBase64ToBitmap().transform(fileName)
         val originalbitmap = rotateBitmap(bitmap!!, 90f)

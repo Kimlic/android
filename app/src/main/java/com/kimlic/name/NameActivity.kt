@@ -80,8 +80,9 @@ class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
 
     // @formatter:off
     private fun validFields(): Boolean {
-        val nameError = if (nameEt.text.length < 3) { nameEt.error = "error"; false } else { nameEt.error = null; true }
-        val lastNameError =  if (lastNameEt.text.length < 3) { lastNameEt.error = "error"; false } else { lastNameEt.error = null; true }
+        val error = getString(R.string.error)
+        val nameError = if (nameEt.text.length < 3) { nameEt.error = error; false } else { nameEt.error = null; true }
+        val lastNameError =  if (lastNameEt.text.length < 3) { lastNameEt.error = error; false } else { lastNameEt.error = null; true }
         return (nameError && lastNameError)
     }
     //@formatter:on

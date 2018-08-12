@@ -30,7 +30,6 @@ class VendorsActivity : BaseActivity() {
     private lateinit var profileModel: ProfileViewModel
     private lateinit var documentAdapter: DocumentVendorAdapter
 
-
     // Life
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,19 +48,19 @@ class VendorsActivity : BaseActivity() {
 
         lifecycle.addObserver(vendorsModel)
 
-        vendorsModel.getVendors().observe(this, object : Observer<Vendors> {
-            override fun onChanged(vendors: Vendors?) {
-                Log.d("TAGVENDORS", "vendors object to string" + vendors?.toString())
-
-                vendors?.documents!!.forEach {
-
-
-                }
-            }
-        })
+//        vendorsModel.getVendors().observe(this, object : Observer<Vendors> {
+//            override fun onChanged(vendors: Vendors?) {
+//                Log.d("TAGVENDORS", "vendors object to string" + vendors?.toString())
+//
+//                vendors?.documents!!.forEach {
+//
+//                }
+//            }
+//        })
 
         vendorsModel.documentsForAdapter().observe(this, object : Observer<List<Document>> {
             override fun onChanged(documents: List<Document>?) {
+
                 documentAdapter.setDocumentsList(documents = documents!!)
             }
         })
@@ -71,8 +70,6 @@ class VendorsActivity : BaseActivity() {
                 progressBar.visibility = if (!visible!!) View.GONE else View.VISIBLE
             }
         })
-
-
 
         countryEt.setOnClickListener { initDropList() }
     }
@@ -101,14 +98,6 @@ class VendorsActivity : BaseActivity() {
 
         documentAdapter = DocumentVendorAdapter()
 
-//        documentAdapter = object: DocumentVendorAdapter(){
-//            override fun setDocumentsList(documents: List<Document>) {
-//
-//
-//
-//            }
-//        }
-
         with(documentRecycler) {
             layoutManager = LinearLayoutManager(this@VendorsActivity, LinearLayout.VERTICAL, false)
             adapter = documentAdapter
@@ -118,12 +107,10 @@ class VendorsActivity : BaseActivity() {
         documentAdapter.setOnStageItemClick(object : OnStageItemClick {
             override fun onClick(view: View, position: Int, type: String, approved: Boolean, state: String) {
                 when (type) {
-
-
-                    AppConstants.documentPassport.key -> PresentationManager.verifyDetails(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentPassport.key)
-                    AppConstants.documentID.key -> PresentationManager.verifyDetails(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentID.key)
-                    AppConstants.documentLicense.key -> PresentationManager.verifyDetails(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentLicense.key)
-                    AppConstants.documentPermit.key -> PresentationManager.verifyDetails(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentPermit.key)
+                    AppConstants.documentPassport.key -> PresentationManager.detailsDocument(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentPassport.key)
+                    AppConstants.documentID.key -> PresentationManager.detailsDocument(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentID.key)
+                    AppConstants.documentLicense.key -> PresentationManager.detailsDocument(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentLicense.key)
+                    AppConstants.documentPermit.key -> PresentationManager.detailsDocument(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentPermit.key)
                 }
             }
         })

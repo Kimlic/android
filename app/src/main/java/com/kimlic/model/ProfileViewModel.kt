@@ -3,12 +3,11 @@ package com.kimlic.model
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import com.fasterxml.jackson.annotation.ObjectIdGenerators
+import com.google.android.gms.tasks.OnSuccessListener
 import com.kimlic.db.entity.Address
 import com.kimlic.db.entity.Contact
 import com.kimlic.db.entity.User
 import com.kimlic.preferences.Prefs
-import com.kimlic.utils.UserPhotos
 import java.util.*
 
 class ProfileViewModel : ViewModel(), LifecycleObserver {
@@ -96,5 +95,7 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     fun syncProfile(accountAddress: String) = repository.syncProfile(accountAddress = accountAddress)
 
-
+    fun senDoc(docType: String, onSuccess: () -> Unit, onError: () -> Unit) {
+        repository.sendDoc(docType, onSuccess = onSuccess, onError = onError)
+    }
 }

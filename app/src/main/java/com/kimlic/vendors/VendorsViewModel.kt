@@ -3,10 +3,8 @@ package com.kimlic.vendors
 import android.arch.lifecycle.*
 import android.util.Log
 import com.android.volley.Response
-import com.android.volley.VolleyError
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.kimlic.KimlicApp
 import com.kimlic.db.entity.Document
 import com.kimlic.model.ProfileRepository
 import com.kimlic.model.SingleLiveEvent
@@ -24,30 +22,22 @@ class VendorsViewModel : ViewModel(), LifecycleObserver {
     private var documentsForAdapter = object : MutableLiveData<List<Document>>() {}
     private var progressLiveData: SingleLiveEvent<Boolean> = object : SingleLiveEvent<Boolean>() {}
     private var responseObject: Vendors? = null
+
+    private val vendorDocuments = object : MutableLiveData<List<Document_>>() {}
+
     // public
 
 
     @OnLifecycleEvent(value = Lifecycle.Event.ON_START)
     fun getDocumentslist() {
-        vendorsRepository.getDocuments(
-                accountAddress = Prefs.currentAccountAddress,
-                responseListner = object : Response.Listener<String> {
-                    override fun onResponse(response: String?) {
-                        val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
-                        if (!responceCode.startsWith("2")) return
-
-                        val data = JSONObject(response).getJSONObject("data").toString()
-                        val type = object : TypeToken<Vendors>() {}.type
-                        responseObject = Gson().fromJson(data, type)
-                        progressLiveData.postValue(false)
-                    }
-                },
-                errorListner = object : Response.ErrorListener {
-                    override fun onErrorResponse(error: VolleyError?) {}
-                })
+        vendorsRepository.initDocuments(accountAddress = Prefs.currentAccountAddress)
+        Log.d("TAGVENDOR", "in repository on start")
     }
 
-    fun getVendors() = documentsLiveData
+//    fun getVendors(): LiveData<List<Document_>> {
+//
+//        return documentsLiveData
+//    }
 
     fun documentsForAdapter() = documentsForAdapter
 
@@ -79,4 +69,5 @@ class VendorsViewModel : ViewModel(), LifecycleObserver {
     }
 
     fun countriesList() = vendorsRepository.countries()
+
 }

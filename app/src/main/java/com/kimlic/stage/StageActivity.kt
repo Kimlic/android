@@ -49,12 +49,6 @@ class StageActivity : BaseActivity() {
         moveTaskToBack(true)
     }
 
-    override fun onDestroy() {
-        Log.d("TAGSTAGE", "OnDestroy!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        super.onDestroy()
-
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
         Log.d("TAGINSTAGE", "from fragment, requestCode = " + requestCode)
