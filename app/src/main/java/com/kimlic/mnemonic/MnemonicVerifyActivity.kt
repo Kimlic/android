@@ -80,7 +80,7 @@ class MnemonicVerifyActivity : BaseActivity() {
 
     private fun phrasesMatch(): Boolean {
         var noError = true
-//        val mnemonicList = KimlicDB.getInstance()!!.userDao().select(Prefs.currentId).mnemonic.split(" ")
+//        val mnemonicList = KimlicDB.getInstance()!!.userDao().selectLive(Prefs.currentId).mnemonic.split(" ")
         val mnemonicList = model.getUser(Prefs.currentAccountAddress).mnemonic.split(" ")
 
         for (i in 0 until hintList.size) noError = mnemonicList[hintList[i] - 1].equals(editTextList[i].text.toString())

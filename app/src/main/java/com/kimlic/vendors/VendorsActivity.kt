@@ -46,9 +46,11 @@ class VendorsActivity : BaseActivity() {
         profileModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         initRecycler()
 
+        // sunbscribe vendors model to activity lifecycle
         lifecycle.addObserver(vendorsModel)
 
-//        vendorsModel.getVendors().observe(this, object : Observer<Vendors> {
+
+//        vendorsModel.getVendorsDocuments().observe(this, object : Observer<List<VendorDocument>> {
 //            override fun onChanged(vendors: Vendors?) {
 //                Log.d("TAGVENDORS", "vendors object to string" + vendors?.toString())
 //
@@ -58,18 +60,17 @@ class VendorsActivity : BaseActivity() {
 //            }
 //        })
 
-        vendorsModel.documentsForAdapter().observe(this, object : Observer<List<Document>> {
+        vendorsModel.getDocumentsForAdapter().observe(this, object : Observer<List<Document>> {
             override fun onChanged(documents: List<Document>?) {
-
                 documentAdapter.setDocumentsList(documents = documents!!)
             }
         })
 
-        vendorsModel.progress().observe(this, object : Observer<Boolean> {
-            override fun onChanged(visible: Boolean?) {
-                progressBar.visibility = if (!visible!!) View.GONE else View.VISIBLE
-            }
-        })
+//        vendorsModel.progress().observe(this, object : Observer<Boolean> {
+//            override fun onChanged(visible: Boolean?) {
+//                progressBar.visibility = if (!visible!!) View.GONE else View.VISIBLE
+//            }
+//        })
 
         countryEt.setOnClickListener { initDropList() }
     }
@@ -82,8 +83,8 @@ class VendorsActivity : BaseActivity() {
                 .setIcon(R.drawable.ic_kimlic_logo_with_text)
                 .setItems(countries, object : DialogInterface.OnClickListener {
                     override fun onClick(dialog: DialogInterface?, which: Int) {
-                        vendorsModel.getSupportedDocuments(country = vendorsModel.countriesList().get(which).sh)
-                        countryEt.text = Editable.Factory.getInstance().newEditable(countries.get(which))
+                        vendorsModel.getSupportedDocuments_PostThemToAdaptersResult(country = vendorsModel.countriesList()[which].sh)
+                        countryEt.text = Editable.Factory.getInstance().newEditable(countries[which])
                     }
                 }).show()
         val rec = Rect()
@@ -104,6 +105,7 @@ class VendorsActivity : BaseActivity() {
             addItemDecoration(divider)
         }
 
+        // OnCliclListner fo recycler elements!!! If user has this document - go to details to show else go to create new document
         documentAdapter.setOnStageItemClick(object : OnStageItemClick {
             override fun onClick(view: View, position: Int, type: String, approved: Boolean, state: String) {
                 when (type) {

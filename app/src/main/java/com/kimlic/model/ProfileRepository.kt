@@ -268,8 +268,8 @@ class ProfileRepository private constructor() {
     // RP request
 
     fun sendDoc(docType: String, onSuccess: () -> Unit, onError: () -> Unit) {
-        Log.d("TAGSENDOC", "in repository senDoc")
-        //val image: String = imageBase64(this)
+        // Log.d("TAGSENDOC", "in repository senDoc")
+        // val image: String = imageBase64(this)
 
         val documents = documentDao.select(Prefs.currentAccountAddress)
         val document = documents.filter { it.type.equals(docType) }
@@ -280,14 +280,25 @@ class ProfileRepository private constructor() {
         Log.d("TAGDOCUMENT", "photos = " + documentFotos.toString())
 //      val image: String = File(context.filesDir.toString() + "/" + fileName).readText(charset = Charset.defaultCharset())
 
-        val faceImage = File(context.filesDir.toString() + "/" + documentFotos.get(0).file).readText(charset = Charset.defaultCharset())
-        val frontImage = File(context.filesDir.toString() + "/" + documentFotos.get(1).file).readText(charset = Charset.defaultCharset())
-        val backImage = File(context.filesDir.toString() + "/" + documentFotos.get(2).file).readText(charset = Charset.defaultCharset())
+        val faceImage = File(context.filesDir.toString() + "/" + documentFotos.get(0).file).readText()
+        val faceImageIS = File(context.filesDir.toString() + "/" + documentFotos.get(0).file).inputStream()
+        val faceImageString = faceImageIS.bufferedReader().use { it.readText() }
 
 
-        val shaFace = Sha.sha256(faceImage)
-        val shaFront = Sha.sha256(frontImage)
-        val shaBack = Sha.sha256(backImage)
+        val frontImage = File(context.filesDir.toString() + "/" + documentFotos.get(0).file).readText()
+        val frontImageIS = File(context.filesDir.toString() + "/" + documentFotos.get(1).file).inputStream()
+        val frontImageString = frontImageIS.bufferedReader().use { it.readText() }
+
+        val backImage = File(context.filesDir.toString() + "/" + documentFotos.get(0).file).readText()
+        val backImageIS = File(context.filesDir.toString() + "/" + documentFotos.get(2).file).inputStream()
+        val backImageString = backImageIS.bufferedReader().use { it.readText() }
+
+
+
+
+        val shaFace = Sha.sha256(faceImageString)
+        val shaFront = Sha.sha256(frontImageString)
+        val shaBack = Sha.sha256(backImageString)
 
 
         //val url = "https://elixir.aws.pp.ua/api/medias"
@@ -305,7 +316,7 @@ class ProfileRepository private constructor() {
         paramsFace.put("attestator", "Veriff.me")
         paramsFace.put("doc", "ID_CARD")
         paramsFace.put("type", "face")
-        paramsFace.put("file", faceImage)
+        paramsFace.put("file", faceImageString)
         Log.e("PARAMS", paramsFace.toString())
 
         ///////////////////////////////////////////////////////////////////
@@ -334,8 +345,8 @@ class ProfileRepository private constructor() {
         val paramsFront = JSONObject()
         paramsFront.put("attestator", "Veriff.me")
         paramsFront.put("doc", "ID_CARD")
-        paramsFront.put("type", "face")
-        paramsFront.put("file", frontImage)
+        paramsFront.put("type", "front")
+        paramsFront.put("file", frontImageString)
         Log.e("PARAMS", paramsFront.toString())
         val frontRequest = object : JsonObjectRequest(Request.Method.POST, url, paramsFront, Response.Listener<JSONObject> { response ->
             Log.e("DOC RESPONSE", response.toString())
@@ -361,9 +372,9 @@ class ProfileRepository private constructor() {
         val paramsBack = JSONObject()
         paramsBack.put("attestator", "Veriff.me")
         paramsBack.put("doc", "ID_CARD")
-        paramsBack.put("type", "face")
-        paramsBack.put("file", backImage)
-        Log.e("PARAMS", paramsFront.toString())
+        paramsBack.put("type", "back")
+        paramsBack.put("file", backImageString)
+        Log.e("PARAMS", paramsBack.toString())
         val backRequest = object : JsonObjectRequest(Request.Method.POST, url, paramsBack, Response.Listener<JSONObject> { response ->
             Log.e("DOC RESPONSE", response.toString())
         }, Response.ErrorListener { error ->

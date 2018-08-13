@@ -15,5 +15,10 @@ interface VendorDao {
     fun insertDocs(docs: List<VendorDocument>)
 
     @Query("SELECT * FROM vendor_document")
-    fun select(): LiveData<List<VendorDocument>>
+    fun selectLive(): LiveData<List<VendorDocument>>
+
+    @Query("SELECT * FROM vendor_document")
+    fun select(): List<VendorDocument>
+
+
 }

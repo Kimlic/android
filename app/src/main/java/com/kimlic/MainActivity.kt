@@ -59,8 +59,8 @@ class MainActivity : BaseActivity() {
         Log.d(TAG, "account address = " + Prefs.currentAccountAddress)
         val user = model.getUser(Prefs.currentAccountAddress)
         // 1. Create Quorum instance with current user
-        //val user = KimlicDB.getInstance()!!.userDao().select(id = Prefs.currentId)
-        //val user = KimlicDB.getInstance()!!.userDao().select(id = Prefs.currentId)
+        //val user = KimlicDB.getInstance()!!.userDao().selectLive(id = Prefs.currentId)
+        //val user = KimlicDB.getInstance()!!.userDao().selectLive(id = Prefs.currentId)
 
         val mnemonic = user.mnemonic
         QuorumKimlic.destroyInstance()

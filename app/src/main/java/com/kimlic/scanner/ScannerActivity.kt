@@ -46,8 +46,8 @@ class ScannerActivity : BaseActivity() {
         capture = CaptureManager(this, zxing_barcode_scanner)
         capture!!.decode()
 
-        cancelBt.setOnClickListener({ finish() })
-        backBt.setOnClickListener({ finish() })
+        cancelBt.setOnClickListener { finish() }
+        backBt.setOnClickListener { finish() }
         setupTitle()
     }
 

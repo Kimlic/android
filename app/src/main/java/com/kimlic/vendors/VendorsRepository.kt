@@ -1,7 +1,6 @@
 package com.kimlic.vendors
 
 import android.os.Handler
-import android.util.Log
 import com.android.volley.Request.Method.GET
 import com.android.volley.Response
 import com.android.volley.VolleyError
@@ -15,7 +14,6 @@ import com.kimlic.db.KimlicDB
 import com.kimlic.db.SyncServise
 import com.kimlic.db.entity.VendorDocument
 import com.kimlic.preferences.Prefs
-import com.kimlic.utils.AppConstants
 import com.kimlic.utils.QuorumURL
 import com.kimlic.utils.mappers.JsonToVenDocMapper
 import org.json.JSONObject
@@ -34,7 +32,6 @@ class VendorsRepository private constructor() {
     companion object {
         val instance: VendorsRepository by lazy(LazyThreadSafetyMode.SYNCHRONIZED) { HOLDER.INSTANSE }
     }
-
 
     private var googleSignInAccount = GoogleSignIn.getLastSignedInAccount(KimlicApp.applicationContext())
     private var db: KimlicDB = KimlicDB.getInstance()!!
@@ -58,7 +55,6 @@ class VendorsRepository private constructor() {
 
                 responseObject.documents.forEach { entityList.add(JsonToVenDocMapper().transform(it)) }
                 vendorDao.insertDocs(entityList.toList())
-                Log.d("TAGVENDOR", "VENDORS DOCUMENTS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                 syncDataBase()
                 //progressLiveData.postValue(false)
             }
@@ -91,6 +87,8 @@ class VendorsRepository private constructor() {
         }
         return countries
     }
+
+    fun vendorDocumentsLive() = vendorDao.selectLive()
 
     fun vendorDocuments() = vendorDao.select()
 

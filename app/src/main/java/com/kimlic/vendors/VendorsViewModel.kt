@@ -2,14 +2,9 @@ package com.kimlic.vendors
 
 import android.arch.lifecycle.*
 import android.util.Log
-import com.android.volley.Response
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.kimlic.db.entity.Document
 import com.kimlic.model.ProfileRepository
-import com.kimlic.model.SingleLiveEvent
 import com.kimlic.preferences.Prefs
-import org.json.JSONObject
 
 class VendorsViewModel : ViewModel(), LifecycleObserver {
 
@@ -18,12 +13,12 @@ class VendorsViewModel : ViewModel(), LifecycleObserver {
     private val vendorsRepository = VendorsRepository.instance
     private val profileRepository = ProfileRepository.instance
 
-    private var documentsLiveData = object : MutableLiveData<Vendors>() {}
+    //private var documentsLiveData = object : MutableLiveData<Vendors>() {}
     private var documentsForAdapter = object : MutableLiveData<List<Document>>() {}
-    private var progressLiveData: SingleLiveEvent<Boolean> = object : SingleLiveEvent<Boolean>() {}
-    private var responseObject: Vendors? = null
+    //private var progressLiveData: SingleLiveEvent<Boolean> = object : SingleLiveEvent<Boolean>() {}
+    //private var responseObject: Vendors? = null
 
-    private val vendorDocuments = object : MutableLiveData<List<Document_>>() {}
+    //private val vendorDocumentsLive = object : MutableLiveData<List<Document_>>() {}
 
     // public
 
@@ -34,26 +29,26 @@ class VendorsViewModel : ViewModel(), LifecycleObserver {
         Log.d("TAGVENDOR", "in repository on start")
     }
 
-//    fun getVendors(): LiveData<List<Document_>> {
+//    fun getVendorsDocuments(): LiveData<List<VendorDocument>> {
 //
-//        return documentsLiveData
+//        return documentsLiveData.value.documents
 //    }
 
-    fun documentsForAdapter() = documentsForAdapter
+    fun getDocumentsForAdapter() = documentsForAdapter// List Document which are supported in chosen country
 
-    fun progress() = progressLiveData
+    //fun progress() = progressLiveData
 
-    fun getSupportedDocuments(country: String) {
+    fun getSupportedDocuments_PostThemToAdaptersResult(country: String) {
         val userDocuments = profileRepository.documents(Prefs.currentAccountAddress)
         val linkedDocs = userDocuments.map { it.type to it }.toMap()
 
         // Documents are supported in chosen country
         val supportedDocuments = mutableListOf<Document>()
 
-        val vendorsDocuments = responseObject?.documents
+        val vendorsDocuments = vendorsRepository.vendorDocuments()
 
-        vendorsDocuments?.forEach { document ->
-            if (document.countries!!.contains(country.toUpperCase())) {
+        vendorsDocuments.forEach { document ->
+            if (document.countries.contains(country.toUpperCase())) {
                 when (document.type) {
                     "ID_CARD" -> supportedDocuments.add(Document(type = "id"))
                     "PASSPORT" -> supportedDocuments.add(Document(type = "passport"))
@@ -62,12 +57,9 @@ class VendorsViewModel : ViewModel(), LifecycleObserver {
                 }
             }
         }
-
         // Document user already have added
-
         documentsForAdapter.postValue(supportedDocuments)
     }
 
     fun countriesList() = vendorsRepository.countries()
-
 }
