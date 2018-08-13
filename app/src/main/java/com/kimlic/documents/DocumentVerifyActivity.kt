@@ -7,7 +7,6 @@ import com.kimlic.R
 import com.kimlic.documents.fragments.DocumentBackFragment
 import com.kimlic.documents.fragments.DocumentFrontFragment
 import com.kimlic.documents.fragments.PortraitPhotoFragment
-import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.BaseCallback
@@ -38,7 +37,7 @@ class DocumentVerifyActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-        if (supportFragmentManager.getBackStackEntryCount() < 2) finish()
+        if (supportFragmentManager.backStackEntryCount < 2) finish()
         super.onBackPressed()
     }
 
@@ -60,7 +59,7 @@ class DocumentVerifyActivity : BaseActivity() {
         })
         frontFragment.setCallback(object : PhotoCallback {
             override fun callback(data: ByteArray) {
-                frontData = data // new
+                frontData = data
                 showFragment(R.id.container, backFragment, DocumentBackFragment.FRAGMENT_KEY)
             }
         })
@@ -94,7 +93,7 @@ class DocumentVerifyActivity : BaseActivity() {
         fragment.show(supportFragmentManager, VerifySuccessfulFragment.FRAGMENT_KEY)
     }
 
-    private fun saveDocument(documentType: String, portaitData: ByteArray, frontData: ByteArray, backData: ByteArray) {
-        model.saveDocumentAndPhoto(documentType, portaitData, frontData, backData)
+    private fun saveDocument(documentType: String, portraitData: ByteArray, frontData: ByteArray, backData: ByteArray) {
+        model.saveDocumentAndPhoto(documentType, portraitData, frontData, backData)
     }
 }

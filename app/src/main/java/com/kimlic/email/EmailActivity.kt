@@ -66,44 +66,43 @@ class EmailActivity : BaseActivity() {
         if (isEmailValid()) {
             showProgress()
             nextBt.isClickable = false
-            emailEt.setError(null)
+            emailEt.error = null
 
             val email = emailEt.text.toString()
 
-            Thread(object : Runnable {
-                override fun run() {
-                    val quorumKimlic = QuorumKimlic.getInstance()
-                    var receiptEmail: TransactionReceipt? = null
-                    try {
-                        receiptEmail = quorumKimlic.setFieldMainData(Sha.sha256(email), "email")
-                    } catch (e: ExecutionException) {
-                        unableToProceed()
-                    } catch (e: InterruptedException) {
-                        unableToProceed()
-                    }
+            Thread(Runnable {
+                val quorumKimlic = QuorumKimlic.getInstance()
+                var receiptEmail: TransactionReceipt? = null
 
-                    if (receiptEmail != null && receiptEmail.transactionHash.isNotEmpty()) {
-                        val params = emptyMap<String, String>().toMutableMap(); params.put("email", email)
-                        val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", Prefs.currentAccountAddress)
-
-                        val request = KimlicRequest(Request.Method.POST, QuorumURL.emailVerify.url, headers, params,
-                                Response.Listener { response ->
-                                    hideProgress()
-                                    val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
-
-                                    if (responceCode.startsWith("2")) {
-                                        nextBt.isClickable = true
-                                        PresentationManager.emailVerify(this@EmailActivity, emailEt.text.toString())
-                                    } else unableToProceed()
-                                },
-                                Response.ErrorListener { unableToProceed() }
-                        )
-                        VolleySingleton.getInstance(this@EmailActivity).addToRequestQueue(request)
-                    } else unableToProceed()
+                try {
+                    receiptEmail = quorumKimlic.setFieldMainData(Sha.sha256(email), "email")
+                } catch (e: ExecutionException) {
+                    unableToProceed()
+                } catch (e: InterruptedException) {
+                    unableToProceed()
                 }
+
+                if (receiptEmail != null && receiptEmail.transactionHash.isNotEmpty()) {
+                    val params = emptyMap<String, String>().toMutableMap(); params["email"] = email
+                    val headers = emptyMap<String, String>().toMutableMap(); headers["account-address"] = Prefs.currentAccountAddress
+
+                    val request = KimlicRequest(Request.Method.POST, QuorumURL.emailVerify.url, headers, params,
+                            Response.Listener { response ->
+                                hideProgress()
+                                val responseCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
+
+                                if (responseCode.startsWith("2")) {
+                                    nextBt.isClickable = true
+                                    PresentationManager.emailVerify(this@EmailActivity, emailEt.text.toString())
+                                } else unableToProceed()
+                            },
+                            Response.ErrorListener { unableToProceed() }
+                    )
+                    VolleySingleton.getInstance(this@EmailActivity).addToRequestQueue(request)
+                } else unableToProceed()
             }).start()
         } else {
-            emailEt.setError("invalid")
+            emailEt.error = getString(R.string.invalid)
         }
     }
 
@@ -124,6 +123,6 @@ class EmailActivity : BaseActivity() {
 
     private fun unableToProceed() {
         hideProgress()
-        runOnUiThread { nextBt.isClickable = true; showPopup(message = "Unable to proceed with verification") }
+        runOnUiThread { nextBt.isClickable = true; showPopup(message = getString(R.string.unable_to_proceed_with_werification)) }
     }
 }

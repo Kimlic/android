@@ -55,5 +55,4 @@ class DocumentFrontFragment : CameraBaseFragment() {
         spannableBuilder.setSpan(boldStyle, 0, spanEnd, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
         documenTitleTv.text = spannableBuilder
     }
-
 }

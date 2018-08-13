@@ -77,7 +77,6 @@ class DocumentDetails : BaseActivity() {
             }
             "preview" -> {
                 addBt.text = getString(R.string.add_details)
-
                 addBt.setOnClickListener {
                     if (validFields()) {
                         currentDocument.number = numberEt.text.toString()
@@ -91,7 +90,6 @@ class DocumentDetails : BaseActivity() {
         }
         backBt.setOnClickListener { finish() }
     }
-
 
     private fun fillData(photos: Map<String, String>, document: Document) {
         frontIv.setImageBitmap(croped(photos.get("front")!!))

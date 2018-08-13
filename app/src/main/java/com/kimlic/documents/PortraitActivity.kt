@@ -53,6 +53,5 @@ class PortraitActivity : BaseActivity() {
 
     private fun saveUserPhoto(data: ByteArray) {
         model.addUserPortraitPhoto(data)
-
     }
 }

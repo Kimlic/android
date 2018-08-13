@@ -53,49 +53,43 @@ class DocumentVerifyChooseActivity : BaseActivity(), View.OnClickListener {
 
     private fun setupUI() {
         model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-        model.getUserLive().observe(this, object : Observer<User> {
-            override fun onChanged(user: User?) {
-                setupBackground(user!!.portraitFile)
-            }
-        })
+        model.getUserLive().observe(this, Observer<User> { user -> setupBackground(user!!.portraitFile) })
 
-        model.getUserDocumentsLive().observe(this, object : Observer<List<Document>> {
-            override fun onChanged(documents: List<Document>?) {
-                types = mutableMapOf(
-                        Pair("passport", getString(R.string.passport)),
-                        Pair("id", getString(R.string.id_card)),
-                        Pair("license", getString(R.string.drivers_license)),
-                        Pair("permit", getString(R.string.life_permit)))
+        model.getUserDocumentsLive().observe(this, Observer<List<Document>> { documents ->
+            types = mutableMapOf(
+                    Pair("passport", getString(R.string.passport)),
+                    Pair("id", getString(R.string.id_card)),
+                    Pair("license", getString(R.string.drivers_license)),
+                    Pair("permit", getString(R.string.life_permit)))
 
-                documents!!.forEach { types.remove(it.type) }
-                buttonsList.forEach { it.visibility = View.GONE }
+            documents!!.forEach { types.remove(it.type) }
+            buttonsList.forEach { it.visibility = View.GONE }
 
-                when (types.size) {
-                    1 -> {
-                        with(buttonsList) {
-                            last().text = types.entries.elementAt(0).value; last().tag = types.entries.elementAt(0).key; last().visibility = View.VISIBLE
-                        }
+            when (types.size) {
+                1 -> {
+                    with(buttonsList) {
+                        last().text = types.entries.elementAt(0).value; last().tag = types.entries.elementAt(0).key; last().visibility = View.VISIBLE
                     }
-                    2 -> {
-                        with(buttonsList) {
-                            first().text = types.entries.elementAt(0).value; first().tag = types.entries.elementAt(0).key; first().visibility = View.VISIBLE
-                            elementAt(3).text = types.entries.elementAt(1).value; elementAt(3).tag = types.entries.elementAt(0).key; elementAt(3).visibility = View.VISIBLE
-                        }
+                }
+                2 -> {
+                    with(buttonsList) {
+                        first().text = types.entries.elementAt(0).value; first().tag = types.entries.elementAt(0).key; first().visibility = View.VISIBLE
+                        elementAt(3).text = types.entries.elementAt(1).value; elementAt(3).tag = types.entries.elementAt(0).key; elementAt(3).visibility = View.VISIBLE
                     }
-                    3 -> {
-                        with(buttonsList) {
-                            first().text = types.entries.elementAt(0).value; first().tag = types.entries.elementAt(0).key; first().visibility = View.VISIBLE
-                            elementAt(1).text = types.entries.elementAt(1).value; elementAt(1).tag = types.entries.elementAt(1).key; elementAt(1).visibility = View.VISIBLE
-                            elementAt(3).text = types.entries.elementAt(2).value; elementAt(3).tag = types.entries.elementAt(2).key; elementAt(3).visibility = View.VISIBLE
-                        }
+                }
+                3 -> {
+                    with(buttonsList) {
+                        first().text = types.entries.elementAt(0).value; first().tag = types.entries.elementAt(0).key; first().visibility = View.VISIBLE
+                        elementAt(1).text = types.entries.elementAt(1).value; elementAt(1).tag = types.entries.elementAt(1).key; elementAt(1).visibility = View.VISIBLE
+                        elementAt(3).text = types.entries.elementAt(2).value; elementAt(3).tag = types.entries.elementAt(2).key; elementAt(3).visibility = View.VISIBLE
                     }
-                    4 -> {
-                        with(buttonsList) {
-                            first().text = types.entries.elementAt(0).value; first().tag = types.entries.elementAt(0).key; first().visibility = View.VISIBLE
-                            elementAt(1).text = types.entries.elementAt(1).value; elementAt(1).tag = types.entries.elementAt(1).key; elementAt(1).visibility = View.VISIBLE
-                            elementAt(2).text = types.entries.elementAt(2).value; elementAt(2).tag = types.entries.elementAt(2).key; elementAt(2).visibility = View.VISIBLE
-                            elementAt(3).text = types.entries.elementAt(3).value; elementAt(3).tag = types.entries.elementAt(3).key; elementAt(3).visibility = View.VISIBLE
-                        }
+                }
+                4 -> {
+                    with(buttonsList) {
+                        first().text = types.entries.elementAt(0).value; first().tag = types.entries.elementAt(0).key; first().visibility = View.VISIBLE
+                        elementAt(1).text = types.entries.elementAt(1).value; elementAt(1).tag = types.entries.elementAt(1).key; elementAt(1).visibility = View.VISIBLE
+                        elementAt(2).text = types.entries.elementAt(2).value; elementAt(2).tag = types.entries.elementAt(2).key; elementAt(2).visibility = View.VISIBLE
+                        elementAt(3).text = types.entries.elementAt(3).value; elementAt(3).tag = types.entries.elementAt(3).key; elementAt(3).visibility = View.VISIBLE
                     }
                 }
             }
@@ -115,8 +109,7 @@ class DocumentVerifyChooseActivity : BaseActivity(), View.OnClickListener {
         val rotated = rotateBitmap(bitmap, -90f)
         val width = rotated.width
         val height = rotated.height
-        val bitmapCroped = Bitmap.createBitmap(rotated, (0.25 * width).toInt(), (0.1 * height).toInt(), (0.5 * width).toInt(), (0.7 * height).toInt())
-        return bitmapCroped
+        return Bitmap.createBitmap(rotated, (0.25 * width).toInt(), (0.1 * height).toInt(), (0.5 * width).toInt(), (0.7 * height).toInt())
     }
 
 }
