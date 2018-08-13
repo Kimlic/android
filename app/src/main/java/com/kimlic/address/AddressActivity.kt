@@ -46,12 +46,12 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
     private lateinit var addressBitmap: Bitmap
     private lateinit var addressData: ByteArray
     private var addressId: Long = 0
-    private var mGoogleApiClient: GoogleApiClient? = null
+    private var googleApiClient: GoogleApiClient? = null
     private val LAT_LNG_BOUNDS = LatLngBounds(LatLng(-40.0, -168.0), LatLng(71.0, 136.0))
     private var isSearchActive = false
     private var isPhotoPresent: Boolean = false
-
     private lateinit var model:ProfileViewModel
+
     // Life
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -134,33 +134,31 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
         var noError = true
 
         noError = if (addressEt.text.length < 3) {
-            addressEt.setError("error"); false
+            addressEt.error = "error"; false
         } else {
-            addressEt.setError(null); true
+            addressEt.error = null; true
         }
 
         return (noError && isPhotoPresent)
     }
 
     private fun setupAddressSerch() {
-        mGoogleApiClient = GoogleApiClient.Builder(this)
+        googleApiClient = GoogleApiClient.Builder(this)
                 .addApi(Places.GEO_DATA_API)
                 .addApi(Places.PLACE_DETECTION_API)
                 .enableAutoManage(this, this)
                 .build()
 
-        placeAutocompleteAdapter = PlaceAutocompleteAdapter(this, mGoogleApiClient, LAT_LNG_BOUNDS, cityFilter())
+        placeAutocompleteAdapter = PlaceAutocompleteAdapter(this, googleApiClient, LAT_LNG_BOUNDS, cityFilter())
 
         addressEt.setAdapter(placeAutocompleteAdapter)
         addressEt.setDropDownBackgroundResource(R.color.transparent)
 
-        addressEt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
-            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    moveDown(); return true
-                }
-                return false
+        addressEt.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                moveDown(); return@OnEditorActionListener true
             }
+            false
         })
 
         addressEt.setOnClickListener { moveUp() }
@@ -242,10 +240,10 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
     // Private helpers
 
     private fun croped(bitmap: Bitmap): Bitmap {
-        val originalbitmap = rotateBitmap(bitmap, 90f)
-        val width = originalbitmap.width
-        val height = originalbitmap.height
-        val bitmapCroped = Bitmap.createBitmap(originalbitmap, (0.15 * width).toInt(), (0.08 * height).toInt(), (0.7 * width).toInt(), (0.5 * height).toInt())
+        val originalBitmap = rotateBitmap(bitmap, 90f)
+        val width = originalBitmap.width
+        val height = originalBitmap.height
+        val bitmapCroped = Bitmap.createBitmap(originalBitmap, (0.15 * width).toInt(), (0.08 * height).toInt(), (0.7 * width).toInt(), (0.5 * height).toInt())
         return bitmapCroped
     }
 }

@@ -32,7 +32,7 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
 
     // Constants
 
-    val REQUEST_CAMERA_PERMISSION = 1000
+    private val REQUEST_CAMERA_PERMISSION = 1000
 
     // Binding
 
@@ -66,7 +66,7 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
 
         if (ActivityCompat.checkSelfPermission(activity!!, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity!!,
-                    arrayOf<String>(Manifest.permission.CAMERA,
+                    arrayOf(Manifest.permission.CAMERA,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     , REQUEST_CAMERA_PERMISSION)
             return

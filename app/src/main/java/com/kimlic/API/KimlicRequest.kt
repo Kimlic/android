@@ -11,7 +11,7 @@ class KimlicRequest(method: Int, url: String, val requestHeaders: Map<String, St
     : StringRequest(method, url, onSuccess, onError) {
 
     init {
-        setRetryPolicy(DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))
+        retryPolicy = DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
     }
 
     // Life
