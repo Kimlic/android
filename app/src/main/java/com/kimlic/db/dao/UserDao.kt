@@ -17,7 +17,6 @@ interface UserDao {
     @Query("SELECT * FROM user WHERE id =:id ")
     fun select(id: Long): User
 
-    // new
     @Query("SELECT * FROM user WHERE account_address =:accountAddress")
     fun select(accountAddress: String): User
 

@@ -16,7 +16,6 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.common.util.IOUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.kimlic.API.KimlicRequest
@@ -37,7 +36,6 @@ import org.spongycastle.util.encoders.Base64
 import java.io.File
 import java.io.IOException
 import java.io.OutputStreamWriter
-import java.nio.charset.Charset
 
 class ProfileRepository private constructor() {
 
@@ -155,7 +153,7 @@ class ProfileRepository private constructor() {
 
     fun documentsLive(accountAddress: String) = documentDao.selectLive(accountAddress = accountAddress)
 
-    fun document(accountAddress: String, documentType: String) = documentDao.select_(accountAddress = accountAddress, documentType = documentType)
+    fun document(accountAddress: String, documentType: String) = documentDao.select(accountAddress = accountAddress, documentType = documentType)
 
     fun documentDelete(documentId: Long) = { documentDao.delete(id = documentId); syncDataBase() }
 
@@ -439,7 +437,7 @@ class ProfileRepository private constructor() {
         }
         //@formatter:on
 
-        val document = documentDao.select_(accountAddress = Prefs.currentAccountAddress, documentType = documentType)
+        val document = documentDao.select(accountAddress = Prefs.currentAccountAddress, documentType = documentType)
         val documentPhotoList = photoDao.selectUserPhotosByDocument(accountAddress = Prefs.currentAccountAddress, documentType = documentType)
         val vendorDocument = vendorDao.select().find { it.type.equals(docType) }
 
