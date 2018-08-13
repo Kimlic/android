@@ -50,7 +50,7 @@ class TutorialActivity : BaseActivity() {
         if (pager.currentItem == 0)
             super.onBackPressed()
         else
-            pager.setCurrentItem(pager.getCurrentItem() - 1)
+            pager.currentItem = pager.currentItem - 1
     }
 
     // Private

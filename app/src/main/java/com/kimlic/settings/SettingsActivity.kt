@@ -17,7 +17,6 @@ import com.kimlic.preferences.Prefs
 import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.utils.AppConstants
 import kotlinx.android.synthetic.main.activity_settings.*
-import java.io.File
 
 class SettingsActivity : BaseActivity() {
 
@@ -69,7 +68,7 @@ class SettingsActivity : BaseActivity() {
         model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         setupAdapter()
         signoutBt.setOnClickListener {
-            model.dropUser(accountAddres = Prefs.currentAccountAddress)
+            model.deleteUser(accountAddres = Prefs.currentAccountAddress)
             Prefs.clear()
             clearAllFiles()
             QuorumKimlic.destroyInstance()
@@ -132,10 +131,6 @@ class SettingsActivity : BaseActivity() {
         startActivityForResult(intent, PASSCODE_REQUEST_CODE)
     }
 
-    private fun clearAllFiles() {
-        val rootFilesDir = File(filesDir.toString())
-        val files = rootFilesDir.listFiles()
-        files.forEach { it.delete() }
-    }
+    private fun clearAllFiles() = model.clearAllFiles()
 }
 

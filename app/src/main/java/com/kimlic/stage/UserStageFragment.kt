@@ -198,7 +198,8 @@ class UserStageFragment : BaseFragment() {
     }
 
     private fun manageRisks(value: Boolean) {
-        risksTv.visibility = if (Prefs.isPasscodeEnabled && Prefs.isTouchEnabled) View.GONE else View.VISIBLE
+//        risksTv.visibility = if (Prefs.isPasscodeEnabled && Prefs.isTouchEnabled) View.GONE else View.VISIBLE
+        risksTv.visibility = if (value) View.GONE else View.VISIBLE
     }
 
     private fun showPhoto(fileName: String) {

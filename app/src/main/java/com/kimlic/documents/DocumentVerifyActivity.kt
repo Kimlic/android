@@ -86,7 +86,8 @@ class DocumentVerifyActivity : BaseActivity() {
         val fragment = VerifySuccessfulFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
-                PresentationManager.stage(this@DocumentVerifyActivity)
+                finish()
+                //PresentationManager.stage(this@DocumentVerifyActivity)
             }
         })
 

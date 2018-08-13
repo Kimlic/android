@@ -11,6 +11,7 @@ import android.util.Log
 import com.android.volley.AuthFailureError
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
+import com.android.volley.Request.Method.POST
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -60,6 +61,7 @@ class ProfileRepository private constructor() {
     private var addressDao: AddressDao
     private var photoDao: PhotoDao
     private var googleSignInAccount: GoogleSignInAccount? = null
+    private var vendorDao: VendorDao
     private var context: Context
 
     // Init
@@ -71,7 +73,8 @@ class ProfileRepository private constructor() {
         documentDao = db.documentDao()
         addressDao = db.addressDao()
         photoDao = db.photoDao()
-        googleSignInAccount = GoogleSignIn.getLastSignedInAccount(KimlicApp.applicationContext())
+        vendorDao = db.vendorDao()
+        //googleSignInAccount = GoogleSignIn.getLastSignedInAccount(KimlicApp.applicationContext())
         context = KimlicApp.applicationContext()
     }
 
@@ -152,6 +155,8 @@ class ProfileRepository private constructor() {
 
     fun documentsLive(accountAddress: String) = documentDao.selectLive(accountAddress = accountAddress)
 
+    fun document(accountAddress: String, documentType: String) = documentDao.select_(accountAddress = accountAddress, documentType = documentType)
+
     fun documentDelete(documentId: Long) = { documentDao.delete(id = documentId); syncDataBase() }
 
     fun addDocument(accountAddres: String, documentType: String, portraitName: String, portraitData: ByteArray, frontName: String, frontData: ByteArray, backName: String, backData: ByteArray) {
@@ -168,6 +173,10 @@ class ProfileRepository private constructor() {
         savePhoto_(frontName, frontData)
         savePhoto_(backName, backData)
         syncDataBase()
+    }
+
+    fun updateDocument(document: Document) {
+        documentDao.update(document); syncDataBase()
     }
 
     // Photo
@@ -227,9 +236,17 @@ class ProfileRepository private constructor() {
     // Backup
 
     private fun syncDataBase() {
+        googleSignInAccount = GoogleSignIn.getLastSignedInAccount(context)
+        Log.d("TAGSYNC", "syncDatabase " + googleSignInAccount)
         googleSignInAccount?.let {
             Handler().postDelayed({ SyncServise.getInstance().backupDatabase(Prefs.currentAccountAddress, "kimlic.db", appFolder = false, onSuccess = {}) }, 0)
         }
+    }
+
+    fun clearAllFiles() {
+        val rootFilesDir = File(context.filesDir.toString())
+        val files = rootFilesDir.listFiles()
+        files.forEach { it.delete() }
     }
 
     private fun syncPhoto(fileName: String) {
@@ -277,6 +294,9 @@ class ProfileRepository private constructor() {
         Log.d("TAGDOCUMENT", "chosen document - " + document)
 
         val documentFotos = photoDao.selectUserPhotosByDocument(Prefs.currentAccountAddress, docType)
+
+
+
         Log.d("TAGDOCUMENT", "photos = " + documentFotos.toString())
 //      val image: String = File(context.filesDir.toString() + "/" + fileName).readText(charset = Charset.defaultCharset())
 
@@ -292,8 +312,6 @@ class ProfileRepository private constructor() {
         val backImage = File(context.filesDir.toString() + "/" + documentFotos.get(0).file).readText()
         val backImageIS = File(context.filesDir.toString() + "/" + documentFotos.get(2).file).inputStream()
         val backImageString = backImageIS.bufferedReader().use { it.readText() }
-
-
 
 
         val shaFace = Sha.sha256(faceImageString)
@@ -399,5 +417,120 @@ class ProfileRepository private constructor() {
         VolleySingleton.getInstance(context).addToRequestQueue(frontRequest)
         VolleySingleton.getInstance(context).addToRequestQueue(backRequest)
 
+    }
+
+    //val url = "https://elixir.aws.pp.ua/api/medias"
+    // val url = "https://67a9c1a3.ngrok.io/api/medias"
+
+    fun mySendoc(documentType: String, dynamicUrl: String = "https://67a9c1a3.ngrok.io/api/medias", onSuccess: () -> Unit, onError: () -> Unit) {
+        val requestList = mutableListOf<KimlicRequest>()
+        val datas = mutableListOf<String>()
+        val dataType: String
+        val docType: String
+        val dataValue: String
+
+        //@formatter:off
+        when (documentType) {
+            "passport" -> { docType = "PASSPORT"; dataType = "documents.passport" }
+            "id" -> { docType = "ID_CARD"; dataType = "documents.id_card" }
+            "license" -> { docType = "DRIVERS_LICENSE"; dataType = "documents.drivers_license" }
+            "permit" -> { docType = "RESIDENCE_PERMIT_CARD"; dataType = "documents.residence_permit_card"}
+            else -> { docType = ""; dataType = "" }
+        }
+        //@formatter:on
+
+        val document = documentDao.select_(accountAddress = Prefs.currentAccountAddress, documentType = documentType)
+        val documentPhotoList = photoDao.selectUserPhotosByDocument(accountAddress = Prefs.currentAccountAddress, documentType = documentType)
+        val vendorDocument = vendorDao.select().find { it.type.equals(docType) }
+
+        if (vendorDocument!!.contexts.contains("face")) {
+            val faceImage = File(context.filesDir.toString() + "/" + documentPhotoList.get(0).file).readText()
+            val faceParams = mapOf("attestator" to "Veriff.me", "doc" to docType, "type" to "face", "file" to faceImage)
+            val shaFace = Sha.sha256(faceImage)
+            datas.add("\"face\":${shaFace}")
+            val faceRequest = KimlicRequest(POST, dynamicUrl, headers(), faceParams, Response.Listener { }, Response.ErrorListener { onError })
+            requestList.add(faceRequest)
+        }
+
+        if (vendorDocument.contexts.contains("document-front")) {
+            val frontImage = File(context.filesDir.toString() + "/" + documentPhotoList.get(1).file).readText()
+            val frontParams = mapOf("attestator" to "Veriff.me", "doc" to docType, "type" to "document-front", "file" to frontImage)
+            val shaFront = Sha.sha256(frontImage)
+            datas.add("\"document-front\":${shaFront}")
+            val frontRequest = KimlicRequest(POST, dynamicUrl, headers(), frontParams, Response.Listener { }, Response.ErrorListener { onError })
+            requestList.add(frontRequest)
+        }
+
+        if (vendorDocument.contexts.contains("document-back")) {
+            val backImage = File(context.filesDir.toString() + "/" + documentPhotoList.get(2).file).readText()
+            val backParams = mapOf("attestator" to "Veriff.me", "doc" to docType, "type" to "document-back", "file" to backImage)
+            val shaBack = Sha.sha256(backImage)
+            datas.add("\"document-back\":${shaBack}")
+            val backRequest = KimlicRequest(POST, dynamicUrl, headers(), backParams, Response.Listener { }, Response.ErrorListener { onError })
+            requestList.add(backRequest)
+        }
+
+        dataValue = "{" + datas.joinToString(",") + "}"
+        // dataValue = "{" + dataValue + "}"
+
+        //datas.forEach { dataValue.append(it) }
+
+        //Log.d("TAGSENDOC", "datavalue  =" + dataValue)
+
+
+        // Log.d("TAGSENDOC", "datavalue native =" + "{\"face\":${shaFace},\"document-front\":${shaFront},\"document-back\":${shaBack}}")
+
+
+//        Log.d("TAGSENDOC", "vendorDocument = ${vendorDocument}")
+//
+//        Log.d("TAGSENDOC", "document = " + document)
+//        Log.d("TAGSENDOC", "documentPhotolist =   " + documentPhotoList.toString())
+
+
+        //val faceImage = File(context.filesDir.toString() + "/" + documentPhotoList.get(0).file).readText()
+        //val frontImage = File(context.filesDir.toString() + "/" + documentPhotoList.get(1).file).readText()
+//        val backImage = File(context.filesDir.toString() + "/" + documentPhotoList.get(2).file).readText()
+
+//        Log.d("TAGSENDOC", "photo face= $faceImage")
+//        Log.d("TAGSENDOC", "--------------------------------------------------------------------------------------------------------------")
+//        Log.d("TAGSENDOC", "photo front = $frontImage")
+//        Log.d("TAGSENDOC", "--------------------------------------------------------------------------------------------------------------")
+//        Log.d("TAGSENDOC", "photo = back $backImage")
+//        Log.d("TAGSENDOC", "--------------------------------------------------------------------------------------------------------------")
+
+//        val faceImage = File(context.filesDir.toString() + "/" + documentPhotoList.get(0).file).readText()
+//        val faceParams = mapOf("attestator" to "Veriff.me", "doc" to docType, "type" to "face", "file" to faceImage)
+//        val shaFace = Sha.sha256(faceImage)
+//        val faceRequest = KimlicRequest(POST, dynamicUrl, headers(), faceParams, Response.Listener { }, Response.ErrorListener { })
+
+//        val frontImage = File(context.filesDir.toString() + "/" + documentPhotoList.get(1).file).readText()
+//        val frontParams = mapOf("attestator" to "Veriff.me", "doc" to docType, "type" to "document-front", "file" to frontImage)
+//        val shaFront = Sha.sha256(frontImage)
+//        val frontRequest = KimlicRequest(POST, dynamicUrl, headers(), frontParams, Response.Listener { }, Response.ErrorListener { })
+
+//        val backImage = File(context.filesDir.toString() + "/" + documentPhotoList.get(2).file).readText()
+//        val backParams = mapOf("attestator" to "Veriff.me", "doc" to docType, "type" to "document-back", "file" to backImage)
+//        val shaBack = Sha.sha256(backImage)
+//        val backRequest = KimlicRequest(POST, dynamicUrl, headers(), backParams, Response.Listener { }, Response.ErrorListener { }
+        val receipt = QuorumKimlic.getInstance().setFieldMainData(dataValue, dataType)
+
+
+        Log.d("TAGSENDOC", "receipt before")
+        receipt?.let {
+            Log.d("TAGSENDOC", "receipt  ${it}")
+            requestList.forEach { request ->
+                VolleySingleton.getInstance(context).addToRequestQueue(request)
+            }
+        }
+    }
+
+    // Private helpers
+
+    private fun headers(): HashMap<String, String> {
+        val headers = HashMap<String, String>()
+        headers["Account-Address"] = Prefs.currentAccountAddress
+        headers["Content-Type"] = "application/json; charset=utf-8"
+        headers["Accept"] = "application/vnd.mobile-api.v1+json"
+        return headers
     }
 }

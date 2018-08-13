@@ -114,7 +114,7 @@ class EmailVerifyActivity : BaseActivity() {
 
     private fun insertEmail(email: String) {
         val emailContact = Contact(value = email, type = "email", approved = true)
-        model.addUserContact(Prefs.currentAccountAddress, emailContact)
+        model.addContact(Prefs.currentAccountAddress, emailContact)
     }
 
     private fun pinEntered(): Boolean {

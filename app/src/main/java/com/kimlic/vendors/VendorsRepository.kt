@@ -37,15 +37,14 @@ class VendorsRepository private constructor() {
     private var db: KimlicDB = KimlicDB.getInstance()!!
     private var vendorDao = db.vendorDao()
 
-
     fun initDocuments(accountAddress: String) {
         val headers = mapOf(Pair("account-address", accountAddress), Pair("accept", "application/vnd.mobile-api.v1+json"))
 
         val vendorsRequest = KimlicRequest(GET, QuorumURL.vendors.url, headers, emptyMap(), object : Response.Listener<String> {
             override fun onResponse(response: String?) {
 
-                val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
-                if (!responceCode.startsWith("2")) return
+                val responseCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
+                if (!responseCode.startsWith("2")) return
 
                 val data = JSONObject(response).getJSONObject("data").toString()
                 val type = object : TypeToken<Vendors>() {}.type
@@ -94,7 +93,6 @@ class VendorsRepository private constructor() {
 
 
     private fun syncDataBase() {
-
         googleSignInAccount?.let {
             Handler().postDelayed({ SyncServise.getInstance().backupDatabase(Prefs.currentAccountAddress, "kimlic.db", appFolder = false, onSuccess = {}) }, 0)
         }

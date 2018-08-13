@@ -45,9 +45,7 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
 
     filePathRezult("FILE_PATH_REZULT"),
 
-    // UserPortraitPhoto
-
-    isUserPhotoTaken("IS_USER_PHOTO_TAKEN"),
+   // isUserPhotoTaken("IS_USER_PHOTO_TAKEN"),
 
     // Settings type
 
@@ -57,13 +55,6 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
     // User profile preferences
 
     userAuth("USER_AUTH"),
-    //userName("USER_NAME"),
-    //userLastName("USER_LAST_NAME"),
-    //userPhone("USER_PHONE"),
-    //userPhoneAccepted("USER_PHONE_ACCEPTED"),
-    //userEmail("USER_EMAIL"),
-    //userEmailAccepted("USER_EMAIL_ACCEPTED"),
-    //userAddress("USER_ADDRESS"),
 
     // Help constants
 
