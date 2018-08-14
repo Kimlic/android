@@ -119,8 +119,6 @@ class SignupRecoveryActivity : BaseActivity() {
             QuorumKimlic.getInstance().setAccountStorageAdapterAddress(accountStorageAdapterAddress)
             PresentationManager.tutorials(this)
         }, onError = Response.ErrorListener {
-            val json = it.networkResponse.toString()
-            Log.e("LOG_TAG", json)
             errorPopup(getString(R.string.server_error))
         })
         VolleySingleton.getInstance(this@SignupRecoveryActivity).requestQueue.add(addressRequest)

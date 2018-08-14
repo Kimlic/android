@@ -559,7 +559,7 @@ class ProfileRepository private constructor() {
             //Log.e("FACE", "SENT: " + response.toString())
             send(fileString = frontString, type = "document-front", doc = doc, firstName = firstName, lastName = lastName, country = country, udid = udid, url = dynamicUrl, listener = Response.Listener { response ->
                 //Log.e("FRONT", "SENT: " + response.toString())
-                send(fileString = backString, type = "document-back", doc = doc, firstName = dynamicUrl, lastName = lastName, country = country, udid = udid, url = dynamicUrl, listener = Response.Listener { response ->
+                send(fileString = backString, type = "document-back", doc = doc, firstName = firstName, lastName = lastName, country = country, udid = udid, url = dynamicUrl, listener = Response.Listener { response ->
                     //Log.e("BACK", "SENT: " + response.toString())
                     onSuccess()
                 }, onError = onError)
@@ -579,8 +579,8 @@ class ProfileRepository private constructor() {
         params.put("last_name", lastName)
         params.put("device", "android")
         params.put("country", country.toUpperCase())
-        params.put("fileString", fileString)
         Log.d("PARAMS", params.toString())
+        params.put("fileString", fileString)
 
         val request = object : JsonObjectRequest(Request.Method.POST, url, params, listener, Response.ErrorListener { error ->
             onError()
