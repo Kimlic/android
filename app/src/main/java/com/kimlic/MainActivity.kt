@@ -67,21 +67,23 @@ class MainActivity : BaseActivity() {
         // 2. Get entry point of the Quorum
 
         val headers = mapOf<String, String>(Pair("account-address", walletAddress))
-
+        Log.e("AAAAA", "11111")
         val addressRequest = KimlicRequest(Request.Method.GET, QuorumURL.config.url, headers, null, Response.Listener {
             val responseCode = JSONObject(it).getJSONObject("meta").optString("code").toString()
 
             if (!responseCode.startsWith("2")) {
                 errorPopup(getString(R.string.server_error)); return@Listener
             }
+            Log.e("AAAAA", "22222")
             val contextContractAddress = JSONObject(it).getJSONObject("data").optString("context_contract")
             QuorumKimlic.getInstance().setKimlicContractsContextAddress(contextContractAddress)
-
+            Log.e("AAAAA", "33333")
             val accountStorageAdapterAddress = QuorumKimlic.getInstance().accountStorageAdapter
             QuorumKimlic.getInstance().setAccountStorageAdapterAddress(accountStorageAdapterAddress)
-
+            Log.e("AAAAA", "44444")
             object : CountDownTimer(1500, 1500) {
                 override fun onFinish() {
+                    Log.e("AAAAA", "555555")
                     continueApp()
                 }
 
@@ -94,6 +96,7 @@ class MainActivity : BaseActivity() {
 //                override fun onTick(millisUntilFinished: Long) {}
 //            }.start()
             errorPopup(getString(R.string.server_error))
+            Log.e("AAAAA", "6666666")
         })
         VolleySingleton.getInstance(this@MainActivity).requestQueue.add(addressRequest)
     }

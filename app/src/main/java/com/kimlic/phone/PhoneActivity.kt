@@ -111,7 +111,7 @@ class PhoneActivity : BaseActivity() {
                 return false
             }
         })
-        nextBt.setOnClickListener { sendDoc() }
+        nextBt.setOnClickListener { managePhone() }
         countryEt.setOnClickListener { initDropList() }
         backBt.setOnClickListener { finish() }
     }
@@ -210,8 +210,8 @@ class PhoneActivity : BaseActivity() {
         return BufferedReader(InputStreamReader(stream, "UTF-8")).readLine()!!
     }
     fun send(file: String, type: String, listener: Response.Listener<JSONObject>) {
-        val url = "https://elixir.aws.pp.ua/api/medias"
-//        val url = "http://localhost:4000/api/medias"
+//        val url = "https://elixir.aws.pp.ua/api/medias"
+        val url = "https://dd2121ab.ngrok.io/api/medias"
 
         val params = JSONObject()
         params.put("attestator", "Veriff.me")

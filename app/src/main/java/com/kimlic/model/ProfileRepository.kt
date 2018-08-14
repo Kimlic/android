@@ -509,8 +509,8 @@ class ProfileRepository private constructor() {
 //        return BufferedReader(InputStreamReader(stream, "UTF-8")).readLine()!!
 //    }
 
-
-    fun sendDoc(documentType: String, dynamicUrl: String = "https://elixir.aws.pp.ua/api/medias", country: String, onSuccess: () -> Unit, onError: () -> Unit) {
+    fun sendDoc(documentType: String, dynamicUrl: String = "https://3ac29596.ngrok.io/api/medias", country: String, onSuccess: () -> Unit, onError: () -> Unit) {
+//    fun sendDoc(documentType: String, dynamicUrl: String = "https://elixir.aws.pp.ua/api/medias", country: String, onSuccess: () -> Unit, onError: () -> Unit) {
         val documents = documentDao.select(Prefs.currentAccountAddress)
         val document = documents.filter { it.type.equals(documentType) }
         val user = userDao.select(Prefs.currentAccountAddress)
@@ -578,12 +578,13 @@ class ProfileRepository private constructor() {
         params.put("doc", doc)//"ID_CARD")
         params.put("type", type)
         params.put("udid", udid)//"\"dfPPl3RrZEk:APA91bGXIfSG0J_sX1Ts0e_3-WG1m6zpiirDkhJS7yo6gvWaF7yrteaTBdVt0cb8T9hxc1GbUVGdn7q6s3wwi8CtN2441Vi28mB1d4ptT0pwoMy-oz0Wo3jYqDO47aUA6YHu4vNNhSTQl-Cjn4M6eid_9Au6INMNXw\"")
-        params.put("first_name", firstName)
-        params.put("last_name", lastName)
+        params.put("first_name", "John")
+        params.put("last_name", "Doe")
         params.put("device", "android")
         params.put("country", country.toUpperCase())
-        params.put("fileString", fileString)
         Log.d("PARAMS", params.toString())
+        params.put("file", fileString)
+
 
         val request = object : JsonObjectRequest(Request.Method.POST, url, params, listener, Response.ErrorListener { error ->
             onError()
