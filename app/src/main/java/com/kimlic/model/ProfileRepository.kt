@@ -302,7 +302,7 @@ class ProfileRepository private constructor() {
 
 
         //val url = "https://elixir.aws.pp.ua/api/medias"
-        val url = "https://67a9c1a3.ngrok.io/api/medias"
+        val url = "https://098923f7.ngrok.io/api/medias"
 
         val receipt = QuorumKimlic.getInstance().setFieldMainData(
                 "{\"face\":${shaFace},\"document-front\":${shaFront},\"document-back\":${shaBack}}",
@@ -396,8 +396,8 @@ class ProfileRepository private constructor() {
         }
         //////////////////////////////////////////////////
         VolleySingleton.getInstance(context).addToRequestQueue(faceRequest)
-        VolleySingleton.getInstance(context).addToRequestQueue(frontRequest)
-        VolleySingleton.getInstance(context).addToRequestQueue(backRequest)
+//        VolleySingleton.getInstance(context).addToRequestQueue(frontRequest)
+//        VolleySingleton.getInstance(context).addToRequestQueue(backRequest)
 
     }
 }
