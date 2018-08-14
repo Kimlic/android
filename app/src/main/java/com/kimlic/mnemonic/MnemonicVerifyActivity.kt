@@ -50,8 +50,6 @@ class MnemonicVerifyActivity : BaseActivity() {
                     successfull()
                 } else
                     showPopup(message = getString(R.string.mnemonic_phrases_do_not_match))
-//                    errorPopup(getString(R.string.mnemonic_phrases_do_not_match))
-
             }
         }
 
@@ -80,7 +78,6 @@ class MnemonicVerifyActivity : BaseActivity() {
 
     private fun phrasesMatch(): Boolean {
         var noError = true
-//        val mnemonicList = KimlicDB.getInstance()!!.userDao().selectLive(Prefs.currentId).mnemonic.split(" ")
         val mnemonicList = model.getUser(Prefs.currentAccountAddress).mnemonic.split(" ")
 
         for (i in 0 until hintList.size) noError = mnemonicList[hintList[i] - 1].equals(editTextList[i].text.toString())
@@ -92,10 +89,10 @@ class MnemonicVerifyActivity : BaseActivity() {
         var noError = true
 
         editTextList.forEach {
-            if (it.text.length < 3) {
-                it.setError("error"); noError = false
+            noError = if (it.text.length < 3) {
+                it.error = "error"; false
             } else {
-                it.setError(null); noError = true
+                it.error = null; true
             }
         }
         return noError

@@ -51,14 +51,6 @@ class PhoneActivity : BaseActivity() {
 
     // Life
 
-//    private var base64Img: List<String> = ArrayList()
-//
-//    fun imageBase64(context: Context): String {
-//        val stream = context.resources.openRawResource(R.raw.base64example)
-//
-//        return BufferedReader(InputStreamReader(stream, "UTF-8")).readLine()!!
-//    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_phone)
@@ -119,89 +111,86 @@ class PhoneActivity : BaseActivity() {
                 return false
             }
         })
-        nextBt.setOnClickListener { sendDoc() }
+        nextBt.setOnClickListener { managePhone() }
         countryEt.setOnClickListener { initDropList() }
         backBt.setOnClickListener { finish() }
     }
 
-    fun imageBase64Face(context: Context): String {
-        val stream = context.resources.openRawResource(R.raw.base64face)
-
-        return BufferedReader(InputStreamReader(stream, "UTF-8")).readLine()!!
-    }
-
-    fun imageBase64Front(context: Context): String {
-        val stream = context.resources.openRawResource(R.raw.base64front)
-
-        return BufferedReader(InputStreamReader(stream, "UTF-8")).readLine()!!
-    }
-
-    fun imageBase64Back(context: Context): String {
-        val stream = context.resources.openRawResource(R.raw.base64back)
-
-        return BufferedReader(InputStreamReader(stream, "UTF-8")).readLine()!!
-    }
-
-    fun send(file: String, type: String, listener: Response.Listener<JSONObject>) {
-        val url = "https://dcadef7e.ngrok.io/api/medias"
-
-        val params = JSONObject()
-        params.put("attestator", "Veriff.me")
-        params.put("doc", "ID_CARD")
-        params.put("type", type)
-        params.put("file", file)
-        params.put("first_name", "John")
-        params.put("last_name", "Doe")
-        params.put("country", "UA")
-        params.put("device", "android")
-        params.put("udid", "\"dfPPl3RrZEk:APA91bGXIfSG0J_sX1Ts0e_3-WG1m6zpiirDkhJS7yo6gvWaF7yrteaTBdVt0cb8T9hxc1GbUVGdn7q6s3wwi8CtN2441Vi28mB1d4ptT0pwoMy-oz0Wo3jYqDO47aUA6YHu4vNNhSTQl-Cjn4M6eid_9Au6INMNXw\"")
-        Log.e("PARAMS", params.toString())
-
-        val request = object : JsonObjectRequest(Request.Method.POST, url, params, listener, Response.ErrorListener { error ->
-            Log.e("DOC RESPONSE ERROR", error.toString())
-        }) {
-            init {
-                setRetryPolicy(DefaultRetryPolicy(30000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))
-            }
-
-            @Throws(AuthFailureError::class)
-            override fun getHeaders(): Map<String, String> {
-                return mapOf(
-                    Pair("Account-Address", Prefs.currentAccountAddress),
-                    Pair("Content-Type", "application/json; charset=utf-8"),
-                    Pair("Accept", "application/vnd.mobile-api.v1+json")
-                )
-            }
-        }
-        VolleySingleton.getInstance(this).addToRequestQueue(request)
-    }
-
-    fun sendDoc() {
-        val faceImageString = imageBase64Face(this)
-        val frontImageString = imageBase64Front(this)
-        val backImageString = imageBase64Back(this)
-
-        val shaFace = Sha.sha256(faceImageString)
-        val shaFront = Sha.sha256(frontImageString)
-        val shaBack = Sha.sha256(backImageString)
-
-        val receipt = QuorumKimlic.getInstance().setFieldMainData(
-            "{\"face\":${shaFace},\"document-front\":${shaFront},\"document-back\":${shaBack}}",
-            "documents.id_card")
-        Log.e("RECEIPT", receipt.toString())
-
-        send(faceImageString, "face", Response.Listener { response ->
-            Log.e("FACE", "SENT: " + response.toString())
-
-            send(frontImageString, "document-front", Response.Listener { response ->
-                Log.e("FRONT", "SENT: " + response.toString())
-
-                send(backImageString, "document-back", Response.Listener { response ->
-                    Log.e("BACK", "SENT: " + response.toString())
-                })
-            })
-        })
-    }
+//    fun imageBase64Face(context: Context): String {
+//        val stream = context.resources.openRawResource(R.raw.base64face)
+//
+//        return BufferedReader(InputStreamReader(stream, "UTF-8")).readLine()!!
+//    }
+//    fun imageBase64Front(context: Context): String {
+//        val stream = context.resources.openRawResource(R.raw.base64front)
+//
+//        return BufferedReader(InputStreamReader(stream, "UTF-8")).readLine()!!
+//    }
+//    fun imageBase64Back(context: Context): String {
+//        val stream = context.resources.openRawResource(R.raw.base64back)
+//
+//        return BufferedReader(InputStreamReader(stream, "UTF-8")).readLine()!!
+//    }
+//    fun send(file: String, type: String, listener: Response.Listener<JSONObject>) {
+//        val url = "https://dcadef7e.ngrok.io/api/medias"
+//
+//        val params = JSONObject()
+//        params.put("attestator", "Veriff.me")
+//        params.put("doc", "ID_CARD")
+//        params.put("type", type)
+//        params.put("file", file)
+//        params.put("first_name", "John")
+//        params.put("last_name", "Doe")
+//        params.put("country", "UA")
+//        params.put("device", "android")
+//        params.put("udid", "\"dfPPl3RrZEk:APA91bGXIfSG0J_sX1Ts0e_3-WG1m6zpiirDkhJS7yo6gvWaF7yrteaTBdVt0cb8T9hxc1GbUVGdn7q6s3wwi8CtN2441Vi28mB1d4ptT0pwoMy-oz0Wo3jYqDO47aUA6YHu4vNNhSTQl-Cjn4M6eid_9Au6INMNXw\"")
+//        Log.e("PARAMS", params.toString())
+//
+//        val request = object : JsonObjectRequest(Request.Method.POST, url, params, listener, Response.ErrorListener { error ->
+//            Log.e("DOC RESPONSE ERROR", error.toString())
+//        }) {
+//            init {
+//                setRetryPolicy(DefaultRetryPolicy(30000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))
+//            }
+//
+//            @Throws(AuthFailureError::class)
+//            override fun getHeaders(): Map<String, String> {
+//                return mapOf(
+//                    Pair("Account-Address", Prefs.currentAccountAddress),
+//                    Pair("Content-Type", "application/json; charset=utf-8"),
+//                    Pair("Accept", "application/vnd.mobile-api.v1+json")
+//                )
+//            }
+//        }
+//        VolleySingleton.getInstance(this).addToRequestQueue(request)
+//    }
+//
+//    fun sendDoc() {
+//        val faceImageString = imageBase64Face(this)
+//        val frontImageString = imageBase64Front(this)
+//        val backImageString = imageBase64Back(this)
+//
+//        val shaFace = Sha.sha256(faceImageString)
+//        val shaFront = Sha.sha256(frontImageString)
+//        val shaBack = Sha.sha256(backImageString)
+//
+//        val receipt = QuorumKimlic.getInstance().setFieldMainData(
+//            "{\"face\":${shaFace},\"document-front\":${shaFront},\"document-back\":${shaBack}}",
+//            "documents.id_card")
+//        Log.e("RECEIPT", receipt.toString())
+//
+//        send(faceImageString, "face", Response.Listener { response ->
+//            Log.e("FACE", "SENT: " + response.toString())
+//
+//            send(frontImageString, "document-front", Response.Listener { response ->
+//                Log.e("FRONT", "SENT: " + response.toString())
+//
+//                send(backImageString, "document-back", Response.Listener { response ->
+//                    Log.e("BACK", "SENT: " + response.toString())
+//                })
+//            })
+//        })
+//    }
 
     private fun managePhone() {
         if (!isPhoneValid()) {

@@ -159,15 +159,17 @@ object PresentationManager {
     fun detailsDocument(presenter: BaseActivity, accountAddress: String, documentType: String) {
         val params = HashMap<String, String>()
         params[AppConstants.documentType.key] = documentType
-        params[AppConstants.accountAddress.key] = accountAddress
+        // params[AppConstants.accountAddress.key] = accountAddress
         present(presenter = presenter, className = DocumentDetails::class.java, isStarting = false, params = params)
     }
 
-    fun detailsDocumentSend(presenter: BaseActivity, accountAddress: String, documentType: String) {
+    fun detailsDocumentSend(presenter: BaseActivity, accountAddress: String, documentType: String, url: String, country: String) {
         val params = HashMap<String, String>()
         params[AppConstants.documentType.key] = documentType
+        params["country"] = country
+        params["url"] = url
         params["target"] = "send"
-        params[AppConstants.accountAddress.key] = accountAddress
+        // params[AppConstants.accountAddress.key] = accountAddress
         present(presenter = presenter, className = DocumentDetails::class.java, isStarting = false, params = params)
     }
 
@@ -221,8 +223,10 @@ object PresentationManager {
         present(presenter = presenter, className = AddressActivity::class.java, isStarting = false)
     }
 
-    fun vendors(presenter: BaseActivity) {
-        present(presenter = presenter, className = VendorsActivity::class.java)
+    fun vendors(presenter: BaseActivity, url: String) {
+        val params = HashMap<String, String>()
+        params["url"] = url
+        present(presenter = presenter, className = VendorsActivity::class.java, params = params)
     }
 
     // Private

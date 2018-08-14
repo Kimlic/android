@@ -29,6 +29,8 @@ class VendorsActivity : BaseActivity() {
     private lateinit var vendorsModel: VendorsViewModel
     private lateinit var profileModel: ProfileViewModel
     private lateinit var documentAdapter: DocumentVendorAdapter
+    private lateinit var country: String
+    private lateinit var url: String
 
     // Life
 
@@ -44,11 +46,11 @@ class VendorsActivity : BaseActivity() {
     fun setupUI() {
         vendorsModel = ViewModelProviders.of(this).get(VendorsViewModel::class.java)
         profileModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        url = intent.extras.getString("url", "")
         initRecycler()
 
         // sunbscribe vendors model to activity lifecycle
         lifecycle.addObserver(vendorsModel)
-
 
 //        vendorsModel.getVendorsDocuments().observe(this, object : Observer<List<VendorDocument>> {
 //            override fun onChanged(vendors: Vendors?) {
@@ -77,6 +79,7 @@ class VendorsActivity : BaseActivity() {
 
     private fun initDropList() {
         val countries = vendorsModel.countriesList().map { it.country }.toList().toTypedArray()
+        val countrySH = vendorsModel.countriesList().map { it.sh }.toList().toTypedArray()
 
         val dialog = AlertDialog.Builder(this)
                 .setTitle("Countries")
@@ -84,6 +87,7 @@ class VendorsActivity : BaseActivity() {
                 .setItems(countries, object : DialogInterface.OnClickListener {
                     override fun onClick(dialog: DialogInterface?, which: Int) {
                         vendorsModel.getSupportedDocuments_PostThemToAdaptersResult(country = vendorsModel.countriesList()[which].sh)
+                        country = countrySH[which]
                         countryEt.text = Editable.Factory.getInstance().newEditable(countries[which])
                     }
                 }).show()
@@ -112,23 +116,22 @@ class VendorsActivity : BaseActivity() {
                 when (type) {
                     AppConstants.documentPassport.key -> {
                         if (presentDocList.contains("passport"))
-                            PresentationManager.detailsDocumentSend(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentPassport.key)
+                            PresentationManager.detailsDocumentSend(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentPassport.key, url = url, country = country)
                         else PresentationManager.verifyPassport(this@VendorsActivity)
                     }
                     AppConstants.documentID.key -> {
                         if (presentDocList.contains("id"))
-                            PresentationManager.detailsDocumentSend(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentID.key)
+                            PresentationManager.detailsDocumentSend(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentID.key, url = url, country = country)
                         else PresentationManager.verifyIDCard(this@VendorsActivity)
                     }
-
                     AppConstants.documentLicense.key -> {
                         if (presentDocList.contains("license"))
-                            PresentationManager.detailsDocumentSend(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentLicense.key)
+                            PresentationManager.detailsDocumentSend(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentLicense.key, url = url, country = country)
                         else PresentationManager.verifyDriverLicence(this@VendorsActivity)
                     }
                     AppConstants.documentPermit.key -> {
                         if (presentDocList.contains("permit"))
-                            PresentationManager.detailsDocumentSend(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentPermit.key)
+                            PresentationManager.detailsDocumentSend(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentPermit.key, url = url, country = country)
                         else PresentationManager.verifyPermit(this@VendorsActivity)
                     }
                 }

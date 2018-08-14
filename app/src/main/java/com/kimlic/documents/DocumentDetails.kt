@@ -3,9 +3,10 @@ package com.kimlic.documents
 import android.arch.lifecycle.ViewModelProviders
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.text.Editable
-import android.util.Log
 import com.kimlic.BaseActivity
+import com.kimlic.BlockchainUpdatingFragment
 import com.kimlic.R
 import com.kimlic.db.entity.Document
 import com.kimlic.db.entity.Photo
@@ -18,15 +19,17 @@ class DocumentDetails : BaseActivity() {
 
     // Variables
 
+    private lateinit var timer: CountDownTimer
+    private var blockchainUpdatingFragment: BlockchainUpdatingFragment? = null
+
     private lateinit var documentType: String
-    private lateinit var accountAddress: String
     private lateinit var model: ProfileViewModel
-
     private lateinit var photoList: List<Photo>
+
     private lateinit var photoMap: Map<String, String>
-
-
     private lateinit var currentDocument: Document
+    private lateinit var country: String
+    private lateinit var url: String
     private var target: String = "preview"
 
     // Life
@@ -42,36 +45,41 @@ class DocumentDetails : BaseActivity() {
 
     private fun setupUI() {
         model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-
         documentType = intent.extras.getString(AppConstants.documentType.key, "")
-        accountAddress = intent.extras.getString(AppConstants.accountAddress.key, "")
-
         target = intent.extras.getString("target", "preview")
 
-
         currentDocument = model.getUserDocument(documentType = documentType)
-
-        Log.d("TAGDETAILS", "Current document! - - - - - - - - " + currentDocument.toString())
-
-        photoList = model.getUserDocumentPhotos(accountAddress = accountAddress, documentType = documentType)
+        photoList = model.getUserDocumentPhotos(documentType = documentType)
         photoMap = photoList.map { it.type to it.file }.toMap()
 
         fillData(photos = photoMap, document = currentDocument)
 
         when (target) {
             "send" -> {
+                country = intent.extras.getString("country", "")
+                url = intent.extras.getString("url", "")
                 addBt.text = getString(R.string.verify_document)
                 addBt.setOnClickListener {
                     if (validFields()) {
-
+                        addBt.isClickable = false
+                        showProgress()
                         currentDocument.number = numberEt.text.toString()
                         currentDocument.expireDate = expireDateEt.text.toString()
                         currentDocument.country = countryEt.text.toString()
                         model.updateDocument(currentDocument)
 
-                        model.senDoc(docType = documentType, onSuccess = {}, onError = { showPopup("Error", message = "Unable to proceed") })
-
-                        finish()
+                        model.senDoc(docType = documentType, country = country, url = url,
+                                onSuccess = {
+                                    showPopup("Success", "document sended!")
+//                                currentDocument.state = "pending"
+//                                model.updateDocument(currentDocument)
+                                    //finish()
+                                },
+                                onError = {
+                                    hideProgress()
+                                    addBt.isClickable = true
+                                    showPopup("Error", message = "Unable to proceed!")
+                                })
                     }
                 }
             }
@@ -101,7 +109,7 @@ class DocumentDetails : BaseActivity() {
 
         when (document.type) {
             AppConstants.documentPassport.key -> titleTv.text = getString(R.string.passport)
-            AppConstants.documentLicense.key -> titleTv.text = getString(R.string.driver_licence)
+            AppConstants.documentLicense.key -> titleTv.text = getString(R.string.driver_license)
             AppConstants.documentID.key -> titleTv.text = getString(R.string.id_card)
             AppConstants.documentPermit.key -> titleTv.text = getString(R.string.residence_permit)
             else -> throw Exception("Wrong document type")
@@ -128,5 +136,22 @@ class DocumentDetails : BaseActivity() {
         val height = originalbitmap.height
         val bitmapCroped = Bitmap.createBitmap(originalbitmap, (0.15 * width).toInt(), (0.22 * height).toInt(), (0.7 * width).toInt(), (0.35 * height).toInt())
         return bitmapCroped
+    }
+
+    // Progress
+
+    private fun showProgress() {
+        timer = object : CountDownTimer(100, 100) {
+            override fun onFinish() {
+                blockchainUpdatingFragment = BlockchainUpdatingFragment.newInstance()
+                blockchainUpdatingFragment?.show(supportFragmentManager, BlockchainUpdatingFragment.FRAGMENT_KEY)
+            }
+
+            override fun onTick(millisUntilFinished: Long) {}
+        }.start()
+    }
+
+    private fun hideProgress() = runOnUiThread {
+        if (blockchainUpdatingFragment != null) blockchainUpdatingFragment?.dismiss(); timer.let { it?.cancel() }
     }
 }

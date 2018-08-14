@@ -16,13 +16,14 @@ import com.google.android.gms.tasks.Task
 import com.kimlic.KimlicApp
 import java.io.*
 
-class SyncServise private constructor(val context: Context) {
+class SyncServise private constructor(val context: Context, appFolder: Boolean) {
 
     // Variables
 
     private val TAG = this::class.java.simpleName
     private var mGoogleSignInAccount: GoogleSignInAccount? = null // SignIn account
     private var mDriveResourceClient: DriveResourceClient? = null // Handle access to Drive resources/files.
+    private val appFolder: Boolean
 
     // Companioin
 
@@ -54,7 +55,7 @@ class SyncServise private constructor(val context: Context) {
             GoogleSignIn.getClient(activity, googleSignInOptions).signOut()
         }
 
-        fun getInstance(context: Context = KimlicApp.applicationContext()): SyncServise = SyncServise(context)
+        fun getInstance(context: Context = KimlicApp.applicationContext(), appFolder: Boolean): SyncServise = SyncServise(context = context, appFolder = false)
     }
 
     // Init
@@ -62,16 +63,17 @@ class SyncServise private constructor(val context: Context) {
     init {
         mGoogleSignInAccount = GoogleSignIn.getLastSignedInAccount(context)
         mDriveResourceClient = Drive.getDriveResourceClient(context, mGoogleSignInAccount!!)
+        this.appFolder = appFolder
     }
 
     // Public
 
-    fun backupDatabase(accountAddress: String, dataBaseName: String, appFolder: Boolean, onSuccess: () -> Unit) {
+    fun backupDatabase(accountAddress: String, dataBaseName: String, onSuccess: () -> Unit) {
         val db = KimlicApp.applicationContext().getDatabasePath(dataBaseName).toString()
-        backupFile(accountAddress = accountAddress, filePath = db, appFolder = appFolder, fileDescription = DATABASE_DECRIPTION, onSuccess = onSuccess)
+        backupFile(accountAddress = accountAddress, filePath = db, fileDescription = DATABASE_DECRIPTION, onSuccess = onSuccess)
     }
 
-    fun backupFile(accountAddress: String, filePath: String, appFolder: Boolean, fileDescription: String = PHOTO_DESCRIPTION, onSuccess: () -> Unit): Task<DriveFolder> {
+    fun backupFile(accountAddress: String, filePath: String, fileDescription: String = PHOTO_DESCRIPTION, onSuccess: () -> Unit): Task<DriveFolder> {
         val backupFolderQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, accountAddress)).build()
         val rootFolder = getRootFolder(appFolder)
         rootFolder.continueWithTask {
@@ -80,7 +82,7 @@ class SyncServise private constructor(val context: Context) {
                     .continueWithTask {
                         if (it.getResult().count == 0) {
                             createFolderInFolder(parent = rootFolder.getResult(), folderName = accountAddress)
-                            backupFile(accountAddress = accountAddress, filePath = filePath, appFolder = appFolder, fileDescription = fileDescription, onSuccess = {})
+                            backupFile(accountAddress = accountAddress, filePath = filePath, fileDescription = fileDescription, onSuccess = {})
                         }
                         updateFile(filePath = filePath, driveFolder = it.result[0].driveId.asDriveFolder(), fileDescription = fileDescription)
                     }.addOnSuccessListener {
@@ -91,9 +93,9 @@ class SyncServise private constructor(val context: Context) {
         return rootFolder
     }
 
-    fun retrivePhotos(accountAddress: String, appFolder: Boolean) = retriveFiles(accountAddress, appFolder)
+    fun retrivePhotos(accountAddress: String, appFolder: Boolean) = retriveFiles(accountAddress)//, appFolder)
 
-    fun deleteFile(rootFolderName: String, fileName: String, mimeType: String, appFolder: Boolean) {
+    fun deleteFile(rootFolderName: String, fileName: String, mimeType: String) {//, appFolder: Boolean) {
         val fileQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, mimeType)).addFilter(Filters.eq(SearchableField.TITLE, fileName)).build()
         val backupFolderQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, rootFolderName)).build()
         val rootFolder = getRootFolder(appFolder)
@@ -116,7 +118,7 @@ class SyncServise private constructor(val context: Context) {
 
     // Private
 
-    private fun retriveFiles(accountAddress: String, appFolder: Boolean) {
+    private fun retriveFiles(accountAddress: String) {//}, appFolder: Boolean) {
         val rootFolder = getRootFolder(appFolder)
         val backupFolderQuerry = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, accountAddress)).build()
         val fileQuerry = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, MIME_TYPE_DATABASE)).build()
@@ -135,7 +137,7 @@ class SyncServise private constructor(val context: Context) {
         }
     }
 
-    fun retriveDataBase(accountAddress: String, dataBaseName: String, appFolder: Boolean, onSuccess: () -> Unit, onError: () -> Unit) {
+    fun retriveDataBase(accountAddress: String, dataBaseName: String, onSuccess: () -> Unit, onError: () -> Unit) {
         val rootFolder = getRootFolder(appFolder)
         val backupFolderQuerry = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, accountAddress)).build()
         val fileQuerry = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, MIME_TYPE_DATABASE)).addFilter(Filters.eq(SearchableField.TITLE, dataBaseName)).build()
@@ -265,11 +267,11 @@ class SyncServise private constructor(val context: Context) {
     }
 
     private fun deleteFolderAsDriveResource(driveResource: DriveResource): Task<Void> {
-        val driveResource_ = mDriveResourceClient!!.delete(driveResource)
-        driveResource_
+        val driveResourse_ = mDriveResourceClient!!.delete(driveResource)
+        driveResourse_
                 .addOnCompleteListener {}
                 .addOnFailureListener {}
-        return driveResource_
+        return driveResourse_
     }
 }
 

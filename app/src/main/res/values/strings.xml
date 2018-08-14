@@ -61,7 +61,7 @@
   <string name="request_permission">This sample needs camera permission.</string>
   <string name="camera_error">This device doesn\'t support Camera2 API.</string>
   <string name="front_side_of_your_drivers_license">Front Side of the document</string>
-  <string name="driver_licence">Driver Licence</string>
+  <string name="driver_license">Driver License</string>
   <string name="you_cant_use_camera_vithout_permissions">You can\'t use camera without permission</string>
   <string name="face_photo">Face photo</string>
   <string name="back_side_your_drivers_license">Back Side your Drivers License</string>

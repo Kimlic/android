@@ -52,7 +52,7 @@
       android:layout_marginStart="8dp"
       android:layout_marginEnd="8dp"
       android:gravity="center"
-      android:text="@string/driver_licence"
+      android:text="@string/driver_license"
       android:textColor="@android:color/white"
       android:textSize="@dimen/title_text_size"
       app:layout_constraintEnd_toEndOf="parent"

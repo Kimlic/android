@@ -48,10 +48,10 @@ class AccountRecoveryActivity : BaseActivity() {
 
             Log.d("TAGPHRASELIST", "account address = " + accountAddress)
 
-            recoveryViewModel!!.retrivePhoto(accountAddress)
+            recoveryViewModel!!.retrievePhoto(accountAddress)
 
             KimlicDB.getInstance()!!.close()
-            recoveryViewModel!!.retriveDatabase(accountAddress = accountAddress, onSuccess = {
+            recoveryViewModel!!.retrieveDatabase(accountAddress = accountAddress, onSuccess = {
                 Prefs.authenticated = true
                 Prefs.currentAccountAddress = accountAddress
                 KimlicDB.getInstance()
@@ -59,7 +59,7 @@ class AccountRecoveryActivity : BaseActivity() {
                 successfull()
             }, onError = {
                 showPopup("Error", "Recovery Error")
-                return@retriveDatabase
+                return@retrieveDatabase
             })
 
         }

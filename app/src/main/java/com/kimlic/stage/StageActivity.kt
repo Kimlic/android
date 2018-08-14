@@ -1,6 +1,5 @@
 package com.kimlic.stage
 
-import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
@@ -50,15 +49,14 @@ class StageActivity : BaseActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
-        Log.d("TAGINSTAGE", "from fragment, requestCode = " + requestCode)
         when (requestCode) {
             SCAN_REQUEST_CODE -> {
                 val result = IntentIntegrator.parseActivityResult(resultCode, data)
-                if (result.getContents() != null) {
+                if (result.contents != null) {
+                    val url = result.contents
                     Log.d("TAGSCANNER", "Scanned")
                     Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show()
-                    PresentationManager.vendors(this)
+                    PresentationManager.vendors(this, url = url)
                 }
             }
 

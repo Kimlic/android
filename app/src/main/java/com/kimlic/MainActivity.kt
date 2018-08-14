@@ -3,14 +3,10 @@ package com.kimlic
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.os.Handler
 import android.util.Log
 import com.android.volley.Request
 import com.android.volley.Response
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.kimlic.API.KimlicRequest
-import com.kimlic.API.SyncObject
 import com.kimlic.API.VolleySingleton
 import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
@@ -73,9 +69,9 @@ class MainActivity : BaseActivity() {
         val headers = mapOf<String, String>(Pair("account-address", walletAddress))
 
         val addressRequest = KimlicRequest(Request.Method.GET, QuorumURL.config.url, headers, null, Response.Listener {
-            val responceCode = JSONObject(it).getJSONObject("meta").optString("code").toString()
+            val responseCode = JSONObject(it).getJSONObject("meta").optString("code").toString()
 
-            if (!responceCode.startsWith("2")) {
+            if (!responseCode.startsWith("2")) {
                 errorPopup(getString(R.string.server_error)); return@Listener
             }
             val contextContractAddress = JSONObject(it).getJSONObject("data").optString("context_contract")
