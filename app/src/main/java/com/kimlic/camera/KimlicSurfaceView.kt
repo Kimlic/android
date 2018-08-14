@@ -22,7 +22,7 @@ class KimlicSurfaceView(context: Context, val camera: Camera) : SurfaceView(cont
         surfaceHolder.addCallback(this)
     }
 
-    // SurfaceHolder.BaseCallback implementation
+    // Life
 
     override fun surfaceCreated(holder: SurfaceHolder?) {
         try {

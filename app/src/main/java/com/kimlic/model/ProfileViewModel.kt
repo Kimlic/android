@@ -6,41 +6,40 @@ import android.arch.lifecycle.ViewModel
 import com.google.android.gms.tasks.OnSuccessListener
 import com.kimlic.db.entity.Address
 import com.kimlic.db.entity.Contact
+import com.kimlic.db.entity.Document
 import com.kimlic.db.entity.User
 import com.kimlic.preferences.Prefs
+import java.io.File
 import java.util.*
 
 class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     // Variables
 
-    private var risksLiveData: MutableLiveData<Boolean>?
+    private var risksLiveData: MutableLiveData<Boolean>? = object : MutableLiveData<Boolean>() {}
     private var repository: ProfileRepository
 
     // Database
 
 
     init {
-        risksLiveData = object : MutableLiveData<Boolean>() {}
         risksLiveData!!.value = (Prefs.isPasscodeEnabled && Prefs.isTouchEnabled)
         repository = ProfileRepository.instance
     }
 
-    //Life
-
-    override fun onCleared() {
-        super.onCleared()
-    }
-
     // Publick
+
+    // User
 
     fun insertUser(user: User) = repository.insertUser(user)
 
+    fun addUserName(accountAddress: String, firstName: String, lastName: String) = repository.addUserName(accountAddress = accountAddress, firstName = firstName, lastName = lastName)
+
     fun getUser(accountAddress: String) = repository.getUser(accountAddress)
 
-    fun dropUser(accountAddres: String) = repository.deleteUser(accountAddres)
+    fun deleteUser(accountAddres: String) = repository.deleteUser(accountAddres)
 
-    fun addUserContact(accountAddress: String, contact: Contact) = repository.contactAdd(accountAddress, contact)
+    fun getUserLive() = repository.userLive(accountAddress = Prefs.currentAccountAddress)
 
     fun deleteUserContact(accountAddress: String, contactType: String) = repository.contactDelete(accountAddress, contactType)
 
@@ -58,6 +57,8 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     }
 
+    // Address
+
     fun addUserAddress(value: String, data: ByteArray) {
         val fileName = UUID.nameUUIDFromBytes(data).toString()
         repository.addUserAddress(accountAddress = Prefs.currentAccountAddress, value = value, fileName = fileName, data = data)
@@ -67,25 +68,34 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     fun deleteAddres(addressId: Long) = repository.addressDelete(addressId)
 
-    fun getUserLive() = repository.userLive(accountAddress = Prefs.currentAccountAddress)
-
     fun getUserAddressesLive(accountAddress: String) = repository.addressLive(accountAddress = accountAddress)
 
     //fun getUserAddress(accountAddress: String) = repository.address(accountAddress = accountAddress)
 
     fun getUserContactsLive(accountAddress: String) = repository.userContactsLive(accountAddress)
 
+    // Documents
+
     fun getUserDocumentsLive() = repository.documentsLive(accountAddress = Prefs.currentAccountAddress)
 
+    fun getUserDocuments() = repository.documents(accountAddres = Prefs.currentAccountAddress)
+
+    fun getUserDocument(documentType: String) = repository.document(Prefs.currentAccountAddress, documentType = documentType)
+
     fun getUserDocumentPhotos(accountAddress: String, documentType: String) = repository.userDocumentPhotos(accountAddress = accountAddress, documentType = documentType)
+
+    fun updateDocument(document: Document) = repository.updateDocument(document)
+
+    fun deleteDocument(documentId: Long) = repository.documentDelete(documentId = documentId)
+
+    // Contact
+
+    fun addContact(accountAddress: String, contact: Contact) = repository.contactAdd(accountAddress, contact)
 
     //fun getUserAddressPhoto(accountAddress: String) = repository.userAddressPhoto(accountAddress = accountAddress)
 
     //fun addUserDocument(accountAddress: String, document: Document_): Long = repository.documentAdd(accountAddress = accountAddress, document = document)
 
-    fun addUserName(accountAddress: String, firstName: String, lastName: String) = repository.addUserName(accountAddress = accountAddress, firstName = firstName, lastName = lastName)
-
-    fun deleteDocument(documentId: Long) = repository.documentDelete(documentId = documentId)
 
     //fun addDocumentPhoto(vararg photos: Photo) = repository.addDocumentPhoto(photos = *photos)
 
@@ -96,6 +106,9 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
     fun syncProfile(accountAddress: String) = repository.syncProfile(accountAddress = accountAddress)
 
     fun senDoc(docType: String, onSuccess: () -> Unit, onError: () -> Unit) {
-        repository.sendDoc(docType, onSuccess = onSuccess, onError = onError)
+//        repository.sendDoc(docType, onSuccess = onSuccess, onError = onError)
+        repository.mySendoc(docType, onSuccess = onSuccess, onError = onError)
     }
+
+    fun clearAllFiles() = repository.clearAllFiles()
 }

@@ -2,13 +2,12 @@ package com.kimlic.documents
 
 import android.arch.lifecycle.ViewModelProviders
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Matrix
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
-import com.android.volley.Response
 import com.kimlic.BaseActivity
 import com.kimlic.R
+import com.kimlic.db.entity.Document
 import com.kimlic.db.entity.Photo
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.utils.AppConstants
@@ -20,14 +19,15 @@ class DocumentDetails : BaseActivity() {
     // Variables
 
     private lateinit var documentType: String
-    private lateinit var accountAddres: String
+    private lateinit var accountAddress: String
     private lateinit var model: ProfileViewModel
 
     private lateinit var photoList: List<Photo>
     private lateinit var photoMap: Map<String, String>
 
-    private var target: String = "preview"
 
+    private lateinit var currentDocument: Document
+    private var target: String = "preview"
 
     // Life
 
@@ -44,62 +44,62 @@ class DocumentDetails : BaseActivity() {
         model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
         documentType = intent.extras.getString(AppConstants.documentType.key, "")
-        accountAddres = intent.extras.getString(AppConstants.accountAddress.key, "")
+        accountAddress = intent.extras.getString(AppConstants.accountAddress.key, "")
+
         target = intent.extras.getString("target", "preview")
 
 
-        photoList = model.getUserDocumentPhotos(accountAddress = accountAddres, documentType = documentType)
+        currentDocument = model.getUserDocument(documentType = documentType)
+
+        Log.d("TAGDETAILS", "Current document! - - - - - - - - " + currentDocument.toString())
+
+        photoList = model.getUserDocumentPhotos(accountAddress = accountAddress, documentType = documentType)
         photoMap = photoList.map { it.type to it.file }.toMap()
 
-        fillData(photos = photoMap, documentType = documentType)
-
+        fillData(photos = photoMap, document = currentDocument)
 
         when (target) {
             "send" -> {
+                addBt.text = getString(R.string.verify_document)
                 addBt.setOnClickListener {
                     if (validFields()) {
 
-                        val listNames = photoList.map { it.file }.toList()
-//                        photoList.iterator().forEach {
-//                            model.senDoc(it.file, onSuccess = {}, onError = {})
-//                        }
-                        model.senDoc(docType = documentType, onSuccess = {}, onError = {})
+                        currentDocument.number = numberEt.text.toString()
+                        currentDocument.expireDate = expireDateEt.text.toString()
+                        currentDocument.country = countryEt.text.toString()
+                        model.updateDocument(currentDocument)
+
+                        model.senDoc(docType = documentType, onSuccess = {}, onError = { showPopup("Error", message = "Unable to proceed") })
+
+                        finish()
                     }
                 }
             }
             "preview" -> {
-//                addBt.text = "Ok"
-//                addBt.setOnClickListener {
-//                    if (validFields()) {
-//                        Log.d("TAG", "preview clicked!!!!!!!!!!!!!!!!!!")
-//
-//
-//                    }
-//                }
-
+                addBt.text = getString(R.string.add_details)
                 addBt.setOnClickListener {
                     if (validFields()) {
-
-                        val listNames = photoList.map { it.file }.toList()
-//                        photoList.iterator().forEach {
-//                            model.senDoc(it.file, onSuccess = {}, onError = {})
-//                        }
-                        model.senDoc(docType = documentType, onSuccess = {}, onError = {})
+                        currentDocument.number = numberEt.text.toString()
+                        currentDocument.expireDate = expireDateEt.text.toString()
+                        currentDocument.country = countryEt.text.toString()
+                        model.updateDocument(currentDocument)
+                        finish()
                     }
                 }
             }
         }
-
-
         backBt.setOnClickListener { finish() }
     }
 
-
-    private fun fillData(photos: Map<String, String>, documentType: String) {
+    private fun fillData(photos: Map<String, String>, document: Document) {
         frontIv.setImageBitmap(croped(photos.get("front")!!))
         backIv.setImageBitmap(croped(photos.get("back")!!))
 
-        when (documentType) {
+        numberEt.text = Editable.Factory.getInstance().newEditable(document.number)
+        expireDateEt.text = Editable.Factory.getInstance().newEditable(document.expireDate)
+        countryEt.text = Editable.Factory.getInstance().newEditable(document.country)
+
+        when (document.type) {
             AppConstants.documentPassport.key -> titleTv.text = getString(R.string.passport)
             AppConstants.documentLicense.key -> titleTv.text = getString(R.string.driver_licence)
             AppConstants.documentID.key -> titleTv.text = getString(R.string.id_card)
@@ -113,7 +113,7 @@ class DocumentDetails : BaseActivity() {
     // @formatter:off
     private fun validFields(): Boolean {
         val error = getString(R.string.error)
-        val docError = if (documentEt.text.length < 3) { documentEt.error = error; false } else { documentEt.error= null; true }
+        val docError = if (numberEt.text.length < 3) { numberEt.error = error; false } else { numberEt.error= null; true }
         val dateError =  if (expireDateEt.text.length < 3) { expireDateEt.error = error; false } else { expireDateEt.error = null; true }
         val countryError =  if (countryEt.text.length < 3) { countryEt.error = error; false  } else { countryEt.error = null; true}
 

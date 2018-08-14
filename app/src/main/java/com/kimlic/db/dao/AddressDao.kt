@@ -14,10 +14,10 @@ interface AddressDao {
     @Update
     fun update(address: Address)
 
-    @Query("SELECT A.id, A.user_id, A.state, A.value FROM address as A INNER JOIN user ON A.user_id = user.id WHERE user.account_address =:accountAddress ")
+    @Query("SELECT A.id, A.user_id, A.state, A.value, A.inserted_at FROM address as A INNER JOIN user ON A.user_id = user.id WHERE user.account_address =:accountAddress ")
     fun selectLive(accountAddress: String): LiveData<Address>
 
-    @Query("SELECT A.id, A.user_id, A.state, A.value FROM address as A INNER JOIN user ON A.user_id = user.id WHERE user.account_address =:accountAddress ")
+    @Query("SELECT A.id, A.user_id, A.state, A.value, A.inserted_at FROM address as A INNER JOIN user ON A.user_id = user.id WHERE user.account_address =:accountAddress ")
     fun select(accountAddress: String): Address
 
     @Query("DELETE FROM address WHERE address.id =:addressId")

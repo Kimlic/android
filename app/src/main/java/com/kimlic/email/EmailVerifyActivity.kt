@@ -70,14 +70,11 @@ class EmailVerifyActivity : BaseActivity() {
 
         setupDigitListner()
 
-        digitsList[3].setOnEditorActionListener(object : TextView.OnEditorActionListener {
-            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
-
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    hideKeyboard(); return true
-                }
-                return false
+        digitsList[3].setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                hideKeyboard(); return@OnEditorActionListener true
             }
+            false
         })
     }
 
@@ -88,18 +85,18 @@ class EmailVerifyActivity : BaseActivity() {
             code = StringBuilder()
             digitsList.forEach { code.append(it.text.toString()) }
 
-            val params = mapOf(Pair("code", code.toString()))
-            val headers = emptyMap<String, String>().toMutableMap(); headers.put("account-address", Prefs.currentAccountAddress)
+            val params = mapOf("code" to code.toString())
+            val headers = mapOf("account-address" to Prefs.currentAccountAddress)
 
             val request = KimlicRequest(Request.Method.POST, QuorumURL.emailVerifyApprove.url, headers, params,
                     Response.Listener { response ->
-                        val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
+                        val responseCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
                         val status = JSONObject(response).getJSONObject("data").optString("status").toString()
 
-                        if (responceCode.startsWith("2") && status.equals("ok")) {
+                        if (responseCode.startsWith("2") && status == "ok") {
                             insertEmail(email)
                             verifyBt.isClickable = true
-                            successfull()
+                            successful()
                         } else {
                             verifyBt.isClickable = true
                             digitsList.forEach { it.text.clear() }
@@ -108,13 +105,14 @@ class EmailVerifyActivity : BaseActivity() {
                     },
                     Response.ErrorListener { unableToProceed() }
             )
+
             VolleySingleton.getInstance(this).addToRequestQueue(request)
         } else showToast(getString(R.string.pin_is_not_enterd))
     }
 
     private fun insertEmail(email: String) {
         val emailContact = Contact(value = email, type = "email", approved = true)
-        model.addUserContact(Prefs.currentAccountAddress, emailContact)
+        model.addContact(Prefs.currentAccountAddress, emailContact)
     }
 
     private fun pinEntered(): Boolean {
@@ -124,7 +122,7 @@ class EmailVerifyActivity : BaseActivity() {
         return (count == 4)
     }
 
-    private fun successfull() {
+    private fun successful() {
         val fragment = EmailSuccesfulFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
@@ -148,7 +146,7 @@ class EmailVerifyActivity : BaseActivity() {
                 val position = Integer.valueOf(it.tag.toString())
 
                 override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
-                    if (event!!.getAction() != KeyEvent.ACTION_DOWN)
+                    if (event!!.action != KeyEvent.ACTION_DOWN)
                         return false
 
                     when (keyCode) {
@@ -170,14 +168,14 @@ class EmailVerifyActivity : BaseActivity() {
                 private fun moveNext(keyCode: Int) {
                     if (position < 4) {
                         digitsList.elementAt(position).text = Editable.Factory.getInstance().newEditable(keyCode.toString())
-                        digitsList.elementAt(position).background = resources.getDrawable(R.drawable.square_edittext_background_dark)
+                        digitsList.elementAt(position).background = resources.getDrawable(R.drawable.square_edittext_background_dark, null)
 
                         if (position < 3) digitsList.elementAt(position + 1).requestFocus()
                     }
                 }
 
                 private fun moveBack() {
-                    digitsList.elementAt(position).background = resources.getDrawable(R.drawable.square_edittext_background_trasparent)
+                    digitsList.elementAt(position).background = resources.getDrawable(R.drawable.square_edittext_background_trasparent, null)
                     digitsList.elementAt(position).text = Editable.Factory.getInstance().newEditable("")
 
                     if (position > 0) digitsList.elementAt(position - 1).requestFocus()

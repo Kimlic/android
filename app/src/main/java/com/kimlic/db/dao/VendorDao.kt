@@ -6,7 +6,6 @@ import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
 import com.kimlic.db.entity.VendorDocument
-import com.kimlic.vendors.Document_
 
 @Dao
 interface VendorDao {

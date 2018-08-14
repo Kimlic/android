@@ -14,5 +14,6 @@ enum class QuorumURL(val url: String) {
     phoneVerify("https://mobile-api-test.kimlic.com/api/verifications/phone"),
     phoneVierifyApprove("https://mobile-api-test.kimlic.com/api/verifications/phone/approve"),
 
-    vendors("https://elixir.aws.pp.ua/api/vendors")
+    vendors("https://elixir.aws.pp.ua/api/vendors"),
+
 }

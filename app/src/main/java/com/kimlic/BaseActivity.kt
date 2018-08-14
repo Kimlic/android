@@ -109,18 +109,18 @@ abstract class BaseActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    fun saveBitmap(fileName: String, bitmap: Bitmap) {
-        val fos: FileOutputStream?
-        val file = File(KimlicApp.applicationContext().filesDir.toString() + "/" + fileName)
-        try {
-            fos = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 60, fos)
-            fos.flush()
-            fos.close()
-        } catch (e: Exception) {
-            throw Exception("Can't write data to internal storage")
-        }
-    }
+//    fun saveBitmap(fileName: String, bitmap: Bitmap) {
+//        val fos: FileOutputStream?
+//        val file = File(KimlicApp.applicationContext().filesDir.toString() + "/" + fileName)
+//        try {
+//            fos = FileOutputStream(file)
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, 60, fos)
+//            fos.flush()
+//            fos.close()
+//        } catch (e: Exception) {
+//            throw Exception("Can't write data to internal storage")
+//        }
+//    }
 
     fun rotateBitmap(sourse: Bitmap, angel: Float): Bitmap {
         val matrix = Matrix()

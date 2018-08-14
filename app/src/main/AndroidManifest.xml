@@ -111,6 +111,7 @@
       android:name=".name.NameActivity"/>
     <activity
       android:label="Verify ID document"
+      android:launchMode="singleTask"
       android:name=".documents.DocumentVerifyChooseActivity"/>
     <activity
       android:label="Email"

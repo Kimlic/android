@@ -105,14 +105,32 @@ class VendorsActivity : BaseActivity() {
             addItemDecoration(divider)
         }
 
-        // OnCliclListner fo recycler elements!!! If user has this document - go to details to show else go to create new document
         documentAdapter.setOnStageItemClick(object : OnStageItemClick {
             override fun onClick(view: View, position: Int, type: String, approved: Boolean, state: String) {
+                val presentDocList = profileModel.getUserDocuments().map { it.type }.toList()
+
                 when (type) {
-                    AppConstants.documentPassport.key -> PresentationManager.detailsDocument(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentPassport.key)
-                    AppConstants.documentID.key -> PresentationManager.detailsDocument(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentID.key)
-                    AppConstants.documentLicense.key -> PresentationManager.detailsDocument(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentLicense.key)
-                    AppConstants.documentPermit.key -> PresentationManager.detailsDocument(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentPermit.key)
+                    AppConstants.documentPassport.key -> {
+                        if (presentDocList.contains("passport"))
+                            PresentationManager.detailsDocumentSend(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentPassport.key)
+                        else PresentationManager.verifyPassport(this@VendorsActivity)
+                    }
+                    AppConstants.documentID.key -> {
+                        if (presentDocList.contains("id"))
+                            PresentationManager.detailsDocumentSend(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentID.key)
+                        else PresentationManager.verifyIDCard(this@VendorsActivity)
+                    }
+
+                    AppConstants.documentLicense.key -> {
+                        if (presentDocList.contains("license"))
+                            PresentationManager.detailsDocumentSend(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentLicense.key)
+                        else PresentationManager.verifyDriverLicence(this@VendorsActivity)
+                    }
+                    AppConstants.documentPermit.key -> {
+                        if (presentDocList.contains("permit"))
+                            PresentationManager.detailsDocumentSend(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentPermit.key)
+                        else PresentationManager.verifyPermit(this@VendorsActivity)
+                    }
                 }
             }
         })

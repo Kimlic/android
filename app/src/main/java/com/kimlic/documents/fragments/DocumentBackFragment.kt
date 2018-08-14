@@ -37,7 +37,7 @@ class DocumentBackFragment : CameraBaseFragment() {
         setupUI()
     }
 
-    // Prvate
+    // Private
 
     private fun setupUI() {
         backBt.setOnClickListener { activity!!.finish() }

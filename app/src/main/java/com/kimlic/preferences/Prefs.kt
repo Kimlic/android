@@ -22,7 +22,7 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
         isTutorialShown = false
         isPasscodeOffered = false
         isRecoveryOffered = false
-        isUserPhotoTaken = false
+       // isUserPhotoTaken = false
         isUserGoogleSigned = false
 
         // User profile preferences
@@ -85,9 +85,9 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
 
     // User photo
 
-    var isUserPhotoTaken: Boolean
-        get() = getBoolean(AppConstants.isUserPhotoTaken.key)
-        set(value) = setBoolean(AppConstants.isUserPhotoTaken.key, value)
+//    var isUserPhotoTaken: Boolean
+//        get() = getBoolean(AppConstants.isUserPhotoTaken.key)
+//        set(value) = setBoolean(AppConstants.isUserPhotoTaken.key, value)
 
     // Profile preferences
 

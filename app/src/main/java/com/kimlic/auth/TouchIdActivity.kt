@@ -65,7 +65,7 @@ class TouchIdActivity : BaseActivity() {
         PresentationManager.stage(this)
     }
 
-    fun propouseTouch() {
+    private fun propouseTouch() {
         val touchFragment = TouchIDFragment.newInstance()
         touchFragment.setCallback(object : BaseCallback {
             override fun callback() {

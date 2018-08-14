@@ -129,7 +129,7 @@ class PhoneVerifyActivity : BaseActivity() {
 
     private fun insertPhone(phone: String) {
         val phoneContact = Contact(value = phone, type = "phone", approved = true)
-        model.addUserContact(Prefs.currentAccountAddress, phoneContact)
+        model.addContact(Prefs.currentAccountAddress, phoneContact)
         //KimlicDB.getInstance()!!.contactDao().insert(phoneContact)
     }
 
