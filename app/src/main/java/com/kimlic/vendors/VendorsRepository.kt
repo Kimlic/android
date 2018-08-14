@@ -3,7 +3,6 @@ package com.kimlic.vendors
 import android.os.Handler
 import com.android.volley.Request.Method.GET
 import com.android.volley.Response
-import com.android.volley.VolleyError
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -11,7 +10,7 @@ import com.kimlic.API.KimlicRequest
 import com.kimlic.API.VolleySingleton
 import com.kimlic.KimlicApp
 import com.kimlic.db.KimlicDB
-import com.kimlic.db.SyncServise
+import com.kimlic.db.SyncService
 import com.kimlic.db.entity.VendorDocument
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.QuorumURL
@@ -40,28 +39,24 @@ class VendorsRepository private constructor() {
     fun initDocuments(accountAddress: String) {
         val headers = mapOf(Pair("account-address", accountAddress), Pair("accept", "application/vnd.mobile-api.v1+json"))
 
-        val vendorsRequest = KimlicRequest(GET, QuorumURL.vendors.url, headers, emptyMap(), object : Response.Listener<String> {
-            override fun onResponse(response: String?) {
+        val vendorsRequest = KimlicRequest(GET, QuorumURL.vendors.url, headers, emptyMap(),
+                Response.Listener { response ->
+                    val responseCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
+                    if (!responseCode.startsWith("2")) return@Listener
 
-                val responseCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
-                if (!responseCode.startsWith("2")) return
+                    val data = JSONObject(response).getJSONObject("data").toString()
+                    val type = object : TypeToken<Vendors>() {}.type
 
-                val data = JSONObject(response).getJSONObject("data").toString()
-                val type = object : TypeToken<Vendors>() {}.type
+                    val responseObject: Vendors = Gson().fromJson(data, type)
+                    val entityList: MutableList<VendorDocument> = mutableListOf()
 
-                val responseObject: Vendors = Gson().fromJson(data, type)
-                val entityList: MutableList<VendorDocument> = mutableListOf()
-
-                responseObject.documents.forEach { entityList.add(JsonToVenDocMapper().transform(it)) }
-                vendorDao.insertDocs(entityList.toList())
-                syncDataBase()
-                //progressLiveData.postValue(false)
-            }
-        }, object : Response.ErrorListener {
-            override fun onErrorResponse(error: VolleyError?) {
-
-            }
-        })
+                    responseObject.documents.forEach { entityList.add(JsonToVenDocMapper().transform(it)) }
+                    vendorDao.insertDocs(entityList.toList())
+                    syncDataBase()
+                    //progressLiveData.postValue(false)
+                },
+                Response.ErrorListener {}
+        )
 
         VolleySingleton.getInstance(KimlicApp.applicationContext()).requestQueue.add(vendorsRequest)
     }
@@ -94,7 +89,7 @@ class VendorsRepository private constructor() {
 
     private fun syncDataBase() {
         googleSignInAccount?.let {
-            Handler().postDelayed({ SyncServise.getInstance(appFolder = false).backupDatabase(Prefs.currentAccountAddress, "kimlic.db", onSuccess = {}) }, 0)
+            Handler().postDelayed({ SyncService.getInstance().backupDatabase(Prefs.currentAccountAddress, "kimlic.db", onSuccess = {}) }, 0)
         }
     }
 

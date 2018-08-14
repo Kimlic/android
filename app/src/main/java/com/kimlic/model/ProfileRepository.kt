@@ -23,7 +23,7 @@ import com.kimlic.API.SyncObject
 import com.kimlic.API.VolleySingleton
 import com.kimlic.KimlicApp
 import com.kimlic.db.KimlicDB
-import com.kimlic.db.SyncServise
+import com.kimlic.db.SyncService
 import com.kimlic.db.dao.*
 import com.kimlic.db.entity.*
 import com.kimlic.preferences.Prefs
@@ -236,7 +236,7 @@ class ProfileRepository private constructor() {
         googleSignInAccount = GoogleSignIn.getLastSignedInAccount(context)
         Log.d("TAGSYNC", "syncDatabase " + googleSignInAccount)
         googleSignInAccount?.let {
-            Handler().postDelayed({ SyncServise.getInstance(appFolder = false).backupDatabase(Prefs.currentAccountAddress, "kimlic.db", onSuccess = {}) }, 0)
+            Handler().postDelayed({ SyncService.getInstance().backupDatabase(Prefs.currentAccountAddress, "kimlic.db", onSuccess = {}) }, 0)
         }
     }
 
@@ -250,7 +250,7 @@ class ProfileRepository private constructor() {
         googleSignInAccount?.let {
             val filePath = KimlicApp.applicationContext().filesDir.toString() + "/" + fileName
             Handler().postDelayed({
-                SyncServise.getInstance(appFolder = false).backupFile(accountAddress = Prefs.currentAccountAddress, filePath = filePath, fileDescription = "photo", onSuccess = {})
+                SyncService.getInstance().backupFile(accountAddress = Prefs.currentAccountAddress, filePath = filePath, fileDescription = SyncService.PHOTO_DESCRIPTION, onSuccess = {})
             }, 0)
         }
     }
@@ -510,7 +510,7 @@ class ProfileRepository private constructor() {
 //    }
 
 
-    fun sendDoc(documentType: String, dynamicUrl: String = "http://elixir.aws.pp.ua/api/medias", country: String, onSuccess: () -> Unit, onError: () -> Unit) {
+    fun sendDoc(documentType: String, dynamicUrl: String = "https://elixir.aws.pp.ua/api/medias", country: String, onSuccess: () -> Unit, onError: () -> Unit) {
         val documents = documentDao.select(Prefs.currentAccountAddress)
         val document = documents.filter { it.type.equals(documentType) }
         val user = userDao.select(Prefs.currentAccountAddress)
@@ -554,17 +554,20 @@ class ProfileRepository private constructor() {
         val receipt = QuorumKimlic.getInstance().setFieldMainData("{\"face\":${shaFace},\"document-front\":${shaFront},\"document-back\":${shaBack}}", dataType)//)"documents.id_card")
         Log.e("RECEIPT", receipt.toString())
 
-
-        send(fileString = faceString, type = "face", doc = doc, firstName = firstName, lastName = lastName, country = country, udid = udid, url = dynamicUrl, listener = Response.Listener { response ->
-            //Log.e("FACE", "SENT: " + response.toString())
-            send(fileString = frontString, type = "document-front", doc = doc, firstName = firstName, lastName = lastName, country = country, udid = udid, url = dynamicUrl, listener = Response.Listener { response ->
-                //Log.e("FRONT", "SENT: " + response.toString())
-                send(fileString = backString, type = "document-back", doc = doc, firstName = dynamicUrl, lastName = lastName, country = country, udid = udid, url = dynamicUrl, listener = Response.Listener { response ->
-                    //Log.e("BACK", "SENT: " + response.toString())
-                    onSuccess()
+        Handler().post {
+            send(fileString = faceString, type = "face", doc = doc, firstName = firstName, lastName = lastName, country = country, udid = udid, url = dynamicUrl, listener = Response.Listener { response ->
+                //Log.e("FACE", "SENT: " + response.toString())
+                send(fileString = frontString, type = "document-front", doc = doc, firstName = firstName, lastName = lastName, country = country, udid = udid, url = dynamicUrl, listener = Response.Listener { response ->
+                    //Log.e("FRONT", "SENT: " + response.toString())
+                    send(fileString = backString, type = "document-back", doc = doc, firstName = dynamicUrl, lastName = lastName, country = country, udid = udid, url = dynamicUrl, listener = Response.Listener { response ->
+                        //Log.e("BACK", "SENT: " + response.toString())
+                        onSuccess()
+                    }, onError = onError)
                 }, onError = onError)
             }, onError = onError)
-        }, onError = onError)
+        }
+
+
     }
 
     private fun send(fileString: String, type: String, doc: String, firstName: String, lastName: String, country: String, udid: String, url: String, listener: Response.Listener<JSONObject>, onError: () -> Unit) {

@@ -22,14 +22,12 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
         isTutorialShown = false
         isPasscodeOffered = false
         isRecoveryOffered = false
-       // isUserPhotoTaken = false
-        isUserGoogleSigned = false
 
         // User profile preferences
 
-       // auth = ""
+        // auth = ""
         currentAccountAddress = ""
-        documentToverify = ""
+        //documentToverify = ""
     }
 
     // Preferences
@@ -101,8 +99,8 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
 
     //val currentId: Long = 0L
 
-    var documentToverify: String
-        get() = getString(AppConstants.documentToVerify.key)
-        set(value) = setString(AppConstants.documentToVerify.key, value)
+//    var documentToverify: String
+//        get() = getString(AppConstants.documentToVerify.key)
+//        set(value) = setString(AppConstants.documentToVerify.key, value)
 
 }

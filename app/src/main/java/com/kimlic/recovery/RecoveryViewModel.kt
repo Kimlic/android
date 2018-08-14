@@ -7,24 +7,24 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.kimlic.KimlicApp
 import com.kimlic.db.KimlicDB
-import com.kimlic.db.SyncServise
+import com.kimlic.db.SyncService
 
 class RecoveryViewModel : ViewModel() {
 
     // Variables
     private val TAG = this::class.java.simpleName
-    private val syncService: SyncServise = SyncServise.getInstance(appFolder = false)
+    private val syncService: SyncService = SyncService.getInstance()
     private var googleSignInAccount: GoogleSignInAccount? = null
     private var db: KimlicDB? = null
 
     // Public
 
-    fun retrievePhoto(accountAddres: String) {
+    fun retrievePhoto(accountAddress: String) {
         googleSignInAccount = GoogleSignIn.getLastSignedInAccount(KimlicApp.applicationContext())
 
         googleSignInAccount?.let {
             Handler().postDelayed({
-                syncService.retrievePhotos(accountAddress = accountAddres, appFolder = false)
+                syncService.retrievePhotos(accountAddress = accountAddress)
             }, 0)
         }
     }
@@ -45,7 +45,7 @@ class RecoveryViewModel : ViewModel() {
 
             if (!db!!.isOpen) {
                 Handler().postDelayed({
-                    syncService.retriveDataBase(accountAddress = accountAddress, dataBaseName = "kimlic.db", onSuccess = {
+                    syncService.retrieveDataBase(accountAddress = accountAddress, dataBaseName = "kimlic.db", onSuccess = {
                         onSuccess()
 //                        KimlicDB.getInstance()
                         Log.d(TAG, "Database restored successfully")

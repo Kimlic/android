@@ -12,7 +12,7 @@ import com.kimlic.API.VolleySingleton
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.db.entity.User
-import com.kimlic.db.SyncServise
+import com.kimlic.db.SyncService
 import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.preferences.Prefs
@@ -58,10 +58,10 @@ class SignupRecoveryActivity : BaseActivity() {
                 }
             }
             GOOGLE_SIGNE_IN_REQUEST_CODE -> {
-                if (resultCode != Activity.RESULT_OK) {
-                    Prefs.isUserGoogleSigned = false; return
-                }
-                Prefs.isUserGoogleSigned = true
+//                if (resultCode != Activity.RESULT_OK) {
+//                    Prefs.isUserGoogleSigned = false; return
+//                }
+//                Prefs.isUserGoogleSigned = true
             }
         }
     }
@@ -70,7 +70,7 @@ class SignupRecoveryActivity : BaseActivity() {
 
     private fun setupUI() {
         model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-        SyncServise.signIn(this, GOOGLE_SIGNE_IN_REQUEST_CODE)
+        SyncService.signIn(this, GOOGLE_SIGNE_IN_REQUEST_CODE)
 
         createBt.setOnClickListener {
             initNewUserRegistaration()
@@ -119,8 +119,6 @@ class SignupRecoveryActivity : BaseActivity() {
             QuorumKimlic.getInstance().setAccountStorageAdapterAddress(accountStorageAdapterAddress)
             PresentationManager.tutorials(this)
         }, onError = Response.ErrorListener {
-            val json = it.networkResponse.toString()
-            Log.e("LOG_TAG", json)
             errorPopup(getString(R.string.server_error))
         })
         VolleySingleton.getInstance(this@SignupRecoveryActivity).requestQueue.add(addressRequest)

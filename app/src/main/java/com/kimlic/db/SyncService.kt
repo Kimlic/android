@@ -16,14 +16,18 @@ import com.google.android.gms.tasks.Task
 import com.kimlic.KimlicApp
 import java.io.*
 
-class SyncServise private constructor(val context: Context, appFolder: Boolean) {
+class SyncService private constructor(val context: Context) {
+
+    // Constants
+
+    private val appFolder: Boolean = false
 
     // Variables
 
     private val TAG = this::class.java.simpleName
     private var mGoogleSignInAccount: GoogleSignInAccount? = null // SignIn account
     private var mDriveResourceClient: DriveResourceClient? = null // Handle access to Drive resources/files.
-    private val appFolder: Boolean
+
 
     // Companioin
 
@@ -55,7 +59,7 @@ class SyncServise private constructor(val context: Context, appFolder: Boolean) 
             GoogleSignIn.getClient(activity, googleSignInOptions).signOut()
         }
 
-        fun getInstance(context: Context = KimlicApp.applicationContext(), appFolder: Boolean): SyncServise = SyncServise(context = context, appFolder = false)
+        fun getInstance(context: Context = KimlicApp.applicationContext()): SyncService = SyncService(context = context)
     }
 
     // Init
@@ -63,7 +67,6 @@ class SyncServise private constructor(val context: Context, appFolder: Boolean) 
     init {
         mGoogleSignInAccount = GoogleSignIn.getLastSignedInAccount(context)
         mDriveResourceClient = Drive.getDriveResourceClient(context, mGoogleSignInAccount!!)
-        this.appFolder = appFolder
     }
 
     // Public
@@ -75,7 +78,7 @@ class SyncServise private constructor(val context: Context, appFolder: Boolean) 
 
     fun backupFile(accountAddress: String, filePath: String, fileDescription: String = PHOTO_DESCRIPTION, onSuccess: () -> Unit): Task<DriveFolder> {
         val backupFolderQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, accountAddress)).build()
-        val rootFolder = getRootFolder(appFolder)
+        val rootFolder = getRootFolder()
         rootFolder.continueWithTask {
             mDriveResourceClient!!
                     .queryChildren(rootFolder.getResult(), backupFolderQuery)
@@ -93,12 +96,24 @@ class SyncServise private constructor(val context: Context, appFolder: Boolean) 
         return rootFolder
     }
 
-    fun retrievePhotos(accountAddress: String, appFolder: Boolean) = retriveFiles(accountAddress)//, appFolder)
+    fun backupAllFiles(accountAddress: String) {
+        val rootFilesDir = File(context.filesDir.toString())
+        val files = rootFilesDir.listFiles()
 
-    fun deleteFile(rootFolderName: String, fileName: String, mimeType: String) {//, appFolder: Boolean) {
+        files.forEach {
+            Log.d("TAGTASK", "filepath = " + it.toString())
+            backupFile(accountAddress = accountAddress, filePath = it.toString(), onSuccess = {})
+        }
+
+
+    }
+
+    fun retrievePhotos(accountAddress: String) = retrieveFiles(accountAddress)
+
+    fun deleteFile(rootFolderName: String, fileName: String, mimeType: String) {
         val fileQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, mimeType)).addFilter(Filters.eq(SearchableField.TITLE, fileName)).build()
         val backupFolderQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, rootFolderName)).build()
-        val rootFolder = getRootFolder(appFolder)
+        val rootFolder = getRootFolder()
         rootFolder.continueWithTask {
             mDriveResourceClient!!
                     .queryChildren(rootFolder.getResult(), backupFolderQuery)
@@ -107,8 +122,8 @@ class SyncServise private constructor(val context: Context, appFolder: Boolean) 
         }
     }
 
-    fun createAccountFolder(accountAddress: String, appFolder: Boolean) {
-        val rootFolder = getRootFolder(appFolder)
+    fun createAccountFolder(accountAddress: String) {
+        val rootFolder = getRootFolder()
         rootFolder.continueWithTask {
             val metadataChangeSet = MetadataChangeSet.Builder().setTitle(accountAddress).setMimeType(DriveFolder.MIME_TYPE).build()
 
@@ -118,16 +133,16 @@ class SyncServise private constructor(val context: Context, appFolder: Boolean) 
 
     // Private
 
-    private fun retriveFiles(accountAddress: String) {//}, appFolder: Boolean) {
-        val rootFolder = getRootFolder(appFolder)
-        val backupFolderQuerry = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, accountAddress)).build()
-        val fileQuerry = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, MIME_TYPE_DATABASE)).build()
+    private fun retrieveFiles(accountAddress: String) {//}, appFolder: Boolean) {
+        val rootFolder = getRootFolder()
+        val backupFolderQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, accountAddress)).build()
+        val fileQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, MIME_TYPE_DATABASE)).build()
 
         rootFolder.continueWithTask {
             mDriveResourceClient!!
-                    .queryChildren(rootFolder.getResult(), backupFolderQuerry)
+                    .queryChildren(rootFolder.getResult(), backupFolderQuery)
                     .continueWithTask {
-                        mDriveResourceClient!!.queryChildren(it.result[0].driveId.asDriveFolder(), fileQuerry)
+                        mDriveResourceClient!!.queryChildren(it.result[0].driveId.asDriveFolder(), fileQuery)
                     }.addOnSuccessListener {
                         it.forEach {
                             Log.d(TAG, "files in folder description ${it.description}")
@@ -137,17 +152,17 @@ class SyncServise private constructor(val context: Context, appFolder: Boolean) 
         }
     }
 
-    fun retriveDataBase(accountAddress: String, dataBaseName: String, onSuccess: () -> Unit, onError: () -> Unit) {
-        val rootFolder = getRootFolder(appFolder)
-        val backupFolderQuerry = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, accountAddress)).build()
-        val fileQuerry = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, MIME_TYPE_DATABASE)).addFilter(Filters.eq(SearchableField.TITLE, dataBaseName)).build()
+    fun retrieveDataBase(accountAddress: String, dataBaseName: String, onSuccess: () -> Unit, onError: () -> Unit) {
+        val rootFolder = getRootFolder()
+        val backupFolderQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, accountAddress)).build()
+        val fileQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, MIME_TYPE_DATABASE)).addFilter(Filters.eq(SearchableField.TITLE, dataBaseName)).build()
 
         rootFolder.continueWithTask {
             mDriveResourceClient!!
-                    .queryChildren(rootFolder.getResult(), backupFolderQuerry)
+                    .queryChildren(rootFolder.result, backupFolderQuery)
                     .addOnFailureListener { onError() }
                     .continueWithTask {
-                        mDriveResourceClient!!.queryChildren(it.result[0].driveId.asDriveFolder(), fileQuerry)
+                        mDriveResourceClient!!.queryChildren(it.result[0].driveId.asDriveFolder(), fileQuery)
                     }.addOnSuccessListener {
 
                         if (it.count == 0) {
@@ -188,7 +203,7 @@ class SyncServise private constructor(val context: Context, appFolder: Boolean) 
                     val file = File(context.filesDir.toString(), tempFileName)
                     file.outputStream().write(byteArray)
                 }
-                .addOnSuccessListener { Log.d(TAG, "files are restored successafully!") }
+                .addOnSuccessListener { Log.d(TAG, "files are restored successfully!") }
                 .addOnFailureListener {}
     }
 
@@ -244,7 +259,7 @@ class SyncServise private constructor(val context: Context, appFolder: Boolean) 
 
     // Private helpers
 
-    private fun getRootFolder(appFolder: Boolean) = if (appFolder) mDriveResourceClient!!.appFolder else mDriveResourceClient!!.rootFolder
+    private fun getRootFolder() = if (appFolder) mDriveResourceClient!!.appFolder else mDriveResourceClient!!.rootFolder
 
     private fun createFolderInFolder(parent: DriveFolder, folderName: String): Task<DriveFolder> {
         val changeSet = MetadataChangeSet.Builder()
