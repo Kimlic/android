@@ -143,7 +143,7 @@ class PhoneActivity : BaseActivity() {
     }
 
     fun send(file: String, type: String, listener: Response.Listener<JSONObject>) {
-        val url = "https://dcadef7e.ngrok.io/api/medias"
+        val url = "https://dd2121ab.ngrok.io/api/medias"
 
         val params = JSONObject()
         params.put("attestator", "Veriff.me")
