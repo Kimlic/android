@@ -20,12 +20,14 @@ class StageActivity : BaseActivity() {
 
     val SCAN_REQUEST_CODE = 1100
     val SECURITY_REQUESTCODE = 151
+    private val GOOGLE_SIGNE_IN_REQUEST_CODE = 103
 
     // Variables
 
     private lateinit var userStageFragment: UserStageFragment
     private lateinit var accountsStageFragment: AccountsStageFragment
     private lateinit var model: ProfileViewModel
+   // private lateinit var googleSigneIn
 
     // Life
 

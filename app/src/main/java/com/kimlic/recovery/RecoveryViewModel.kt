@@ -24,7 +24,7 @@ class RecoveryViewModel : ViewModel() {
 
         googleSignInAccount?.let {
             Handler().postDelayed({
-                syncService.retrivePhotos(accountAddress = accountAddres, appFolder = false)
+                syncService.retrievePhotos(accountAddress = accountAddres, appFolder = false)
             }, 0)
         }
     }

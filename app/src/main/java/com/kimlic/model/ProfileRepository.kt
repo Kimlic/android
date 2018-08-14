@@ -510,7 +510,7 @@ class ProfileRepository private constructor() {
 //    }
 
 
-    fun sendDoc(documentType: String, dynamicUrl: String = "https://dcadef7e.ngrok.io/api/medias", country: String, onSuccess: () -> Unit, onError: () -> Unit) {
+    fun sendDoc(documentType: String, dynamicUrl: String = "http://elixir.aws.pp.ua/api/medias", country: String, onSuccess: () -> Unit, onError: () -> Unit) {
         val documents = documentDao.select(Prefs.currentAccountAddress)
         val document = documents.filter { it.type.equals(documentType) }
         val user = userDao.select(Prefs.currentAccountAddress)
@@ -578,7 +578,7 @@ class ProfileRepository private constructor() {
         params.put("first_name", firstName)
         params.put("last_name", lastName)
         params.put("device", "android")
-        params.put("country", country)
+        params.put("country", country.toUpperCase())
         params.put("fileString", fileString)
         Log.d("PARAMS", params.toString())
 

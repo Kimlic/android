@@ -93,7 +93,7 @@ class SyncServise private constructor(val context: Context, appFolder: Boolean) 
         return rootFolder
     }
 
-    fun retrivePhotos(accountAddress: String, appFolder: Boolean) = retriveFiles(accountAddress)//, appFolder)
+    fun retrievePhotos(accountAddress: String, appFolder: Boolean) = retriveFiles(accountAddress)//, appFolder)
 
     fun deleteFile(rootFolderName: String, fileName: String, mimeType: String) {//, appFolder: Boolean) {
         val fileQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, mimeType)).addFilter(Filters.eq(SearchableField.TITLE, fileName)).build()
