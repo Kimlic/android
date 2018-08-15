@@ -136,7 +136,13 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
 
         params.pictureFormat = ImageFormat.JPEG
         params.jpegQuality = 80
-        params.focusMode = (Camera.Parameters.FOCUS_MODE_AUTO)
+
+//        try {
+//            params.focusMode = (Camera.Parameters.FOCUS_MODE_AUTO)
+//        } catch (e: Exception) {
+//
+//        }
+
         params.setPictureSize(currentWidth, currentHight)
 
         camera.parameters = params

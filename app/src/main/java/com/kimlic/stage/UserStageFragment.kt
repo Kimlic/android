@@ -1,5 +1,6 @@
 package com.kimlic.stage
 
+import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
@@ -14,7 +15,10 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.kimlic.BaseFragment
 import com.kimlic.R
-import com.kimlic.db.entity.*
+import com.kimlic.db.entity.Address
+import com.kimlic.db.entity.Contact
+import com.kimlic.db.entity.Document
+import com.kimlic.db.entity.User
 import com.kimlic.managers.PresentationManager
 import com.kimlic.passcode.PasscodeActivity
 import com.kimlic.preferences.Prefs
@@ -27,7 +31,7 @@ import kotlinx.android.synthetic.main.fragment_stage_user.*
 import kotlinx.android.synthetic.main.item_stage.view.*
 import java.io.File
 
-class UserStageFragment : BaseFragment() {
+class UserStageFragment : BaseFragment(), LifecycleObserver {
 
     // Constants
 
@@ -71,7 +75,7 @@ class UserStageFragment : BaseFragment() {
         setupContacts()
         setupAddress()
         setupDocuments()
-        setupListners()
+        setupListeners()
     }
 
     // Private Helpers
@@ -136,11 +140,7 @@ class UserStageFragment : BaseFragment() {
     }
 
     private fun setupAddress() {
-        model.getUserAddressesLive(Prefs.currentAccountAddress).observe(this, object : Observer<Address> {
-            override fun onChanged(address: Address?) {
-                setupAddressField(address?.value ?: "")
-            }
-        })
+        model.getUserAddressesLive(Prefs.currentAccountAddress).observe(this, Observer<Address> { address -> setupAddressField(address?.value ?: "") })
     }
 
     private fun setupDocuments() {
@@ -168,14 +168,10 @@ class UserStageFragment : BaseFragment() {
             }
         })
 
-        model.getUserDocumentsLive().observe(this@UserStageFragment, object : Observer<List<Document>> {
-            override fun onChanged(documents: List<Document>?) {
-                documentsAdapter.setDocumentsList(documents!!)
-            }
-        })
+        model.getUserDocumentsLive().observe(this@UserStageFragment, Observer<List<Document>> { documents -> documentsAdapter.setDocumentsList(documents!!) })
     }
 
-    private fun setupListners() {
+    private fun setupListeners() {
         settingsBt.setOnClickListener { PresentationManager.settings(activity!!) }
         nameItem.setOnClickListener { PresentationManager.name(activity!!) }
 
@@ -197,9 +193,10 @@ class UserStageFragment : BaseFragment() {
         if (File(activity!!.filesDir.toString() + "/" + fileName).exists()) takePhotoLl.visibility = View.GONE else takePhotoLl.visibility = View.VISIBLE
     }
 
-    private fun manageRisks(value: Boolean) {
-//        risksTv.visibility = if (Prefs.isPasscodeEnabled && Prefs.isTouchEnabled) View.GONE else View.VISIBLE
-        risksTv.visibility = if (value) View.GONE else View.VISIBLE
+    //@OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun manageRisks(value: Boolean) {
+        risksTv?.visibility = if (Prefs.isPasscodeEnabled && Prefs.isTouchEnabled) View.GONE else View.VISIBLE
+//        risksTv.visibility = if (value) View.GONE else View.VISIBLE
     }
 
     private fun showPhoto(fileName: String) {
@@ -227,16 +224,16 @@ class UserStageFragment : BaseFragment() {
     }
 
     private fun setupNameField(name: String = "") {
-        nameArrow.background = resources.getDrawable(if (name.equals("")) Icons_.ARROW_BLUE.icon else Icons_.ARROW_WHITE.icon, null)
-        nameTv.text = if (name.equals("")) getString(R.string.add_your_full_name) else name
-        nameTv.setTextColor(if (name.equals("")) resources.getColor(R.color.lightBlue, null) else resources.getColor(android.R.color.white, null))
+        nameArrow.background = resources.getDrawable(if (name == "") Icons_.ARROW_BLUE.icon else Icons_.ARROW_WHITE.icon, null)
+        nameTv.text = if (name == "") getString(R.string.add_your_full_name) else name
+        nameTv.setTextColor(if (name == "") resources.getColor(R.color.lightBlue, null) else resources.getColor(android.R.color.white, null))
     }
 
     private fun setupAddressField(address: String = "") {
-        addressItem.iconIv.background = resources.getDrawable(if (address.equals("")) Icons_.LOCATION_BLUE.icon else Icons_.LOCATION_WHITE.icon, null)
-        addressItem.arrowIv.background = resources.getDrawable(if (address.equals("")) Icons_.ARROW_BLUE.icon else Icons_.ARROW_WHITE.icon, null)
-        addressItem.contentTv.text = if (address.equals("")) getString(R.string.add_your_address) else address
-        addressItem.contentTv.setTextColor(if (address.equals("")) resources.getColor(R.color.lightBlue, null) else resources.getColor(android.R.color.white, null))
+        addressItem.iconIv.background = resources.getDrawable(if (address == "") Icons_.LOCATION_BLUE.icon else Icons_.LOCATION_WHITE.icon, null)
+        addressItem.arrowIv.background = resources.getDrawable(if (address == "") Icons_.ARROW_BLUE.icon else Icons_.ARROW_WHITE.icon, null)
+        addressItem.contentTv.text = if (address == "") getString(R.string.add_your_address) else address
+        addressItem.contentTv.setTextColor(if (address == "") resources.getColor(R.color.lightBlue, null) else resources.getColor(android.R.color.white, null))
     }
 }
 

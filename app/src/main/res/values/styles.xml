@@ -21,6 +21,12 @@
     <item name="android:textSize">@dimen/subtitle_text_size</item>
   </style>
 
+  <!--Date picker theme-->
+
+  <style name="DatePickerStyle" parent="Theme.AppCompat.Light.Dialog">
+    <item name="colorAccent">@color/darkBlue</item>
+  </style>
+
   <!--Passcode circle button-->
 
   <style name="PasscodeCircleButtonOk" parent="PasscodeCircleButton">

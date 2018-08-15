@@ -3,9 +3,12 @@ package com.kimlic
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
 import android.util.Log
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.Response
+import com.android.volley.RetryPolicy
 import com.kimlic.API.KimlicRequest
 import com.kimlic.API.VolleySingleton
 import com.kimlic.managers.PresentationManager
@@ -66,14 +69,16 @@ class MainActivity : BaseActivity() {
 
         // 2. Get entry point of the Quorum
 
-        val headers = mapOf<String, String>(Pair("account-address", walletAddress))
+        val headers = mapOf(Pair("account-address", walletAddress))
 
-        val addressRequest = KimlicRequest(Request.Method.GET, QuorumURL.config.url, headers, null, Response.Listener {
+        val addressRequest = object : KimlicRequest(Request.Method.GET, QuorumURL.config.url, headers, null, Response.Listener {
             val responseCode = JSONObject(it).getJSONObject("meta").optString("code").toString()
 
             if (!responseCode.startsWith("2")) {
+                Log.d("TAGSERVER", "in server response in response")
                 errorPopup(getString(R.string.server_error)); return@Listener
             }
+            Log.d("TAGSERVER", "in server response in response NO PROBLEM")
             val contextContractAddress = JSONObject(it).getJSONObject("data").optString("context_contract")
             QuorumKimlic.getInstance().setKimlicContractsContextAddress(contextContractAddress)
 
@@ -93,9 +98,15 @@ class MainActivity : BaseActivity() {
 //
 //                override fun onTick(millisUntilFinished: Long) {}
 //            }.start()
+            Log.d("TAGSERVER", "inResponce error listner  = ${it?.networkResponse?.statusCode}")
             errorPopup(getString(R.string.server_error))
-        })
-        VolleySingleton.getInstance(this@MainActivity).requestQueue.add(addressRequest)
+        }) {
+            init {
+                retryPolicy = DefaultRetryPolicy(2000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+            }
+        }
+
+        Handler().postDelayed({ VolleySingleton.getInstance(this@MainActivity).requestQueue.add(addressRequest) }, 1500)
     }
 
     private fun initFragment() {

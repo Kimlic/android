@@ -21,7 +21,7 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
 
     init {
-        risksLiveData!!.value = (Prefs.isPasscodeEnabled && Prefs.isTouchEnabled)
+        risksLiveData!!.postValue(Prefs.isPasscodeEnabled && Prefs.isTouchEnabled)
         repository = ProfileRepository.instance
     }
 
@@ -32,6 +32,8 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
     fun insertUser(user: User) = repository.insertUser(user)
 
     fun addUserName(accountAddress: String, firstName: String, lastName: String) = repository.addUserName(accountAddress = accountAddress, firstName = firstName, lastName = lastName)
+
+    fun updateUser(user: User) = repository.updateUser(user)
 
     fun getUser(accountAddress: String) = repository.getUser(accountAddress)
 
@@ -105,8 +107,9 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     fun senDoc(docType: String, country: String, url: String, onSuccess: () -> Unit, onError: () -> Unit) {
 //        repository.sendDoc(docType, onSuccess = onSuccess, onError = onError)
-//        repository.mySendoc_(docType, onSuccess = onSuccess, onError = onError)
-        repository.sendDoc(documentType = docType, country = country, onSuccess = onSuccess, onError = onError)//, dynamicUrl = )
+        repository.mySendoc_(documentType = docType, country = country, onSuccess = onSuccess, onError = onError)//, dynamicUrl = "insert url fro qr Coed")
+
+        //repository.sendDoc(documentType = docType, country = country, onSuccess = onSuccess, onError = onError)//, dynamicUrl = )
     }
 
     fun clearAllFiles() = repository.clearAllFiles()

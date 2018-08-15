@@ -111,7 +111,7 @@ class PhoneActivity : BaseActivity() {
                 return false
             }
         })
-        nextBt.setOnClickListener { sendDoc() }
+        nextBt.setOnClickListener { managePhone() }
         countryEt.setOnClickListener { initDropList() }
         backBt.setOnClickListener { finish() }
     }
