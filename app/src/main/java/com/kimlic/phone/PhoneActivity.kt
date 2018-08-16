@@ -111,7 +111,7 @@ class PhoneActivity : BaseActivity() {
                 return false
             }
         })
-        nextBt.setOnClickListener { managePhone() }
+        nextBt.setOnClickListener { sendDoc() }
         countryEt.setOnClickListener { initDropList() }
         backBt.setOnClickListener { finish() }
     }
@@ -211,19 +211,23 @@ class PhoneActivity : BaseActivity() {
     }
     fun send(file: String, type: String, listener: Response.Listener<JSONObject>) {
 //        val url = "https://elixir.aws.pp.ua/api/medias"
-        val url = "https://dd2121ab.ngrok.io/api/medias"
+        val url = "https://5d1bdb9f.ngrok.io/api/medias"
 
+        // ID_CARD
+        // PASSPORT
+        // DRIVERS_LICENSE
+        // RESIDENCE_PERMIT_CARD
         val params = JSONObject()
         params.put("attestator", "Veriff.me")
         params.put("doc", "PASSPORT")
         params.put("type", type)
-        params.put("file", file)
         params.put("first_name", "John")
         params.put("last_name", "Doe")
         params.put("country", "UA")
         params.put("device", "android")
         params.put("udid", "\"dfPPl3RrZEk:APA91bGXIfSG0J_sX1Ts0e_3-WG1m6zpiirDkhJS7yo6gvWaF7yrteaTBdVt0cb8T9hxc1GbUVGdn7q6s3wwi8CtN2441Vi28mB1d4ptT0pwoMy-oz0Wo3jYqDO47aUA6YHu4vNNhSTQl-Cjn4M6eid_9Au6INMNXw\"")
         Log.e("PARAMS", params.toString())
+        params.put("file", file)
 
         val request = object : JsonObjectRequest(Request.Method.POST, url, params, listener, Response.ErrorListener { error ->
             Log.e("DOC RESPONSE ERROR", error.toString())
@@ -253,9 +257,20 @@ class PhoneActivity : BaseActivity() {
         val shaFront = Sha.sha256(frontImageString)
         val shaBack = Sha.sha256(backImageString)
 
+        // documents.id_card
+        // documents.passport
+        // documents.driver_license
+        // documents.residence_permit_card
+
         val receipt = QuorumKimlic.getInstance().setFieldMainData(
             "{\"face\":${shaFace},\"document-front\":${shaFront},\"document-back\":${shaBack}}",
             "documents.passport")
+
+        if (receipt.status == "0x0") {
+            Log.e("RECEIPT ERROR", receipt.toString())
+            return
+        }
+
         Log.e("RECEIPT", receipt.toString())
 
         send(faceImageString, "face", Response.Listener { response ->

@@ -5,6 +5,10 @@ import android.content.Context
 import android.os.Build
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
+import android.annotation.SuppressLint
+import java.security.SecureRandom
+import javax.net.ssl.*
+import javax.security.cert.X509Certificate
 
 
 class KimlicApp : Application() {

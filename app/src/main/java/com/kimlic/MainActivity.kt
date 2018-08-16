@@ -33,14 +33,20 @@ class MainActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
+        Log.e(TAG, "AAAAAAA")
         initFragment()
+        Log.e(TAG, "BBBBBBB")
         splashScreenShow()
-
+        Log.e(TAG, "CCCCCCC")
         if (Prefs.authenticated) {
             model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+            Log.e(TAG, "DDDDDDDDD")
             model.syncProfile(Prefs.currentAccountAddress)
+            Log.e(TAG, "EEEEEEEEE")
             quorumRequest()
+            Log.e(TAG, "FFFFFFFFF")
         } else {
+            Log.e(TAG, "GGGGGGGGG")
             object : CountDownTimer(3000, 3000) {
                 override fun onFinish() {
                     splashScreenHide(); PresentationManager.signupRecovery(this@MainActivity)
@@ -81,21 +87,21 @@ class MainActivity : BaseActivity() {
             val accountStorageAdapterAddress = QuorumKimlic.getInstance().accountStorageAdapter
             QuorumKimlic.getInstance().setAccountStorageAdapterAddress(accountStorageAdapterAddress)
             Log.e("AAAAA", "44444")
-            object : CountDownTimer(1500, 1500) {
-                override fun onFinish() {
-                    Log.e("AAAAA", "555555")
-                    continueApp()
-                }
-
-                override fun onTick(millisUntilFinished: Long) {}
-            }.start()
+//            object : CountDownTimer(1500, 1500) {
+//                override fun onFinish() {
+//                    Log.e("AAAAA", "555555")
+//                    continueApp()
+//                }
+//
+//                override fun onTick(millisUntilFinished: Long) {}
+//            }.start()
         }, Response.ErrorListener {
             //            object : CountDownTimer(1500, 1500) {
 //                override fun onFinish() { quorumRequest() }
 //
 //                override fun onTick(millisUntilFinished: Long) {}
 //            }.start()
-            errorPopup(getString(R.string.server_error))
+//            errorPopup(getString(R.string.server_error))
             Log.e("AAAAA", "6666666")
         })
         VolleySingleton.getInstance(this@MainActivity).requestQueue.add(addressRequest)

@@ -106,7 +106,7 @@ class SignupRecoveryActivity : BaseActivity() {
         val addressRequest = KimlicRequest(method = Request.Method.GET, url = QuorumURL.config.url, requestHeaders = headers, requestParams = null, onSuccess = Response.Listener {
             val json = JSONObject(it)
             val responceCode = json.getJSONObject("meta").optString("code").toString()
-
+            Log.e("AAAAAAA", json.toString())
             if (!responceCode.startsWith("2")) {
                 errorPopup(getString(R.string.server_error))
                 return@Listener
@@ -119,6 +119,7 @@ class SignupRecoveryActivity : BaseActivity() {
             QuorumKimlic.getInstance().setAccountStorageAdapterAddress(accountStorageAdapterAddress)
             PresentationManager.tutorials(this)
         }, onError = Response.ErrorListener {
+            Log.e("BBBBBBB", it.toString())
             errorPopup(getString(R.string.server_error))
         })
         VolleySingleton.getInstance(this@SignupRecoveryActivity).requestQueue.add(addressRequest)
