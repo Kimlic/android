@@ -35,7 +35,7 @@ class VolleySingleton(context: Context) {
         override fun createConnection(url: URL): HttpURLConnection {
             val httpsURLConnection = super.createConnection(url) as HttpsURLConnection
             try {
-                httpsURLConnection.sslSocketFactory = getSSLSocketFactory()
+                httpsURLConnection.sslSocketFactory = getSSLSocketFactory(context)
                 httpsURLConnection.hostnameVerifier = getHostnameVerifier()
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -52,47 +52,47 @@ class VolleySingleton(context: Context) {
         }
     }
 
-    fun getSSLSocketFactory(): SSLSocketFactory {
-        try {
-            val sslContext = SSLContext.getInstance("SSL")
-            sslContext.init(null, getTrustManager(), SecureRandom())
-            return sslContext.socketFactory
-        } catch (e: Exception) {
-            throw RuntimeException(e)
-        }
-    }
-
-    private fun getTrustManager(): Array<TrustManager> {
-        return arrayOf(object : X509TrustManager {
-            override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
-            override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
-            override fun getAcceptedIssuers(): Array<X509Certificate> {
-                return arrayOf()
-            }
-        })
-    }
-
-//    @Throws(CertificateException::class, KeyStoreException::class, IOException::class, NoSuchAlgorithmException::class, KeyManagementException::class)
-//    private fun getSSLSocketFactory(context: Context): SSLSocketFactory {
-//        val cf = CertificateFactory.getInstance("X.509")
-//        val caInput = context.resources.openRawResource(R.raw.emxcel) // File path: app\src\main\res\raw\your_cert.cer
-//        val ca = cf.generateCertificate(caInput)
-//        caInput.close()
-//
-//        val keyStore = KeyStore.getInstance("PKCS12")
-//        keyStore.load(null, null)
-//        keyStore.setCertificateEntry("ca", ca)
-//
-//        val tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm()
-//        val tmf = TrustManagerFactory.getInstance(tmfAlgorithm)
-//        tmf.init(keyStore)
-//
-//        val wrappedTrustManagers = getWrappedTrustManagers(tmf.trustManagers)
-//        val sslContext = SSLContext.getInstance("TLS")
-//        sslContext.init(null, wrappedTrustManagers, null)
-//
-//        return sslContext.socketFactory
+//    fun getSSLSocketFactory(): SSLSocketFactory {
+//        try {
+//            val sslContext = SSLContext.getInstance("SSL")
+//            sslContext.init(null, getTrustManager(), SecureRandom())
+//            return sslContext.socketFactory
+//        } catch (e: Exception) {
+//            throw RuntimeException(e)
+//        }
 //    }
+//
+//    private fun getTrustManager(): Array<TrustManager> {
+//        return arrayOf(object : X509TrustManager {
+//            override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
+//            override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
+//            override fun getAcceptedIssuers(): Array<X509Certificate> {
+//                return arrayOf()
+//            }
+//        })
+//    }
+
+    @Throws(CertificateException::class, KeyStoreException::class, IOException::class, NoSuchAlgorithmException::class, KeyManagementException::class)
+    private fun getSSLSocketFactory(context: Context): SSLSocketFactory {
+        val cf = CertificateFactory.getInstance("X.509")
+        val caInput = context.resources.openRawResource(R.raw.kimlic_com) // File path: app\src\main\res\raw\your_cert.cer
+        val ca = cf.generateCertificate(caInput)
+        caInput.close()
+
+        val keyStore = KeyStore.getInstance("PKCS12")
+        keyStore.load(null, null)
+        keyStore.setCertificateEntry("ca", ca)
+
+        val tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm()
+        val tmf = TrustManagerFactory.getInstance(tmfAlgorithm)
+        tmf.init(keyStore)
+
+        val wrappedTrustManagers = getWrappedTrustManagers(tmf.trustManagers)
+        val sslContext = SSLContext.getInstance("TLS")
+        sslContext.init(null, wrappedTrustManagers, null)
+
+        return sslContext.socketFactory
+    }
 
     private fun getWrappedTrustManagers(trustManagers: Array<TrustManager>): Array<TrustManager> {
         val originalTrustManager = trustManagers[0] as X509TrustManager

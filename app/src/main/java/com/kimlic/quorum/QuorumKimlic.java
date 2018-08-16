@@ -54,7 +54,7 @@ public class QuorumKimlic {
       mnemonic = generateMnemonic(context);
     }
 
-    return new QuorumKimlic(mnemonic);
+    return new QuorumKimlic(mnemonic, context);
   }
 
   public static void destroyInstance() {
@@ -115,12 +115,12 @@ public class QuorumKimlic {
 
   // Private
 
-  private QuorumKimlic(String mnemonic) {
+  private QuorumKimlic(String mnemonic, Context context) {
     sInstance = this;
     mMnemonic = mnemonic;
 
 //    mWeb3 = Web3.getInstance(QUORUM_URL).getWeb3();
-    mWeb3 = Web3.getInstance(QuorumURL.quorum.getUrl()).getWeb3();
+    mWeb3 = Web3.getInstance(QuorumURL.quorum.getUrl(), context).getWeb3();
     ECKeyPair keyPair = generateKeyPair(mMnemonic);
     mWalletAddress = generateAddress(keyPair);
     mCredentials = credentialsFrom(keyPair);
