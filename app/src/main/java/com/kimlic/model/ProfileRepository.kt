@@ -30,11 +30,14 @@ import com.kimlic.db.entity.*
 import com.kimlic.preferences.Prefs
 import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.quorum.crypto.Sha
+import com.kimlic.utils.AppConstants
 import com.kimlic.utils.QuorumURL
 import com.kimlic.utils.mappers.BitmapToByteArrayMapper
 import org.json.JSONObject
 import org.spongycastle.util.encoders.Base64
-import java.io.*
+import java.io.File
+import java.io.IOException
+import java.io.OutputStreamWriter
 import java.nio.charset.Charset
 import java.util.*
 
@@ -73,7 +76,6 @@ class ProfileRepository private constructor() {
         addressDao = db.addressDao()
         photoDao = db.photoDao()
         vendorDao = db.vendorDao()
-        //googleSignInAccount = GoogleSignIn.getLastSignedInAccount(KimlicApp.applicationContext())
         context = KimlicApp.applicationContext()
     }
 
@@ -95,8 +97,8 @@ class ProfileRepository private constructor() {
     fun userLive(accountAddress: String): LiveData<User> = userDao.selectLive(accountAddress)
 
     fun addUserPhoto(accountAddress: String, fileName: String, data: ByteArray) {
-        savePhoto_(fileName = fileName, data = data)
-        savePhoto_(fileName = "preview_" + fileName, data = cropedPreviewInByteArray(data))
+        savePhoto(fileName = fileName, data = data)
+        savePhoto(fileName = "preview_" + fileName, data = cropedPreviewInByteArray(data))
         val user = userDao.select(accountAddress = accountAddress)
         user.portraitFile = fileName
         user.portraitPreviewFile = "preview_" + fileName
@@ -118,10 +120,10 @@ class ProfileRepository private constructor() {
         val userId = userDao.select(accountAddress = accountAddress).id
         val address = Address(userId = userId, value = value)
         val addressId = addressDao.insert(address)
-        val addressPhoto = Photo(addressId = addressId, type = "address", file = fileName)
+        val addressPhoto = Photo(addressId = addressId, type = AppConstants.photoAddressType.key, file = fileName)
         photoDao.insert(photos = arrayOf(addressPhoto).asList())
         syncDataBase()
-        savePhoto_(fileName, data)
+        savePhoto(fileName, data)
     }
 
     fun addressUpdate(address: Address) {
@@ -166,13 +168,13 @@ class ProfileRepository private constructor() {
 
         photoDao.insert(photos =
         arrayOf(
-                Photo(documentId = documentId, file = portraitName, type = "portrait"),
-                Photo(documentId = documentId, file = frontName, type = "front"),
-                Photo(documentId = documentId, file = backName, type = "back")).asList())
+                Photo(documentId = documentId, file = portraitName, type = AppConstants.photoFaceType.key),
+                Photo(documentId = documentId, file = frontName, type = AppConstants.photoFrontType.key),
+                Photo(documentId = documentId, file = backName, type = AppConstants.photoBackType.key)).asList())
 
-        savePhoto_(portraitName, portraitData)
-        savePhoto_(frontName, frontData)
-        savePhoto_(backName, backData)
+        savePhoto(portraitName, portraitData)
+        savePhoto(frontName, frontData)
+        savePhoto(backName, backData)
         syncDataBase()
     }
 
@@ -188,7 +190,7 @@ class ProfileRepository private constructor() {
 
     // Private
 
-    fun savePhoto_(fileName: String, data: ByteArray) {
+    private fun savePhoto(fileName: String, data: ByteArray) {
         val data64 = Base64.toBase64String(data)
         writeToFile(context, fileName, data64)
         syncPhoto(fileName)
@@ -265,13 +267,13 @@ class ProfileRepository private constructor() {
         val headers = mapOf(Pair("account-address", accountAddress))
         val syncRequest = KimlicRequest(Request.Method.GET, QuorumURL.profileSync.url, headers, null,
                 Response.Listener {
-                    val responceCode = JSONObject(it).getJSONObject("meta").optString("code").toString()
+                    val responseCode = JSONObject(it).getJSONObject("meta").optString("code").toString()
 
-                    if (!responceCode.startsWith("2")) return@Listener
+                    if (!responseCode.startsWith("2")) return@Listener
 
-                    val jsonToParce = JSONObject(it).getJSONObject("data").getJSONArray("data_fields").toString()
+                    val jsonToParse = JSONObject(it).getJSONObject("data").getJSONArray("data_fields").toString()
                     val type = object : TypeToken<List<SyncObject>>() {}.type
-                    val approvedObjects: List<SyncObject> = Gson().fromJson(jsonToParce, type)
+                    val approvedObjects: List<SyncObject> = Gson().fromJson(jsonToParse, type)
                     val approved = approvedObjects.map { its -> its.name }
 
                     if (!approved.contains("phone")) contactDao.delete(Prefs.currentAccountAddress, "phone")
@@ -285,291 +287,64 @@ class ProfileRepository private constructor() {
 
     // RP request
 
-//    fun sendDoc_(docType: String, onSuccess: () -> Unit, onError: () -> Unit) {
-//        // Log.d("TAGSENDOC", "in repository senDoc")
-//        // val image: String = imageBase64(this)
-//
-//        val documents = documentDao.select(Prefs.currentAccountAddress)
-//        val document = documents.filter { it.type.equals(docType) }
-//        Log.d("TAGDOCUMENT", "doctype = " + docType)
-//        Log.d("TAGDOCUMENT", "chosen document - " + document)
-//
-//        val documentFotos = photoDao.selectUserPhotosByDocument(Prefs.currentAccountAddress, docType)
-//
-//
-//
-//        Log.d("TAGDOCUMENT", "photos = " + documentFotos.toString())
-////      val image: String = File(context.filesDir.toString() + "/" + fileName).readText(charset = Charset.defaultCharset())
-//
-//        val faceImage = File(context.filesDir.toString() + "/" + documentFotos.get(0).file).readText()
-//        val faceImageIS = File(context.filesDir.toString() + "/" + documentFotos.get(0).file).inputStream()
-//        val faceImageString = faceImageIS.bufferedReader().use { it.readText() }
-//
-//
-//        val frontImage = File(context.filesDir.toString() + "/" + documentFotos.get(0).file).readText()
-//        val frontImageIS = File(context.filesDir.toString() + "/" + documentFotos.get(1).file).inputStream()
-//        val frontImageString = frontImageIS.bufferedReader().use { it.readText() }
-//
-//        val backImage = File(context.filesDir.toString() + "/" + documentFotos.get(0).file).readText()
-//        val backImageIS = File(context.filesDir.toString() + "/" + documentFotos.get(2).file).inputStream()
-//        val backImageString = backImageIS.bufferedReader().use { it.readText() }
-//
-//
-//        val shaFace = Sha.sha256(faceImageString)
-//        val shaFront = Sha.sha256(frontImageString)
-//        val shaBack = Sha.sha256(backImageString)
-//
-//
-//        //val url = "https://elixir.aws.pp.ua/api/medias"
-//        val url = "https://098923f7.ngrok.io/api/medias"
-//
-//        val receipt = QuorumKimlic.getInstance().setFieldMainData(
-//                "{\"face\":${shaFace},\"document-front\":${shaFront},\"document-back\":${shaBack}}",
-//                "documents.id_card")
-//
-//        Log.e("RECEIPT", receipt.toString())
-//
-//        Log.e("ACCOUNT", Prefs.currentAccountAddress)
-//
-//        val paramsFace = JSONObject()
-//        paramsFace.put("attestator", "Veriff.me")
-//        paramsFace.put("doc", "ID_CARD")
-//        paramsFace.put("type", "face")
-//        paramsFace.put("file", faceImageString)
-//        Log.e("PARAMS", paramsFace.toString())
-//
-//        ///////////////////////////////////////////////////////////////////
-//        val faceRequest = object : JsonObjectRequest(Request.Method.POST, url, paramsFace, Response.Listener<JSONObject> { response ->
-//            Log.e("DOC RESPONSE", response.toString())
-//        }, Response.ErrorListener { error ->
-//
-//
-//            //unableToProceed()
-//        }) {
-//            init {
-//                setRetryPolicy(DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))
-//            }
-//
-//            @Throws(AuthFailureError::class)
-//            override fun getHeaders(): Map<String, String> {
-//                return mapOf(
-//                        Pair("Account-Address", Prefs.currentAccountAddress),
-//                        Pair("Content-Type", "application/json; charset=utf-8"),
-//                        Pair("Accept", "application/vnd.mobile-api.v1+json")
-//                )
-//            }
-//        }
-//        /////////////////////////////////////////////////////////////////////
-//
-//        val paramsFront = JSONObject()
-//        paramsFront.put("attestator", "Veriff.me")
-//        paramsFront.put("doc", "ID_CARD")
-//        paramsFront.put("type", "front")
-//        paramsFront.put("file", frontImageString)
-//        Log.e("PARAMS", paramsFront.toString())
-//        val frontRequest = object : JsonObjectRequest(Request.Method.POST, url, paramsFront, Response.Listener<JSONObject> { response ->
-//            Log.e("DOC RESPONSE", response.toString())
-//        }, Response.ErrorListener { error ->
-//
-//
-//            //unableToProceed()
-//        }) {
-//            init {
-//                setRetryPolicy(DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))
-//            }
-//
-//            @Throws(AuthFailureError::class)
-//            override fun getHeaders(): Map<String, String> {
-//                return mapOf(
-//                        Pair("Account-Address", Prefs.currentAccountAddress),
-//                        Pair("Content-Type", "application/json; charset=utf-8"),
-//                        Pair("Accept", "application/vnd.mobile-api.v1+json")
-//                )
-//            }
-//        }
-//        /////////////////////////////////////////////////////////////////////
-//        val paramsBack = JSONObject()
-//        paramsBack.put("attestator", "Veriff.me")
-//        paramsBack.put("doc", "ID_CARD")
-//        paramsBack.put("type", "back")
-//        paramsBack.put("file", backImageString)
-//        Log.e("PARAMS", paramsBack.toString())
-//        val backRequest = object : JsonObjectRequest(Request.Method.POST, url, paramsBack, Response.Listener<JSONObject> { response ->
-//            Log.e("DOC RESPONSE", response.toString())
-//        }, Response.ErrorListener { error ->
-//
-//            //unableToProceed()
-//        }) {
-//            init {
-//                setRetryPolicy(DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))
-//            }
-//
-//            @Throws(AuthFailureError::class)
-//            override fun getHeaders(): Map<String, String> {
-//                return mapOf(
-//                        Pair("Account-Address", Prefs.currentAccountAddress),
-//                        Pair("Content-Type", "application/json; charset=utf-8"),
-//                        Pair("Accept", "application/vnd.mobile-api.v1+json")
-//                )
-//            }
-//        }
-//        //////////////////////////////////////////////////
-//        VolleySingleton.getInstance(context).addToRequestQueue(faceRequest)
-////        VolleySingleton.getInstance(context).addToRequestQueue(frontRequest)
-////        VolleySingleton.getInstance(context).addToRequestQueue(backRequest)
-//
-//    }
-//
-//    val url = "https://elixir.aws.pp.ua/api/medias"
-//     val url = "https://67a9c1a3.ngrok.io/api/medias"
-
-//    fun mySendoc_(documentType: String, dynamicUrl: String = "https://67a9c1a3.ngrok.io/api/medias", onSuccess: () -> Unit, onError: () -> Unit) {
-//        val requestList = mutableListOf<KimlicRequest>()
-//        val datas = mutableListOf<String>()
-//        val dataType: String
-//        val docType: String
-//        val dataValue: String
-//
-//        //@formatter:off
-//        when (documentType) {
-//            "passport" -> { docType = "PASSPORT"; dataType = "documents.passport" }
-//            "id" -> { docType = "ID_CARD"; dataType = "documents.id_card" }
-//            "license" -> { docType = "DRIVERS_LICENSE"; dataType = "documents.drivers_license" }
-//            "permit" -> { docType = "RESIDENCE_PERMIT_CARD"; dataType = "documents.residence_permit_card"}
-//            else -> { docType = ""; dataType = "" }
-//        }
-//        //@formatter:on
-//
-//        val document = documentDao.select(accountAddress = Prefs.currentAccountAddress, documentType = documentType)
-//        val documentPhotoList = photoDao.selectUserPhotosByDocument(accountAddress = Prefs.currentAccountAddress, documentType = documentType)
-//        val vendorDocument = vendorDao.select().find { it.type.equals(docType) }
-//
-//        if (vendorDocument!!.contexts.contains("face")) {
-//            val faceImage = File(context.filesDir.toString() + "/" + documentPhotoList.get(0).file).readText()
-//            val faceParams = mapOf("attestator" to "Veriff.me", "doc" to docType, "type" to "face", "file" to faceImage)
-//            val shaFace = Sha.sha256(faceImage)
-//            datas.add("\"face\":${shaFace}")
-//            val faceRequest = KimlicRequest(POST, dynamicUrl, headers(), faceParams, Response.Listener { }, Response.ErrorListener { onError })
-//            requestList.add(faceRequest)
-//        }
-//
-//        if (vendorDocument.contexts.contains("document-front")) {
-//            val frontImage = File(context.filesDir.toString() + "/" + documentPhotoList.get(1).file).readText()
-//            val frontParams = mapOf("attestator" to "Veriff.me", "doc" to docType, "type" to "document-front", "file" to frontImage)
-//            val shaFront = Sha.sha256(frontImage)
-//            datas.add("\"document-front\":${shaFront}")
-//            val frontRequest = KimlicRequest(POST, dynamicUrl, headers(), frontParams, Response.Listener { }, Response.ErrorListener { onError })
-//            requestList.add(frontRequest)
-//        }
-//
-//        if (vendorDocument.contexts.contains("document-back")) {
-//            val backImage = File(context.filesDir.toString() + "/" + documentPhotoList.get(2).file).readText()
-//            val backParams = mapOf("attestator" to "Veriff.me", "doc" to docType, "type" to "document-back", "file" to backImage)
-//            val shaBack = Sha.sha256(backImage)
-//            datas.add("\"document-back\":${shaBack}")
-//            val backRequest = KimlicRequest(POST, dynamicUrl, headers(), backParams, Response.Listener { }, Response.ErrorListener { onError })
-//            requestList.add(backRequest)
-//        }
-//
-//        dataValue = "{" + datas.joinToString(",") + "}"
-//
-//        val receipt = QuorumKimlic.getInstance().setFieldMainData(dataValue, dataType)
-//
-//
-//        Log.d("TAGSENDOC", "receipt before")
-//        receipt?.let {
-//            Log.d("TAGSENDOC", "receipt  ${it}")
-//            requestList.forEach { request ->
-//                VolleySingleton.getInstance(context).addToRequestQueue(request)
-//            }
-//        }
-//    }
-
-    // Private helpers
-
-    private fun headers(): HashMap<String, String> {
-        val headers = HashMap<String, String>()
-        headers["Account-Address"] = Prefs.currentAccountAddress
-        headers["Content-Type"] = "application/json; charset=utf-8"
-        headers["Accept"] = "application/vnd.mobile-api.v1+json"
-        return headers
-    }
-
-
-    //    fun sendDoc(documentType: String, dynamicUrl: String = "https://elixir.aws.pp.ua/api/medias", country: String, onSuccess: () -> Unit, onError: () -> Unit) {
-    fun sendDoc(documentType: String, dynamicUrl: String = "http://40.113.76.56:4000/api/medias", country: String, onSuccess: () -> Unit, onError: () -> Unit) {
+    fun sendDoc(documentType: String, url: String = "http://40.113.76.56:4000/api/medias", countrySH: String, onSuccess: () -> Unit, onError: () -> Unit) {
         val documents = documentDao.select(Prefs.currentAccountAddress)
-        val document = documents.filter { it.type.equals(documentType) }
+        val document = documents.filter { it.type == documentType }
         val user = userDao.select(Prefs.currentAccountAddress)
         val doc: String
         val dataType: String
         val firstName = user.firstName
         val lastName = user.lastName
         val udid = FirebaseInstanceId.getInstance().token!!
-        Log.d("TAGUDID", "udid = ${udid}")
-        Log.d("TAGUDID", "firstName = $firstName")
-        Log.d("TAGUDID", "lastNAme = $lastName")
-        Log.d("TAGUDID", "country = $country")
-        Log.d("TAGUDID", "url = $dynamicUrl")
 
         //@formatter:off
         when (documentType) {
             "passport" -> { doc = "PASSPORT"; dataType = "documents.passport" }
             "id" -> { doc = "ID_CARD"; dataType = "documents.id_card" }
-            "license" -> { doc = "DRIVERS_LICENSE"; dataType = "documents.drivers_license" }
+            "license" -> { doc = "DRIVERS_LICENSE"; dataType = "documents.driver_license" }
             "permit" -> { doc = "RESIDENCE_PERMIT_CARD"; dataType = "documents.residence_permit_card"}
             else -> { doc = ""; dataType = "" }
         }
         //@formatter:on
-
-        Log.d("TAGDOCUMENT", "doctype = " + documentType)
-        Log.d("TAGDOCUMENT", "chosen document - " + document)
-
         val documentPhotos = photoDao.selectUserPhotosByDocument(Prefs.currentAccountAddress, documentType)
 
-        val faceString = File(context.filesDir.toString() + "/" + documentPhotos[0].file).readText(charset = Charset.forName("UTF-8"))
-        val frontString = File(context.filesDir.toString() + "/" + documentPhotos[1].file).readText(charset = Charset.forName("UTF-8"))
-        val backString = File(context.filesDir.toString() + "/" + documentPhotos[2].file).readText(charset = Charset.forName("UTF-8"))
-
-        //val faceImageString =
+        val faceString = photoString(documentPhotos.first { it.type == AppConstants.photoFaceType.key }.file)
+        val frontString = photoString(documentPhotos.first { it.type == AppConstants.photoFrontType.key }.file)
+        val backString = photoString(documentPhotos.first { it.type == AppConstants.photoBackType.key }.file)
 
         val shaFace = Sha.sha256(faceString)
         val shaFront = Sha.sha256(frontString)
         val shaBack = Sha.sha256(backString)
 
-        val receipt = QuorumKimlic.getInstance().setFieldMainData("{\"face\":${shaFace},\"document-front\":${shaFront},\"document-back\":${shaBack}}", dataType)//)"documents.id_card")
-        Log.e("RECEIPT", receipt.toString())
+        val receipt = QuorumKimlic.getInstance().setFieldMainData("{\"face\":${shaFace},\"document-front\":${shaFront},\"document-back\":${shaBack}}", dataType)
 
-        Handler().post {
-            send(fileString = faceString, type = "face", doc = doc, firstName = firstName, lastName = lastName, country = country, udid = udid, url = dynamicUrl, listener = Response.Listener { response ->
-                //Log.e("FACE", "SENT: " + response.toString())
-                send(fileString = frontString, type = "document-front", doc = doc, firstName = firstName, lastName = lastName, country = country, udid = udid, url = dynamicUrl, listener = Response.Listener { response ->
-                    //Log.e("FRONT", "SENT: " + response.toString())
-                    send(fileString = backString, type = "document-back", doc = doc, firstName = dynamicUrl, lastName = lastName, country = country, udid = udid, url = dynamicUrl, listener = Response.Listener { response ->
-                        //Log.e("BACK", "SENT: " + response.toString())
-                        onSuccess()
-                    }, onError = onError)
-                }, onError = onError)
-            }, onError = onError)
+        if (receipt == null || receipt.status == "0x0") {
+            onError()
+            return
         }
 
-
+        Handler().post {
+            send(faceString, "face", doc, firstName, lastName, countrySH, udid, url, Response.Listener { _ ->
+                send(frontString, "document-front", doc, firstName, lastName, countrySH, udid, url, Response.Listener { _ ->
+                    send(backString, "document-back", doc, url, lastName, countrySH, udid, url, Response.Listener { _ ->
+                        onSuccess()
+                    }, onError)
+                }, onError)
+            }, onError)
+        }
     }
 
-    private fun send(fileString: String, type: String, doc: String, firstName: String, lastName: String, country: String, udid: String, url: String, listener: Response.Listener<JSONObject>, onError: () -> Unit) {
-//    private fun send(fileString: String, type: String, doc: String, firstName: String, lastName: String, country: String, udid: String? = "", url: String, listener: Response.Listener<JSONObject>, onError: () -> Unit) {
-
+    private fun send(fileString: String, type: String, doc: String, firstName: String, lastName: String, countrySH: String, udid: String, url: String, listener: Response.Listener<JSONObject>, onError: () -> Unit) {
         val params = JSONObject()
         params.put("attestator", "Veriff.me")
-        params.put("doc", doc)//"ID_CARD")
+        params.put("doc", doc)
         params.put("type", type)
-        params.put("udid", udid)//"\"dfPPl3RrZEk:APA91bGXIfSG0J_sX1Ts0e_3-WG1m6zpiirDkhJS7yo6gvWaF7yrteaTBdVt0cb8T9hxc1GbUVGdn7q6s3wwi8CtN2441Vi28mB1d4ptT0pwoMy-oz0Wo3jYqDO47aUA6YHu4vNNhSTQl-Cjn4M6eid_9Au6INMNXw\"")
+        params.put("udid", udid)
         params.put("first_name", firstName)
         params.put("last_name", lastName)
         params.put("device", "android")
-        params.put("country", country.toUpperCase())
-        params.put("fileString", fileString)
-        Log.d("PARAMS", params.toString())
+        params.put("countrySH", countrySH.toUpperCase())
+        params.put("file", fileString)
 
         val request = object : JsonObjectRequest(Request.Method.POST, url, params, listener, Response.ErrorListener { error ->
             onError()
@@ -589,5 +364,110 @@ class ProfileRepository private constructor() {
             }
         }
         VolleySingleton.getInstance(context).addToRequestQueue(request)
+    }
+
+    fun senDoc_(documentType: String, url: String = "http://40.113.76.56:4000/api/medias", country: String, onSuccess: () -> Unit, onError: () -> Unit) {
+        var faceRequest: JsonObjectRequest? = null
+        val queue = ArrayDeque<JsonObjectRequest>()
+        val shas = mutableListOf<String>()
+
+        val dataType: String
+        val docType: String
+        val dataValue: String
+
+        val user = userDao.select(accountAddress = Prefs.currentAccountAddress)
+        val firstName = user.firstName
+        val lastName = user.lastName
+        val udid = FirebaseInstanceId.getInstance().token!!
+
+        //@formatter:off
+        when (documentType) {
+            "passport" -> { docType = "PASSPORT"; dataType = "documents.passport" }
+            "id" -> { docType = "ID_CARD"; dataType = "documents.id_card" }
+            "license" -> { docType = "DRIVERS_LICENSE"; dataType = "documents.driver_license" }
+            "permit" -> { docType = "RESIDENCE_PERMIT_CARD"; dataType = "documents.residence_permit_card"}
+            else -> { docType = ""; dataType = "" }
+        }
+        //@formatter:on
+
+        val params = params(docType, udid, firstName, lastName, country)
+        val documents = photoDao.selectUserPhotosByDocument(Prefs.currentAccountAddress, documentType)
+        val vendorDocument = vendorDao.select().find { it.type == docType }
+
+        if (vendorDocument!!.contexts.contains("face")) {
+            val faceImage = photoString(documents.first { it.type == AppConstants.photoFaceType.key }.file)
+            val faceParams = params.put("type", "face").put("file", faceImage)
+            val shaFace = Sha.sha256(faceImage)
+            shas.add("\"face\":${shaFace}")
+
+            faceRequest = docRequest(POST, url, faceParams, Response.Listener { nextRequest(queue, onSuccess) }, Response.ErrorListener { onError() })
+        }
+
+        if (vendorDocument.contexts.contains("document-front")) {
+            val frontImage = photoString(documents.first { it.type == AppConstants.photoFrontType.key }.file)
+            val frontParams = params.put("type", "document-front").put("file", frontImage)
+            val shaFront = Sha.sha256(frontImage)
+            val frontRequest = docRequest(POST, url, frontParams, Response.Listener { nextRequest(queue, onSuccess) }, Response.ErrorListener { onError() })
+
+            queue.add(frontRequest)
+            shas.add("\"document-front\":${shaFront}")
+        }
+
+        if (vendorDocument.contexts.contains("document-back")) {
+            val backImage = photoString(documents.first { it.type == AppConstants.photoBackType.key }.file)
+            val shaBack = Sha.sha256(backImage)
+            val backParams = params.put("type", "document-back").put("file", backImage)
+            val backRequest = docRequest(POST, url, backParams, Response.Listener { nextRequest(queue, onSuccess) }, Response.ErrorListener { onError() })
+
+            shas.add("\"document-back\":${shaBack}")
+            queue.add(backRequest)
+        }
+
+        dataValue = "{" + shas.joinToString(",") + "}"
+        val receipt = QuorumKimlic.getInstance().setFieldMainData(dataValue, dataType)
+
+        if (receipt.status == "0x0") {
+            Log.e("RECEIPT ERROR", receipt.toString())
+            onError()
+            return
+        }
+
+        VolleySingleton.getInstance(context).addToRequestQueue(faceRequest!!)
+    }
+
+    private fun nextRequest(queue: Queue<JsonObjectRequest>, onSuccess: () -> Unit) {
+        if (queue.peek() != null) {
+            VolleySingleton.getInstance(context).addToRequestQueue(queue.poll())
+        } else onSuccess()
+    }
+
+    private fun params(docType: String, udid: String, firstName: String, lastName: String, country: String): JSONObject {
+        val params = JSONObject()
+        params.put("attestator", "Veriff.me")
+        params.put("doc", docType)
+        params.put("udid", udid)
+        params.put("first_name", firstName)
+        params.put("last_name", lastName)
+        params.put("device", "android")
+        params.put("country", country.toUpperCase())
+        return params
+    }
+
+    private fun photoString(fileName: String) = File(context.filesDir.toString() + "/" + fileName).readText(Charset.forName("UTF-8"))
+
+    private fun docRequest(method: Int, url: String, params: JSONObject, listener: Response.Listener<JSONObject>, error: Response.ErrorListener): JsonObjectRequest {
+        val request = object : JsonObjectRequest(method, url, params, listener, error) {init {
+            retryPolicy = DefaultRetryPolicy(30000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        }
+
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                return mapOf(
+                        Pair("Account-Address", Prefs.currentAccountAddress),
+                        Pair("Content-Type", "application/json; charset=utf-8"),
+                        Pair("Accept", "application/vnd.mobile-api.v1+json"))
+            }
+        }
+        return request
     }
 }
