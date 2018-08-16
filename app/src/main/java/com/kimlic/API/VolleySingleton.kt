@@ -6,11 +6,14 @@ import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.HurlStack
 import com.android.volley.toolbox.Volley
+import com.kimlic.R
+//import org.spongycastle.jcajce.provider.asymmetric.x509.CertificateFactory
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
-import java.security.SecureRandom
+import java.security.*
 import java.security.cert.CertificateException
+import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import javax.net.ssl.*
 
