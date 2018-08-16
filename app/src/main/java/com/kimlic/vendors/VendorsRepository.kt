@@ -45,7 +45,6 @@ class VendorsRepository private constructor() {
                     val responseCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
                     if (!responseCode.startsWith("2")) return@Listener
 
-                    Log.d("VENDOR", "Vendor response")
                     val data = JSONObject(response).getJSONObject("data").toString()
                     val type = object : TypeToken<Vendors>() {}.type
 

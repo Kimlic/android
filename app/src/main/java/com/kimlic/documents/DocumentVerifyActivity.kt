@@ -67,7 +67,7 @@ class DocumentVerifyActivity : BaseActivity() {
             override fun callback(data: ByteArray) {
                 backData = data
                 saveDocument(documentType, portraitData, frontData, backData)
-                successfull()
+                successful()
             }
         })
     }
@@ -81,12 +81,11 @@ class DocumentVerifyActivity : BaseActivity() {
         backFragment = DocumentBackFragment.newInstance()
     }
 
-    private fun successfull() {
+    private fun successful() {
         val fragment = VerifySuccessfulFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
                 finish()
-                //PresentationManager.stage(this@DocumentVerifyActivity)
             }
         })
 

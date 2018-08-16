@@ -3,13 +3,11 @@ package com.kimlic.vendors
 import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.DialogInterface
 import android.graphics.Rect
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
-import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import com.kimlic.BaseActivity
@@ -17,7 +15,6 @@ import com.kimlic.R
 import com.kimlic.db.entity.Document
 import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
-import com.kimlic.preferences.Prefs
 import com.kimlic.stage.adapter.OnStageItemClick
 import com.kimlic.utils.AppConstants
 import kotlinx.android.synthetic.main.activity_vendors.*
@@ -49,18 +46,7 @@ class VendorsActivity : BaseActivity() {
         url = intent.extras.getString("url", "")
         initRecycler()
 
-        // sunbscribe vendors model to activity lifecycle
         lifecycle.addObserver(vendorsModel)
-
-//        vendorsModel.getVendorsDocuments().observe(this, object : Observer<List<VendorDocument>> {
-//            override fun onChanged(vendors: Vendors?) {
-//                Log.d("TAGVENDORS", "vendors object to string" + vendors?.toString())
-//
-//                vendors?.documents!!.forEach {
-//
-//                }
-//            }
-//        })
 
         vendorsModel.getDocumentsForAdapter().observe(this, object : Observer<List<Document>> {
             override fun onChanged(documents: List<Document>?) {
@@ -68,29 +54,20 @@ class VendorsActivity : BaseActivity() {
             }
         })
 
-//        vendorsModel.progress().observe(this, object : Observer<Boolean> {
-//            override fun onChanged(visible: Boolean?) {
-//                progressBar.visibility = if (!visible!!) View.GONE else View.VISIBLE
-//            }
-//        })
-
         countryEt.setOnClickListener { initDropList() }
     }
 
     private fun initDropList() {
         val countries = vendorsModel.countriesList().map { it.country }.toList().toTypedArray()
-        val countrySH = vendorsModel.countriesList().map { it.sh }.toList().toTypedArray()
 
         val dialog = AlertDialog.Builder(this)
                 .setTitle("Countries")
                 .setIcon(R.drawable.ic_kimlic_logo_with_text)
-                .setItems(countries, object : DialogInterface.OnClickListener {
-                    override fun onClick(dialog: DialogInterface?, which: Int) {
-                        vendorsModel.getSupportedDocuments_PostThemToAdaptersResult(country = vendorsModel.countriesList()[which].sh)
-                        country = countrySH[which]
-                        countryEt.text = Editable.Factory.getInstance().newEditable(countries[which])
-                    }
-                }).show()
+                .setItems(countries) { dialog, which ->
+                    vendorsModel.supportedDocuments(country = vendorsModel.countriesList()[which].sh)
+                    country = countries[which]
+                    countryEt.text = Editable.Factory.getInstance().newEditable(countries[which])
+                }.show()
         val rec = Rect()
         val window = this.window
         window.decorView.getWindowVisibleDisplayFrame(rec)
@@ -116,22 +93,22 @@ class VendorsActivity : BaseActivity() {
                 when (type) {
                     AppConstants.documentPassport.key -> {
                         if (presentDocList.contains("passport"))
-                            PresentationManager.detailsDocumentSend(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentPassport.key, url = url, country = country)
+                            PresentationManager.detailsDocumentSend(this@VendorsActivity, AppConstants.documentPassport.key, url, country)
                         else PresentationManager.verifyPassport(this@VendorsActivity)
                     }
                     AppConstants.documentID.key -> {
                         if (presentDocList.contains("id"))
-                            PresentationManager.detailsDocumentSend(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentID.key, url = url, country = country)
+                            PresentationManager.detailsDocumentSend(this@VendorsActivity, AppConstants.documentID.key, url, country)
                         else PresentationManager.verifyIDCard(this@VendorsActivity)
                     }
                     AppConstants.documentLicense.key -> {
                         if (presentDocList.contains("license"))
-                            PresentationManager.detailsDocumentSend(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentLicense.key, url = url, country = country)
+                            PresentationManager.detailsDocumentSend(this@VendorsActivity, AppConstants.documentLicense.key, url, country)
                         else PresentationManager.verifyDriverLicence(this@VendorsActivity)
                     }
                     AppConstants.documentPermit.key -> {
                         if (presentDocList.contains("permit"))
-                            PresentationManager.detailsDocumentSend(this@VendorsActivity, Prefs.currentAccountAddress, AppConstants.documentPermit.key, url = url, country = country)
+                            PresentationManager.detailsDocumentSend(this@VendorsActivity, AppConstants.documentPermit.key, url, country)
                         else PresentationManager.verifyPermit(this@VendorsActivity)
                     }
                 }

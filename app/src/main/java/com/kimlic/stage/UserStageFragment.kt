@@ -1,7 +1,9 @@
 package com.kimlic.stage
 
+import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.OnLifecycleEvent
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
@@ -159,10 +161,10 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
         documentsAdapter.setOnStageItemClick(object : OnStageItemClick {
             override fun onClick(view: View, position: Int, type: String, approved: Boolean, state: String) {
                 when (type) {
-                    AppConstants.documentPassport.key -> PresentationManager.detailsDocument(activity!!, Prefs.currentAccountAddress, AppConstants.documentPassport.key)
-                    AppConstants.documentLicense.key -> PresentationManager.detailsDocument(activity!!, Prefs.currentAccountAddress, AppConstants.documentLicense.key)
-                    AppConstants.documentID.key -> PresentationManager.detailsDocument(activity!!, Prefs.currentAccountAddress, AppConstants.documentID.key)
-                    AppConstants.documentPermit.key -> PresentationManager.detailsDocument(activity!!, Prefs.currentAccountAddress, AppConstants.documentPermit.key)
+                    AppConstants.documentPassport.key -> PresentationManager.detailsDocument(activity!!, AppConstants.documentPassport.key)
+                    AppConstants.documentLicense.key -> PresentationManager.detailsDocument(activity!!, AppConstants.documentLicense.key)
+                    AppConstants.documentID.key -> PresentationManager.detailsDocument(activity!!, AppConstants.documentID.key)
+                    AppConstants.documentPermit.key -> PresentationManager.detailsDocument(activity!!, AppConstants.documentPermit.key)
                     "add" -> PresentationManager.documentChooseVerify(activity!!)
                 }
             }
@@ -193,9 +195,9 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
         if (File(activity!!.filesDir.toString() + "/" + fileName).exists()) takePhotoLl.visibility = View.GONE else takePhotoLl.visibility = View.VISIBLE
     }
 
-    //@OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+//    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun manageRisks(value: Boolean) {
-        risksTv?.visibility = if (Prefs.isPasscodeEnabled && Prefs.isTouchEnabled) View.GONE else View.VISIBLE
+        (activity).let { risksTv?.visibility = if (Prefs.isPasscodeEnabled && Prefs.isTouchEnabled) View.GONE else View.VISIBLE }
 //        risksTv.visibility = if (value) View.GONE else View.VISIBLE
     }
 

@@ -68,7 +68,7 @@ class SettingsActivity : BaseActivity() {
         model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         setupAdapter()
         signoutBt.setOnClickListener {
-            model.deleteUser(accountAddres = Prefs.currentAccountAddress)
+            model.deleteUser(accountAddress = Prefs.currentAccountAddress)
             Prefs.clear()
             clearAllFiles()
             QuorumKimlic.destroyInstance()

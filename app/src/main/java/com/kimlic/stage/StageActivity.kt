@@ -43,7 +43,6 @@ class StageActivity : BaseActivity() {
 
     override fun onResume() {
         risks()
-        //Log.d("TAGSTAGE", "onResume")
         super.onResume()
     }
 
@@ -83,7 +82,6 @@ class StageActivity : BaseActivity() {
                     }, 0)
                 }
             }
-
         }
     }
 
@@ -116,8 +114,8 @@ class StageActivity : BaseActivity() {
             replaceAccountsFragment()
         }
         scanBt.setOnClickListener {
-            PresentationManager.vendors(this, url = "demo.kimlic.com")
-//            IntentIntegrator(this).setOrientationLocked(true).setRequestCode(SCAN_REQUEST_CODE).setCaptureActivity(ScannerActivity::class.java).initiateScan()
+            //PresentationManager.vendors(this, url = "demo.kimlic.com")
+            IntentIntegrator(this).setOrientationLocked(true).setRequestCode(SCAN_REQUEST_CODE).setCaptureActivity(ScannerActivity::class.java).initiateScan()
         }
     }
 

@@ -156,14 +156,13 @@ object PresentationManager {
         present(presenter = presenter, className = DocumentVerifyActivity::class.java, isStarting = false, params = params)
     }
 
-    fun detailsDocument(presenter: BaseActivity, accountAddress: String, documentType: String) {
+    fun detailsDocument(presenter: BaseActivity, documentType: String) {
         val params = HashMap<String, String>()
         params[AppConstants.documentType.key] = documentType
-        // params[AppConstants.accountAddress.key] = accountAddress
         present(presenter = presenter, className = DocumentDetails::class.java, isStarting = false, params = params)
     }
 
-    fun detailsDocumentSend(presenter: BaseActivity, accountAddress: String, documentType: String, url: String, country: String) {
+    fun detailsDocumentSend(presenter: BaseActivity, documentType: String, url: String, country: String) {
         val params = HashMap<String, String>()
         params[AppConstants.documentType.key] = documentType
         params["country"] = country

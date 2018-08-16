@@ -41,11 +41,18 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
     documentToVerify("DOCUMENT_TO_VERIFY"),
     documentByteArray("DOCUMENT_BYTE_ARRAY"),
 
+    // Photo type
+
+    photoFaceType("face"),
+    photoFrontType("document-front"),
+    photoBackType("document-back"),
+    photoAddressType("address"),
+
     // File path
 
     filePathRezult("FILE_PATH_REZULT"),
 
-   // isUserPhotoTaken("IS_USER_PHOTO_TAKEN"),
+    // isUserPhotoTaken("IS_USER_PHOTO_TAKEN"),
 
     // Settings type
 

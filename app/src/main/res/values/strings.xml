@@ -205,7 +205,7 @@
   <string name="unable_to_proceed_with_verification">Unable to proceed with verification</string>
   <string name="information_is_saving_on_blockchain_wait_for_a_while">Information is saving on BlockChain. \n Wait for a while.</string>
   <string name="blockchain_updating">Blockchain updating</string>
-  <string name="country_of_sitizenship">Country of sitizenship</string>
+  <string name="country_of_sitizenship">Country of citizenship</string>
   <string name="expire_date">Expire date</string>
   <string name="document_number">Document number</string>
   <string name="front_side_of_the_document">Front side of the document</string>

@@ -161,6 +161,9 @@
         android:id="@+id/countryTil"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:hint="@string/country_of_sitizenship"
         app:hintTextAppearance="@style/WhiteTextInputLayout">
 
@@ -169,8 +172,11 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:backgroundTint="@color/lightBlue"
+          android:clickable="false"
+          android:focusable="false"
+          android:focusableInTouchMode="false"
           android:imeOptions="actionDone"
-          android:inputType="textNoSuggestions|textCapWords"
+          android:inputType="textCapWords"
           android:maxLength="30"
           android:textColor="@android:color/white"
           android:textSize="@dimen/subtitle_text_size"

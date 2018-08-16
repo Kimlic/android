@@ -28,7 +28,7 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
         vendorsRepository = VendorsRepository.instance
     }
 
-    // Publick
+    // Public
 
     // User
 
@@ -108,7 +108,7 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
     fun syncProfile(accountAddress: String) = repository.syncProfile(accountAddress = accountAddress)
 
     fun senDoc(docType: String, country: String, url: String, onSuccess: () -> Unit, onError: () -> Unit) {
-        val countrySH = vendorsRepository.countries().first { it.country == country }.sh.toUpperCase()
+        val countrySH = vendorsRepository.countries().filter { it.country == country }.first().sh.toUpperCase()
         repository.sendDoc(documentType = docType, countrySH = countrySH, onSuccess = onSuccess, onError = onError)//, dynamicUrl = "insert url fro qr Coed")
     }
 
