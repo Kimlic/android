@@ -10,11 +10,14 @@ import com.kimlic.R
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
-import java.security.*
-import java.security.cert.CertificateException
+import java.security.KeyManagementException
+import java.security.KeyStore
+import java.security.KeyStoreException
+import java.security.NoSuchAlgorithmException
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import javax.net.ssl.*
+import javax.security.cert.CertificateException
 
 
 class VolleySingleton(context: Context) {
@@ -35,10 +38,10 @@ class VolleySingleton(context: Context) {
     var hurlStack: HurlStack = object : HurlStack() {
         @Throws(IOException::class)
         override fun createConnection(url: URL): HttpURLConnection {
-            val httpsURLConnection = super.createConnection(url) as HttpsURLConnection
+            val httpsURLConnection = super.createConnection(url)
             try {
-                httpsURLConnection.sslSocketFactory = getSSLSocketFactory(context)
-                httpsURLConnection.hostnameVerifier = getHostnameVerifier()
+                (httpsURLConnection as HttpsURLConnection).sslSocketFactory = getSSLSocketFactory(context)
+                (httpsURLConnection as HttpsURLConnection).hostnameVerifier = getHostnameVerifier()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
