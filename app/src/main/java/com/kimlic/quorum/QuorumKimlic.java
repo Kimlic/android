@@ -69,7 +69,7 @@ public class QuorumKimlic {
     if (mKimlicContractsContext == null) {
       throw new InterruptedException("Empty contract address");
     }
-    //TODO catch quorum server Error!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
     return mKimlicContractsContext.getAccountStorageAdapter().sendAsync().get();
   }
 

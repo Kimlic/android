@@ -77,10 +77,8 @@ class MainActivity : BaseActivity() {
             val responseCode = JSONObject(it).getJSONObject("meta").optString("code").toString()
 
             if (!responseCode.startsWith("2")) {
-                Log.d("TAGSERVER", "in server response in response")
                 errorPopup(getString(R.string.server_error)); return@Listener
             }
-            Log.d("TAGSERVER", "in server response in response NO PROBLEM")
             val contextContractAddress = JSONObject(it).getJSONObject("data").optString("context_contract")
             QuorumKimlic.getInstance().setKimlicContractsContextAddress(contextContractAddress)
 
@@ -91,15 +89,11 @@ class MainActivity : BaseActivity() {
                 override fun onFinish() {
                     continueApp()
                 }
-
                 override fun onTick(millisUntilFinished: Long) {}
             }.start()
         }, Response.ErrorListener {
-
-//                        object : CountDownTimer(1500, 1500) {
-//                override fun onFinish() {
-//
-//                    quorumRequest() }
+            //            object : CountDownTimer(1500, 1500) {
+//                override fun onFinish() { quorumRequest() }
 //
 //                override fun onTick(millisUntilFinished: Long) {}
 //            }.start()

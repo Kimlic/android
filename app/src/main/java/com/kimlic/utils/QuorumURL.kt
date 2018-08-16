@@ -2,6 +2,7 @@ package com.kimlic.utils
 
 enum class QuorumURL(val url: String) {
 
+
     quorum("https://mobile-api-test.kimlic.com/api/quorum"),
     config("https://mobile-api-test.kimlic.com/api/config"),
 

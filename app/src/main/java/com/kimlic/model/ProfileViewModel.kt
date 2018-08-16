@@ -107,9 +107,9 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     fun senDoc(docType: String, country: String, url: String, onSuccess: () -> Unit, onError: () -> Unit) {
 //        repository.sendDoc(docType, onSuccess = onSuccess, onError = onError)
-        repository.mySendoc_(documentType = docType, country = country, onSuccess = onSuccess, onError = onError)//, dynamicUrl = "insert url fro qr Coed")
+//        repository.mySendoc_(documentType = docType, country = country, onSuccess = onSuccess, onError = onError)//, dynamicUrl = "insert url fro qr Coed")
 
-        //repository.sendDoc(documentType = docType, country = country, onSuccess = onSuccess, onError = onError)//, dynamicUrl = )
+        repository.sendDoc(documentType = docType, country = country, onSuccess = onSuccess, onError = onError)//, dynamicUrl = )
     }
 
     fun clearAllFiles() = repository.clearAllFiles()

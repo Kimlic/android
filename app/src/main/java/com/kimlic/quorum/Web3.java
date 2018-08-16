@@ -32,6 +32,6 @@ public class Web3 {
   // Private
 
   private Web3(String URL) {
-    mWeb3 = Web3jFactory.build(new HttpService(URL));
+    mWeb3 = Web3jFactory.build(new QuorumHttpClient(URL));
   }
 }

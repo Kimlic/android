@@ -68,7 +68,6 @@ class StageActivity : BaseActivity() {
             }
 
             SECURITY_REQUESTCODE -> {
-
                 if (resultCode == Activity.RESULT_OK) {
                     Log.d("TAGINSTAGE", "from fragment, touch is enabled " + Prefs.isTouchEnabled)
                     if (!Prefs.isTouchEnabled) PresentationManager.touchCreate(this)
@@ -117,6 +116,7 @@ class StageActivity : BaseActivity() {
             replaceAccountsFragment()
         }
         scanBt.setOnClickListener {
+            //PresentationManager.vendors(this, url = "demo.kimlic.com")
             IntentIntegrator(this).setOrientationLocked(true).setRequestCode(SCAN_REQUEST_CODE).setCaptureActivity(ScannerActivity::class.java).initiateScan()
         }
     }
