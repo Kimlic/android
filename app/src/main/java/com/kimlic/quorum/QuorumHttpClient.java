@@ -1,5 +1,9 @@
 package com.kimlic.quorum;
 
+import android.content.Context;
+import android.util.Log;
+
+import com.kimlic.R;
 import com.kimlic.TrustAllCerts;
 import com.kimlic.TrustAllHostnameVerifier;
 
@@ -11,13 +15,26 @@ import org.web3j.protocol.exceptions.ClientConnectionException;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 
 import okhttp3.Headers;
 import okhttp3.MediaType;
@@ -44,45 +61,71 @@ public class QuorumHttpClient extends Service {
   private final boolean includeRawResponse;
 
   private HashMap<String, String> headers = new HashMap<String, String>();
+  private SSLSocketFactory mSocketFactory;
 
-  public QuorumHttpClient(String url, OkHttpClient httpClient, boolean includeRawResponses) {
+  public QuorumHttpClient(Context context, String url, OkHttpClient httpClient, boolean includeRawResponses) {
     super(includeRawResponses);
     this.url = url;
     this.httpClient = httpClient;
     this.includeRawResponse = includeRawResponses;
+    try {
+      mSocketFactory = createSSLSocketFactory(context);
+    } catch (CertificateException e) {
+      e.printStackTrace();
+    } catch (KeyStoreException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (NoSuchAlgorithmException e) {
+      e.printStackTrace();
+    } catch (KeyManagementException e) {
+      e.printStackTrace();
+    }
   }
 
-  public QuorumHttpClient(OkHttpClient httpClient, boolean includeRawResponses) {
-    this(DEFAULT_URL, httpClient, includeRawResponses);
+  public QuorumHttpClient(Context context, OkHttpClient httpClient, boolean includeRawResponses) {
+    this(context, DEFAULT_URL, httpClient, includeRawResponses);
   }
 
-  private QuorumHttpClient(String url, OkHttpClient httpClient) {
-    this(url, httpClient, false);
+  private QuorumHttpClient(Context context, String url, OkHttpClient httpClient) {
+    this(context, url, httpClient, false);
   }
 
-  public QuorumHttpClient(String url) {
-    this(url, createOkHttpClient());
+  public QuorumHttpClient(Context context, String url) {
+    this(context, url, createOkHttpClient(context));
   }
 
-  public QuorumHttpClient(String url, boolean includeRawResponse) {
-    this(url, createOkHttpClient(), includeRawResponse);
+  public QuorumHttpClient(Context context, String url, boolean includeRawResponse) {
+    this(context, url, createOkHttpClient(context), includeRawResponse);
   }
 
-  public QuorumHttpClient(OkHttpClient httpClient) {
-    this(DEFAULT_URL, httpClient);
+  public QuorumHttpClient(Context context, OkHttpClient httpClient) {
+    this(context, DEFAULT_URL, httpClient);
   }
 
-  public  QuorumHttpClient(boolean includeRawResponse) {
-    this(DEFAULT_URL, includeRawResponse);
+  public  QuorumHttpClient(Context context, boolean includeRawResponse) {
+    this(context, DEFAULT_URL, includeRawResponse);
   }
 
-  public QuorumHttpClient() {
-    this(DEFAULT_URL);
+  public QuorumHttpClient(Context context) {
+    this(context, DEFAULT_URL);
   }
 
-  private static OkHttpClient createOkHttpClient() {
+  private static OkHttpClient createOkHttpClient(Context context) {
     OkHttpClient.Builder builder = new OkHttpClient.Builder();
-    builder.sslSocketFactory(createSSLSocketFactory());
+    try {
+      builder.sslSocketFactory(createSSLSocketFactory(context));
+    } catch (CertificateException e) {
+      e.printStackTrace();
+    } catch (KeyStoreException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (NoSuchAlgorithmException e) {
+      e.printStackTrace();
+    } catch (KeyManagementException e) {
+      e.printStackTrace();
+    }
     builder.hostnameVerifier(new TrustAllHostnameVerifier());
     configureLogging(builder);
     return builder.build();
@@ -173,15 +216,85 @@ public class QuorumHttpClient extends Service {
     return headers;
   }
 
-  private static SSLSocketFactory createSSLSocketFactory() {
-    SSLSocketFactory ssfFactory = null;
-    try {
-      // 在这处理证书
-      SSLContext sc = SSLContext.getInstance("TLS");
-      sc.init(null, new TrustManager[]{new TrustAllCerts()}, new SecureRandom());
-      ssfFactory = sc.getSocketFactory();
-    } catch (Exception e) {
-    }
-    return ssfFactory;
+//  private static SSLSocketFactory createSSLSocketFactory() {
+//    SSLSocketFactory ssfFactory = null;
+//    try {
+//      // 在这处理证书
+//      SSLContext sc = SSLContext.getInstance("TLS");
+//      sc.init(null, new TrustManager[]{new TrustAllCerts()}, new SecureRandom());
+//      ssfFactory = sc.getSocketFactory();
+//    } catch (Exception e) {
+//    }
+//    return ssfFactory;
+//  }
+
+  private HostnameVerifier getHostnameVerifier() {
+    return new HostnameVerifier() {
+      @Override
+      public boolean verify(String hostname, SSLSession session) {
+        //return true; // verify always returns true, which could cause insecure network traffic due to trusting TLS/SSL server certificates for wrong hostnames
+        HostnameVerifier hv = HttpsURLConnection.getDefaultHostnameVerifier();
+        return hv.verify("localhost", session);
+      }
+    };
+  }
+
+  private static TrustManager[] getWrappedTrustManagers(TrustManager[] trustManagers) {
+    final X509TrustManager originalTrustManager = (X509TrustManager) trustManagers[0];
+    return new TrustManager[]{
+        new X509TrustManager() {
+          public X509Certificate[] getAcceptedIssuers() {
+            return originalTrustManager.getAcceptedIssuers();
+          }
+
+          public void checkClientTrusted(X509Certificate[] certs, String authType) {
+            try {
+              if (certs != null && certs.length > 0){
+                certs[0].checkValidity();
+              } else {
+                originalTrustManager.checkClientTrusted(certs, authType);
+              }
+            } catch (CertificateException e) {
+              Log.w("checkClientTrusted", e.toString());
+            }
+          }
+
+          public void checkServerTrusted(X509Certificate[] certs, String authType) {
+            try {
+              if (certs != null && certs.length > 0){
+                certs[0].checkValidity();
+              } else {
+                originalTrustManager.checkServerTrusted(certs, authType);
+              }
+            } catch (CertificateException e) {
+              Log.w("checkServerTrusted", e.toString());
+            }
+          }
+        }
+    };
+  }
+
+  private static SSLSocketFactory createSSLSocketFactory(Context context)
+      throws CertificateException, KeyStoreException, IOException, NoSuchAlgorithmException, KeyManagementException {
+    CertificateFactory cf = CertificateFactory.getInstance("X.509");
+    InputStream caInput = context.getResources().openRawResource(R.raw.kimlic_com); // this cert file stored in \app\src\main\res\raw folder path
+
+    Certificate ca = cf.generateCertificate(caInput);
+    caInput.close();
+
+    KeyStore keyStore = KeyStore.getInstance("BKS");
+    keyStore.load(null, null);
+    keyStore.setCertificateEntry("ca", ca);
+
+    String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
+    TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
+    tmf.init(keyStore);
+
+    TrustManager[] wrappedTrustManagers = getWrappedTrustManagers(tmf.getTrustManagers());
+
+    SSLContext sslContext = SSLContext.getInstance("TLS");
+    sslContext.init(null, wrappedTrustManagers, null);
+
+    return sslContext.getSocketFactory();
   }
 }

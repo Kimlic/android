@@ -1,5 +1,7 @@
 package com.kimlic.quorum;
 
+import android.content.Context;
+
 import org.web3j.protocol.Web3j;
 //import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.Web3jFactory;
@@ -16,9 +18,9 @@ public class Web3 {
 
   // Public
 
-  public static Web3 getInstance(String URL) {
+  public static Web3 getInstance(String URL, Context context) {
     if (sInstance == null)
-      sInstance = new Web3(URL);
+      sInstance = new Web3(context, URL);
 
     return sInstance;
   }
@@ -31,7 +33,7 @@ public class Web3 {
 
   // Private
 
-  private Web3(String URL) {
-    mWeb3 = Web3jFactory.build(new QuorumHttpClient(URL));
+  private Web3(Context context, String URL) {
+    mWeb3 = Web3jFactory.build(new QuorumHttpClient(context, URL));
   }
 }
