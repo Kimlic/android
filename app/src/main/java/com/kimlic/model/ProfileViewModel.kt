@@ -8,6 +8,7 @@ import com.kimlic.db.entity.Contact
 import com.kimlic.db.entity.Document
 import com.kimlic.db.entity.User
 import com.kimlic.preferences.Prefs
+import com.kimlic.vendors.VendorsRepository
 import java.util.*
 
 class ProfileViewModel : ViewModel(), LifecycleObserver {
@@ -16,6 +17,7 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     private var risksLiveData: MutableLiveData<Boolean>? = object : MutableLiveData<Boolean>() {}
     private var repository: ProfileRepository
+    private var vendorsRepository: VendorsRepository
 
     // Database
 
@@ -23,6 +25,7 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
     init {
         risksLiveData!!.postValue(Prefs.isPasscodeEnabled && Prefs.isTouchEnabled)
         repository = ProfileRepository.instance
+        vendorsRepository = VendorsRepository.instance
     }
 
     // Publick
@@ -37,7 +40,7 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     fun getUser(accountAddress: String) = repository.getUser(accountAddress)
 
-    fun deleteUser(accountAddres: String) = repository.deleteUser(accountAddres)
+    fun deleteUser(accountAddress: String) = repository.deleteUser(accountAddress)
 
     fun getUserLive() = repository.userLive(accountAddress = Prefs.currentAccountAddress)
 
@@ -50,10 +53,10 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
     }
 
     fun saveDocumentAndPhoto(documentType: String, portraitData: ByteArray, frontData: ByteArray, backData: ByteArray) {
-        val portritName: String = UUID.nameUUIDFromBytes(portraitData).toString()
+        val portraitName: String = UUID.nameUUIDFromBytes(portraitData).toString()
         val frontName: String = UUID.nameUUIDFromBytes(frontData).toString()
         val backName: String = UUID.nameUUIDFromBytes(backData).toString()
-        repository.addDocument(Prefs.currentAccountAddress, documentType, portritName, portraitData, frontName, frontData, backName, backData)
+        repository.addDocument(Prefs.currentAccountAddress, documentType, portraitName, portraitData, frontName, frontData, backName, backData)
 
     }
 
@@ -96,7 +99,6 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     //fun addUserDocument(accountAddress: String, document: Document_): Long = repository.documentAdd(accountAddress = accountAddress, document = document)
 
-
     //fun addDocumentPhoto(vararg photos: Photo) = repository.addDocumentPhoto(photos = *photos)
 
     fun getRisksLiveData() = risksLiveData
@@ -106,10 +108,8 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
     fun syncProfile(accountAddress: String) = repository.syncProfile(accountAddress = accountAddress)
 
     fun senDoc(docType: String, country: String, url: String, onSuccess: () -> Unit, onError: () -> Unit) {
-//        repository.sendDoc(docType, onSuccess = onSuccess, onError = onError)
-//        repository.mySendoc_(documentType = docType, country = country, onSuccess = onSuccess, onError = onError)//, dynamicUrl = "insert url fro qr Coed")
-
-        repository.sendDoc(documentType = docType, country = country, onSuccess = onSuccess, onError = onError)//, dynamicUrl = )
+        val countrySH = vendorsRepository.countries().first { it.country == country }.sh.toUpperCase()
+        repository.sendDoc(documentType = docType, countrySH = countrySH, onSuccess = onSuccess, onError = onError)//, dynamicUrl = "insert url fro qr Coed")
     }
 
     fun clearAllFiles() = repository.clearAllFiles()
