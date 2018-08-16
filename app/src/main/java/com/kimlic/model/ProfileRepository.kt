@@ -343,7 +343,7 @@ class ProfileRepository private constructor() {
         params.put("first_name", firstName)
         params.put("last_name", lastName)
         params.put("device", "android")
-        params.put("countrySH", countrySH.toUpperCase())
+        params.put("country", countrySH.toUpperCase())
         params.put("file", fileString)
 
         val request = object : JsonObjectRequest(Request.Method.POST, url, params, listener, Response.ErrorListener { error ->
@@ -366,7 +366,7 @@ class ProfileRepository private constructor() {
         VolleySingleton.getInstance(context).addToRequestQueue(request)
     }
 
-    fun senDoc_(documentType: String, url: String = "http://40.113.76.56:4000/api/medias", country: String, onSuccess: () -> Unit, onError: () -> Unit) {
+    fun senDoc_(documentType: String, url: String = "http://40.113.76.56:4000/api/medias", countrySH: String, onSuccess: () -> Unit, onError: () -> Unit) {
         var faceRequest: JsonObjectRequest? = null
         val queue = ArrayDeque<JsonObjectRequest>()
         val shas = mutableListOf<String>()
@@ -390,7 +390,7 @@ class ProfileRepository private constructor() {
         }
         //@formatter:on
 
-        val params = params(docType, udid, firstName, lastName, country)
+        val params = params(docType, udid, firstName, lastName, countrySH)
         val documents = photoDao.selectUserPhotosByDocument(Prefs.currentAccountAddress, documentType)
         val vendorDocument = vendorDao.select().find { it.type == docType }
 
@@ -441,7 +441,7 @@ class ProfileRepository private constructor() {
         } else onSuccess()
     }
 
-    private fun params(docType: String, udid: String, firstName: String, lastName: String, country: String): JSONObject {
+    private fun params(docType: String, udid: String, firstName: String, lastName: String, countrySH: String): JSONObject {
         val params = JSONObject()
         params.put("attestator", "Veriff.me")
         params.put("doc", docType)
@@ -449,7 +449,7 @@ class ProfileRepository private constructor() {
         params.put("first_name", firstName)
         params.put("last_name", lastName)
         params.put("device", "android")
-        params.put("country", country.toUpperCase())
+        params.put("country", countrySH.toUpperCase())
         return params
     }
 
