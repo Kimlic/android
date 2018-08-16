@@ -3,6 +3,7 @@ package com.kimlic.API
 import android.content.Context
 import com.android.volley.Request
 import com.android.volley.RequestQueue
+import com.android.volley.toolbox.HurlStack
 import com.android.volley.toolbox.Volley
 
 class VolleySingleton(context: Context) {

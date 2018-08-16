@@ -9,6 +9,7 @@ import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.RetryPolicy
+import com.android.volley.toolbox.JsonObjectRequest
 import com.kimlic.API.KimlicRequest
 import com.kimlic.API.VolleySingleton
 import com.kimlic.managers.PresentationManager
@@ -25,6 +26,7 @@ class MainActivity : BaseActivity() {
 
     private lateinit var splashFragment: SplashScreenFragment
     private lateinit var model: ProfileViewModel
+
 
     // Life
 
@@ -93,12 +95,15 @@ class MainActivity : BaseActivity() {
                 override fun onTick(millisUntilFinished: Long) {}
             }.start()
         }, Response.ErrorListener {
-            //            object : CountDownTimer(1500, 1500) {
-//                override fun onFinish() { quorumRequest() }
+
+//                        object : CountDownTimer(1500, 1500) {
+//                override fun onFinish() {
+//
+//                    quorumRequest() }
 //
 //                override fun onTick(millisUntilFinished: Long) {}
 //            }.start()
-            Log.d("TAGSERVER", "inResponce error listner  = ${it?.networkResponse?.statusCode}")
+            Log.d("TAGSERVER", "inResponse error listener  = ${it}")
             errorPopup(getString(R.string.server_error))
         }) {
             init {
