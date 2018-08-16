@@ -1,6 +1,7 @@
 package com.kimlic.vendors
 
 import android.os.Handler
+import android.util.Log
 import com.android.volley.Request.Method.GET
 import com.android.volley.Response
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -44,6 +45,7 @@ class VendorsRepository private constructor() {
                     val responseCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
                     if (!responseCode.startsWith("2")) return@Listener
 
+                    Log.d("VENDOR", "Vendor response")
                     val data = JSONObject(response).getJSONObject("data").toString()
                     val type = object : TypeToken<Vendors>() {}.type
 
@@ -55,7 +57,9 @@ class VendorsRepository private constructor() {
                     syncDataBase()
                     //progressLiveData.postValue(false)
                 },
-                Response.ErrorListener {}
+                Response.ErrorListener {
+                    Log.d("VENDOR", "Vendor error" + it)
+                }
         )
 
         VolleySingleton.getInstance(KimlicApp.applicationContext()).requestQueue.add(vendorsRequest)

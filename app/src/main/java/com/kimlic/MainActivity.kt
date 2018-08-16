@@ -3,9 +3,13 @@ package com.kimlic
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
 import android.util.Log
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.Response
+import com.android.volley.RetryPolicy
+import com.android.volley.toolbox.JsonObjectRequest
 import com.kimlic.API.KimlicRequest
 import com.kimlic.API.VolleySingleton
 import com.kimlic.managers.PresentationManager
@@ -23,6 +27,7 @@ class MainActivity : BaseActivity() {
     private lateinit var splashFragment: SplashScreenFragment
     private lateinit var model: ProfileViewModel
 
+
     // Life
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,20 +38,14 @@ class MainActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        Log.e(TAG, "AAAAAAA")
         initFragment()
-        Log.e(TAG, "BBBBBBB")
         splashScreenShow()
-        Log.e(TAG, "CCCCCCC")
+
         if (Prefs.authenticated) {
             model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-            Log.e(TAG, "DDDDDDDDD")
             model.syncProfile(Prefs.currentAccountAddress)
-            Log.e(TAG, "EEEEEEEEE")
             quorumRequest()
-            Log.e(TAG, "FFFFFFFFF")
         } else {
-            Log.e(TAG, "GGGGGGGGG")
             object : CountDownTimer(3000, 3000) {
                 override fun onFinish() {
                     splashScreenHide(); PresentationManager.signupRecovery(this@MainActivity)
@@ -72,39 +71,41 @@ class MainActivity : BaseActivity() {
 
         // 2. Get entry point of the Quorum
 
-        val headers = mapOf<String, String>(Pair("account-address", walletAddress))
-        Log.e("AAAAA", "11111")
-        val addressRequest = KimlicRequest(Request.Method.GET, QuorumURL.config.url, headers, null, Response.Listener {
+        val headers = mapOf(Pair("account-address", walletAddress))
+
+        val addressRequest = object : KimlicRequest(Request.Method.GET, QuorumURL.config.url, headers, null, Response.Listener {
             val responseCode = JSONObject(it).getJSONObject("meta").optString("code").toString()
 
             if (!responseCode.startsWith("2")) {
                 errorPopup(getString(R.string.server_error)); return@Listener
             }
-            Log.e("AAAAA", "22222")
             val contextContractAddress = JSONObject(it).getJSONObject("data").optString("context_contract")
             QuorumKimlic.getInstance().setKimlicContractsContextAddress(contextContractAddress)
-            Log.e("AAAAA", "33333")
+
             val accountStorageAdapterAddress = QuorumKimlic.getInstance().accountStorageAdapter
             QuorumKimlic.getInstance().setAccountStorageAdapterAddress(accountStorageAdapterAddress)
-            Log.e("AAAAA", "44444")
-//            object : CountDownTimer(1500, 1500) {
-//                override fun onFinish() {
-//                    Log.e("AAAAA", "555555")
-//                    continueApp()
-//                }
-//
-//                override fun onTick(millisUntilFinished: Long) {}
-//            }.start()
+
+            object : CountDownTimer(1500, 1500) {
+                override fun onFinish() {
+                    continueApp()
+                }
+                override fun onTick(millisUntilFinished: Long) {}
+            }.start()
         }, Response.ErrorListener {
             //            object : CountDownTimer(1500, 1500) {
 //                override fun onFinish() { quorumRequest() }
 //
 //                override fun onTick(millisUntilFinished: Long) {}
 //            }.start()
-//            errorPopup(getString(R.string.server_error))
-            Log.e("AAAAA", "6666666")
-        })
-        VolleySingleton.getInstance(this@MainActivity).requestQueue.add(addressRequest)
+            Log.d("TAGSERVER", "inResponse error listener  = ${it}")
+            errorPopup(getString(R.string.server_error))
+        }) {
+            init {
+                retryPolicy = DefaultRetryPolicy(2000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+            }
+        }
+
+        Handler().postDelayed({ VolleySingleton.getInstance(this@MainActivity).requestQueue.add(addressRequest) }, 1500)
     }
 
     private fun initFragment() {

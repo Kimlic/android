@@ -31,9 +31,8 @@ class AccountRecoveryActivity : BaseActivity() {
 
     private fun setupUI() {
         recoveryViewModel = ViewModelProviders.of(this).get(RecoveryViewModel::class.java)
-        backTv.setOnClickListener {
-            PresentationManager.signupRecovery(this)
-        }
+
+        backTv.setOnClickListener { PresentationManager.signupRecovery(this) }
 
         verifyBt.setOnClickListener {
             val mnemonic = phraseEt.text.toString().trim()
@@ -43,10 +42,8 @@ class AccountRecoveryActivity : BaseActivity() {
             }
 
             QuorumKimlic.destroyInstance()
-            val quorumKimlic = QuorumKimlic.createInstance(mnemonic, this)//Create Quorum instance
+            val quorumKimlic = QuorumKimlic.createInstance(mnemonic, this)
             val accountAddress = quorumKimlic.walletAddress
-
-            Log.d("TAGPHRASELIST", "account address = " + accountAddress)
 
             recoveryViewModel!!.retrievePhoto(accountAddress)
 

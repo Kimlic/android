@@ -4,9 +4,10 @@ import android.content.Context
 import android.util.Log
 import com.android.volley.Request
 import com.android.volley.RequestQueue
-import com.android.volley.toolbox.Volley
 import com.android.volley.toolbox.HurlStack
+import com.android.volley.toolbox.Volley
 import com.kimlic.R
+//import org.spongycastle.jcajce.provider.asymmetric.x509.CertificateFactory
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
@@ -45,7 +46,6 @@ class VolleySingleton(context: Context) {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-
             return httpsURLConnection
         }
     }

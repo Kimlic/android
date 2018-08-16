@@ -22,8 +22,8 @@ import kotlinx.android.synthetic.main.activity_stage.*
 
 class StageActivity : BaseActivity() {
 
-    val SCAN_REQUEST_CODE = 1100
-    val SECURITY_REQUESTCODE = 151
+    private val SCAN_REQUEST_CODE = 1100
+    private val SECURITY_REQUESTCODE = 151
     private val GOOGLE_SIGNE_IN_REQUEST_CODE = 107
 
     // Variables
@@ -42,8 +42,9 @@ class StageActivity : BaseActivity() {
     }
 
     override fun onResume() {
-        super.onResume()
         risks()
+        //Log.d("TAGSTAGE", "onResume")
+        super.onResume()
     }
 
     override fun onPause() {
@@ -61,14 +62,17 @@ class StageActivity : BaseActivity() {
                 if (result.contents != null) {
                     val url = result.contents
                     Log.d("TAGSCANNER", "Scanned")
-                    Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Scanned: " + result.contents, Toast.LENGTH_LONG).show()
                     PresentationManager.vendors(this, url = url)
                 }
             }
 
             SECURITY_REQUESTCODE -> {
-                Log.d("TAGINSTAGE", "from fragment, touch is enabled " + Prefs.isTouchEnabled)
-                if (!Prefs.isTouchEnabled) PresentationManager.touchCreate(this)
+                if (resultCode == Activity.RESULT_OK) {
+                    Log.d("TAGINSTAGE", "from fragment, touch is enabled " + Prefs.isTouchEnabled)
+                    if (!Prefs.isTouchEnabled) PresentationManager.touchCreate(this)
+                }
+
             }
             GOOGLE_SIGNE_IN_REQUEST_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
@@ -94,12 +98,12 @@ class StageActivity : BaseActivity() {
             SyncService.getInstance().backupAllFiles(Prefs.currentAccountAddress)
         }
 
-        lifecycle.addObserver(model)
         initFragments()
+        lifecycle.addObserver(model)
+        lifecycle.addObserver(userStageFragment)
         setupListeners()
         profileBt.isSelected = true
         replaceStageFragment()
-
     }
 
     private fun setupListeners() {

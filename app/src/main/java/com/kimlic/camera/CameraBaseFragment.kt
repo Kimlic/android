@@ -3,7 +3,6 @@
 package com.kimlic.camera
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -23,10 +22,8 @@ import com.kimlic.BaseFragment
 import com.kimlic.KimlicApp
 import com.kimlic.R
 import com.kimlic.utils.AppConstants
-import com.kimlic.utils.BaseCallback
 import com.kimlic.utils.PhotoCallback
 import kotlinx.android.synthetic.main.fragment_document_portrait.*
-import java.io.FileOutputStream
 
 abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
 
@@ -125,20 +122,25 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
         val params = camera.parameters
         val sizes: List<Camera.Size> = params.supportedPictureSizes
         var currentWidth = 640
-        var currentHight = 480
+        var currentHeight = 480
 
         for (size in sizes) {
-            if (size.height > currentHight && size.width > currentWidth && size.height < 3000 && size.width < 2500) {
-                currentHight = size.height
+            if (size.height > currentHeight && size.width > currentWidth && size.height < 3000 && size.width < 2500) {
+                currentHeight = size.height
                 currentWidth = size.width
             }
         }
 
         params.pictureFormat = ImageFormat.JPEG
         params.jpegQuality = 80
-//        params.focusMode = (Camera.Parameters.FOCUS_MODE_AUTO)
-        params.setPictureSize(currentWidth, currentHight)
 
+        val supportedFocuseMode = camera.parameters.supportedFocusModes
+        val hasAutofocus = supportedFocuseMode != null && supportedFocuseMode.contains(Camera.Parameters.FOCUS_MODE_AUTO)
+
+        if (hasAutofocus) {
+            params.focusMode = (Camera.Parameters.FOCUS_MODE_AUTO)
+        }
+        params.setPictureSize(currentWidth, currentHeight)
         camera.parameters = params
     }
 

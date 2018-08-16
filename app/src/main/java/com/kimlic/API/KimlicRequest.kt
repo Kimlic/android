@@ -6,7 +6,7 @@ import com.android.volley.Response
 import com.android.volley.RetryPolicy
 import com.android.volley.toolbox.StringRequest
 
-class KimlicRequest(method: Int, url: String, val requestHeaders: Map<String, String>?, val requestParams: Map<String, String>?,
+open class KimlicRequest(method: Int, url: String, val requestHeaders: Map<String, String>?, val requestParams: Map<String, String>?,
                     onSuccess: Response.Listener<String>, onError: Response.ErrorListener)
     : StringRequest(method, url, onSuccess, onError) {
 

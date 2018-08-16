@@ -95,7 +95,7 @@ abstract class BaseActivity : AppCompatActivity() {
         transaction.commit()
     }
 
-    fun showPopup(title: String = "", message: String) {
+    open fun showPopup(title: String = "", message: String) {
         val builder = AlertDialog.Builder(this)
         builder.setTitle(title)
                 .setMessage(message)

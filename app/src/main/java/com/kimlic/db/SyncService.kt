@@ -100,8 +100,8 @@ class SyncService private constructor(val context: Context) {
         val rootFilesDir = File(context.filesDir.toString())
         val files = rootFilesDir.listFiles()
 
-        files.forEach {
-            Log.d("TAGTASK", "filepath = " + it.toString())
+        files.filter{!it.isDirectory}.forEach {
+            Log.d("TAGTASK", " filtered.filepath = " + it.toString())
             backupFile(accountAddress = accountAddress, filePath = it.toString(), onSuccess = {})
         }
 

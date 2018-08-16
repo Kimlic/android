@@ -1,6 +1,7 @@
 package com.kimlic.passcode
 
 import android.app.Activity
+import android.arch.lifecycle.ViewModelProviders
 import android.graphics.drawable.Animatable
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -15,6 +16,7 @@ import butterknife.ButterKnife
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
+import com.kimlic.model.ProfileViewModel
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.BaseCallback
 import kotlinx.android.synthetic.main.activity_passcode.*
@@ -33,6 +35,7 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
 
     private var passcode: String
     private lateinit var passcodeConfirm: String
+    private lateinit var model: ProfileViewModel
     private lateinit var action: String
     private var firstInput: Boolean
 
@@ -71,6 +74,7 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
     // Private
 
     private fun setupUI() {
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         mBtnList.forEach { it.setOnClickListener(this) }
         setupTextSwitcher()
 
@@ -165,7 +169,8 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
         } else if (passcodeConfirm == passcode) {
             Prefs.passcode = passcode
             Prefs.isPasscodeEnabled = true
-            successfull()
+            model.getRisksLiveData()?.postValue(true)
+            successful()
         } else setupUITryAgain()
     }
 
@@ -188,12 +193,12 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun blinkDots() {
-        Handler().post({
+        Handler().post {
             mDotList.forEach {
                 it.setBackgroundResource(R.drawable.button_dots_shape_oval_color_blink)
                 (it.background as Animatable).start()
             }
-        })
+        }
 
         Handler().postDelayed({
             mDotList.forEach { it.setBackgroundResource(R.drawable.button_dots_shape_oval) }
@@ -243,7 +248,7 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
         subtitleTs.outAnimation = outAnim
     }
 
-    private fun successfull() {
+    private fun successful() {
         val fragment = PasscodeSuccessfulFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {

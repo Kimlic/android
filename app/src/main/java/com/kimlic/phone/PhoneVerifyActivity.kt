@@ -66,16 +66,13 @@ class PhoneVerifyActivity : BaseActivity() {
 
         cancelTv.setOnClickListener { PresentationManager.phoneNumber(this) }
         showSoftKeyboard(digit1Et)
-        setupDigitListner()
+        setupDigitListener()
 
-        digitsList[3].setOnEditorActionListener(object : TextView.OnEditorActionListener {
-            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
-
-                if (event!!.keyCode == KeyEvent.KEYCODE_ENTER) {
-                    hideKeyboard(); return true
-                }
-                return false
+        digitsList[3].setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+            if (event!!.keyCode == KeyEvent.KEYCODE_ENTER) {
+                hideKeyboard(); return@OnEditorActionListener true
             }
+            false
         })
     }
 
@@ -90,16 +87,16 @@ class PhoneVerifyActivity : BaseActivity() {
             val headers = mapOf(Pair("account-address", Prefs.currentAccountAddress))
 
             val request = KimlicRequest(Request.Method.POST, QuorumURL.phoneVierifyApprove.url, headers, params,
-                    Response.Listener<String> { response ->
+                    Response.Listener { response ->
                         progressBar.visibility = View.GONE
-                        val responceCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
+                        val responseCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
                         val status = JSONObject(response).getJSONObject("data").optString("status").toString()
 
-                        if (responceCode.startsWith("2") && status.equals("ok")) {
+                        if (responseCode.startsWith("2") && status == "ok") {
                             insertPhone(phone)
                             Prefs.authenticated = true
                             verifyBt.isClickable = true
-                            successfull()
+                            successful()
                         } else {
                             verifyBt.isClickable = true
                             digitsList.forEach { it.text.clear() }
@@ -130,10 +127,9 @@ class PhoneVerifyActivity : BaseActivity() {
     private fun insertPhone(phone: String) {
         val phoneContact = Contact(value = phone, type = "phone", approved = true)
         model.addContact(Prefs.currentAccountAddress, phoneContact)
-        //KimlicDB.getInstance()!!.contactDao().insert(phoneContact)
     }
 
-    private fun successfull() {
+    private fun successful() {
         fragment = PhoneSuccessfulFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
 
@@ -144,14 +140,14 @@ class PhoneVerifyActivity : BaseActivity() {
         fragment.show(supportFragmentManager, PhoneSuccessfulFragment.FRAGMENT_KEY)
     }
 
-    private fun setupDigitListner() {
+    private fun setupDigitListener() {
         digitsList.forEach {
 
             it.setOnKeyListener(object : View.OnKeyListener {
                 val position = Integer.valueOf(it.tag.toString())
 
                 override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
-                    if (event!!.getAction() != KeyEvent.ACTION_DOWN)
+                    if (event!!.action != KeyEvent.ACTION_DOWN)
                         return false
 
                     when (keyCode) {
@@ -173,13 +169,13 @@ class PhoneVerifyActivity : BaseActivity() {
                 private fun moveNext(keyCode: Int) {
                     if (position < 4) {
                         digitsList.elementAt(position).text = Editable.Factory.getInstance().newEditable(keyCode.toString())
-                        digitsList.elementAt(position).background = resources.getDrawable(R.drawable.square_edittext_background_dark)
+                        digitsList.elementAt(position).background = resources.getDrawable(R.drawable.square_edittext_background_dark, null)
                         if (position < 3) digitsList.elementAt(position + 1).requestFocus()
                     }
                 }
 
                 private fun moveBack() {
-                    digitsList.elementAt(position).background = resources.getDrawable(R.drawable.square_edittext_background_trasparent)
+                    digitsList.elementAt(position).background = resources.getDrawable(R.drawable.square_edittext_background_trasparent, null)
                     digitsList.elementAt(position).text = Editable.Factory.getInstance().newEditable("")
 
                     if (position > 0) digitsList.elementAt(position - 1).requestFocus()
@@ -187,5 +183,4 @@ class PhoneVerifyActivity : BaseActivity() {
             })
         }
     }
-
 }
