@@ -63,7 +63,7 @@ class EmailVerifyActivity : BaseActivity() {
         digitsList[currentHolder].requestFocus()
         verifyBt.setOnClickListener { managePins() }
 
-        cancelTv.setOnClickListener { finish() }
+        changeTv.setOnClickListener { finish() }
         backBt.setOnClickListener { finish() }
 
         setupDigitListener()
