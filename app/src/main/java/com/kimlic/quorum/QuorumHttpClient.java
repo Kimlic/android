@@ -232,7 +232,7 @@ public class QuorumHttpClient extends Service {
     return new HostnameVerifier() {
       @Override
       public boolean verify(String hostname, SSLSession session) {
-        //return true; // verify always returns true, which could cause insecure network traffic due to trusting TLS/SSL server certificates for wrong hostnames
+        //return true; // contactVerify always returns true, which could cause insecure network traffic due to trusting TLS/SSL server certificates for wrong hostnames
         HostnameVerifier hv = HttpsURLConnection.getDefaultHostnameVerifier();
         return hv.verify("localhost", session);
       }

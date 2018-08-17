@@ -65,7 +65,7 @@
   </style>
 
   <!--EditText Style -> passphrases-->
-  <!--Document verify-->
+  <!--Document contactVerify-->
   <style name="KimlicEditText">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">40dp</item>

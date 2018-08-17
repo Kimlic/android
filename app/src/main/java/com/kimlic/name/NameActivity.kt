@@ -52,7 +52,7 @@ class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
         nameEt.setOnEditorActionListener(this)
         lastNameEt.setOnEditorActionListener(this)
 
-        cancelTv.setOnClickListener { finish() }
+        changeTv.setOnClickListener { finish() }
 
         nameEt.filters = arrayOf(lengthFilter(20))//,filter())
         lastNameEt.filters = arrayOf(lengthFilter(20))//,filter())

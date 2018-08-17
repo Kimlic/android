@@ -47,5 +47,5 @@ class VendorsViewModel : ViewModel(), LifecycleObserver {
         documentsForAdapter.postValue(supportedDocuments)
     }
 
-    fun countriesList() = vendorsRepository.countries()
+    fun countries() = vendorsRepository.countries()
 }

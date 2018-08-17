@@ -39,7 +39,7 @@
     android:layout_marginTop="1dp"
     android:baselineAligned="true"
     android:orientation="vertical"
-    app:layout_constraintBottom_toTopOf="@id/cancelTv"
+    app:layout_constraintBottom_toTopOf="@id/changeTv"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/rootUpper">
@@ -174,7 +174,7 @@
   </LinearLayout>
 
   <TextView
-    android:id="@+id/cancelTv"
+    android:id="@+id/changeTv"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"

@@ -48,7 +48,7 @@ class TouchIdActivity : BaseActivity() {
             else -> throw RuntimeException("Invalid action")
         }
 
-        cancelTv.setOnClickListener { finish() }
+        changeTv.setOnClickListener { finish() }
     }
 
     private fun create() {

@@ -11,6 +11,7 @@ import android.util.Log
 import com.android.volley.AuthFailureError
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
+import com.android.volley.Request.Method.GET
 import com.android.volley.Request.Method.POST
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
@@ -19,7 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.kimlic.API.KimlicRequest
+import com.kimlic.API.KimlicJSONRequest
 import com.kimlic.API.SyncObject
 import com.kimlic.API.VolleySingleton
 import com.kimlic.KimlicApp
@@ -35,11 +36,13 @@ import com.kimlic.utils.QuorumURL
 import com.kimlic.utils.mappers.BitmapToByteArrayMapper
 import org.json.JSONObject
 import org.spongycastle.util.encoders.Base64
+import org.web3j.protocol.core.methods.response.TransactionReceipt
 import java.io.File
 import java.io.IOException
 import java.io.OutputStreamWriter
 import java.nio.charset.Charset
 import java.util.*
+import java.util.concurrent.ExecutionException
 
 class ProfileRepository private constructor() {
 
@@ -265,24 +268,88 @@ class ProfileRepository private constructor() {
 
     fun syncProfile(accountAddress: String) {
         val headers = mapOf(Pair("account-address", accountAddress))
-        val syncRequest = KimlicRequest(Request.Method.GET, QuorumURL.profileSync.url, headers, null,
-                Response.Listener {
-                    val responseCode = JSONObject(it).getJSONObject("meta").optString("code").toString()
 
-                    if (!responseCode.startsWith("2")) return@Listener
+        val syncRequest = KimlicJSONRequest(GET, QuorumURL.profileSync.url, headers, JSONObject(), Response.Listener {
+            if (!it.getJSONObject("meta").optString("code").startsWith("2")) return@Listener
 
-                    val jsonToParse = JSONObject(it).getJSONObject("data").getJSONArray("data_fields").toString()
-                    val type = object : TypeToken<List<SyncObject>>() {}.type
-                    val approvedObjects: List<SyncObject> = Gson().fromJson(jsonToParse, type)
-                    val approved = approvedObjects.map { its -> its.name }
+            val jsonToParse = it.getJSONObject("data").getJSONArray("data_fields").toString()
+            val type = object : TypeToken<List<SyncObject>>() {}.type
+            val approvedObjects: List<SyncObject> = Gson().fromJson(jsonToParse, type)
+            val approved = approvedObjects.map { its -> its.name }
 
-                    if (!approved.contains("phone")) contactDao.delete(Prefs.currentAccountAddress, "phone")
-                    if (!approved.contains("email")) contactDao.delete(Prefs.currentAccountAddress, "email")
-                    syncDataBase()
-                },
-                Response.ErrorListener {})
+            if (!approved.contains("phone")) contactDao.delete(Prefs.currentAccountAddress, "phone")
+            if (!approved.contains("email")) contactDao.delete(Prefs.currentAccountAddress, "email")
+            Log.d("TAGSYNC", "json to parse = $jsonToParse")
+            syncDataBase()
 
+        }, Response.ErrorListener { })
+        
         Handler().post { VolleySingleton.getInstance(context = context).requestQueue.add(syncRequest) }
+    }
+
+    // Contacts verification
+
+    fun contactVerify(target: String, source: String, onSuccess: () -> Unit, onError: () -> Unit) {
+        Thread {
+            val quorumKimlic = QuorumKimlic.getInstance()
+            var receiptPhone: TransactionReceipt? = null
+
+            try {
+                receiptPhone = quorumKimlic.setFieldMainData(Sha.sha256(source), target)
+            } catch (e: ExecutionException) {
+                onError()
+            } catch (e: InterruptedException) {
+                onError()
+            }
+
+            if (receiptPhone != null && receiptPhone.transactionHash.isNotEmpty()) {
+                val headers = mapOf(Pair("account-address", Prefs.currentAccountAddress))
+                val params = JSONObject().put(target, source)
+
+                var url = ""
+                when (target) {
+                    "phone" -> url = QuorumURL.phoneVerify.url
+                    "email" -> url = QuorumURL.emailVerify.url
+                }
+
+                val verifyRequest = KimlicJSONRequest(POST, url, headers, params, Response.Listener {
+                    if (!it.getJSONObject("meta").optString("code").startsWith("2")) {
+                        onError(); return@Listener
+                    }
+                    onSuccess()
+
+                }, Response.ErrorListener { onError() })
+
+                VolleySingleton.getInstance(context).addToRequestQueue(verifyRequest)
+            }
+        }.start()
+    }
+
+    fun contactApprove(target: String, code: String, onSuccess: () -> Unit, onError: (code: String) -> Unit) {
+        var url = ""
+
+        when (target) {
+            "email" -> url = QuorumURL.emailApprove.url
+            "phone" -> url = QuorumURL.phoneApprove.url
+        }
+
+        val headers = mapOf(Pair("account-address", Prefs.currentAccountAddress))
+        val params = JSONObject().put("code", code)
+
+        val approveRequest = KimlicJSONRequest(POST, url, headers, params, Response.Listener {
+            val responseSuccess = it.getJSONObject("meta").optString("code").startsWith("2")
+            val statusOk = it.getJSONObject("data").optString("status").toString() == "ok"
+
+            if (!responseSuccess && !statusOk) {
+                onError("400"); return@Listener
+            }
+            onSuccess()
+
+        }, Response.ErrorListener {
+            onError(it?.networkResponse?.statusCode.toString())
+        })
+
+        VolleySingleton.getInstance(context).addToRequestQueue(approveRequest)
     }
 
     // RP request

@@ -53,7 +53,7 @@ class VolleySingleton(context: Context) {
     private fun getHostnameVerifier(): HostnameVerifier {
         return HostnameVerifier { hostname, session ->
 //            HostnameVerifier hv = HttpsURLConnection.getDefaultHostnameVerifier()
-//            return hv.verify("localhost", session)
+//            return hv.contactVerify("localhost", session)
             true
         }
     }

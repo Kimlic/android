@@ -5,10 +5,8 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import com.kimlic.BaseActivity
 import com.kimlic.R
-import com.kimlic.db.KimlicDB
 import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.preferences.Prefs
@@ -55,7 +53,7 @@ class MnemonicPreviewActivity : BaseActivity() {
                 }
             }
         }
-        cancelTv.setOnClickListener { finish() }
+        changeTv.setOnClickListener { finish() }
     }
 
     private fun setPhrases(list: List<String>) {
@@ -69,7 +67,7 @@ class MnemonicPreviewActivity : BaseActivity() {
         val string = StringBuilder()
 
         if (listToSave.isNotEmpty()) {
-            listToSave.forEachIndexed { index, it -> string.append(it + " ") }
+            listToSave.forEachIndexed { _, it -> string.append(it + " ") }
             val clipData = ClipData.newPlainText("copyedText", string)
             clipBoard.primaryClip = clipData
         }

@@ -88,7 +88,7 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
         }
 
         passcodeDeleteBt.setOnClickListener { deletePasscode() }
-        cancelTv.setOnClickListener { finish() }
+        changeTv.setOnClickListener { finish() }
         //passcodeOkBt.setOnClickListener { usePasscode(action) }
     }
 

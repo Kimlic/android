@@ -8,10 +8,10 @@ enum class QuorumURL(val url: String) {
     profileSync("https://mobile-api-test.kimlic.com/api/sync"),
 
     emailVerify("https://mobile-api-test.kimlic.com/api/verifications/email"),
-    emailVerifyApprove("https://mobile-api-test.kimlic.com/api/verifications/email/approve"),
+    emailApprove("https://mobile-api-test.kimlic.com/api/verifications/email/approve"),
 
     phoneVerify("https://mobile-api-test.kimlic.com/api/verifications/phone"),
-    phoneVierifyApprove("https://mobile-api-test.kimlic.com/api/verifications/phone/approve"),
+    phoneApprove("https://mobile-api-test.kimlic.com/api/verifications/phone/approve"),
 
     vendors("http://demo.kimlic.com/api/vendors")
 }

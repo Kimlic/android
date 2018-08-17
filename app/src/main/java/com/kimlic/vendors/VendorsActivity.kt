@@ -58,13 +58,13 @@ class VendorsActivity : BaseActivity() {
     }
 
     private fun initDropList() {
-        val countries = vendorsModel.countriesList().map { it.country }.toList().toTypedArray()
+        val countries = vendorsModel.countries().map { it.country }.toList().toTypedArray()
 
         val dialog = AlertDialog.Builder(this)
                 .setTitle("Countries")
                 .setIcon(R.drawable.ic_kimlic_logo_with_text)
                 .setItems(countries) { dialog, which ->
-                    vendorsModel.supportedDocuments(country = vendorsModel.countriesList()[which].sh)
+                    vendorsModel.supportedDocuments(country = vendorsModel.countries()[which].sh)
                     country = countries[which]
                     countryEt.text = Editable.Factory.getInstance().newEditable(countries[which])
                 }.show()

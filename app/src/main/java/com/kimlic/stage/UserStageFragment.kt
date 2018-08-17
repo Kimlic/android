@@ -134,11 +134,7 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
             }
         })
 
-        model.getUserContactsLive(Prefs.currentAccountAddress).observe(this, object : Observer<List<Contact>> {
-            override fun onChanged(contacts: List<Contact>?) {
-                contactsAdapter.setContactsList(contacts = contacts!!)
-            }
-        })
+        model.getUserContactsLive(Prefs.currentAccountAddress).observe(this, Observer<List<Contact>> { contacts -> contactsAdapter.setContactsList(contacts = contacts!!) })
     }
 
     private fun setupAddress() {

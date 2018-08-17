@@ -124,7 +124,7 @@ public class Address implements Serializable, Comparable<Address> {
     * representation of the address. The byte array contains both the address
     * version and address bytes, but without the checksum (1 + 20 = 21 bytes).
     * <p/>
-    * Note: No attempt is made to verify that the byte array and string
+    * Note: No attempt is made to contactVerify that the byte array and string
     * representation match.
     *
     * @param bytes         containing the full address representation 1 + 20 bytes.

@@ -50,7 +50,7 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
     private val LAT_LNG_BOUNDS = LatLngBounds(LatLng(-40.0, -168.0), LatLng(71.0, 136.0))
     private var isSearchActive = false
     private var isPhotoPresent: Boolean = false
-    private lateinit var model:ProfileViewModel
+    private lateinit var model: ProfileViewModel
 
     // Life
 
@@ -68,8 +68,8 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
 
         when (requestCode) {
             PICK_FILE_REQUEST_CODE -> {
-                // Get the Uri of the selected file
-                val uri = data!!.getData()
+
+                val uri = data!!.data
                 val uriString = uri.toString()
                 val myFile = File(uriString)
 
@@ -79,7 +79,7 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
                 if (uriString.startsWith("content://")) {
                     var cursor: Cursor? = null
                     try {
-                        cursor = this.getContentResolver().query(uri, null, null, null, null)
+                        cursor = this.contentResolver.query(uri, null, null, null, null)
                         if (cursor != null && cursor.moveToFirst()) {
                             displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
                         }
@@ -117,10 +117,10 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
 
     private fun setupUI() {
         model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-        setupAddressSerch()
+        setupAddressSearch()
         saveBt.setOnClickListener { manageInput() }
         addBt.setOnClickListener { pickFile() }
-        cancelTv.setOnClickListener { model.deleteAddres(addressId = addressId); finish() }
+        changeTv.setOnClickListener { model.deleteAddres(addressId = addressId); finish() }
     }
 
     private fun manageInput() {
@@ -131,10 +131,8 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
     }
 
     private fun fieldsAreValid(): Boolean {
-        var noError = true
-
-        noError = if (addressEt.text.length < 3) {
-            addressEt.error = "error"; false
+        val noError = if (addressEt.text.length < 3) {
+            addressEt.error = getString(R.string.error); false
         } else {
             addressEt.error = null; true
         }
@@ -142,7 +140,7 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
         return (noError && isPhotoPresent)
     }
 
-    private fun setupAddressSerch() {
+    private fun setupAddressSearch() {
         googleApiClient = GoogleApiClient.Builder(this)
                 .addApi(Places.GEO_DATA_API)
                 .addApi(Places.PLACE_DETECTION_API)
@@ -183,7 +181,7 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
         layoutParams.setMargins(16, 16, 16, 16)
         documentIv.layoutParams = layoutParams
         documentIv.background = null
-        documentIv.setImageBitmap(croped(bitmap))
+        documentIv.setImageBitmap(cropped(bitmap))
     }
 
     private fun pickFile() {
@@ -239,11 +237,11 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
 
     // Private helpers
 
-    private fun croped(bitmap: Bitmap): Bitmap {
+    private fun cropped(bitmap: Bitmap): Bitmap {
         val originalBitmap = rotateBitmap(bitmap, 90f)
         val width = originalBitmap.width
         val height = originalBitmap.height
-        val bitmapCroped = Bitmap.createBitmap(originalBitmap, (0.15 * width).toInt(), (0.08 * height).toInt(), (0.7 * width).toInt(), (0.5 * height).toInt())
-        return bitmapCroped
+        val bitmapCropped = Bitmap.createBitmap(originalBitmap, (0.15 * width).toInt(), (0.08 * height).toInt(), (0.7 * width).toInt(), (0.5 * height).toInt())
+        return bitmapCropped
     }
 }
