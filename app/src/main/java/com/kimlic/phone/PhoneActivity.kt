@@ -80,7 +80,7 @@ class PhoneActivity : BaseActivity() {
         })
 
         phoneEt.setOnClickListener { phoneEt.setSelection(phoneEt.text.length) }
-        phoneEt.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+        phoneEt.setOnEditorActionListener(TextView.OnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 hideKeyboard()
                 return@OnEditorActionListener true
@@ -96,13 +96,14 @@ class PhoneActivity : BaseActivity() {
         if (!isPhoneValid()) {
             phoneEt.error = getString(R.string.phone_is_not_valid); return
         }
+
         nextBt.isClickable = false
         showProgress()
 
         val phone = phoneEt.text.toString().replace(" ", "")
 
         phoneModel.verify(phone,
-                onSuccess = { PresentationManager.phoneNumberVerify(this, phoneEt.text.toString()) },
+                onSuccess = { hideProgress(); PresentationManager.phoneNumberVerify(this, phoneEt.text.toString()) },
                 onError = { hideProgress(); unableToProceed() })
     }
 
@@ -119,7 +120,7 @@ class PhoneActivity : BaseActivity() {
 
     private fun unableToProceed() {
         hideProgress()
-        runOnUiThread { nextBt.isClickable = true; showPopup(message = getString(R.string.unable_to_proceed_with_verification)) }
+        nextBt.isClickable = true; showPopup(message = getString(R.string.unable_to_proceed_with_verification))
     }
 
     private fun showProgress() {
@@ -135,6 +136,7 @@ class PhoneActivity : BaseActivity() {
 
     private fun hideProgress() {
         if (blockchainUpdatingFragment != null) blockchainUpdatingFragment?.dismiss(); timer?.cancel()
+        nextBt.isClickable = true
     }
 
     private fun isPhoneValid(): Boolean {
@@ -144,5 +146,3 @@ class PhoneActivity : BaseActivity() {
         return phone.matches("^[+]?[0-9]{10,13}\$".toRegex())
     }
 }
-
-
