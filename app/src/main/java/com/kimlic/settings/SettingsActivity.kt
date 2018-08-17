@@ -27,22 +27,19 @@ class SettingsActivity : BaseActivity() {
     // Variables
 
     private lateinit var settingsList: MutableList<Setting>
-    private val adapter: SettingsAdapter
+    private val adapter: SettingsAdapter = SettingsAdapter()
     private lateinit var model: ProfileViewModel
 
     // Init
-
-    init {
-        adapter = SettingsAdapter()
-    }
 
     // Life
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-        ButterKnife.bind(this)
 
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        ButterKnife.bind(this)
         setupUI()
     }
 
@@ -65,15 +62,8 @@ class SettingsActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         setupAdapter()
-        signoutBt.setOnClickListener {
-            model.deleteUser(accountAddress = Prefs.currentAccountAddress)
-            Prefs.clear()
-            clearAllFiles()
-            QuorumKimlic.destroyInstance()
-            PresentationManager.signupRecovery(this)
-        }
+        signoutBt.setOnClickListener { signOut() }
         backBt.setOnClickListener { finish() }
     }
 
@@ -131,6 +121,13 @@ class SettingsActivity : BaseActivity() {
         startActivityForResult(intent, PASSCODE_REQUEST_CODE)
     }
 
+    private fun signOut() {
+        model.deleteUser(Prefs.currentAccountAddress)
+        Prefs.clear()
+        clearAllFiles()
+        QuorumKimlic.destroyInstance()
+        PresentationManager.signupRecovery(this)
+    }
+
     private fun clearAllFiles() = model.clearAllFiles()
 }
-
