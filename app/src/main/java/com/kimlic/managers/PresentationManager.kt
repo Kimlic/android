@@ -20,7 +20,7 @@ import com.kimlic.passcode.PasscodeActivity
 import com.kimlic.phone.PhoneActivity
 import com.kimlic.phone.PhoneVerifyActivity
 import com.kimlic.recovery.AccountRecoveryActivity
-import com.kimlic.recovery.SignupRecoveryActivity
+import com.kimlic.recovery.SignUpRecoveryActivity
 import com.kimlic.settings.SettingsActivity
 import com.kimlic.splash.SplashScreenActivity
 import com.kimlic.stage.StageActivity
@@ -83,7 +83,6 @@ object PresentationManager {
         present(presenter = presenter, className = TouchIdActivity::class.java, isStarting = false, params = params)
     }
 
-    // causes passphrase generation
     fun recoveryEnable(presenter: BaseActivity) {
         present(presenter = presenter, className = MnemonicPreviewActivity::class.java, isStarting = false)
     }
@@ -168,12 +167,11 @@ object PresentationManager {
         params["country"] = country
         params["url"] = url
         params["target"] = "send"
-        // params[AppConstants.accountAddress.key] = accountAddress
         present(presenter = presenter, className = DocumentDetails::class.java, isStarting = false, params = params)
     }
 
     fun signupRecovery(presenter: BaseActivity) {
-        present(presenter = presenter, className = SignupRecoveryActivity::class.java, isStarting = true)
+        present(presenter = presenter, className = SignUpRecoveryActivity::class.java, isStarting = true)
     }
 
     fun passphraseCreate(presenter: BaseActivity) {
@@ -214,7 +212,6 @@ object PresentationManager {
     }
 
     fun about(presenter: BaseActivity) {
-        //present(presenter = presenter, className = ...)
         presenter.showToast("About activity")
     }
 

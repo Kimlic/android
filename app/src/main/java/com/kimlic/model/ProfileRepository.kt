@@ -101,7 +101,7 @@ class ProfileRepository private constructor() {
 
     fun addUserPhoto(accountAddress: String, fileName: String, data: ByteArray) {
         savePhoto(fileName = fileName, data = data)
-        savePhoto(fileName = "preview_" + fileName, data = cropedPreviewInByteArray(data))
+        savePhoto(fileName = "preview_" + fileName, data = croppedPreviewInByteArray(data))
         val user = userDao.select(accountAddress = accountAddress)
         user.portraitFile = fileName
         user.portraitPreviewFile = "preview_" + fileName
@@ -193,50 +193,14 @@ class ProfileRepository private constructor() {
 
     // Private
 
-    private fun savePhoto(fileName: String, data: ByteArray) {
-        val data64 = Base64.toBase64String(data)
-        writeToFile(context, fileName, data64)
-        syncPhoto(fileName)
-    }
-
-    // Writes file to files directory
-
-    private fun writeToFile(context: Context, fileName: String, data: String) {
-        try {
-            val outputStreamWriter = OutputStreamWriter(context.openFileOutput(fileName, Context.MODE_PRIVATE))
-            outputStreamWriter.write(data)
-            outputStreamWriter.close()
-        } catch (e: IOException) {
-            Log.e("TAG", "FileWriteFailed- " + e.toString())
-        }
-    }
-
-    // Bitmap transformations
-
-    private fun getResizedBitmap(bm: Bitmap, newWidth: Int, newHeight: Int, angel: Float, isNecessaryToKeepOrig: Boolean): Bitmap {
-        val width = bm.width
-        val height = bm.height
-        val scaleWidth = newWidth.toFloat() / width
-        val scaleHeight = newHeight.toFloat() / height
-        val matrix = Matrix()
-        matrix.postScale(scaleWidth, scaleHeight)
-        matrix.postRotate(angel)
-        val resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false)
-
-        if (!isNecessaryToKeepOrig) {
-            bm.recycle()
-        }
-        return resizedBitmap
-    }
-
-    private fun cropedPreviewInByteArray(data: ByteArray): ByteArray {
+    private fun croppedPreviewInByteArray(data: ByteArray): ByteArray {
         val originalBitmap = BitmapFactory.decodeByteArray(data, 0, data.size)
         val resizedBitmap = getResizedBitmap(originalBitmap, 1024, 768, -90f, true)
         val width = resizedBitmap.width
         val height = resizedBitmap.height
-        val cropedBitmap = Bitmap.createBitmap(resizedBitmap, (0.15 * width).toInt(), (0.12 * height).toInt(), (0.75 * width).toInt(), (0.7 * height).toInt())
-        val cropedPrevireByteArray = BitmapToByteArrayMapper().transform(cropedBitmap)
-        return cropedPrevireByteArray
+        val croppedBitmap = Bitmap.createBitmap(resizedBitmap, (0.15 * width).toInt(), (0.12 * height).toInt(), (0.75 * width).toInt(), (0.7 * height).toInt())
+        val croppedPreviewByteArray = BitmapToByteArrayMapper().transform(croppedBitmap)
+        return croppedPreviewByteArray
     }
 
     // Backup
@@ -259,9 +223,42 @@ class ProfileRepository private constructor() {
         googleSignInAccount?.let {
             val filePath = KimlicApp.applicationContext().filesDir.toString() + "/" + fileName
             Handler().postDelayed({
-                SyncService.getInstance().backupFile(accountAddress = Prefs.currentAccountAddress, filePath = filePath, fileDescription = SyncService.PHOTO_DESCRIPTION, onSuccess = {})
+                SyncService.getInstance().backupFile(Prefs.currentAccountAddress, filePath, SyncService.PHOTO_DESCRIPTION, onSuccess = {})
             }, 0)
         }
+    }
+
+    // New User
+
+    fun initNewUserRegistration(onSuccess: () -> Unit, onError: () -> Unit) {
+        // 1. Create Quorum instance locally - mnemonic and address
+        QuorumKimlic.destroyInstance()
+        QuorumKimlic.createInstance(null, context) // moved to quorum request
+
+        val mnemonic = QuorumKimlic.getInstance().mnemonic
+        val walletAddress = QuorumKimlic.getInstance().walletAddress
+        // Init new user
+        val user = User(accountAddress = walletAddress, mnemonic = mnemonic)
+        // 2. Get entry point of the Quorum
+        val headers = mapOf<String, String>(Pair("account-address", walletAddress))
+
+        val addressRequest = KimlicJSONRequest(GET, QuorumURL.config.url, headers, JSONObject(),
+                Response.Listener {
+                    if (!it.getJSONObject("meta").optString("code").startsWith("2")) {
+                        onError(); return@Listener
+                    }
+
+                    val contextContractAddress = it.getJSONObject("data").optString("context_contract")
+                    QuorumKimlic.getInstance().setKimlicContractsContextAddress(contextContractAddress)
+                    val accountStorageAdapterAddress = QuorumKimlic.getInstance().accountStorageAdapter
+                    QuorumKimlic.getInstance().setAccountStorageAdapterAddress(accountStorageAdapterAddress)
+                    userDao.insert(user)
+                    Prefs.currentAccountAddress = walletAddress
+
+                    onSuccess()
+                },
+                Response.ErrorListener { onError() })
+        VolleySingleton.getInstance(context).addToRequestQueue(addressRequest)
     }
 
     // Sync user
@@ -283,7 +280,7 @@ class ProfileRepository private constructor() {
             syncDataBase()
 
         }, Response.ErrorListener { })
-        
+
         Handler().post { VolleySingleton.getInstance(context = context).requestQueue.add(syncRequest) }
     }
 
@@ -520,8 +517,6 @@ class ProfileRepository private constructor() {
         return params
     }
 
-    private fun photoString(fileName: String) = File(context.filesDir.toString() + "/" + fileName).readText(Charset.forName("UTF-8"))
-
     private fun docRequest(method: Int, url: String, params: JSONObject, listener: Response.Listener<JSONObject>, error: Response.ErrorListener): JsonObjectRequest {
         val request = object : JsonObjectRequest(method, url, params, listener, error) {init {
             retryPolicy = DefaultRetryPolicy(30000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
@@ -536,5 +531,44 @@ class ProfileRepository private constructor() {
             }
         }
         return request
+    }
+
+    // Private helpers
+
+    private fun photoString(fileName: String) = File(context.filesDir.toString() + "/" + fileName).readText(Charset.forName("UTF-8"))
+
+    // Bitmap transformations
+
+    private fun getResizedBitmap(bm: Bitmap, newWidth: Int, newHeight: Int, angel: Float, isNecessaryToKeepOrig: Boolean): Bitmap {
+        val width = bm.width
+        val height = bm.height
+        val scaleWidth = newWidth.toFloat() / width
+        val scaleHeight = newHeight.toFloat() / height
+        val matrix = Matrix()
+        matrix.postScale(scaleWidth, scaleHeight)
+        matrix.postRotate(angel)
+        val resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false)
+
+        if (!isNecessaryToKeepOrig) bm.recycle()
+
+        return resizedBitmap
+    }
+
+    private fun savePhoto(fileName: String, data: ByteArray) {
+        val data64 = Base64.toBase64String(data)
+        writeToFile(context, fileName, data64)
+        syncPhoto(fileName)
+    }
+
+    // Writes file to files directory
+
+    private fun writeToFile(context: Context, fileName: String, data: String) {
+        try {
+            val outputStreamWriter = OutputStreamWriter(context.openFileOutput(fileName, Context.MODE_PRIVATE))
+            outputStreamWriter.write(data)
+            outputStreamWriter.close()
+        } catch (e: IOException) {
+            Log.e("TAG", "FileWriteFailed- " + e.toString())
+        }
     }
 }

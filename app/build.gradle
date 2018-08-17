@@ -60,11 +60,14 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     // Butter Knife
+
     implementation 'com.jakewharton:butterknife:8.8.1'
     kapt 'com.jakewharton:butterknife-compiler:8.8.1'
 
+    // Multidex
+    implementation 'com.android.support:multidex:1.0.3'
 
-    // Yoyo animation
+    // YoYo animation
     implementation 'com.android.support:support-compat:27.1.1'
     implementation 'com.daimajia.easing:library:2.0@aar'
     implementation 'com.daimajia.androidanimations:library:2.3@aar'
