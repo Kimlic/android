@@ -34,39 +34,34 @@ class MnemonicVerifyActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_verify_passphrase)
-        ButterKnife.bind(this)
 
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        ButterKnife.bind(this)
         setupUI()
     }
 
     // Private
 
     private fun setupUI() {
-        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         verifyBt.setOnClickListener {
-            if (validEmptyFields()) {
+
+            if (validEmptyFields())
                 if (phrasesMatch()) {
-                    Prefs.isRecoveryEnabled = true
-                    successfull()
+                    Prefs.isRecoveryEnabled = true; successful()
                 } else
                     showPopup(message = getString(R.string.mnemonic_phrases_do_not_match))
-            }
+
         }
 
-        backTv.setOnClickListener {
-            Prefs.isRecoveryEnabled = false
-            PresentationManager.stage(this)
-        }
+        backTv.setOnClickListener { Prefs.isRecoveryEnabled = false; PresentationManager.stage(this) }
         setupHints(hintList)
     }
 
     private fun setupHints(hintList: List<Int>) {
-        for (i in 0 until hintList.size) {
-            titleList[i].hint = getString(R.string.th_word, hintList[i])
-        }
+        for (i in 0 until hintList.size) titleList[i].hint = getString(R.string.th_word, hintList[i])
     }
 
-    private fun successfull() {
+    private fun successful() {
         val fragment = MnemonicSuccessfulFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
@@ -80,7 +75,7 @@ class MnemonicVerifyActivity : BaseActivity() {
         var noError = true
         val mnemonicList = model.getUser(Prefs.currentAccountAddress).mnemonic.split(" ")
 
-        for (i in 0 until hintList.size) noError = mnemonicList[hintList[i] - 1].equals(editTextList[i].text.toString())
+        for (i in 0 until hintList.size) noError = mnemonicList[hintList[i] - 1] == editTextList[i].text.toString()
 
         return noError
     }
@@ -90,7 +85,7 @@ class MnemonicVerifyActivity : BaseActivity() {
 
         editTextList.forEach {
             noError = if (it.text.length < 3) {
-                it.error = "error"; false
+                it.error = getString(R.string.error); false
             } else {
                 it.error = null; true
             }
