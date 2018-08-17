@@ -133,13 +133,13 @@ class PhoneActivity : BaseActivity() {
         }.start()
     }
 
-    private fun hideProgress() = runOnUiThread {
+    private fun hideProgress() {
         if (blockchainUpdatingFragment != null) blockchainUpdatingFragment?.dismiss(); timer?.cancel()
     }
 
     private fun isPhoneValid(): Boolean {
         val list = phoneEt.text.toString().split(" ")
-        var phone: String = ""
+        var phone = ""
         list.forEach { phone += it }
         return phone.matches("^[+]?[0-9]{10,13}\$".toRegex())
     }
