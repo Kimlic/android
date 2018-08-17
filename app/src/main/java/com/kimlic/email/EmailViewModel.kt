@@ -13,6 +13,10 @@ class EmailViewModel(application: Application) : AndroidViewModel(application) {
     // Public
 
     fun emailVerify(email: String, onSuccess: () -> Unit, onError: () -> Unit) {
-        repository.verify("email", email, onSuccess, onError)
+        repository.contactVerify("email", email, onSuccess, onError)
+    }
+
+    fun emailApprove(code: String, onSuccess: () -> Unit, onError: (code: String) -> Unit) {
+        repository.contactApprove("email", code, onSuccess, onError)
     }
 }
