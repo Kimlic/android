@@ -26,6 +26,7 @@ class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_name)
 
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         ButterKnife.bind(this)
         setupUI()
     }
@@ -47,7 +48,6 @@ class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
     // Private
 
     private fun setupUI() {
-        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         saveBt.setOnClickListener { manageInput() }
         nameEt.setOnEditorActionListener(this)
         lastNameEt.setOnEditorActionListener(this)
@@ -63,11 +63,11 @@ class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
     private fun manageInput() {
         if (validFields()) {
             model.addUserName(Prefs.currentAccountAddress, nameEt.text.toString(), lastNameEt.text.toString())
-            succesful()
+            successful()
         }
     }
 
-    private fun succesful() {
+    private fun successful() {
         val fragment = NameSuccessfulFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
@@ -89,7 +89,7 @@ class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
 
 
     private fun filter(): InputFilter {
-        return InputFilter { src, start, end, dst, dstart, dend ->
+        return InputFilter { src, _, _, _, _, _ ->
             if (src == "") return@InputFilter src
             if (Character.isLetter(src.last()) && !Character.isWhitespace(src.last())) return@InputFilter src else ""
         }
