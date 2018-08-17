@@ -8,14 +8,18 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.kimlic.KimlicApp
 import com.kimlic.db.KimlicDB
 import com.kimlic.db.SyncService
+import com.kimlic.model.ProfileRepository
 
 class RecoveryViewModel : ViewModel() {
 
     // Variables
+
     private val TAG = this::class.java.simpleName
+
     private val syncService: SyncService = SyncService.getInstance()
     private var googleSignInAccount: GoogleSignInAccount? = null
     private var db: KimlicDB? = null
+    private var repository: ProfileRepository = ProfileRepository.instance
 
     // Public
 
@@ -33,6 +37,10 @@ class RecoveryViewModel : ViewModel() {
         db = KimlicDB.getInstance()
     }
 
+    fun initNewUserRegistration(onSuccess: () -> Unit, onError: () -> Unit) {
+        repository.initNewUserRegistration(onSuccess, onError)
+    }
+
     override fun onCleared() {
         db = null
         super.onCleared()
@@ -45,14 +53,11 @@ class RecoveryViewModel : ViewModel() {
 
             if (!db!!.isOpen) {
                 Handler().postDelayed({
-                    syncService.retrieveDataBase(accountAddress = accountAddress, dataBaseName = "kimlic.db", onSuccess = {
-                        onSuccess()
-//                        KimlicDB.getInstance()
-                        Log.d(TAG, "Database restored successfully")
-                    }, onError = onError)
+                    syncService.retrieveDataBase(accountAddress, "kimlic.db",
+                            onSuccess = { onSuccess(); Log.d(TAG, "Database restored successfully") },
+                            onError = onError)
                 }, 10)
             }
         }
     }
-
 }
