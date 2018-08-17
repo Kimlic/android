@@ -16,7 +16,6 @@ class MnemonicPreviewActivity : BaseActivity() {
 
     // Variables
 
-    private var phraseList: List<String> = emptyList()
     private lateinit var model: ProfileViewModel
 
     // Life
@@ -25,26 +24,25 @@ class MnemonicPreviewActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mnemonic_preview)
 
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         setupUI()
     }
 
     // Private
 
     private fun setupUI() {
-        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         phraseBt.tag = "show"
 
         phraseBt.setOnClickListener {
             when (it.tag) {
                 "show" -> {
-                    phraseList = mnemonicList()
-                    setPhrases(phraseList)
+                    setPhrases(mnemonicList())
                     phraseBt.tag = "copy"
                     phraseBt.text = getString(R.string.copy_to_buffer)
                     showPopup(message = getString(R.string.write_down_these_words_stroe_them_in_a_safe_place))
                 }
                 "copy" -> {
-                    copyToBuffer(phraseList)
+                    copyToBuffer(mnemonicList())
                     phraseBt.tag = "save"
                     phraseBt.text = getString(R.string.ok_i_save_the_passphrase)
                 }
@@ -67,8 +65,8 @@ class MnemonicPreviewActivity : BaseActivity() {
         val string = StringBuilder()
 
         if (listToSave.isNotEmpty()) {
-            listToSave.forEachIndexed { _, it -> string.append(it + " ") }
-            val clipData = ClipData.newPlainText("copyedText", string)
+            listToSave.forEachIndexed { _, it -> string.append("$it ") }
+            val clipData = ClipData.newPlainText("copied text", string)
             clipBoard.primaryClip = clipData
         }
     }
