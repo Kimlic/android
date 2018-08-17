@@ -1,5 +1,6 @@
 package com.kimlic.email
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.KeyEvent
@@ -25,7 +26,7 @@ import java.util.concurrent.ExecutionException
 class EmailActivity : BaseActivity() {
 
     // Variables
-
+    private lateinit var emailModel: EmailViewModel
     private var blockchainUpdatingFragment: BlockchainUpdatingFragment? = null
     private var timer: CountDownTimer? = null
 
@@ -34,6 +35,7 @@ class EmailActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_email)
+        emailModel = ViewModelProviders.of(this).get(EmailViewModel::class.java)
 
         setupUI()
     }
@@ -48,14 +50,12 @@ class EmailActivity : BaseActivity() {
     private fun setupUI() {
         nextBt.setOnClickListener { manageInput() }
 
-        emailEt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
-            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    hideKeyboard()
-                    return true
-                }
-                return false
+        emailEt.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                hideKeyboard()
+                return@OnEditorActionListener true
             }
+            false
         })
 
         backTv.setOnClickListener { finish() }
@@ -63,46 +63,17 @@ class EmailActivity : BaseActivity() {
     }
 
     private fun manageInput() {
-        if (isEmailValid()) {
+        if (!isEmailValid()) emailEt.error = getString(R.string.invalid)
+        else {
             showProgress()
             nextBt.isClickable = false
             emailEt.error = null
 
             val email = emailEt.text.toString()
 
-            Thread(Runnable {
-                val quorumKimlic = QuorumKimlic.getInstance()
-                var receiptEmail: TransactionReceipt? = null
-
-                try {
-                    receiptEmail = quorumKimlic.setFieldMainData(Sha.sha256(email), "email")
-                } catch (e: ExecutionException) {
-                    unableToProceed()
-                } catch (e: InterruptedException) {
-                    unableToProceed()
-                }
-
-                if (receiptEmail != null && receiptEmail.transactionHash.isNotEmpty()) {
-                    val params = emptyMap<String, String>().toMutableMap(); params["email"] = email
-                    val headers = emptyMap<String, String>().toMutableMap(); headers["account-address"] = Prefs.currentAccountAddress
-
-                    val request = KimlicRequest(Request.Method.POST, QuorumURL.emailVerify.url, headers, params,
-                            Response.Listener { response ->
-                                hideProgress()
-                                val responseCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
-
-                                if (responseCode.startsWith("2")) {
-                                    nextBt.isClickable = true
-                                    PresentationManager.emailVerify(this@EmailActivity, emailEt.text.toString())
-                                } else unableToProceed()
-                            },
-                            Response.ErrorListener { unableToProceed() }
-                    )
-                    VolleySingleton.getInstance(this@EmailActivity).addToRequestQueue(request)
-                } else unableToProceed()
-            }).start()
-        } else {
-            emailEt.error = getString(R.string.invalid)
+            emailModel.emailVerify(email,
+                    onSuccess = { PresentationManager.emailVerify(this@EmailActivity, emailEt.text.toString()) },
+                    onError = { unableToProceed() })
         }
     }
 
@@ -117,7 +88,7 @@ class EmailActivity : BaseActivity() {
         }.start()
     }
 
-    private fun hideProgress() = runOnUiThread { if (blockchainUpdatingFragment != null) blockchainUpdatingFragment?.dismiss(); timer.let { it?.cancel() } }
+    private fun hideProgress() { if (blockchainUpdatingFragment != null) blockchainUpdatingFragment?.dismiss(); timer?.cancel() }
 
     private fun isEmailValid() = android.util.Patterns.EMAIL_ADDRESS.matcher(emailEt.text.toString()).matches()
 
