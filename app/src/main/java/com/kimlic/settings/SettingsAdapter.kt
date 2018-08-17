@@ -86,16 +86,10 @@ class SettingsAdapter : RecyclerView.Adapter<SettingsAdapter.SettingsViewHolder>
 
         override fun onClick(v: View?) {
             if (itemView.selector != null) {
-                if (itemView.selector.isChecked)
-                    itemView.selector.isChecked = false
-                else
-                    itemView.selector.isChecked = true
+                itemView.selector.isChecked = !itemView.selector.isChecked
             }
 
             onItemClick.onClick(v!!, adapterPosition)
         }
     }
 }
-
-
-
