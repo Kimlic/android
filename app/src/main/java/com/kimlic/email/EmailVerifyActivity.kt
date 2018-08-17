@@ -10,10 +10,6 @@ import android.widget.EditText
 import android.widget.TextView
 import butterknife.BindViews
 import butterknife.ButterKnife
-import com.android.volley.Request
-import com.android.volley.Response
-import com.kimlic.API.KimlicRequest
-import com.kimlic.API.VolleySingleton
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.db.entity.Contact
@@ -22,9 +18,7 @@ import com.kimlic.model.ProfileViewModel
 import com.kimlic.phone.PhoneSuccessfulFragment
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.BaseCallback
-import com.kimlic.utils.QuorumURL
 import kotlinx.android.synthetic.main.activity_email_verify.*
-import org.json.JSONObject
 
 class EmailVerifyActivity : BaseActivity() {
 
@@ -39,12 +33,16 @@ class EmailVerifyActivity : BaseActivity() {
     private lateinit var code: StringBuilder
     private lateinit var email: String
     private lateinit var model: ProfileViewModel
+    private lateinit var emailViewModel: EmailViewModel
 
     // Life
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_email_verify)
+
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        emailViewModel = ViewModelProviders.of(this).get(EmailViewModel::class.java)
 
         ButterKnife.bind(this)
         setupUI()
@@ -58,7 +56,7 @@ class EmailVerifyActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+
         email = intent.extras.getString("email", "")
         titleTv.text = Editable.Factory.getInstance().newEditable(this.getString(R.string.code_sent_to_email, email))
 
@@ -68,9 +66,9 @@ class EmailVerifyActivity : BaseActivity() {
         cancelTv.setOnClickListener { finish() }
         backBt.setOnClickListener { finish() }
 
-        setupDigitListner()
+        setupDigitListener()
 
-        digitsList[3].setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+        digitsList[3].setOnEditorActionListener(TextView.OnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 hideKeyboard(); return@OnEditorActionListener true
             }
@@ -79,35 +77,22 @@ class EmailVerifyActivity : BaseActivity() {
     }
 
     private fun managePins() {
-        if (pinEntered()) {
+        if (!pinEntered()) showToast(getString(R.string.pin_is_not_enterd))
+        else {
             progressBar.visibility = View.VISIBLE
             verifyBt.isClickable = false
             code = StringBuilder()
             digitsList.forEach { code.append(it.text.toString()) }
 
-            val params = mapOf("code" to code.toString())
-            val headers = mapOf("account-address" to Prefs.currentAccountAddress)
-
-            val request = KimlicRequest(Request.Method.POST, QuorumURL.emailVerifyApprove.url, headers, params,
-                    Response.Listener { response ->
-                        val responseCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
-                        val status = JSONObject(response).getJSONObject("data").optString("status").toString()
-
-                        if (responseCode.startsWith("2") && status == "ok") {
-                            insertEmail(email)
-                            verifyBt.isClickable = true
-                            successful()
-                        } else {
-                            verifyBt.isClickable = true
-                            digitsList.forEach { it.text.clear() }
-                            showPopup(message = getString(R.string.unable_to_verify_the_code))
+            emailViewModel.emailApprove(code.toString(),
+                    onSuccess = { insertEmail(email); successful() },
+                    onError = {
+                        when (it.first().toString()) {
+                            "4" -> unableVerifyCode()
+                            else -> unableToProceed()
                         }
-                    },
-                    Response.ErrorListener { unableToProceed() }
-            )
-
-            VolleySingleton.getInstance(this).addToRequestQueue(request)
-        } else showToast(getString(R.string.pin_is_not_enterd))
+                    })
+        }
     }
 
     private fun insertEmail(email: String) {
@@ -118,7 +103,6 @@ class EmailVerifyActivity : BaseActivity() {
     private fun pinEntered(): Boolean {
         var count = 0
         digitsList.forEach { it -> if (!it.text.isEmpty()) count++ }
-
         return (count == 4)
     }
 
@@ -133,13 +117,19 @@ class EmailVerifyActivity : BaseActivity() {
     }
 
     private fun unableToProceed() {
-        runOnUiThread { progressBar.visibility = View.GONE }
+        progressBar.visibility = View.GONE
         verifyBt.isClickable = true
-        digitsList.forEach { it.text = Editable.Factory.getInstance().newEditable("") }
         showPopup(message = getString(R.string.unable_to_proceed_with_verification))
     }
 
-    private fun setupDigitListner() {
+    private fun unableVerifyCode() {
+        progressBar.visibility - View.GONE
+        verifyBt.isClickable = true
+        digitsList.forEach { it.text.clear() }
+        showPopup(message = getString(R.string.unable_to_verify_the_code))
+    }
+
+    private fun setupDigitListener() {
         digitsList.forEach {
 
             it.setOnKeyListener(object : View.OnKeyListener {
