@@ -9,10 +9,6 @@ import android.widget.EditText
 import android.widget.TextView
 import butterknife.BindViews
 import butterknife.ButterKnife
-import com.android.volley.Request
-import com.android.volley.Response
-import com.kimlic.API.KimlicRequest
-import com.kimlic.API.VolleySingleton
 import com.kimlic.BaseActivity
 import com.kimlic.BaseDialogFragment
 import com.kimlic.R
@@ -21,9 +17,7 @@ import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.BaseCallback
-import com.kimlic.utils.QuorumURL
 import kotlinx.android.synthetic.main.activity_phone_verify.*
-import org.json.JSONObject
 
 class PhoneVerifyActivity : BaseActivity() {
 
@@ -38,12 +32,16 @@ class PhoneVerifyActivity : BaseActivity() {
     private lateinit var phone: String
     private lateinit var code: StringBuilder
     private lateinit var model: ProfileViewModel
+    private lateinit var phoneModel: PhoneViewModel
 
     // Life
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_phone_verify)
+
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        phoneModel = ViewModelProviders.of(this).get(PhoneViewModel::class.java)
 
         ButterKnife.bind(this)
         setupUI()
@@ -57,18 +55,17 @@ class PhoneVerifyActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         verifyBt.setOnClickListener { managePin() }
         backBt.setOnClickListener { finish() }
+        changeTv.setOnClickListener { PresentationManager.phoneNumber(this) }
 
         phone = intent.extras!!.getString("phone", "")
         titleTv.text = Editable.Factory.getInstance().newEditable(this.getString(R.string.code_sent_to, phone))
 
-        cancelTv.setOnClickListener { PresentationManager.phoneNumber(this) }
         showSoftKeyboard(digit1Et)
         setupDigitListener()
 
-        digitsList[3].setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+        digitsList[3].setOnEditorActionListener(TextView.OnEditorActionListener { _, _, event ->
             if (event!!.keyCode == KeyEvent.KEYCODE_ENTER) {
                 hideKeyboard(); return@OnEditorActionListener true
             }
@@ -83,38 +80,29 @@ class PhoneVerifyActivity : BaseActivity() {
             code = StringBuilder()
             digitsList.forEach { code.append(it.text.toString()) }
 
-            val params = mapOf(Pair("code", code.toString()))
-            val headers = mapOf(Pair("account-address", Prefs.currentAccountAddress))
 
-            val request = KimlicRequest(Request.Method.POST, QuorumURL.phoneVierifyApprove.url, headers, params,
-                    Response.Listener { response ->
-                        progressBar.visibility = View.GONE
-                        val responseCode = JSONObject(response).getJSONObject("meta").optString("code").toString()
-                        val status = JSONObject(response).getJSONObject("data").optString("status").toString()
-
-                        if (responseCode.startsWith("2") && status == "ok") {
-                            insertPhone(phone)
-                            Prefs.authenticated = true
-                            verifyBt.isClickable = true
-                            successful()
-                        } else {
-                            verifyBt.isClickable = true
-                            digitsList.forEach { it.text.clear() }
-                            showPopup(message = getString(R.string.unable_to_verify_the_code))
+            phoneModel.emailApprove(code.toString(),
+                    onSuccess = { insertPhone(phone); successful() },
+                    onError = {
+                        when (it.first().toString()) {
+                            "4" -> unableVerifyCode()
+                            else -> unableToProceed()
                         }
-                    },
-                    Response.ErrorListener { unableToProceed() }
-            )
-
-            VolleySingleton.getInstance(this).addToRequestQueue(request)
+                    })
         } else showToast(getString(R.string.pin_is_not_enterd))
     }
 
     private fun unableToProceed() {
-        runOnUiThread { progressBar.visibility = View.GONE }
+        progressBar.visibility = View.GONE
         verifyBt.isClickable = true
-        digitsList.forEach { it.text = Editable.Factory.getInstance().newEditable("") }
         showPopup(message = getString(R.string.unable_to_proceed_with_verification))
+    }
+
+    private fun unableVerifyCode() {
+        progressBar.visibility = View.GONE
+        verifyBt.isClickable = true
+        digitsList.forEach { it.text.clear() }
+        showPopup(message = getString(R.string.unable_to_verify_the_code))
     }
 
     private fun pinEntered(): Boolean {
