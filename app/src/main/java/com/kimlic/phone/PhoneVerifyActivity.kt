@@ -82,7 +82,7 @@ class PhoneVerifyActivity : BaseActivity() {
 
 
             phoneModel.emailApprove(code.toString(),
-                    onSuccess = { insertPhone(phone); successful() },
+                    onSuccess = { insertPhone(phone);Prefs.authenticated = true; successful() },
                     onError = {
                         when (it.first().toString()) {
                             "4" -> unableVerifyCode()
