@@ -1,14 +1,13 @@
 package com.kimlic.utils
 
-enum class AppDuration(val duration: Long, val repeat: Int = 4) {
+enum class AppDuration(val duration: Long) {
 
-    SUCCESSFULL_DURATION(700, 4),
-    BLOCKCHAIN_DURATION(1000, 4),
+    SUCCESSFUL_DURATION(700),
+    BLOCKCHAIN_DURATION(1000),
 
 
     //quick shake logo duration
     LOGO_DURATION(800),
-    FINGERPRINT_DURATION(4000, 10),
-    SPLASH(2000, 1)
-
+    FINGERPRINT_DURATION(4000),
+    SPLASH(2000)
 }
