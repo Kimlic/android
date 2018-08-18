@@ -37,7 +37,7 @@ class ErrorPopupFragment : BasePopupFragment() {
 
     override fun onDismiss(dialog: DialogInterface?) {
         super.onDismiss(dialog)
-        activity!!.finish()
+        activity?.finish()
     }
 
     // Private
