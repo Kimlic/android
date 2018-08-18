@@ -31,13 +31,15 @@ class StageActivity : BaseActivity() {
     private lateinit var userStageFragment: UserStageFragment
     private lateinit var accountsStageFragment: AccountsStageFragment
     private lateinit var model: ProfileViewModel
-    // private lateinit var googleSigneIn
+
 
     // Life
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stage)
+
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         setupUI()
     }
 
@@ -60,7 +62,6 @@ class StageActivity : BaseActivity() {
                 val result = IntentIntegrator.parseActivityResult(resultCode, data)
                 if (result.contents != null) {
                     val url = result.contents
-                    Log.d("TAGSCANNER", "Scanned")
                     Toast.makeText(this, "Scanned: " + result.contents, Toast.LENGTH_LONG).show()
                     PresentationManager.vendors(this, url = url)
                 }
@@ -88,7 +89,6 @@ class StageActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
 
         SyncService.signIn(this, GOOGLE_SIGNE_IN_REQUEST_CODE)
         GoogleSignIn.getLastSignedInAccount(this)?.let {
