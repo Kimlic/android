@@ -36,13 +36,13 @@ abstract class BaseFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setVerticlal()
+        setVertically()
     }
 
     // Public
 
     fun showToast(text: String) {
-        if (text.length > 0) Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()
+        if (text.isNotEmpty()) Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()
     }
 
     fun showSoftKeyboard(view: View) {
@@ -62,7 +62,7 @@ abstract class BaseFragment : Fragment() {
 
     // Private
 
-    private fun setVerticlal() {
+    private fun setVertically() {
         getActivity()?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 }
