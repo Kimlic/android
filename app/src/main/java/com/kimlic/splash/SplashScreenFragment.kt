@@ -2,7 +2,6 @@ package com.kimlic.splash
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,7 +25,7 @@ class SplashScreenFragment : BaseDialogFragment() {
     // Companion
 
     companion object {
-        val FRAGMENT_KEY = this::class.java.simpleName
+        val FRAGMENT_KEY = this::class.java.simpleName!!
 
         fun newInstance() = SplashScreenFragment()
     }
@@ -36,11 +35,10 @@ class SplashScreenFragment : BaseDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.fragment_splash_screen, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        //super.onViewCreated(view, savedInstanceState)
         setupUI()
     }
 
-    override fun playAnimation() { }
+    override fun playAnimation() {}
 
     override fun onDismiss(dialog: DialogInterface?) {
         yoyoFadeIn?.stop()
@@ -54,17 +52,18 @@ class SplashScreenFragment : BaseDialogFragment() {
 
     private fun setupUI() {
         splashLogoWeakReference = WeakReference(logoIv)
-        playFirstAnimation()
+        firstAnimation()
     }
 
     private fun secondAnimation() {
         yoyoFadeIn = YoYo
                 .with(Techniques.FadeIn)
-                .duration(AppDuration.SPLASH.duration).onEnd { playAnimation() } //getCallback().callback() }
+                .duration(AppDuration.SPLASH.duration).onEnd { playAnimation() }
+                .onEnd { firstAnimation() }
                 .playOn(splashLogoWeakReference.get())
     }
 
-    fun playFirstAnimation() {
+    private fun firstAnimation() {
         yoyoFadeOut = YoYo
                 .with(Techniques.FadeOut)
                 .duration(AppDuration.SPLASH.duration)
