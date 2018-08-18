@@ -15,13 +15,14 @@ class BlockchainUpdatingFragment : BasePopupFragment() {
 
     // Variables
 
-    private lateinit var blockchaimWeakReference: WeakReference<ImageView>
+    private lateinit var blockchainWeakReference: WeakReference<ImageView>
     private var yoyoFadeIn: YoYo.YoYoString? = null
     private var yoyoFadeOut: YoYo.YoYoString? = null
 
     // Companion
 
     companion object {
+
         val FRAGMENT_KEY = this::class.java.simpleName
 
         fun newInstance(bundle: Bundle? = Bundle()): BlockchainUpdatingFragment {
@@ -42,7 +43,7 @@ class BlockchainUpdatingFragment : BasePopupFragment() {
 
     private fun setupUI() {
         isCancelable = false
-        blockchaimWeakReference = WeakReference(blockchainIv)
+        blockchainWeakReference = WeakReference(blockchainIv)
         playAnimation()
     }
 
@@ -59,7 +60,7 @@ class BlockchainUpdatingFragment : BasePopupFragment() {
                 .with(Techniques.FadeOut)
                 .duration(AppDuration.BLOCKCHAIN_DURATION.duration)
                 .onEnd { secondAnimation() }
-                .playOn(blockchaimWeakReference.get())
+                .playOn(blockchainWeakReference.get())
     }
 
     private fun secondAnimation() {
@@ -67,6 +68,6 @@ class BlockchainUpdatingFragment : BasePopupFragment() {
                 .with(Techniques.FadeIn)
                 .duration(AppDuration.BLOCKCHAIN_DURATION.duration)
                 .onEnd { playAnimation() }
-                .playOn(blockchaimWeakReference.get())
+                .playOn(blockchainWeakReference.get())
     }
 }
