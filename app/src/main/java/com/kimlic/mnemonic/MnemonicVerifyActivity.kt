@@ -73,7 +73,7 @@ class MnemonicVerifyActivity : BaseActivity() {
 
     private fun phrasesMatch(): Boolean {
         var noError = true
-        val mnemonicList = model.getUser(Prefs.currentAccountAddress).mnemonic.split(" ")
+        val mnemonicList = model.user(Prefs.currentAccountAddress).mnemonic.split(" ")
 
         for (i in 0 until hintList.size) noError = mnemonicList[hintList[i] - 1] == editTextList[i].text.toString()
 
