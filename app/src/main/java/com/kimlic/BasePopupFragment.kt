@@ -18,9 +18,6 @@ abstract class BasePopupFragment : DialogFragment(){
             activity = context
     }
 
-    /*
-    * setup background rounded corners
-    * */
     override fun onResume() {
         super.onResume()
         dialog.window.setBackgroundDrawableResource(R.drawable.rounded_background_fragment)
