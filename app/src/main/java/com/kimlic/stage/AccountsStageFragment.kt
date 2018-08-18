@@ -10,7 +10,7 @@ import com.kimlic.R
 
 class AccountsStageFragment : BaseFragment() {
 
-    // Compainion
+    // Companion
 
     companion object {
         val FRAGMENT_KEY = this::class.java.simpleName
@@ -36,6 +36,5 @@ class AccountsStageFragment : BaseFragment() {
     // Private
 
     private fun setupUI() {
-
     }
 }
