@@ -1,8 +1,6 @@
 package com.kimlic
 
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
-import android.content.DialogInterface
 import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.Matrix
@@ -14,17 +12,10 @@ import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import com.kimlic.model.ProfileViewModel
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.ErrorPopupFragment
-import java.io.File
-import java.io.FileOutputStream
 
 abstract class BaseActivity : AppCompatActivity() {
-
-    // Variables
-
-    //protected lateinit var model: ProfileViewModel
 
     // Companion
 
@@ -32,14 +23,11 @@ abstract class BaseActivity : AppCompatActivity() {
         val TAG = this::class.java.simpleName
     }
 
-    open val TAG = this::class.java.simpleName
-
     // Life
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         setupUI()
     }
 
@@ -53,7 +41,7 @@ abstract class BaseActivity : AppCompatActivity() {
     // Public
 
     fun showToast(text: String) {
-        if (text.length > 0) Toast.makeText(applicationContext, text, Toast.LENGTH_SHORT).show()
+        if (text.isNotEmpty()) Toast.makeText(applicationContext, text, Toast.LENGTH_SHORT).show()
     }
 
     fun showSoftKeyboard(view: View) {
@@ -80,14 +68,14 @@ abstract class BaseActivity : AppCompatActivity() {
     // Private
 
     private fun setupUI() {
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+        this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
     open fun showFragment(containerViewId: Int, fragment: Fragment, tag: String, title: String = "") {
         if (supportActionBar != null && title != "")
-            supportActionBar?.setTitle(title)
+            supportActionBar?.title = title
 
         val transaction = this.supportFragmentManager.beginTransaction()
         transaction.replace(containerViewId, fragment, tag)
@@ -99,32 +87,15 @@ abstract class BaseActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle(title)
                 .setMessage(message)
-                .setPositiveButton(getString(R.string.OK), object : DialogInterface.OnClickListener {
-                    override fun onClick(dialog: DialogInterface?, which: Int) {
-                        dialog?.dismiss()
-                    }
-                }).setCancelable(true)
+                .setPositiveButton(getString(R.string.OK)) { dialog, _ -> dialog?.dismiss() }.setCancelable(true)
 
         val dialog = builder.create()
         dialog.show()
     }
 
-//    fun saveBitmap(fileName: String, bitmap: Bitmap) {
-//        val fos: FileOutputStream?
-//        val file = File(KimlicApp.applicationContext().filesDir.toString() + "/" + fileName)
-//        try {
-//            fos = FileOutputStream(file)
-//            bitmap.compress(Bitmap.CompressFormat.JPEG, 60, fos)
-//            fos.flush()
-//            fos.close()
-//        } catch (e: Exception) {
-//            throw Exception("Can't write data to internal storage")
-//        }
-//    }
-
-    fun rotateBitmap(sourse: Bitmap, angel: Float): Bitmap {
+    fun rotateBitmap(source: Bitmap, angel: Float): Bitmap {
         val matrix = Matrix()
         matrix.postRotate(angel)
-        return Bitmap.createBitmap(sourse, 0, 0, sourse.width, sourse.height, matrix, true)
+        return Bitmap.createBitmap(source, 0, 0, source.width, source.height, matrix, true)
     }
 }
