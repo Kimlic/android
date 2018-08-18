@@ -41,7 +41,7 @@ class TutorialActivity : BaseActivity() {
                     Prefs.termsAccepted = true
                     PresentationManager.phoneNumber(this@TutorialActivity)
                 } else
-                    PresentationManager.signupRecovery(this@TutorialActivity)
+                    PresentationManager.signUpRecovery(this@TutorialActivity)
             }
         }
     }
@@ -63,12 +63,12 @@ class TutorialActivity : BaseActivity() {
         adapter.setContent(content)
 
         tabLayout.setupWithViewPager(pager, true)
-        setupPageChangeListner(pager)
+        setupPageChangeListener(pager)
 
         skipTv.setOnClickListener { termsToAccept(TERMS_ACCEPT_REQUEST_CODE) }
     }
 
-    private fun setupPageChangeListner(pager: ViewPager) {
+    private fun setupPageChangeListener(pager: ViewPager) {
         pager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
             var counterPageScroll: Int = 0
             var counterPageScrollL: Int = 0
