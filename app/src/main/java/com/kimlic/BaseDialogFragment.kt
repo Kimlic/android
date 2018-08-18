@@ -62,7 +62,7 @@ abstract class BaseDialogFragment : DialogFragment() {
     open fun playAnimation() {
         YoYo
                 .with(Techniques.FadeOut)
-                .duration(AppDuration.SUCCESSFULL_DURATION.duration)
+                .duration(AppDuration.SUCCESSFUL_DURATION.duration)
                 .onEnd { secondAnimation() }
                 .playOn(logoRoundedIv)
 
@@ -80,7 +80,7 @@ abstract class BaseDialogFragment : DialogFragment() {
     private fun secondAnimation() {
         YoYo
                 .with(Techniques.FadeIn)
-                .duration(AppDuration.SUCCESSFULL_DURATION.duration)
+                .duration(AppDuration.SUCCESSFUL_DURATION.duration)
                 .onEnd { callback.callback() }
                 .playOn(logoRoundedIv)
     }
