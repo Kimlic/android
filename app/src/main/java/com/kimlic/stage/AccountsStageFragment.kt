@@ -1,7 +1,6 @@
 package com.kimlic.stage
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,7 @@ class AccountsStageFragment : BaseFragment() {
     // Companion
 
     companion object {
-        val FRAGMENT_KEY = this::class.java.simpleName
+        val FRAGMENT_KEY = this::class.java.simpleName!!
 
         fun newInstance(bundle: Bundle = Bundle()): AccountsStageFragment {
             val fragment = AccountsStageFragment()
