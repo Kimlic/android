@@ -7,13 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.widget.ImageView
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.kimlic.utils.AppDuration
 import com.kimlic.utils.BaseCallback
 import kotlinx.android.synthetic.main.fragment_phone_successfull.*
-
 
 abstract class BaseDialogFragment : DialogFragment() {
 
@@ -47,7 +45,7 @@ abstract class BaseDialogFragment : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        dialog.window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
     }
 
     override fun onDetach() {
@@ -59,16 +57,6 @@ abstract class BaseDialogFragment : DialogFragment() {
 
     fun setCallback(callback: BaseCallback) {
         this.callback = callback
-    }
-
-    fun getCallback() = this.callback
-
-    // Private
-
-    private fun setupUI() {
-        isCancelable = false
-        playAnimation()
-
     }
 
     open fun playAnimation() {
@@ -83,11 +71,17 @@ abstract class BaseDialogFragment : DialogFragment() {
 
     // Private
 
+    private fun setupUI() {
+        isCancelable = false
+        playAnimation()
+
+    }
+
     private fun secondAnimation() {
         YoYo
                 .with(Techniques.FadeIn)
                 .duration(AppDuration.SUCCESSFULL_DURATION.duration)
-                .onEnd { getCallback().callback() }
+                .onEnd { callback.callback() }
                 .playOn(logoRoundedIv)
     }
 
@@ -100,5 +94,4 @@ abstract class BaseDialogFragment : DialogFragment() {
                 .interpolate(AccelerateDecelerateInterpolator())
                 .playOn(logoIv)
     }
-
 }
