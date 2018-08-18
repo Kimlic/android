@@ -14,9 +14,9 @@ class ErrorPopupFragment : BasePopupFragment() {
     // Companion
 
     companion object {
-        val FRAGMENT_KEY = this::class.java.simpleName
+        val FRAGMENT_KEY = this::class.java.simpleName!!
 
-        fun newInstanse(bundle: Bundle = Bundle()): ErrorPopupFragment {
+        fun newInstance(bundle: Bundle = Bundle()): ErrorPopupFragment {
             val fragment = ErrorPopupFragment()
             fragment.arguments = bundle
             return fragment
