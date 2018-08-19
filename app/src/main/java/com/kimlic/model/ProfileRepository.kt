@@ -6,6 +6,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
+import android.os.AsyncTask
+import android.os.CountDownTimer
 import android.os.Handler
 import android.util.Log
 import com.android.volley.AuthFailureError
@@ -20,6 +22,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.kimlic.API.DocumentLoader
 import com.kimlic.API.KimlicJSONRequest
 import com.kimlic.API.SyncObject
 import com.kimlic.API.VolleySingleton
@@ -32,6 +35,7 @@ import com.kimlic.preferences.Prefs
 import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.quorum.crypto.Sha
 import com.kimlic.utils.AppConstants
+import com.kimlic.utils.AppDoc
 import com.kimlic.utils.QuorumURL
 import com.kimlic.utils.mappers.BitmapToByteArrayMapper
 import org.json.JSONObject
@@ -85,9 +89,6 @@ class ProfileRepository private constructor() {
     // Public
 
     // User
-    fun insertUser(user: User) {
-        userDao.insert(user); syncDataBase()
-    }
 
     fun updateUser(user: User) = userDao.update(user)
 
@@ -252,12 +253,46 @@ class ProfileRepository private constructor() {
                     QuorumKimlic.getInstance().setKimlicContractsContextAddress(contextContractAddress)
                     val accountStorageAdapterAddress = QuorumKimlic.getInstance().accountStorageAdapter
                     QuorumKimlic.getInstance().setAccountStorageAdapterAddress(accountStorageAdapterAddress)
-                    userDao.insert(user)
+                    userDao.insert(user); syncDataBase();
                     Prefs.currentAccountAddress = walletAddress
 
                     onSuccess()
                 },
                 Response.ErrorListener { onError() })
+        VolleySingleton.getInstance(context).addToRequestQueue(addressRequest)
+    }
+
+    // Requests
+
+    // Quorum request
+
+    fun quorumRequest(accountAddress: String, onSuccess: () -> Unit, onError: () -> Unit) {
+        val user = userDao.select(accountAddress)
+        // 1. Create Quorum instance with current user
+
+        val mnemonic = user.mnemonic
+        QuorumKimlic.destroyInstance()
+        QuorumKimlic.createInstance(mnemonic, context)//Create Quorum instance
+
+        val walletAddress = user.accountAddress
+
+        // 2. Get entry point of the Quorum
+        val headers = mapOf(Pair("account-address", walletAddress))
+
+        val addressRequest = KimlicJSONRequest(GET, QuorumURL.config.url, headers, JSONObject(), Response.Listener {
+            if (!it.getJSONObject("meta").optString("code").startsWith("2")) {
+                onError(); return@Listener
+            }
+
+            val contextContractAddress = it.getJSONObject("data").optString("context_contract")
+            QuorumKimlic.getInstance().setKimlicContractsContextAddress(contextContractAddress)
+
+            val accountStorageAdapterAddress = QuorumKimlic.getInstance().accountStorageAdapter
+            QuorumKimlic.getInstance().setAccountStorageAdapterAddress(accountStorageAdapterAddress)
+            onSuccess()
+
+        }, Response.ErrorListener { onError() })
+
         VolleySingleton.getInstance(context).addToRequestQueue(addressRequest)
     }
 
@@ -352,8 +387,6 @@ class ProfileRepository private constructor() {
     // RP request
 
     fun sendDoc(documentType: String, url: String = "http://40.113.76.56:4000/api/medias", countrySH: String, onSuccess: () -> Unit, onError: () -> Unit) {
-        val documents = documentDao.select(Prefs.currentAccountAddress)
-        val document = documents.filter { it.type == documentType }
         val user = userDao.select(Prefs.currentAccountAddress)
         val doc: String
         val dataType: String
@@ -363,10 +396,10 @@ class ProfileRepository private constructor() {
 
         //@formatter:off
         when (documentType) {
-            "passport" -> { doc = "PASSPORT"; dataType = "documents.passport" }
-            "id" -> { doc = "ID_CARD"; dataType = "documents.id_card" }
-            "license" -> { doc = "DRIVERS_LICENSE"; dataType = "documents.driver_license" }
-            "permit" -> { doc = "RESIDENCE_PERMIT_CARD"; dataType = "documents.residence_permit_card"}
+            AppDoc.PASSPORT.type -> { doc = "PASSPORT"; dataType = "documents.passport" }
+            AppDoc.ID_CARD.type -> { doc = "ID_CARD"; dataType = "documents.id_card" }
+            AppDoc.DRIVERS_LICENSE.type -> { doc = "DRIVERS_LICENSE"; dataType = "documents.driver_license" }
+            AppDoc.RESIDENCE_PERMIT_CARD.type -> { doc = "RESIDENCE_PERMIT_CARD"; dataType = "documents.residence_permit_card"}
             else -> { doc = ""; dataType = "" }
         }
         //@formatter:on
@@ -380,14 +413,13 @@ class ProfileRepository private constructor() {
         val shaFront = Sha.sha256(frontString)
         val shaBack = Sha.sha256(backString)
 
-        val receipt = QuorumKimlic.getInstance().setFieldMainData("{\"face\":${shaFace},\"document-front\":${shaFront},\"document-back\":${shaBack}}", dataType)
+        val loader = DocumentLoader()
+        loader.execute(Runnable {
+            val receipt = QuorumKimlic.getInstance().setFieldMainData("{\"face\":${shaFace},\"document-front\":${shaFront},\"document-back\":${shaBack}}", dataType)
 
-        if (receipt == null || receipt.status == "0x0") {
-            onError()
-            return
-        }
-
-        Handler().post {
+            if (receipt == null || receipt.status == "0x0") {
+                onError()
+            }
             send(faceString, "face", doc, firstName, lastName, countrySH, udid, url, Response.Listener { _ ->
                 send(frontString, "document-front", doc, firstName, lastName, countrySH, udid, url, Response.Listener { _ ->
                     send(backString, "document-back", doc, url, lastName, countrySH, udid, url, Response.Listener { _ ->
@@ -395,7 +427,7 @@ class ProfileRepository private constructor() {
                     }, onError)
                 }, onError)
             }, onError)
-        }
+        })
     }
 
     private fun send(fileString: String, type: String, doc: String, firstName: String, lastName: String, countrySH: String, udid: String, url: String, listener: Response.Listener<JSONObject>, onError: () -> Unit) {
