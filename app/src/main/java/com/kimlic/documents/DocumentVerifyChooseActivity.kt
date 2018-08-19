@@ -15,6 +15,7 @@ import com.kimlic.db.entity.Document
 import com.kimlic.db.entity.User
 import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
+import com.kimlic.utils.AppDoc
 import com.kimlic.utils.mappers.FileNameTxtBase64ToBitmap
 import kotlinx.android.synthetic.main.activity_verify_document.*
 
@@ -37,30 +38,23 @@ class DocumentVerifyChooseActivity : BaseActivity(), View.OnClickListener {
         setContentView(R.layout.activity_verify_document)
         ButterKnife.bind(this)
 
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         setupUI()
     }
 
-    override fun onClick(v: View?) {
-        when (v!!.tag) {
-            "passport" -> PresentationManager.verifyPassport(this@DocumentVerifyChooseActivity)
-            "id" -> PresentationManager.verifyIDCard(this@DocumentVerifyChooseActivity)
-            "license" -> PresentationManager.verifyDriverLicence(this@DocumentVerifyChooseActivity)
-            "permit" -> PresentationManager.verifyPermit(this@DocumentVerifyChooseActivity)
-        }
-    }
+    override fun onClick(v: View?) = PresentationManager.verifyDocument(this, v!!.tag.toString())
 
     // Private
 
     private fun setupUI() {
-        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-        model.getUserLive().observe(this, Observer<User> { user -> setupBackground(user!!.portraitFile) })
+        model.userLive().observe(this, Observer<User> { user -> setupBackground(user!!.portraitFile) })
 
-        model.getUserDocumentsLive().observe(this, Observer<List<Document>> { documents ->
+        model.userDocumentsLive().observe(this, Observer<List<Document>> { documents ->
             types = mutableMapOf(
-                    Pair("passport", getString(R.string.passport)),
-                    Pair("id", getString(R.string.id_card)),
-                    Pair("license", getString(R.string.drivers_license)),
-                    Pair("permit", getString(R.string.life_permit)))
+                    Pair(AppDoc.PASSPORT.type, getString(R.string.passport)),
+                    Pair(AppDoc.ID_CARD.type, getString(R.string.id_card)),
+                    Pair(AppDoc.DRIVERS_LICENSE.type, getString(R.string.drivers_license)),
+                    Pair(AppDoc.RESIDENCE_PERMIT_CARD.type, getString(R.string.life_permit)))
 
             documents!!.forEach { types.remove(it.type) }
             buttonsList.forEach { it.visibility = View.GONE }
@@ -102,14 +96,13 @@ class DocumentVerifyChooseActivity : BaseActivity(), View.OnClickListener {
 
     private fun setupBackground(fileName: String) {
         val bitmap = FileNameTxtBase64ToBitmap().transform(fileName)
-        bitmap?.let { rootIv.setImageBitmap(croped(bitmap)); rootIv.scaleType = ImageView.ScaleType.CENTER_CROP }
+        bitmap?.let { rootIv.setImageBitmap(cropped(bitmap)); rootIv.scaleType = ImageView.ScaleType.CENTER_CROP }
     }
 
-    private fun croped(bitmap: Bitmap): Bitmap {
+    private fun cropped(bitmap: Bitmap): Bitmap {
         val rotated = rotateBitmap(bitmap, -90f)
         val width = rotated.width
         val height = rotated.height
         return Bitmap.createBitmap(rotated, (0.25 * width).toInt(), (0.1 * height).toInt(), (0.5 * width).toInt(), (0.7 * height).toInt())
     }
-
 }
