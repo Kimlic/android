@@ -11,7 +11,6 @@ import android.provider.OpenableColumns
 import android.support.constraint.ConstraintLayout
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
@@ -90,7 +89,6 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
                     displayName = myFile.name
                 }
 
-                Log.d("TAG", "display name = " + displayName)
                 data.extras.getByteArray("")
                 addBt.setOnClickListener({})
             }
@@ -120,7 +118,7 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
         setupAddressSearch()
         saveBt.setOnClickListener { manageInput() }
         addBt.setOnClickListener { pickFile() }
-        changeTv.setOnClickListener { model.deleteAddres(addressId = addressId); finish() }
+        changeTv.setOnClickListener { model.deleteAddress(addressId = addressId); finish() }
     }
 
     private fun manageInput() {
@@ -128,16 +126,6 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
             model.addUserAddress(value = addressEt.text.toString(), data = addressData)
             successful()
         }
-    }
-
-    private fun fieldsAreValid(): Boolean {
-        val noError = if (addressEt.text.length < 3) {
-            addressEt.error = getString(R.string.error); false
-        } else {
-            addressEt.error = null; true
-        }
-
-        return (noError && isPhotoPresent)
     }
 
     private fun setupAddressSearch() {
@@ -160,7 +148,7 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
         })
 
         addressEt.setOnClickListener { moveUp() }
-        addressEt.setOnItemClickListener { parent, view, position, id -> moveDown() }
+        addressEt.setOnItemClickListener { _, _, _, id -> moveDown() }
         addressEt.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 moveUp()
@@ -241,7 +229,16 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
         val originalBitmap = rotateBitmap(bitmap, 90f)
         val width = originalBitmap.width
         val height = originalBitmap.height
-        val bitmapCropped = Bitmap.createBitmap(originalBitmap, (0.15 * width).toInt(), (0.08 * height).toInt(), (0.7 * width).toInt(), (0.5 * height).toInt())
-        return bitmapCropped
+        return Bitmap.createBitmap(originalBitmap, (0.15 * width).toInt(), (0.08 * height).toInt(), (0.7 * width).toInt(), (0.5 * height).toInt())
+    }
+
+    private fun fieldsAreValid(): Boolean {
+        val noError = if (addressEt.text.length < 3) {
+            addressEt.error = getString(R.string.error); false
+        } else {
+            addressEt.error = null; true
+        }
+
+        return (noError && isPhotoPresent)
     }
 }
