@@ -1,8 +1,7 @@
 package com.kimlic.model
 
-import android.arch.lifecycle.LifecycleObserver
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.*
+import android.os.Handler
 import com.kimlic.db.entity.Address
 import com.kimlic.db.entity.Contact
 import com.kimlic.db.entity.Document
@@ -18,9 +17,9 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
     private var risksLiveData: MutableLiveData<Boolean>? = object : MutableLiveData<Boolean>() {}
     private var repository: ProfileRepository
     private var vendorsRepository: VendorsRepository
+    private var timerQueue = ArrayDeque<Long>(listOf(2000L, 4000L))
 
     // Database
-
 
     init {
         risksLiveData!!.postValue(Prefs.isPasscodeEnabled && Prefs.isTouchEnabled)
@@ -32,17 +31,15 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     // User
 
-    fun insertUser(user: User) = repository.insertUser(user)
-
     fun addUserName(accountAddress: String, firstName: String, lastName: String) = repository.addUserName(accountAddress = accountAddress, firstName = firstName, lastName = lastName)
 
     fun updateUser(user: User) = repository.updateUser(user)
 
-    fun getUser(accountAddress: String) = repository.getUser(accountAddress)
+    fun user(accountAddress: String) = repository.getUser(accountAddress)
 
     fun deleteUser(accountAddress: String) = repository.deleteUser(accountAddress)
 
-    fun getUserLive() = repository.userLive(accountAddress = Prefs.currentAccountAddress)
+    fun userLive() = repository.userLive(accountAddress = Prefs.currentAccountAddress)
 
     fun deleteUserContact(accountAddress: String, contactType: String) = repository.contactDelete(accountAddress, contactType)
 
@@ -69,23 +66,23 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     fun updateUserAddress(address: Address) = repository.addressUpdate(address = address)
 
-    fun deleteAddres(addressId: Long) = repository.addressDelete(addressId)
+    fun deleteAddress(addressId: Long) = repository.addressDelete(addressId)
 
-    fun getUserAddressesLive(accountAddress: String) = repository.addressLive(accountAddress = accountAddress)
+    fun userAddressLive() = repository.addressLive(Prefs.currentAccountAddress)
 
     //fun getUserAddress(accountAddress: String) = repository.address(accountAddress = accountAddress)
 
-    fun getUserContactsLive(accountAddress: String) = repository.userContactsLive(accountAddress)
+    fun userContactsLive() = repository.userContactsLive(Prefs.currentAccountAddress)
 
     // Documents
 
-    fun getUserDocumentsLive() = repository.documentsLive(accountAddress = Prefs.currentAccountAddress)
+    fun userDocumentsLive() = repository.documentsLive(accountAddress = Prefs.currentAccountAddress)
 
-    fun getUserDocuments() = repository.documents(accountAddress = Prefs.currentAccountAddress)
+    fun userDocuments() = repository.documents(accountAddress = Prefs.currentAccountAddress)
 
-    fun getUserDocument(documentType: String) = repository.document(Prefs.currentAccountAddress, documentType = documentType)
+    fun userDocument(documentType: String) = repository.document(Prefs.currentAccountAddress, documentType = documentType)
 
-    fun getUserDocumentPhotos(documentType: String) = repository.userDocumentPhotos(accountAddress = Prefs.currentAccountAddress, documentType = documentType)
+    fun userDocumentPhotos(documentType: String) = repository.userDocumentPhotos(accountAddress = Prefs.currentAccountAddress, documentType = documentType)
 
     fun updateDocument(document: Document) = repository.updateDocument(document)
 
@@ -97,15 +94,25 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     //fun getUserAddressPhoto(accountAddress: String) = repository.userAddressPhoto(accountAddress = accountAddress)
 
-    //fun addUserDocument(accountAddress: String, document: Document_): Long = repository.documentAdd(accountAddress = accountAddress, document = document)
-
-    //fun addDocumentPhoto(vararg photos: Photo) = repository.addDocumentPhoto(photos = *photos)
-
     fun getRisksLiveData() = risksLiveData
 
-    // SyncRequest
+    // Sync request
 
-    fun syncProfile(accountAddress: String) = repository.syncProfile(accountAddress = accountAddress)
+    fun syncProfile() = repository.syncProfile(accountAddress = Prefs.currentAccountAddress)
+
+    // Quorum request
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    fun resetQueue() {
+        timerQueue = ArrayDeque(listOf(2000L, 4000L))
+    }
+
+    fun quorumRequest(onSuccess: () -> Unit, onError: () -> Unit) {
+        repository.quorumRequest(Prefs.currentAccountAddress, onSuccess, onError = { retryQuorumRequest(onSuccess, onError) })
+    }
+
+    private fun retryQuorumRequest(onSuccess: () -> Unit, onError: () -> Unit) = timerQueue.poll()?.let { Handler().postDelayed({ quorumRequest(onSuccess, onError) }, it) }
+            ?: onError()
 
     fun senDoc(docType: String, country: String, url: String, onSuccess: () -> Unit, onError: () -> Unit) {
         val countrySH = vendorsRepository.countries().filter { it.country == country }.first().sh.toUpperCase()
