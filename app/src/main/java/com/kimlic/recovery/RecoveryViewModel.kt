@@ -16,19 +16,19 @@ class RecoveryViewModel : ViewModel() {
 
     private val TAG = this::class.java.simpleName
 
-    private val syncService: SyncService = SyncService.getInstance()
+    private lateinit var syncService: SyncService
     private var googleSignInAccount: GoogleSignInAccount? = null
     private var db: KimlicDB? = null
     private var repository: ProfileRepository = ProfileRepository.instance
 
     // Public
 
-    fun retrievePhoto(accountAddress: String) {
+    fun retrievePhoto(accountAddress: String, onSuccess: () -> Unit, onError: () -> Unit) {
         googleSignInAccount = GoogleSignIn.getLastSignedInAccount(KimlicApp.applicationContext())
 
         googleSignInAccount?.let {
             Handler().postDelayed({
-                syncService.retrievePhotos(accountAddress = accountAddress)
+                SyncService.getInstance().retrievePhotos(accountAddress = accountAddress)
             }, 0)
         }
     }
@@ -53,7 +53,7 @@ class RecoveryViewModel : ViewModel() {
 
             if (!db!!.isOpen) {
                 Handler().postDelayed({
-                    syncService.retrieveDataBase(accountAddress, "kimlic.db",
+                    SyncService.getInstance().retrieveDataBase(accountAddress, "kimlic.db",
                             onSuccess = { onSuccess(); Log.d(TAG, "Database restored successfully") },
                             onError = onError)
                 }, 10)
