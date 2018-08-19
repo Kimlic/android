@@ -36,9 +36,9 @@ class DocumentVerifyChooseActivity : BaseActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_verify_document)
-        ButterKnife.bind(this)
 
         model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        ButterKnife.bind(this)
         setupUI()
     }
 
