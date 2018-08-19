@@ -1,10 +1,13 @@
 package com.kimlic.vendors
 
 import android.arch.lifecycle.*
-import android.util.Log
+import android.os.Handler
 import com.kimlic.db.entity.Document
 import com.kimlic.model.ProfileRepository
+import com.kimlic.model.SingleLiveEvent
 import com.kimlic.preferences.Prefs
+import com.kimlic.utils.AppDoc
+import java.util.*
 
 class VendorsViewModel : ViewModel(), LifecycleObserver {
 
@@ -13,17 +16,22 @@ class VendorsViewModel : ViewModel(), LifecycleObserver {
     private val vendorsRepository = VendorsRepository.instance
     private val profileRepository = ProfileRepository.instance
 
-    private var documentsForAdapter = object : MutableLiveData<List<Document>>() {}
+    private var vendorSupportedDocuments = object : MutableLiveData<List<Document>>() {}
+    private var vendorRequestStatus: SingleLiveEvent<String> = SingleLiveEvent()
+    private val timeQueue = ArrayDeque<Long>(listOf(4000L, 5000L, 10000L))
 
     // public
 
     @OnLifecycleEvent(value = Lifecycle.Event.ON_START)
-    fun getDocumentsList() = vendorsRepository.initDocuments(accountAddress = Prefs.currentAccountAddress)
+    fun getDocumentsList() = vendorsRepository.initDocuments(Prefs.currentAccountAddress, onError = { retry() })
 
+    private fun retry() {
+        timeQueue.poll()?.let { Handler().postDelayed({ getDocumentsList() }, it) } ?: vendorRequestStatus.postValue("server error")
+    }
 
-    fun getDocumentsForAdapter() = documentsForAdapter// List Document which are supported in chosen country
+    fun vendorRequestStatus() = vendorRequestStatus
 
-    //fun progress() = progressLiveData
+    fun getDocumentsForAdapter() = vendorSupportedDocuments// List Document which are supported in chosen country
 
     fun supportedDocuments(country: String) {
         val userDocuments = profileRepository.documents(Prefs.currentAccountAddress)
@@ -36,15 +44,15 @@ class VendorsViewModel : ViewModel(), LifecycleObserver {
         vendorsDocuments.forEach { document ->
             if (document.countries.contains(country.toUpperCase())) {
                 when (document.type) {
-                    "ID_CARD" -> supportedDocuments.add(Document(type = "id"))
-                    "PASSPORT" -> supportedDocuments.add(Document(type = "passport"))
-                    "DRIVERS_LICENSE" -> supportedDocuments.add(Document(type = "license"))
-                    "RESIDENCE_PERMIT_CARD" -> supportedDocuments.add(Document(type = "permit"))
+                    "ID_CARD" -> supportedDocuments.add(Document(type = AppDoc.ID_CARD.type))
+                    "PASSPORT" -> supportedDocuments.add(Document(type = AppDoc.PASSPORT.type))
+                    "DRIVERS_LICENSE" -> supportedDocuments.add(Document(type = AppDoc.DRIVERS_LICENSE.type))
+                    "RESIDENCE_PERMIT_CARD" -> supportedDocuments.add(Document(type = AppDoc.RESIDENCE_PERMIT_CARD.type))
                 }
             }
         }
         // Document user already have added
-        documentsForAdapter.postValue(supportedDocuments)
+        vendorSupportedDocuments.postValue(supportedDocuments)
     }
 
     fun countries() = vendorsRepository.countries()
