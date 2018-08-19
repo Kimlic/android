@@ -1,15 +1,12 @@
 package com.kimlic.stage
 
-import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.OnLifecycleEvent
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -28,7 +25,6 @@ import com.kimlic.stage.adapter.ContactsAdapter
 import com.kimlic.stage.adapter.DocumentAdapter
 import com.kimlic.stage.adapter.Icons_
 import com.kimlic.stage.adapter.OnStageItemClick
-import com.kimlic.utils.AppConstants
 import kotlinx.android.synthetic.main.fragment_stage_user.*
 import kotlinx.android.synthetic.main.item_stage.view.*
 import java.io.File
@@ -48,7 +44,7 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
     // Companion
 
     companion object {
-        val FRAGMENT_KEY = this::class.java.simpleName
+        val FRAGMENT_KEY = this::class.java.simpleName!!
 
         fun newInstance(bundle: Bundle = Bundle()): UserStageFragment {
             val fragment = UserStageFragment()
@@ -83,11 +79,7 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
     // Private Helpers
 
     private fun setupRisks() {
-        model.getRisksLiveData()!!.observe(activity!!, object : Observer<Boolean> {
-            override fun onChanged(risks: Boolean?) {
-                manageRisks(risks!!)
-            }
-        })
+        model.getRisksLiveData()!!.observe(activity!!, Observer<Boolean> { risks -> manageRisks(risks!!) })
 
         risksTv.setOnClickListener {
             if (!Prefs.isPasscodeEnabled) {
@@ -96,12 +88,11 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
 
             if (Prefs.isTouchEnabled) PresentationManager.touchDisable(activity!!)
             else PresentationManager.touchCreate(activity!!)
-            Log.d("TAGRISKS", "pressed")
         }
     }
 
     private fun setupUser() {
-        model.getUserLive().observe(this@UserStageFragment, object : Observer<User> {
+        model.userLive().observe(this@UserStageFragment, object : Observer<User> {
             override fun onChanged(user: User?) {
                 user?.let {
                     setupNameField(if (user.firstName.isNotEmpty()) {
@@ -134,11 +125,11 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
             }
         })
 
-        model.getUserContactsLive(Prefs.currentAccountAddress).observe(this, Observer<List<Contact>> { contacts -> contactsAdapter.setContactsList(contacts = contacts!!) })
+        model.userContactsLive().observe(this, Observer<List<Contact>> { contacts -> contactsAdapter.setContactsList(contacts = contacts!!) })
     }
 
     private fun setupAddress() {
-        model.getUserAddressesLive(Prefs.currentAccountAddress).observe(this, Observer<Address> { address -> setupAddressField(address?.value ?: "") })
+        model.userAddressLive().observe(this, Observer<Address> { address -> setupAddressField(address?.value ?: "") })
     }
 
     private fun setupDocuments() {
@@ -156,30 +147,25 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
 
         documentsAdapter.setOnStageItemClick(object : OnStageItemClick {
             override fun onClick(view: View, position: Int, type: String, approved: Boolean, state: String) {
-                when (type) {
-                    AppConstants.documentPassport.key -> PresentationManager.detailsDocument(activity!!, AppConstants.documentPassport.key)
-                    AppConstants.documentLicense.key -> PresentationManager.detailsDocument(activity!!, AppConstants.documentLicense.key)
-                    AppConstants.documentID.key -> PresentationManager.detailsDocument(activity!!, AppConstants.documentID.key)
-                    AppConstants.documentPermit.key -> PresentationManager.detailsDocument(activity!!, AppConstants.documentPermit.key)
-                    "add" -> PresentationManager.documentChooseVerify(activity!!)
-                }
+
+                if (type == "add") PresentationManager.documentChooseVerify(activity!!)
+                else PresentationManager.detailsDocument(activity!!, type)
             }
         })
 
-        model.getUserDocumentsLive().observe(this@UserStageFragment, Observer<List<Document>> { documents -> documentsAdapter.setDocumentsList(documents!!) })
+        model.userDocumentsLive().observe(this@UserStageFragment, Observer<List<Document>> { documents -> documentsAdapter.setDocumentsList(documents!!) })
     }
 
     private fun setupListeners() {
-        settingsBt.setOnClickListener { PresentationManager.settings(activity!!) }
+        addressItem.setOnClickListener { PresentationManager.address(activity!!) }
         nameItem.setOnClickListener { PresentationManager.name(activity!!) }
 
-        addressItem.setOnClickListener { PresentationManager.address(activity!!) }
+        settingsBt.setOnClickListener { PresentationManager.settings(activity!!) }
+
         takePhotoLl.setOnClickListener {
             PresentationManager.portraitPhoto(activity!!)
 //            it.visibility = if (setUserPhoto()) View.INVISIBLE else View.VISIBLE
         }
-        // Stub?
-        //userPhotoIv.setOnClickListener { PresentationManager.portraitPhoto(activity!!) }
     }
 
     private fun initDivider() {
@@ -191,7 +177,7 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
         if (File(activity!!.filesDir.toString() + "/" + fileName).exists()) takePhotoLl.visibility = View.GONE else takePhotoLl.visibility = View.VISIBLE
     }
 
-//    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+       // @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun manageRisks(value: Boolean) {
         (activity).let { risksTv?.visibility = if (Prefs.isPasscodeEnabled && Prefs.isTouchEnabled) View.GONE else View.VISIBLE }
 //        risksTv.visibility = if (value) View.GONE else View.VISIBLE
@@ -234,6 +220,3 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
         addressItem.contentTv.setTextColor(if (address == "") resources.getColor(R.color.lightBlue, null) else resources.getColor(android.R.color.white, null))
     }
 }
-
-
-
