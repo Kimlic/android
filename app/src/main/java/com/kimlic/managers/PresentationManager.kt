@@ -2,9 +2,7 @@ package com.kimlic.managers
 
 import android.app.Activity
 import android.content.Intent
-import android.support.v4.app.Fragment
 import com.kimlic.BaseActivity
-import com.kimlic.R
 import com.kimlic.address.AddressActivity
 import com.kimlic.auth.TouchIdActivity
 import com.kimlic.documents.DocumentDetails
@@ -22,7 +20,6 @@ import com.kimlic.phone.PhoneVerifyActivity
 import com.kimlic.recovery.AccountRecoveryActivity
 import com.kimlic.recovery.SignUpRecoveryActivity
 import com.kimlic.settings.SettingsActivity
-import com.kimlic.splash.SplashScreenActivity
 import com.kimlic.stage.StageActivity
 import com.kimlic.terms.TermsActivity
 import com.kimlic.tutorial.TutorialActivity
@@ -31,15 +28,13 @@ import com.kimlic.vendors.VendorsActivity
 
 object PresentationManager {
 
-    private val TAG = this.javaClass.simpleName
-
-    fun splash(presenter: BaseActivity) {
-        present(presenter = presenter, className = SplashScreenActivity::class.java, isStarting = true)
-    }
+    // Public
 
     fun tutorials(presenter: BaseActivity) {
         present(presenter = presenter, className = TutorialActivity::class.java, isStarting = false)
     }
+
+    // Passcode
 
     fun passcode(presenter: BaseActivity) {
         val params = HashMap<String, String>()
@@ -71,6 +66,8 @@ object PresentationManager {
         present(presenter = presenter, className = TouchIdActivity::class.java, isStarting = true, params = params)
     }
 
+    // Touch
+
     fun touchCreate(presenter: BaseActivity) {
         val params = HashMap<String, String>()
         params["action"] = "create"
@@ -83,9 +80,6 @@ object PresentationManager {
         present(presenter = presenter, className = TouchIdActivity::class.java, isStarting = false, params = params)
     }
 
-    fun recoveryEnable(presenter: BaseActivity) {
-        present(presenter = presenter, className = MnemonicPreviewActivity::class.java, isStarting = false)
-    }
 
     fun phraseVerify(presenter: BaseActivity) {
         present(presenter = presenter, className = MnemonicVerifyActivity::class.java)
@@ -115,43 +109,39 @@ object PresentationManager {
         present(presenter = presenter, className = EmailVerifyActivity::class.java, isStarting = false, params = params)
     }
 
+    // Name
+
     fun name(presenter: BaseActivity) {
         present(presenter = presenter, className = NameActivity::class.java, isStarting = false)
+    }
+
+    // Recovery
+
+    fun signUpRecovery(presenter: BaseActivity) {
+        present(presenter = presenter, className = SignUpRecoveryActivity::class.java, isStarting = true)
     }
 
     fun recovery(presenter: BaseActivity) {
         present(presenter = presenter, className = AccountRecoveryActivity::class.java, isStarting = false)
     }
 
-    fun documentChooseVerify(presenter: BaseActivity) {
-        present(presenter = presenter, className = DocumentVerifyChooseActivity::class.java, isStarting = false)
+    fun recoveryEnable(presenter: BaseActivity) {
+        present(presenter = presenter, className = MnemonicPreviewActivity::class.java, isStarting = false)
+    }
+
+    fun passphraseCreate(presenter: BaseActivity) {
+        present(presenter = presenter, className = MnemonicPreviewActivity::class.java)
     }
 
     // Verification
 
-    fun verifyPassport(presenter: BaseActivity) {
-        val params = HashMap<String, String>()
-        params[AppConstants.documentType.key] = AppConstants.documentPassport.key
-        present(presenter = presenter, className = DocumentVerifyActivity::class.java, isStarting = false, params = params)
+    fun documentChooseVerify(presenter: BaseActivity) {
+        present(presenter = presenter, className = DocumentVerifyChooseActivity::class.java, isStarting = false)
     }
 
-    fun verifyDriverLicence(presenter: BaseActivity) {
+    fun verifyDocument(presenter: BaseActivity, documentType: String) {
         val params = HashMap<String, String>()
-
-        params[AppConstants.documentType.key] = AppConstants.documentLicense.key
-        present(presenter = presenter, className = DocumentVerifyActivity::class.java, isStarting = false, params = params)
-    }
-
-    fun verifyIDCard(presenter: BaseActivity) {
-        val params = HashMap<String, String>()
-
-        params[AppConstants.documentType.key] = AppConstants.documentID.key
-        present(presenter = presenter, className = DocumentVerifyActivity::class.java, isStarting = false, params = params)
-    }
-
-    fun verifyPermit(presenter: BaseActivity) {
-        val params = HashMap<String, String>()
-        params[AppConstants.documentType.key] = AppConstants.documentPermit.key
+        params[AppConstants.documentType.key] = documentType
         present(presenter = presenter, className = DocumentVerifyActivity::class.java, isStarting = false, params = params)
     }
 
@@ -170,13 +160,7 @@ object PresentationManager {
         present(presenter = presenter, className = DocumentDetails::class.java, isStarting = false, params = params)
     }
 
-    fun signupRecovery(presenter: BaseActivity) {
-        present(presenter = presenter, className = SignUpRecoveryActivity::class.java, isStarting = true)
-    }
-
-    fun passphraseCreate(presenter: BaseActivity) {
-        present(presenter = presenter, className = MnemonicPreviewActivity::class.java)
-    }
+    // Settings
 
     fun settings(presenter: BaseActivity) {
         present(presenter = presenter, className = SettingsActivity::class.java, isStarting = false)
@@ -238,12 +222,5 @@ object PresentationManager {
         }
 
         presenter.startActivity(intent)
-    }
-
-    private fun presentFragment(presenter: BaseActivity, fragment: Fragment, sourceTag: String, targetTag: String) {
-        val fragmentManager = presenter.supportFragmentManager
-        val transaction = fragmentManager.beginTransaction()
-        transaction!!.replace(R.id.fragment_container, fragment, targetTag)
-        transaction.commit()
     }
 }
