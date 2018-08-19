@@ -2,6 +2,7 @@ package com.kimlic.phone
 
 import android.app.AlertDialog
 import android.arch.lifecycle.ViewModelProviders
+import android.graphics.Rect
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
@@ -110,13 +111,19 @@ class PhoneActivity : BaseActivity() {
     private fun initDropList() {
         val types = countries.map { it.country }.toList().toTypedArray()
 
-        AlertDialog.Builder(this)
+        val dialog = AlertDialog.Builder(this)
                 .setItems(types) { _, which ->
                     countryEt.text = Editable.Factory.getInstance().newEditable(countries[which].country)
                     phoneEt.text = Editable.Factory.getInstance().newEditable("+" + countries[which].code)
                     phoneEt.setSelection(phoneEt.text.length)
                 }.show()
+
+        val rec = Rect()
+        val window = this.window
+        window.decorView.getWindowVisibleDisplayFrame(rec)
+        dialog.window.setLayout((rec.width() * 0.9f).toInt(), (rec.height() * 0.7f).toInt())
     }
+
 
     private fun unableToProceed() {
         hideProgress()
