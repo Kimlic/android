@@ -8,7 +8,7 @@ import com.kimlic.R
 import com.kimlic.db.entity.Document
 import com.kimlic.stage.adapter.Icons_
 import com.kimlic.stage.adapter.OnStageItemClick
-import com.kimlic.utils.AppConstants
+import com.kimlic.utils.AppDoc
 import kotlinx.android.synthetic.main.item_stage.view.*
 
 open class DocumentVendorAdapter : RecyclerView.Adapter<DocumentVendorAdapter.DocumentHolder>() {
@@ -34,16 +34,14 @@ open class DocumentVendorAdapter : RecyclerView.Adapter<DocumentVendorAdapter.Do
 
     // Public
 
-  open fun setDocumentsList(documents: List<Document>) {
+    open fun setDocumentsList(documents: List<Document>) {
         val tempList = mutableListOf<Document>()
         documents.forEach {
-            if (it.type.equals("passport")) tempList.add(it)
-            if (it.type.equals("id")) tempList.add(it)
-            if (it.type.equals("license")) tempList.add(it)
-            if (it.type.equals("permit")) tempList.add(it)
+            if (it.type == AppDoc.PASSPORT.type) tempList.add(it)
+            if (it.type == AppDoc.ID_CARD.type) tempList.add(it)
+            if (it.type == AppDoc.DRIVERS_LICENSE.type) tempList.add(it)
+            if (it.type == AppDoc.RESIDENCE_PERMIT_CARD.type) tempList.add(it)
         }
-
-//        if (documents.size < 4) tempList.add(Document(type = "add"))
 
         this.documentList = tempList
         notifyDataSetChanged()
@@ -63,7 +61,7 @@ open class DocumentVendorAdapter : RecyclerView.Adapter<DocumentVendorAdapter.Do
         private lateinit var documentType: String
         private lateinit var documentState: String
 
-        // Publick
+        // Public
 
         fun bind(itemDocument: Document) {
             documentType = itemDocument.type
@@ -77,25 +75,18 @@ open class DocumentVendorAdapter : RecyclerView.Adapter<DocumentVendorAdapter.Do
                 arrowIv.background = resources.getDrawable(Icons_.ARROW_WHITE.icon, null)
 
                 when (itemDocument.type) {
-                    AppConstants.documentPassport.key -> {
-                        contentTv.text = context.getString(R.string.passport)
-                    }
-                    AppConstants.documentID.key -> {
-                        contentTv.text = context.getString(R.string.id_card)
-                    }
-                    AppConstants.documentLicense.key -> {
-                        contentTv.text = context.getString(R.string.drivers_license)
-                    }
-                    AppConstants.documentPermit.key -> {
-                        contentTv.text = context.getString(R.string.residence_permit)
-                    }
+                    AppDoc.PASSPORT.type -> contentTv.text = context.getString(R.string.passport)
+                    AppDoc.ID_CARD.type -> contentTv.text = context.getString(R.string.id_card)
+                    AppDoc.DRIVERS_LICENSE.type -> contentTv.text = context.getString(R.string.drivers_license)
+                    AppDoc.RESIDENCE_PERMIT_CARD.type -> contentTv.text = context.getString(R.string.residence_permit)
 
-                    "add" -> {
-                        contentTv.text = context.getString(R.string.add_new_document)
-                        contentTv.setTextColor(resources.getColor(R.color.lightBlue, null))
-                        arrowIv.background = resources.getDrawable(Icons_.ARROW_BLUE.icon, null)
-                        iconIv.background = resources.getDrawable(Icons_.ID_BLUE.icon, null)
-                    }
+
+//                    "add" -> {
+//                        contentTv.text = context.getString(R.string.add_new_document)
+//                        contentTv.setTextColor(resources.getColor(R.color.lightBlue, null))
+//                        arrowIv.background = resources.getDrawable(Icons_.ARROW_BLUE.icon, null)
+//                        iconIv.background = resources.getDrawable(Icons_.ID_BLUE.icon, null)
+//                    }
                 }
             }
         }
@@ -109,6 +100,5 @@ open class DocumentVendorAdapter : RecyclerView.Adapter<DocumentVendorAdapter.Do
         override fun onClick(v: View?) {
             onStageItemClick.onClick(view = itemView, position = adapterPosition, type = documentType, state = documentState)
         }
-
     }
 }
