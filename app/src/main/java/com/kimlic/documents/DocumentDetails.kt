@@ -8,6 +8,9 @@ import android.os.CountDownTimer
 import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.view.View
+import android.widget.EditText
+import butterknife.BindViews
+import butterknife.ButterKnife
 import com.kimlic.BaseActivity
 import com.kimlic.BlockchainUpdatingFragment
 import com.kimlic.R
@@ -16,6 +19,7 @@ import com.kimlic.db.entity.User
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.AppConstants
+import com.kimlic.utils.AppDoc
 import com.kimlic.utils.mappers.FileNameTxtBase64ToBitmap
 import com.kimlic.vendors.VendorsViewModel
 import kotlinx.android.synthetic.main.activity_verify_details.*
@@ -23,9 +27,14 @@ import java.util.*
 
 class DocumentDetails : BaseActivity() {
 
+    // Binding
+
+    @BindViews(R.id.firstNameEt, R.id.lastNameEt, R.id.numberEt, R.id.expireDateEt)
+    lateinit var textFields: List<@JvmSuppressWildcards EditText>
+
     // Variables
 
-    private lateinit var timer: CountDownTimer
+    private var timer: CountDownTimer? = null
     private var blockchainUpdatingFragment: BlockchainUpdatingFragment? = null
 
     private lateinit var model: ProfileViewModel
@@ -44,31 +53,20 @@ class DocumentDetails : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_verify_details)
 
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        vendorsModel = ViewModelProviders.of(this).get(VendorsViewModel::class.java)
+        ButterKnife.bind(this)
         setupUI()
     }
 
     // Private
 
     private fun setupUI() {
-        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-        vendorsModel = ViewModelProviders.of(this).get(VendorsViewModel::class.java)
-
-        documentType = intent.extras.getString(AppConstants.documentType.key, "")
-        target = intent.extras.getString("target", "preview")
-
-        currentDocument = model.getUserDocument(documentType)
-        user = model.getUser(Prefs.currentAccountAddress)
-        photosMap = model.getUserDocumentPhotos(documentType = documentType).map { it.type to it.file }.toMap()
-
-
+        initExtraVariables()
         fillData(user = user, photos = photosMap, document = currentDocument)
-
-        country = intent.extras.getString("country", "")
 
         when (target) {
             "send" -> {
-                url = intent.extras.getString("url", "")
-
                 countryTil.visibility = View.VISIBLE
                 countryEt.text = Editable.Factory.getInstance().newEditable(country)
 
@@ -76,7 +74,6 @@ class DocumentDetails : BaseActivity() {
                 addBt.setOnClickListener {
                     if (validFields()) {
                         addBt.isClickable = false
-                        progressBar.visibility = View.VISIBLE
                         updateUser()
                         updateDocument()
                         sendDocument()
@@ -99,20 +96,28 @@ class DocumentDetails : BaseActivity() {
         expireDateEt.setOnClickListener { datePicker() }
     }
 
+    private fun initExtraVariables() {
+        documentType = intent.extras.getString(AppConstants.documentType.key, "")
+        target = intent.extras.getString("target", "preview")
+        country = intent.extras.getString("country", "")
+        url = intent.extras.getString("url", "")
 
+        currentDocument = model.userDocument(documentType)
+        user = model.user(Prefs.currentAccountAddress)
+        photosMap = model.userDocumentPhotos(documentType = documentType).map { it.type to it.file }.toMap()
+    }
 
     private fun sendDocument() {
+        showProgress()
         model.senDoc(docType = documentType, country = country, url = url,
                 onSuccess = {
-                    //hideProgress()
-                    progressBar.visibility = View.GONE
+                    hideProgress()
                     showPopup("Success!", "Document sent!")
                     currentDocument.state = "pending"
                     model.updateDocument(currentDocument) //finish ()
                 },
                 onError = {
-                    //hideProgress()
-                    progressBar.visibility = View.GONE
+                    hideProgress()
                     addBt.isClickable = true
                     showPopup("Error", message = "Unable to proceed!")
                 })
@@ -141,28 +146,28 @@ class DocumentDetails : BaseActivity() {
         lastNameEt.text = Editable.Factory.getInstance().newEditable(user.lastName)
         numberEt.text = Editable.Factory.getInstance().newEditable(document.number)
         expireDateEt.text = Editable.Factory.getInstance().newEditable(document.expireDate)
-        //countryEt.text = Editable.Factory.getInstance().newEditable(document.country)
 
-        when (document.type) {
-            AppConstants.documentPassport.key -> titleTv.text = getString(R.string.passport)
-            AppConstants.documentLicense.key -> titleTv.text = getString(R.string.driver_license)
-            AppConstants.documentID.key -> titleTv.text = getString(R.string.id_card)
-            AppConstants.documentPermit.key -> titleTv.text = getString(R.string.residence_permit)
-            else -> throw Exception("Wrong document type")
-        }
+        titleTv.text =
+                when (document.type) {
+                    AppDoc.PASSPORT.type -> getString(R.string.passport)
+                    AppDoc.DRIVERS_LICENSE.type -> getString(R.string.driver_license)
+                    AppDoc.ID_CARD.type -> getString(R.string.id_card)
+                    AppDoc.RESIDENCE_PERMIT_CARD.type -> getString(R.string.residence_permit)
+                    else -> throw Exception("Wrong document type")
+                }
     }
 
     // Private helpers
 
-    // @formatter:off
     private fun validFields(): Boolean {
-        val error = getString(R.string.error)
-        val firstNameError = if (firstNameEt.text.length < 3) { firstNameEt.error = error; false } else { firstNameEt.error= null; true }
-        val lastNameError = if (lastNameEt.text.length < 3) { lastNameEt.error = error; false } else { lastNameEt.error= null; true }
-        val docError = if (numberEt.text.length < 3) { numberEt.error = error; false } else { numberEt.error= null; true }
-        val dateError =  if (expireDateEt.text.length < 3) { expireDateEt.error = error; false } else { expireDateEt.error = null; true }
-    // @formatrter:on
-        return (docError && dateError && firstNameError && lastNameError)
+        val error = textFields.map {
+            if (it.text.length < 3) {
+                it.error = getString(R.string.error); false
+            } else {
+                it.error = null; true
+            }
+        }.contains(false)
+        return !error
     }
 
     private fun cropped(fileName: String): Bitmap {
@@ -170,14 +175,13 @@ class DocumentDetails : BaseActivity() {
         val originalBitmap = rotateBitmap(bitmap!!, 90f)
         val width = originalBitmap.width
         val height = originalBitmap.height
-        val bitmapCropped = Bitmap.createBitmap(originalBitmap, (0.15 * width).toInt(), (0.22 * height).toInt(), (0.7 * width).toInt(), (0.35 * height).toInt())
-        return bitmapCropped
+        return Bitmap.createBitmap(originalBitmap, (0.15 * width).toInt(), (0.22 * height).toInt(), (0.7 * width).toInt(), (0.35 * height).toInt())
     }
 
     // Progress
 
     private fun showProgress() {
-        timer = object : CountDownTimer(100, 100) {
+        timer = object : CountDownTimer(0, 0) {
             override fun onFinish() {
                 blockchainUpdatingFragment = BlockchainUpdatingFragment.newInstance()
                 blockchainUpdatingFragment?.show(supportFragmentManager, BlockchainUpdatingFragment.FRAGMENT_KEY)
@@ -188,27 +192,27 @@ class DocumentDetails : BaseActivity() {
     }
 
     private fun hideProgress() = runOnUiThread {
-        if (blockchainUpdatingFragment != null) blockchainUpdatingFragment?.dismiss(); timer?.let { it.cancel() }
+        if (blockchainUpdatingFragment != null) blockchainUpdatingFragment?.dismiss(); timer?.cancel()
     }
 
     override fun showPopup(title: String, message: String) {
         val builder = AlertDialog.Builder(this)
         builder.setTitle(title)
                 .setMessage(message)
-                .setPositiveButton(getString(R.string.OK)) { dialog, which -> dialog?.dismiss()}.setCancelable(true)
-
-        val dialog = builder.create()
-        dialog.show()
+                .setPositiveButton(getString(R.string.OK)) { dialog, _ -> dialog?.dismiss() }
+                .setCancelable(true)
+                .create()
+                .show()
     }
 
-    private fun datePicker(){
+    private fun datePicker() {
         val c = Calendar.getInstance()
         val year = c.get(Calendar.YEAR)
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
 
-        val dialog = DatePickerDialog(this, R.style.DatePickerStyle, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-            expireDateEt.text = Editable.Factory.getInstance().newEditable("$dayOfMonth / $monthOfYear / $year")
+        val dialog = DatePickerDialog(this, R.style.DatePickerStyle, DatePickerDialog.OnDateSetListener { _, year_, monthOfYear, dayOfMonth ->
+            expireDateEt.text = Editable.Factory.getInstance().newEditable("$dayOfMonth / $monthOfYear / $year_")
         }, year, month, day)
         dialog.datePicker.minDate = Date().time
         dialog.show()
