@@ -8,7 +8,6 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
     userId("USERID"),
     accountAddress("ACCOUNT_ADDRESS"),
 
-
     passcode("PASSCODE"),
 
     isPasscodeEnabled("IS_PASSCODE_ENABLED"),
@@ -34,10 +33,7 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
     // Document type
 
     documentType("DOCUMENT_TYPE"),
-    documentPassport("passport"),
-    documentLicense("license"),
-    documentID("id"),
-    documentPermit("permit"),
+
     documentToVerify("DOCUMENT_TO_VERIFY"),
     documentByteArray("DOCUMENT_BYTE_ARRAY"),
 
@@ -52,8 +48,6 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
 
     filePathRezult("FILE_PATH_REZULT"),
 
-    // isUserPhotoTaken("IS_USER_PHOTO_TAKEN"),
-
     // Settings type
 
     settingSwitch("SETTING_SWITCH", 1),
@@ -66,5 +60,4 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
     // Help constants
 
     errorDescription("ERROR")
-
 }
