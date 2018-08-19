@@ -14,7 +14,9 @@ import com.google.android.gms.drive.query.Query
 import com.google.android.gms.drive.query.SearchableField
 import com.google.android.gms.tasks.Task
 import com.kimlic.KimlicApp
-import java.io.*
+import java.io.File
+import java.io.FileInputStream
+import java.io.IOException
 
 class SyncService private constructor(val context: Context) {
 
@@ -29,7 +31,7 @@ class SyncService private constructor(val context: Context) {
     private var mDriveResourceClient: DriveResourceClient? = null // Handle access to Drive resources/files.
 
 
-    // Companioin
+    // Companion
 
     companion object {
 
@@ -100,7 +102,7 @@ class SyncService private constructor(val context: Context) {
         val rootFilesDir = File(context.filesDir.toString())
         val files = rootFilesDir.listFiles()
 
-        files.filter{!it.isDirectory}.forEach {
+        files.filter { !it.isDirectory }.forEach {
             Log.d("TAGTASK", " filtered.filepath = " + it.toString())
             backupFile(accountAddress = accountAddress, filePath = it.toString(), onSuccess = {})
         }
@@ -146,9 +148,9 @@ class SyncService private constructor(val context: Context) {
                     }.addOnSuccessListener {
                         it.forEach {
                             Log.d(TAG, "files in folder description ${it.description}")
-                            if (it.description.equals(PHOTO_DESCRIPTION)) saveFileToDisc(it.title, it.driveId.asDriveFile())
+                            if (it.description == PHOTO_DESCRIPTION) saveFileToDisc(it.title, it.driveId.asDriveFile())
                         }
-                    }
+                    }.addOnSuccessListener { }
         }
     }
 
@@ -289,4 +291,3 @@ class SyncService private constructor(val context: Context) {
         return driveResourse_
     }
 }
-
