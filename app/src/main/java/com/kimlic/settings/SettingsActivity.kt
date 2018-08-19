@@ -30,8 +30,6 @@ class SettingsActivity : BaseActivity() {
     private val adapter: SettingsAdapter = SettingsAdapter()
     private lateinit var model: ProfileViewModel
 
-    // Init
-
     // Life
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,9 +50,9 @@ class SettingsActivity : BaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             PASSCODE_REQUEST_CODE -> {
-                if (resultCode == Activity.RESULT_OK) {
+                if (resultCode == Activity.RESULT_OK)
                     PresentationManager.touchCreate(this@SettingsActivity)
-                }
+
             }
         }
     }
@@ -126,7 +124,7 @@ class SettingsActivity : BaseActivity() {
         Prefs.clear()
         clearAllFiles()
         QuorumKimlic.destroyInstance()
-        PresentationManager.signupRecovery(this)
+        PresentationManager.signUpRecovery(this)
     }
 
     private fun clearAllFiles() = model.clearAllFiles()
