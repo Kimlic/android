@@ -100,7 +100,7 @@ class DocumentDetails : BaseActivity() {
         documentType = intent.extras.getString(AppConstants.documentType.key, "")
         action = intent.extras.getString("action", "preview")
         country = intent.extras.getString("country", "")
-        url = intent.extras.getString("url", "")
+        url = intent.extras.getString("path", "")
 
         currentDocument = model.userDocument(documentType)
         user = model.user(Prefs.currentAccountAddress)
