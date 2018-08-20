@@ -1,20 +1,17 @@
 package com.kimlic.quorum;
 
 import android.content.Context;
-import android.util.Log;
-
+import com.kimlic.BuildConfig;
 import com.kimlic.quorum.bip44.HdKeyNode;
 import com.kimlic.quorum.bip44.hdpath.HdKeyPath;
 import com.kimlic.quorum.contracts.AccountStorageAdapter;
 import com.kimlic.quorum.contracts.KimlicContractsContext;
 import com.kimlic.quorum.crypto.MnemonicUtils;
 import com.kimlic.quorum.crypto.SecureRandomTools;
-
 import com.kimlic.utils.QuorumURL;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.concurrent.ExecutionException;
-
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.ECKeyPair;
 import org.web3j.crypto.Keys;
@@ -26,7 +23,9 @@ public class QuorumKimlic {
 
   // Constants
 
-  private final static String QUORUM_URL = "http://40.115.43.126:22000";
+  //  private final static String QUORUM_URL = "http://40.115.43.126:22000";
+  private final static String BASE_URL = BuildConfig.BASE_URL;
+  private final static String QUORUM_URL = BASE_URL + QuorumURL.QUORUM.getUrl();
 
   // Variables
 
@@ -120,7 +119,7 @@ public class QuorumKimlic {
     mMnemonic = mnemonic;
 
 //    mWeb3 = Web3.getInstance(QUORUM_URL).getWeb3();
-    mWeb3 = Web3.getInstance(QuorumURL.quorum.getUrl(), context).getWeb3();
+    mWeb3 = Web3.getInstance(QUORUM_URL, context).getWeb3();
     ECKeyPair keyPair = generateKeyPair(mMnemonic);
     mWalletAddress = generateAddress(keyPair);
     mCredentials = credentialsFrom(keyPair);
