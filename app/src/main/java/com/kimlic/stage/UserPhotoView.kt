@@ -82,22 +82,26 @@ class UserPhotoView : View {
         val q = Paint(Paint.ANTI_ALIAS_FLAG)
         setLayerType(View.LAYER_TYPE_HARDWARE, q)
         canvas.save()
-        Log.d("TAGCANVAS", "view vidth = $width")
-        Log.d("TAGCANVAS", "view height = $height")
+        Log.d("TAGCANVAS", "view vidth = $viewWidth")
+        Log.d("TAGCANVAS", "view height = $viewHeight")
         Log.d("TAGCANVAS", "user photo bitmap height = ${userPhotoBackBitmap?.height}")
         Log.d("TAGCANVAS", "view photo bitmap  width= ${userPhotoBackBitmap?.width}")
-        val scaleW: Float = (width / userPhotoBackBitmap!!.width).toFloat()
-        val scaleH: Float = (height / userPhotoBackBitmap!!.height).toFloat()
 
-        Log.d("TAGCANVAS", "scale W = $scaleW")
-        Log.d("TAGCANVAS", "scale H = $scaleH")
+        val scaleX: Float = viewWidth / userPhotoBackBitmap!!.width.toFloat()
+        val scaleY: Float = viewHeight / userPhotoBackBitmap!!.height.toFloat()
 
-
-        canvas.scale(1.4f, 1.4f)
+        Log.d("TAGCANVAS", "scale X = $scaleX")
+        Log.d("TAGCANVAS", "scale Y = $scaleY")
 
 
-        canvas.drawBitmap(userPhotoBackBitmap, 0f, 0f, q)
-        //canvas.drawBitmap(userPhotoBackBitmap, ((width - userPhotoBackBitmap!!.width) / 2).toFloat(), ((height - userPhotoBackBitmap!!.width) / 2).toFloat(), q)
+//        canvas.scale(1.0f, 2.3f)
+//        canvas.scale(scaleY, scaleX)
+//        canvas.scale(1.3f, 1.3f)
+        canvas.scale(scaleX, scaleX)
+
+
+        //canvas.drawBitmap(userPhotoBackBitmap, 0f, 0f, q)
+        canvas.drawBitmap(userPhotoBackBitmap, ((width - userPhotoBackBitmap!!.width * scaleX) / 2).toFloat(), ((height - userPhotoBackBitmap!!.height* scaleY) / 2).toFloat() , q)
         canvas.restore()
         q.xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_IN)
         canvas.drawBitmap(userPhotoBitmap, 0f, 0f, q)

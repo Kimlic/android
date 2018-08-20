@@ -119,5 +119,9 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
         repository.sendDoc(documentType = docType, countrySH = countrySH, onSuccess = onSuccess, onError = onError)//, dynamicUrl = "insert url fro qr Coed")
     }
 
+    fun getTokensBalance(){
+
+    }
+
     fun clearAllFiles() = repository.clearAllFiles()
 }

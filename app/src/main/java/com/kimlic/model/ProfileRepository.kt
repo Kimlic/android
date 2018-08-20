@@ -35,7 +35,7 @@ import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.quorum.crypto.Sha
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.AppDoc
-import com.kimlic.utils.KimlicApi
+import com.kimlic.API.KimlicApi
 import com.kimlic.utils.mappers.BitmapToByteArrayMapper
 import org.json.JSONObject
 import org.spongycastle.util.encoders.Base64
@@ -199,7 +199,7 @@ class ProfileRepository private constructor() {
         val resizedBitmap = getResizedBitmap(originalBitmap, 1024, 768, -90f, true)
         val width = resizedBitmap.width
         val height = resizedBitmap.height
-        val croppedBitmap = Bitmap.createBitmap(resizedBitmap, (0.15 * width).toInt(), (0.12 * height).toInt(), (0.75 * width).toInt(), (0.7 * height).toInt())
+        val croppedBitmap = Bitmap.createBitmap(resizedBitmap, (0.1 * width).toInt(), (0.12 * height).toInt(), (0.70 * width).toInt(), (0.72 * height).toInt())
         val croppedPreviewByteArray = BitmapToByteArrayMapper().transform(croppedBitmap)
         return croppedPreviewByteArray
     }

@@ -8,7 +8,7 @@ import com.kimlic.quorum.contracts.AccountStorageAdapter;
 import com.kimlic.quorum.contracts.KimlicContractsContext;
 import com.kimlic.quorum.crypto.MnemonicUtils;
 import com.kimlic.quorum.crypto.SecureRandomTools;
-import com.kimlic.utils.KimlicApi;
+import com.kimlic.API.KimlicApi;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.concurrent.ExecutionException;

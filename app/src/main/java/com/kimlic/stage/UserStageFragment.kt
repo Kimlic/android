@@ -177,8 +177,8 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
     }
 
     private fun manageCameraIcon(fileName: String) {
-        if (File(activity!!.filesDir.toString() + "/" + fileName).exists()) takePhotoLl.visibility = View.GONE else takePhotoLl.visibility = View.VISIBLE
-        //if (File(activity!!.filesDir.toString() + "/" + fileName).exists()) takePhotoLl.visibility = View.VISIBLE else takePhotoLl.visibility = View.VISIBLE
+        //if (File(activity!!.filesDir.toString() + "/" + fileName).exists()) takePhotoLl.visibility = View.GONE else takePhotoLl.visibility = View.VISIBLE
+        if (File(activity!!.filesDir.toString() + "/" + fileName).exists()) takePhotoLl.visibility = View.VISIBLE else takePhotoLl.visibility = View.VISIBLE
     }
 
     // @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)

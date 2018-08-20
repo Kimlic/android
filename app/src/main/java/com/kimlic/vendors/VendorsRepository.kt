@@ -15,7 +15,7 @@ import com.kimlic.db.KimlicDB
 import com.kimlic.db.SyncService
 import com.kimlic.db.entity.VendorDocument
 import com.kimlic.preferences.Prefs
-import com.kimlic.utils.KimlicApi
+import com.kimlic.API.KimlicApi
 import com.kimlic.utils.mappers.JsonToVenDocMapper
 import org.json.JSONObject
 import java.io.BufferedReader
