@@ -4,6 +4,7 @@ import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
+import android.os.HandlerThread
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
@@ -166,6 +167,8 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
             PresentationManager.portraitPhoto(activity!!)
 //            it.visibility = if (setUserPhoto()) View.INVISIBLE else View.VISIBLE
         }
+
+
     }
 
     private fun initDivider() {
@@ -175,9 +178,10 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
 
     private fun manageCameraIcon(fileName: String) {
         if (File(activity!!.filesDir.toString() + "/" + fileName).exists()) takePhotoLl.visibility = View.GONE else takePhotoLl.visibility = View.VISIBLE
+        //if (File(activity!!.filesDir.toString() + "/" + fileName).exists()) takePhotoLl.visibility = View.VISIBLE else takePhotoLl.visibility = View.VISIBLE
     }
 
-       // @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    // @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun manageRisks(value: Boolean) {
         (activity).let { risksTv?.visibility = if (Prefs.isPasscodeEnabled && Prefs.isTouchEnabled) View.GONE else View.VISIBLE }
 //        risksTv.visibility = if (value) View.GONE else View.VISIBLE
