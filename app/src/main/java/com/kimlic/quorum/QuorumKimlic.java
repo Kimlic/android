@@ -8,7 +8,7 @@ import com.kimlic.quorum.contracts.AccountStorageAdapter;
 import com.kimlic.quorum.contracts.KimlicContractsContext;
 import com.kimlic.quorum.crypto.MnemonicUtils;
 import com.kimlic.quorum.crypto.SecureRandomTools;
-import com.kimlic.utils.QuorumURL;
+import com.kimlic.utils.KimlicApi;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.concurrent.ExecutionException;
@@ -25,7 +25,7 @@ public class QuorumKimlic {
 
   //  private final static String QUORUM_URL = "http://40.115.43.126:22000";
   private final static String BASE_URL = BuildConfig.BASE_URL;
-  private final static String QUORUM_URL = BASE_URL + QuorumURL.QUORUM.getUrl();
+  private final static String QUORUM_URL = BASE_URL + KimlicApi.QUORUM.getPath();
 
   // Variables
 
