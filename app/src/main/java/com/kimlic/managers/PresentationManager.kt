@@ -156,7 +156,7 @@ object PresentationManager {
         params[AppConstants.documentType.key] = documentType
         params["country"] = country
         params["url"] = url
-        params["target"] = "send"
+        params["action"] = "send"
         present(presenter = presenter, className = DocumentDetails::class.java, isStarting = false, params = params)
     }
 
