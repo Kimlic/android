@@ -15,7 +15,7 @@ import com.kimlic.db.KimlicDB
 import com.kimlic.db.SyncService
 import com.kimlic.db.entity.VendorDocument
 import com.kimlic.preferences.Prefs
-import com.kimlic.utils.QuorumURL
+import com.kimlic.utils.KimlicApi
 import com.kimlic.utils.mappers.JsonToVenDocMapper
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -38,7 +38,7 @@ class VendorsRepository private constructor() {
     // Public
 
     fun initDocuments(accountAddress: String, onError: () -> Unit) {
-        val url = VENDORS_URL + QuorumURL.VENDORS.url
+        val url = VENDORS_URL + KimlicApi.VENDORS.path
         val headers = mapOf(Pair("account-address", accountAddress), Pair("accept", "application/vnd.mobile-api.v1+json"))
 
         val vendorsRequest = KimlicJSONRequest(GET, url, headers, JSONObject(),
@@ -108,7 +108,6 @@ class VendorsRepository private constructor() {
     // Companion
 
     companion object {
-
         val instance: VendorsRepository by lazy(LazyThreadSafetyMode.SYNCHRONIZED) { HOLDER.INSTANCE }
     }
 
