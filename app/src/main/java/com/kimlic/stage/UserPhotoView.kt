@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import com.kimlic.R
 import com.kimlic.utils.mappers.FileNameTxtBase64ToBitmap
@@ -81,8 +82,22 @@ class UserPhotoView : View {
         val q = Paint(Paint.ANTI_ALIAS_FLAG)
         setLayerType(View.LAYER_TYPE_HARDWARE, q)
         canvas.save()
+        Log.d("TAGCANVAS", "view vidth = $width")
+        Log.d("TAGCANVAS", "view height = $height")
+        Log.d("TAGCANVAS", "user photo bitmap height = ${userPhotoBackBitmap?.height}")
+        Log.d("TAGCANVAS", "view photo bitmap  width= ${userPhotoBackBitmap?.width}")
+        val scaleW: Float = (width / userPhotoBackBitmap!!.width).toFloat()
+        val scaleH: Float = (height / userPhotoBackBitmap!!.height).toFloat()
+
+        Log.d("TAGCANVAS", "scale W = $scaleW")
+        Log.d("TAGCANVAS", "scale H = $scaleH")
+
+
         canvas.scale(1.4f, 1.4f)
+
+
         canvas.drawBitmap(userPhotoBackBitmap, 0f, 0f, q)
+        //canvas.drawBitmap(userPhotoBackBitmap, ((width - userPhotoBackBitmap!!.width) / 2).toFloat(), ((height - userPhotoBackBitmap!!.width) / 2).toFloat(), q)
         canvas.restore()
         q.xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_IN)
         canvas.drawBitmap(userPhotoBitmap, 0f, 0f, q)
