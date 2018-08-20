@@ -155,7 +155,7 @@ object PresentationManager {
         val params = HashMap<String, String>()
         params[AppConstants.documentType.key] = documentType
         params["country"] = country
-        params["url"] = url
+        params["path"] = url
         params["action"] = "send"
         present(presenter = presenter, className = DocumentDetails::class.java, isStarting = false, params = params)
     }
@@ -205,7 +205,7 @@ object PresentationManager {
 
     fun vendors(presenter: BaseActivity, url: String) {
         val params = HashMap<String, String>()
-        params["url"] = url
+        params["path"] = url
         present(presenter = presenter, className = VendorsActivity::class.java, params = params)
     }
 
