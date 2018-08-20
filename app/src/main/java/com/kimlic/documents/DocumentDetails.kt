@@ -45,7 +45,7 @@ class DocumentDetails : BaseActivity() {
     private lateinit var currentDocument: Document
     private lateinit var country: String
     private lateinit var url: String
-    private var target: String = "preview"
+    private lateinit var action: String
 
     // Life
 
@@ -65,7 +65,7 @@ class DocumentDetails : BaseActivity() {
         initExtraVariables()
         fillData(user = user, photos = photosMap, document = currentDocument)
 
-        when (target) {
+        when (action) {
             "send" -> {
                 countryTil.visibility = View.VISIBLE
                 countryEt.text = Editable.Factory.getInstance().newEditable(country)
@@ -98,7 +98,7 @@ class DocumentDetails : BaseActivity() {
 
     private fun initExtraVariables() {
         documentType = intent.extras.getString(AppConstants.documentType.key, "")
-        target = intent.extras.getString("target", "preview")
+        action = intent.extras.getString("action", "preview")
         country = intent.extras.getString("country", "")
         url = intent.extras.getString("url", "")
 
