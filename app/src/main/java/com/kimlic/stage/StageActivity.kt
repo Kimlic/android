@@ -114,7 +114,7 @@ class StageActivity : BaseActivity() {
             replaceAccountsFragment()
         }
         scanBt.setOnClickListener {
-            //PresentationManager.vendors(this, url = "demo.kimlic.com")
+            //PresentationManager.VENDORS(this, path = "demo.kimlic.com")
             IntentIntegrator(this).setOrientationLocked(true).setRequestCode(SCAN_REQUEST_CODE).setCaptureActivity(ScannerActivity::class.java).initiateScan()
         }
     }
