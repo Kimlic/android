@@ -55,12 +55,22 @@ public class KimlicToken extends Contract {
 
     public static final String FUNC_ALLOWANCE = "allowance";
 
-    public static final Event APPROVAL_EVENT = new Event("Approval", 
-            Arrays.<TypeReference<?>>asList(new TypeReference<Address>(true) {}, new TypeReference<Address>(true) {}, new TypeReference<Uint256>() {}));
+//    public static final Event APPROVAL_EVENT = new Event("Approval",
+//            Arrays.<TypeReference<?>>asList(new TypeReference<Address>(true) {}, new TypeReference<Address>(true) {}, new TypeReference<Uint256>() {}));
+//    ;
+//
+//    public static final Event TRANSFER_EVENT = new Event("Transfer",
+//            Arrays.<TypeReference<?>>asList(new TypeReference<Address>(true) {}, new TypeReference<Address>(true) {}, new TypeReference<Uint256>() {}));
+//    ;
+
+    public static final Event APPROVAL_EVENT = new Event("Approval",
+        Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}),
+        Arrays.<TypeReference<?>>asList());
     ;
 
-    public static final Event TRANSFER_EVENT = new Event("Transfer", 
-            Arrays.<TypeReference<?>>asList(new TypeReference<Address>(true) {}, new TypeReference<Address>(true) {}, new TypeReference<Uint256>() {}));
+    public static final Event TRANSFER_EVENT = new Event("Transfer",
+        Arrays.<TypeReference<?>>asList(new TypeReference<Address>() {}, new TypeReference<Address>() {}),
+        Arrays.<TypeReference<?>>asList());
     ;
 
     protected static final HashMap<String, String> _addresses;
