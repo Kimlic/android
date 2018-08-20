@@ -6,8 +6,10 @@ import com.android.volley.Response
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.kimlic.API.DoAsync
 import com.kimlic.API.KimlicJSONRequest
 import com.kimlic.API.VolleySingleton
+import com.kimlic.BuildConfig
 import com.kimlic.KimlicApp
 import com.kimlic.db.KimlicDB
 import com.kimlic.db.SyncService
@@ -22,24 +24,24 @@ import java.io.InputStreamReader
 
 class VendorsRepository private constructor() {
 
-    private object HOLDER {
-        val INSTANCE = VendorsRepository()
-    }
+    // Constants
 
-    // Companion
+    private val VENDORS_URL = BuildConfig.VENDORS_URL
 
-    companion object {
-        val instance: VendorsRepository by lazy(LazyThreadSafetyMode.SYNCHRONIZED) { HOLDER.INSTANCE }
-    }
+    // Variables
 
     private var googleSignInAccount = GoogleSignIn.getLastSignedInAccount(KimlicApp.applicationContext())
     private var db: KimlicDB = KimlicDB.getInstance()!!
     private var vendorDao = db.vendorDao()
 
+
+    // Public
+
     fun initDocuments(accountAddress: String, onError: () -> Unit) {
+        val url = VENDORS_URL + QuorumURL.VENDORS.url
         val headers = mapOf(Pair("account-address", accountAddress), Pair("accept", "application/vnd.mobile-api.v1+json"))
 
-        val vendorsRequest = KimlicJSONRequest(GET, QuorumURL.vendors.url, headers, JSONObject(),
+        val vendorsRequest = KimlicJSONRequest(GET, url, headers, JSONObject(),
                 Response.Listener { it ->
                     if (!it.getJSONObject("meta").optString("code").toString().startsWith("2")) {
                         onError()
@@ -60,7 +62,7 @@ class VendorsRepository private constructor() {
                     onError()
                 })
 
-        VolleySingleton.getInstance(KimlicApp.applicationContext()).requestQueue.add(vendorsRequest)
+        DoAsync().execute(Runnable { VolleySingleton.getInstance(KimlicApp.applicationContext()).requestQueue.add(vendorsRequest) })
     }
 
     fun countries(): List<Country> {
@@ -88,11 +90,29 @@ class VendorsRepository private constructor() {
 
     fun vendorDocuments() = vendorDao.select()
 
+    // Private
+
     private fun syncDataBase() {
         googleSignInAccount?.let {
             Handler().postDelayed({ SyncService.getInstance().backupDatabase(Prefs.currentAccountAddress, "kimlic.db", onSuccess = {}) }, 0)
         }
     }
+
+    // Holder
+
+    private object HOLDER {
+
+        val INSTANCE = VendorsRepository()
+    }
+
+    // Companion
+
+    companion object {
+
+        val instance: VendorsRepository by lazy(LazyThreadSafetyMode.SYNCHRONIZED) { HOLDER.INSTANCE }
+    }
+
+    // Inner class
 
     class Country(val country: String, val sh: String, val code: Int)
 }
