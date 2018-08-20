@@ -6,8 +6,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
-import android.os.AsyncTask
-import android.os.CountDownTimer
 import android.os.Handler
 import android.util.Log
 import com.android.volley.AuthFailureError
@@ -22,10 +20,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.kimlic.API.DocumentLoader
+import com.kimlic.API.DoAsync
 import com.kimlic.API.KimlicJSONRequest
 import com.kimlic.API.SyncObject
 import com.kimlic.API.VolleySingleton
+import com.kimlic.BuildConfig
 import com.kimlic.KimlicApp
 import com.kimlic.db.KimlicDB
 import com.kimlic.db.SyncService
@@ -36,7 +35,7 @@ import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.quorum.crypto.Sha
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.AppDoc
-import com.kimlic.utils.QuorumURL
+import com.kimlic.utils.KimlicApi
 import com.kimlic.utils.mappers.BitmapToByteArrayMapper
 import org.json.JSONObject
 import org.spongycastle.util.encoders.Base64
@@ -73,6 +72,7 @@ class ProfileRepository private constructor() {
     private var vendorDao: VendorDao
     private var context: Context
 
+    private val BASE_URL = BuildConfig.BASE_URL
     // Init
 
     init {
@@ -232,9 +232,10 @@ class ProfileRepository private constructor() {
     // New User
 
     fun initNewUserRegistration(onSuccess: () -> Unit, onError: () -> Unit) {
+        val url = BASE_URL + KimlicApi.CONFIG.path
         // 1. Create Quorum instance locally - mnemonic and address
         QuorumKimlic.destroyInstance()
-        QuorumKimlic.createInstance(null, context) // moved to quorum request
+        QuorumKimlic.createInstance(null, context) // moved to QUORUM request
 
         val mnemonic = QuorumKimlic.getInstance().mnemonic
         val walletAddress = QuorumKimlic.getInstance().walletAddress
@@ -243,7 +244,7 @@ class ProfileRepository private constructor() {
         // 2. Get entry point of the Quorum
         val headers = mapOf<String, String>(Pair("account-address", walletAddress))
 
-        val addressRequest = KimlicJSONRequest(GET, QuorumURL.config.url, headers, JSONObject(),
+        val addressRequest = KimlicJSONRequest(GET, url, headers, JSONObject(),
                 Response.Listener {
                     if (!it.getJSONObject("meta").optString("code").startsWith("2")) {
                         onError(); return@Listener
@@ -267,6 +268,7 @@ class ProfileRepository private constructor() {
     // Quorum request
 
     fun quorumRequest(accountAddress: String, onSuccess: () -> Unit, onError: () -> Unit) {
+        val url = BASE_URL + KimlicApi.CONFIG.path
         val user = userDao.select(accountAddress)
         // 1. Create Quorum instance with current user
 
@@ -279,7 +281,7 @@ class ProfileRepository private constructor() {
         // 2. Get entry point of the Quorum
         val headers = mapOf(Pair("account-address", walletAddress))
 
-        val addressRequest = KimlicJSONRequest(GET, QuorumURL.config.url, headers, JSONObject(), Response.Listener {
+        val addressRequest = KimlicJSONRequest(GET, url, headers, JSONObject(), Response.Listener {
             if (!it.getJSONObject("meta").optString("code").startsWith("2")) {
                 onError(); return@Listener
             }
@@ -299,9 +301,10 @@ class ProfileRepository private constructor() {
     // Sync user
 
     fun syncProfile(accountAddress: String) {
+        val url = BASE_URL + KimlicApi.PROFILE_SYNC.path
         val headers = mapOf(Pair("account-address", accountAddress))
 
-        val syncRequest = KimlicJSONRequest(GET, QuorumURL.profileSync.url, headers, JSONObject(), Response.Listener {
+        val syncRequest = KimlicJSONRequest(GET, url, headers, JSONObject(), Response.Listener {
             if (!it.getJSONObject("meta").optString("code").startsWith("2")) return@Listener
 
             val jsonToParse = it.getJSONObject("data").getJSONArray("data_fields").toString()
@@ -322,7 +325,7 @@ class ProfileRepository private constructor() {
     // Contacts verification
 
     fun contactVerify(target: String, source: String, onSuccess: () -> Unit, onError: () -> Unit) {
-        Thread {
+        DoAsync().execute(Runnable {
             val quorumKimlic = QuorumKimlic.getInstance()
             var receiptPhone: TransactionReceipt? = null
 
@@ -338,11 +341,12 @@ class ProfileRepository private constructor() {
                 val headers = mapOf(Pair("account-address", Prefs.currentAccountAddress))
                 val params = JSONObject().put(target, source)
 
-                var url = ""
-                when (target) {
-                    "phone" -> url = QuorumURL.phoneVerify.url
-                    "email" -> url = QuorumURL.emailVerify.url
-                }
+                val url =
+                        when (target) {
+                            "phone" -> BASE_URL + KimlicApi.PHONE_VERIFY.path
+                            "email" -> BASE_URL + KimlicApi.EMAIL_VERIFY.path
+                            else -> " "
+                        }
 
                 val verifyRequest = KimlicJSONRequest(POST, url, headers, params, Response.Listener {
                     if (!it.getJSONObject("meta").optString("code").startsWith("2")) {
@@ -354,34 +358,35 @@ class ProfileRepository private constructor() {
 
                 VolleySingleton.getInstance(context).addToRequestQueue(verifyRequest)
             }
-        }.start()
+        })
     }
 
     fun contactApprove(target: String, code: String, onSuccess: () -> Unit, onError: (code: String) -> Unit) {
-        var url = ""
-
-        when (target) {
-            "email" -> url = QuorumURL.emailApprove.url
-            "phone" -> url = QuorumURL.phoneApprove.url
-        }
-
-        val headers = mapOf(Pair("account-address", Prefs.currentAccountAddress))
-        val params = JSONObject().put("code", code)
-
-        val approveRequest = KimlicJSONRequest(POST, url, headers, params, Response.Listener {
-            val responseSuccess = it.getJSONObject("meta").optString("code").startsWith("2")
-            val statusOk = it.getJSONObject("data").optString("status").toString() == "ok"
-
-            if (!responseSuccess && !statusOk) {
-                onError("400"); return@Listener
+        DoAsync().execute(Runnable {
+            val url = when (target) {
+                "email" -> BASE_URL + KimlicApi.EMAIL_APPROVE.path
+                "phone" -> BASE_URL + KimlicApi.PHONE_APPROVE.path
+                else -> ""
             }
-            onSuccess()
 
-        }, Response.ErrorListener {
-            onError(it?.networkResponse?.statusCode.toString())
+            val headers = mapOf(Pair("account-address", Prefs.currentAccountAddress))
+            val params = JSONObject().put("code", code)
+
+            val approveRequest = KimlicJSONRequest(POST, url, headers, params, Response.Listener {
+                val responseSuccess = it.getJSONObject("meta").optString("code").startsWith("2")
+                val statusOk = it.getJSONObject("data").optString("status").toString() == "ok"
+
+                if (!responseSuccess && !statusOk) {
+                    onError("400"); return@Listener
+                }
+                onSuccess()
+
+            }, Response.ErrorListener {
+                onError(it?.networkResponse?.statusCode.toString())
+            })
+
+            VolleySingleton.getInstance(context).addToRequestQueue(approveRequest)
         })
-
-        VolleySingleton.getInstance(context).addToRequestQueue(approveRequest)
     }
 
     // RP request
@@ -413,8 +418,7 @@ class ProfileRepository private constructor() {
         val shaFront = Sha.sha256(frontString)
         val shaBack = Sha.sha256(backString)
 
-        val loader = DocumentLoader()
-        loader.execute(Runnable {
+        DoAsync().execute(Runnable {
             val receipt = QuorumKimlic.getInstance().setFieldMainData("{\"face\":${shaFace},\"document-front\":${shaFront},\"document-back\":${shaBack}}", dataType)
 
             if (receipt == null || receipt.status == "0x0") {
