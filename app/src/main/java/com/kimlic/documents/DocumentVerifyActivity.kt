@@ -75,6 +75,7 @@ class DocumentVerifyActivity : BaseActivity() {
     private fun initFragments() {
         val portraitBundle = Bundle()
         portraitBundle.putInt(AppConstants.cameraType.key, AppConstants.cameraFront.intKey)
+        portraitBundle.putString("action", AppConstants.portraitDocument.key)
 
         portraitFragment = PortraitPhotoFragment.newInstance(portraitBundle)
         frontFragment = DocumentFrontFragment.newInstance()
