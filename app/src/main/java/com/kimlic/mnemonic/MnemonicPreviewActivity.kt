@@ -58,7 +58,7 @@ class MnemonicPreviewActivity : BaseActivity() {
         listView.adapter = PhraseAdapter(this, R.layout.item_phrase, list)
     }
 
-    private fun mnemonicList() = model.user(Prefs.currentAccountAddress).mnemonic.split(" ")
+    private fun mnemonicList() = model.user().mnemonic.split(" ")
 
     private fun copyToBuffer(listToSave: List<String>) {
         val clipBoard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
