@@ -102,10 +102,10 @@ class ProfileRepository private constructor() {
 
     fun addUserPhoto(accountAddress: String, fileName: String, data: ByteArray) {
         savePhoto(fileName = fileName, data = data)
-        savePhoto(fileName = "preview_" + fileName, data = croppedPreviewInByteArray(data))
+        savePhoto(fileName = "preview_$fileName", data = croppedPreviewInByteArray(data))
         val user = userDao.select(accountAddress = accountAddress)
         user.portraitFile = fileName
-        user.portraitPreviewFile = "preview_" + fileName
+        user.portraitPreviewFile = "preview_$fileName"
         userDao.update(user = user)
         syncDataBase()
     }
@@ -199,7 +199,7 @@ class ProfileRepository private constructor() {
         val resizedBitmap = getResizedBitmap(originalBitmap, 1024, 768, -90f, true)
         val width = resizedBitmap.width
         val height = resizedBitmap.height
-        val croppedBitmap = Bitmap.createBitmap(resizedBitmap, (0.1 * width).toInt(), (0.12 * height).toInt(), (0.70 * width).toInt(), (0.72 * height).toInt())
+        val croppedBitmap = Bitmap.createBitmap(resizedBitmap, (0.15 * width).toInt(), (0.12 * height).toInt(), (0.70 * width).toInt(), (0.72 * height).toInt())
         val croppedPreviewByteArray = BitmapToByteArrayMapper().transform(croppedBitmap)
         return croppedPreviewByteArray
     }

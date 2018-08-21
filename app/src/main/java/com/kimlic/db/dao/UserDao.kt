@@ -20,6 +20,9 @@ interface UserDao {
     @Query("SELECT * FROM user WHERE account_address =:accountAddress")
     fun select(accountAddress: String): User
 
+    @Query("UPDATE user SET kim_quantity =:kimToken WHERE account_address =:accountAddress ")
+    fun updateKimToken(accountAddress: String, kimToken: Int)
+
     @Query("SELECT * FROM user WHERE id =:id ")
     fun selectLive(id: Long): LiveData<User>
 

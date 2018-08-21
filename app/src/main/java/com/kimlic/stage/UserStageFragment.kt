@@ -4,7 +4,6 @@ import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
-import android.os.HandlerThread
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
@@ -168,6 +167,7 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
 //            it.visibility = if (setUserPhoto()) View.INVISIBLE else View.VISIBLE
         }
 
+        kimItem.setOnClickListener{model.tokensBalance()}
 
     }
 
