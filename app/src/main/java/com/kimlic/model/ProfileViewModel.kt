@@ -35,7 +35,7 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     fun updateUser(user: User) = repository.updateUser(user)
 
-    fun user(accountAddress: String) = repository.getUser(accountAddress)
+    fun user() = repository.getUser(Prefs.currentAccountAddress)
 
     fun deleteUser(accountAddress: String) = repository.deleteUser(accountAddress)
 
@@ -57,11 +57,18 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     }
 
+    // Tokens
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    fun tokensBalance() {
+        repository.tokenBalanceRequest(Prefs.currentAccountAddress)
+    }
+
     // Address
 
     fun addUserAddress(value: String, data: ByteArray) {
         val fileName = UUID.nameUUIDFromBytes(data).toString()
-        repository.addUserAddress(accountAddress = Prefs.currentAccountAddress, value = value, fileName = fileName, data = data)
+        repository.addUserAddress(Prefs.currentAccountAddress, value, fileName, data)
     }
 
     fun updateUserAddress(address: Address) = repository.addressUpdate(address = address)
@@ -117,10 +124,6 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
     fun senDoc(docType: String, country: String, url: String, onSuccess: () -> Unit, onError: () -> Unit) {
         val countrySH = vendorsRepository.countries().filter { it.country == country }.first().sh.toUpperCase()
         repository.sendDoc(documentType = docType, countrySH = countrySH, onSuccess = onSuccess, onError = onError)//, dynamicUrl = "insert url fro qr Coed")
-    }
-
-    fun getTokensBalance(){
-
     }
 
     fun clearAllFiles() = repository.clearAllFiles()
