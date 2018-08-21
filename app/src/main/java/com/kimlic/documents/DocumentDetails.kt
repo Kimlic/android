@@ -103,7 +103,7 @@ class DocumentDetails : BaseActivity() {
         url = intent.extras.getString("path", "")
 
         currentDocument = model.userDocument(documentType)
-        user = model.user(Prefs.currentAccountAddress)
+        user = model.user()
         photosMap = model.userDocumentPhotos(documentType = documentType).map { it.type to it.file }.toMap()
     }
 
