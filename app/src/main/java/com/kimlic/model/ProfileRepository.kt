@@ -253,6 +253,7 @@ class ProfileRepository private constructor() {
                     val contextContractAddress = it.getJSONObject("data").optString("context_contract")
                     QuorumKimlic.getInstance().setKimlicContractsContextAddress(contextContractAddress)
                     val accountStorageAdapterAddress = QuorumKimlic.getInstance().accountStorageAdapter
+
                     QuorumKimlic.getInstance().setAccountStorageAdapterAddress(accountStorageAdapterAddress)
                     userDao.insert(user); syncDataBase();
                     Prefs.currentAccountAddress = walletAddress
@@ -267,6 +268,9 @@ class ProfileRepository private constructor() {
 
     // Quorum request
 
+    /*
+    * Request to get address for ContractsContext
+    * */
     fun quorumRequest(accountAddress: String, onSuccess: () -> Unit, onError: () -> Unit) {
         val url = BASE_URL + KimlicApi.CONFIG.path
         val user = userDao.select(accountAddress)
@@ -298,6 +302,17 @@ class ProfileRepository private constructor() {
         VolleySingleton.getInstance(context).addToRequestQueue(addressRequest)
     }
 
+    // Token balance
+
+    fun tokenBalanceRequest(accountAddress: String) {
+        val kimlicTokenContractAddress = QuorumKimlic.getInstance().kimlicTokenAddress
+        QuorumKimlic.getInstance().setKimlicToken(kimlicTokenContractAddress)
+        val kimQuantity = QuorumKimlic.getInstance().getTokenBalance(accountAddress)
+
+        // TODO Convert kim from uind256 to humanfrienadly format
+        userDao.updateKimToken(accountAddress, 2)
+    }
+
     // Sync user
 
     fun syncProfile(accountAddress: String) {
@@ -324,13 +339,13 @@ class ProfileRepository private constructor() {
 
     // Contacts verification
 
-    fun contactVerify(target: String, source: String, onSuccess: () -> Unit, onError: () -> Unit) {
+    fun contactVerify(contactType: String, source: String, onSuccess: () -> Unit, onError: () -> Unit) {
         DoAsync().execute(Runnable {
             val quorumKimlic = QuorumKimlic.getInstance()
             var receiptPhone: TransactionReceipt? = null
 
             try {
-                receiptPhone = quorumKimlic.setFieldMainData(Sha.sha256(source), target)
+                receiptPhone = quorumKimlic.setFieldMainData(Sha.sha256(source), contactType)
             } catch (e: ExecutionException) {
                 onError()
             } catch (e: InterruptedException) {
@@ -339,10 +354,10 @@ class ProfileRepository private constructor() {
 
             if (receiptPhone != null && receiptPhone.transactionHash.isNotEmpty()) {
                 val headers = mapOf(Pair("account-address", Prefs.currentAccountAddress))
-                val params = JSONObject().put(target, source)
+                val params = JSONObject().put(contactType, source)
 
                 val url =
-                        when (target) {
+                        when (contactType) {
                             "phone" -> BASE_URL + KimlicApi.PHONE_VERIFY.path
                             "email" -> BASE_URL + KimlicApi.EMAIL_VERIFY.path
                             else -> " "
@@ -354,7 +369,10 @@ class ProfileRepository private constructor() {
                     }
                     onSuccess()
 
-                }, Response.ErrorListener { onError() })
+                }, Response.ErrorListener {
+                    Log.d("TAGERROR", "response = $it")
+                    onError()
+                })
 
                 VolleySingleton.getInstance(context).addToRequestQueue(verifyRequest)
             }
