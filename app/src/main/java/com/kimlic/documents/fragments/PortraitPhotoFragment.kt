@@ -1,6 +1,7 @@
 package com.kimlic.documents.fragments
 
 import android.os.Bundle
+import android.support.constraint.ConstraintLayout
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
@@ -42,6 +43,14 @@ class PortraitPhotoFragment : CameraBaseFragment() {
     // Private
 
     private fun setupUI() {
+        val action = arguments?.getString("action", "")
+
+        when (action) {
+            AppConstants.portraitDocument.key -> {
+                setDocumentBackground()
+            }
+        }
+
         backBt.setOnClickListener { activity!!.finish() }
         setupTitle()
     }
@@ -57,4 +66,10 @@ class PortraitPhotoFragment : CameraBaseFragment() {
         documenTitleTv.text = spannableBuilder
     }
 
+    private fun setDocumentBackground() {
+        guidelineIv.setBackgroundResource(R.drawable.ic_face_and_id_guideline)
+        auxilaryContourIv.setBackgroundResource(R.drawable.ic_face_and_id_cutout)
+        val layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT)
+        auxilaryContourIv.layoutParams = layoutParams
+    }
 }
