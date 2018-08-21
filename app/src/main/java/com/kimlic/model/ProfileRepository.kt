@@ -379,9 +379,9 @@ class ProfileRepository private constructor() {
         })
     }
 
-    fun contactApprove(target: String, code: String, onSuccess: () -> Unit, onError: (code: String) -> Unit) {
+    fun contactApprove(contactType: String, code: String, onSuccess: () -> Unit, onError: (code: String) -> Unit) {
         DoAsync().execute(Runnable {
-            val url = when (target) {
+            val url = when (contactType) {
                 "email" -> BASE_URL + KimlicApi.EMAIL_APPROVE.path
                 "phone" -> BASE_URL + KimlicApi.PHONE_APPROVE.path
                 else -> ""
