@@ -1,4 +1,4 @@
-package com.kimlic;
+package com.kimlic.quorum.contracts;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
