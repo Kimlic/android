@@ -33,7 +33,6 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
     // Document type
 
     documentType("DOCUMENT_TYPE"),
-
     documentToVerify("DOCUMENT_TO_VERIFY"),
     documentByteArray("DOCUMENT_BYTE_ARRAY"),
 
@@ -43,6 +42,8 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
     photoFrontType("document-front"),
     photoBackType("document-back"),
     photoAddressType("address"),
+
+    portraitDocument("portrait_document"),
 
     // File path
 
