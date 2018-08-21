@@ -1,14 +1,15 @@
 package com.kimlic.quorum;
 
 import android.content.Context;
+import com.kimlic.API.KimlicApi;
 import com.kimlic.BuildConfig;
 import com.kimlic.quorum.bip44.HdKeyNode;
 import com.kimlic.quorum.bip44.hdpath.HdKeyPath;
 import com.kimlic.quorum.contracts.AccountStorageAdapter;
 import com.kimlic.quorum.contracts.KimlicContractsContext;
+import com.kimlic.quorum.contracts.KimlicToken;
 import com.kimlic.quorum.crypto.MnemonicUtils;
 import com.kimlic.quorum.crypto.SecureRandomTools;
-import com.kimlic.API.KimlicApi;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.concurrent.ExecutionException;
@@ -37,6 +38,7 @@ public class QuorumKimlic {
   private String mMnemonic;
   private AccountStorageAdapter mAccountStorageAdapter;
   private KimlicContractsContext mKimlicContractsContext;
+  private KimlicToken mKimlicToken;
 
   // Public
 
@@ -74,8 +76,7 @@ public class QuorumKimlic {
 
   // Quorum Transactions
 
-  public TransactionReceipt setFieldMainData(String value, String type)
-      throws ExecutionException, InterruptedException {
+  public TransactionReceipt setFieldMainData(String value, String type) throws ExecutionException, InterruptedException {
     if (mAccountStorageAdapter == null) {
       throw new InterruptedException("Empty contract address");
     }
@@ -89,7 +90,7 @@ public class QuorumKimlic {
 
   public static QuorumKimlic getInstance() throws Exception {
     if (sInstance == null) {
-      throw new Exception("Call createInstance to generate instace");
+      throw new Exception("Call createInstance to generate instance");
     }
 
     return sInstance;
@@ -110,6 +111,29 @@ public class QuorumKimlic {
   public void setAccountStorageAdapterAddress(String address) {
     mAccountStorageAdapter = AccountStorageAdapter
         .load(address, mWeb3, mCredentials, BigInteger.ZERO, BigInteger.valueOf(4612388));
+  }
+
+  /*
+   * Return address KimlicToken contract
+   * */
+  public String getKimlicTokenAddress() throws ExecutionException, InterruptedException {
+    return mKimlicContractsContext.getKimlicToken().sendAsync().get();
+  }
+
+  /*
+   * Create instance KimlicToken contract; input parametr - address from KimlicContractsContex
+   * */
+
+  public void setKimlicToken(String address) {
+    mKimlicToken = KimlicToken.load(address, mWeb3, mCredentials, BigInteger.ZERO, BigInteger.valueOf(4612388));
+  }
+
+  /*
+   * Kimlic token contract returns quantity of tokens
+   * */
+
+  public BigInteger getTokenBalance(String owner) throws Exception {
+    return mKimlicToken.balanceOf(owner).sendAsync().get();
   }
 
   // Private
