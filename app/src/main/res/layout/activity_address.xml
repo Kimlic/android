@@ -59,7 +59,7 @@
       android:textColorHint="@color/lightBlue"
       app:hintTextAppearance="@style/AddressTextInputLayout">
 
-      <AutoCompleteTextView
+      <com.kimlic.address.CustomAutoCompleteTextView
         android:id="@+id/addressEt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
