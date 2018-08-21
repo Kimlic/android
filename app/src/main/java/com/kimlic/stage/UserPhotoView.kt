@@ -4,11 +4,11 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import com.kimlic.R
 import com.kimlic.utils.mappers.FileNameTxtBase64ToBitmap
 
+@SuppressLint("ViewConstructor")
 class UserPhotoView : View {
 
     // Variables
@@ -61,9 +61,7 @@ class UserPhotoView : View {
         viewHeight = (0.9 * width).toInt()
 
         bitmapGradient = blueGradient(viewWidth, viewHeight)
-        if (getUserPhotoBitmap(fileName = fileName) != null)
-            bitmapToShow = getUserPhotoBitmap(fileName) else
-            bitmapToShow = bitmapGradient
+        bitmapToShow = if (getUserPhotoBitmap(fileName) != null) getUserPhotoBitmap(fileName) else bitmapGradient
     }
 
     @SuppressLint("DrawAllocation")
@@ -82,27 +80,14 @@ class UserPhotoView : View {
         val q = Paint(Paint.ANTI_ALIAS_FLAG)
         setLayerType(View.LAYER_TYPE_HARDWARE, q)
         canvas.save()
-        Log.d("TAGCANVAS", "view vidth = $viewWidth")
-        Log.d("TAGCANVAS", "view height = $viewHeight")
-        Log.d("TAGCANVAS", "user photo bitmap height = ${userPhotoBackBitmap?.height}")
-        Log.d("TAGCANVAS", "view photo bitmap  width= ${userPhotoBackBitmap?.width}")
 
         val scaleX: Float = viewWidth / userPhotoBackBitmap!!.width.toFloat()
         val scaleY: Float = viewHeight / userPhotoBackBitmap!!.height.toFloat()
-
-        Log.d("TAGCANVAS", "scale X = $scaleX")
-        Log.d("TAGCANVAS", "scale Y = $scaleY")
-
-
-//        canvas.scale(1.0f, 2.3f)
-//        canvas.scale(scaleY, scaleX)
-//        canvas.scale(1.3f, 1.3f)
         canvas.scale(scaleX, scaleX)
 
-
-        //canvas.drawBitmap(userPhotoBackBitmap, 0f, 0f, q)
-        canvas.drawBitmap(userPhotoBackBitmap, ((width - userPhotoBackBitmap!!.width * scaleX) / 2).toFloat(), ((height - userPhotoBackBitmap!!.height* scaleY) / 2).toFloat() , q)
+        canvas.drawBitmap(userPhotoBackBitmap, ((width - userPhotoBackBitmap!!.width * scaleX) / 2), ((height - userPhotoBackBitmap!!.height * scaleY) / 2), q)
         canvas.restore()
+
         q.xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_IN)
         canvas.drawBitmap(userPhotoBitmap, 0f, 0f, q)
         q.xfermode = null
@@ -129,7 +114,9 @@ class UserPhotoView : View {
         hexPaint.pathEffect = pathEffect
     }
 
-    // getsFileName in byte64Format
+    /*
+    * input -  byte64Format
+    * */
     private fun getUserPhotoBitmap(fileName: String): Bitmap? = FileNameTxtBase64ToBitmap().transform(fileName)
 
     private fun hexagonPath(cornerWidth: Float = 0f): Path {
@@ -141,7 +128,7 @@ class UserPhotoView : View {
 
         path.moveTo((centerX - step).toFloat(), cornerWidth)
         path.lineTo((centerX + step).toFloat(), cornerWidth)
-        path.lineTo((width - cornerWidth).toFloat(), (centerY).toFloat())
+        path.lineTo((width - cornerWidth), (centerY).toFloat())
         path.lineTo((centerX + step).toFloat(), height - cornerWidth)
         path.lineTo((centerX - step).toFloat(), height - cornerWidth)
         path.lineTo(cornerWidth, (centerY).toFloat())
