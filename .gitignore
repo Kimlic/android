@@ -13,3 +13,12 @@
 /captures
 .externalNativeBuild
 .idea/*
+
+# Built application files
+*.apk
+*.ap_
+app/libs/
+app/src/dev/
+app/src/main/res/menu/
+app/src/prod/
+app/src/stage/
