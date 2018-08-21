@@ -3,6 +3,7 @@
 package com.kimlic.camera
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -11,9 +12,11 @@ import android.graphics.Matrix
 import android.hardware.Camera
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.FrameLayout
 import butterknife.BindView
@@ -135,12 +138,14 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
         params.jpegQuality = 80
 
         val supportedFocuseMode = camera.parameters.supportedFocusModes
-        val hasAutofocus = supportedFocuseMode != null && supportedFocuseMode.contains(Camera.Parameters.FOCUS_MODE_AUTO)
+        val hasAutoFocus = supportedFocuseMode != null && supportedFocuseMode.contains(Camera.Parameters.FOCUS_MODE_AUTO)
 
-        if (hasAutofocus) {
+        if (hasAutoFocus) {
             params.focusMode = (Camera.Parameters.FOCUS_MODE_AUTO)
         }
+
         params.setPictureSize(currentWidth, currentHeight)
+        setOptimalPrviewSize(params)
         camera.parameters = params
     }
 
@@ -175,12 +180,26 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
     override fun onPictureTaken(data: ByteArray?, camera: Camera?) {
         closeCamera()
         showResultPhoto(data)
-
     }
 
-    private fun rotateBitmap(sourse: Bitmap, angel: Float): Bitmap {
+    private fun rotateBitmap(source: Bitmap, angel: Float): Bitmap {
         val matrix = Matrix()
         matrix.postRotate(angel)
-        return Bitmap.createBitmap(sourse, 0, 0, sourse.width, sourse.height, matrix, true)
+        return Bitmap.createBitmap(source, 0, 0, source.width, source.height, matrix, true)
+    }
+
+    private fun setOptimalPrviewSize(params: Camera.Parameters) {
+        val manager = context!!.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val display = manager.defaultDisplay
+        val metrics = DisplayMetrics()
+        display.getMetrics(metrics)
+        val width = metrics.widthPixels
+        val height = metrics.heightPixels
+
+        try {
+            params.setPreviewSize(height, width)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }
