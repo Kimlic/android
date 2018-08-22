@@ -71,7 +71,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    implementation "com.google.firebase:firebase-messaging:17.1.0"
+    implementation "com.google.firebase:firebase-messaging:17.3.0"
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.google.guava:guava:24.1-android'
     testImplementation 'junit:junit:4.12'
@@ -128,7 +128,7 @@ dependencies {
 
     // Google Drive
     implementation 'com.google.android.gms:play-services-drive:15.0.1'
-    implementation 'com.google.android.gms:play-services-auth:15.0.1'
+    implementation 'com.google.android.gms:play-services-auth:16.0.0'
 
     //Firebase
     implementation 'com.google.firebase:firebase-core:16.0.1'
