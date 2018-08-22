@@ -14,4 +14,6 @@ data class Address(
         @ColumnInfo(name = "value") var value: String = "",
         @ColumnInfo(name = "state") var state: String = "",
         @ColumnInfo(name = "inserted_at") var insertedAt: Long = System.currentTimeMillis()
-)
+) {
+   @Ignore constructor() : this(id = 0)
+}
