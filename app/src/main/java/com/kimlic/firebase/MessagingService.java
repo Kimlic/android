@@ -1,4 +1,4 @@
-package com.kimlic;
+package com.kimlic.firebase;
 
 import android.util.Log;
 
