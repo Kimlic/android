@@ -14,4 +14,6 @@ data class VendorDocument(
         @ColumnInfo(name = "description") var description: String = "",
         @ColumnInfo(name = "type") var type: String = "",
         @ColumnInfo(name = "inserted_at") var insertedAt: Long = System.currentTimeMillis()
-)
+) {
+    @Ignore constructor() : this(id = 0)
+}

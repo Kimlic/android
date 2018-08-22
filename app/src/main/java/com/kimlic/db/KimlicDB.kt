@@ -8,7 +8,7 @@ import com.kimlic.KimlicApp
 import com.kimlic.db.dao.*
 import com.kimlic.db.entity.*
 
-@Database(entities = [User::class, Contact::class, Document::class, Address::class, Photo::class, VendorDocument::class], version = 1)
+@Database(entities = [User::class, Contact::class, Document::class, Address::class, Photo::class, VendorDocument::class], version = 1, exportSchema = false)
 
 abstract class KimlicDB : RoomDatabase() {
 
@@ -17,7 +17,7 @@ abstract class KimlicDB : RoomDatabase() {
     companion object {
         private var INSTANCE: KimlicDB? = null
 
-        fun getInstance(context: Context? = KimlicApp.applicationContext()): KimlicDB? {
+        fun getInstance(): KimlicDB? {
             if (INSTANCE == null) {
                 synchronized(KimlicDB::class) {
                     INSTANCE = Room.databaseBuilder(KimlicApp.applicationContext(), KimlicDB::class.java, "kimlic.db")

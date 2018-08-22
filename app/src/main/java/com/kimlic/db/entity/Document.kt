@@ -4,7 +4,7 @@ import android.arch.persistence.room.*
 import android.arch.persistence.room.ForeignKey.CASCADE
 
 @Entity(tableName = "document",
-        indices = [Index(value = arrayOf("type"), unique = true)],
+        indices = [Index(value = arrayOf("type"), unique = true), Index(value = arrayOf("user_id"))],
         foreignKeys = [ForeignKey(entity = User::class, parentColumns = arrayOf("id"), childColumns = arrayOf("user_id"), onDelete = CASCADE, onUpdate = CASCADE)])
 
 data class Document(
@@ -18,4 +18,6 @@ data class Document(
         @ColumnInfo(name = "state") var state: String = "",
         @ColumnInfo(name = "type") var type: String = "",
         @ColumnInfo(name = "inserted_at") var insertedAt: Long = System.currentTimeMillis()
-)
+) {
+    @Ignore constructor() : this(id = 0)
+}

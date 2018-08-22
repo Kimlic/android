@@ -1,13 +1,11 @@
 package com.kimlic.db.entity
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.ForeignKey
-import android.arch.persistence.room.ForeignKey.*
-import android.arch.persistence.room.PrimaryKey
+import android.arch.persistence.room.*
+import android.arch.persistence.room.ForeignKey.CASCADE
 
 @Entity(tableName = "photo"
-        ,foreignKeys = [ForeignKey(entity = Document::class, parentColumns = arrayOf("id"), childColumns = arrayOf("document_id"), onDelete = CASCADE, onUpdate = CASCADE), ForeignKey(entity = Address::class, parentColumns = arrayOf("id"), childColumns = arrayOf("address_id"), onDelete = CASCADE, onUpdate = CASCADE)]
+        , indices = [Index(value = arrayOf("id"), unique = true), Index(value = arrayOf("document_id")), Index(value = arrayOf("address_id"))]
+        , foreignKeys = [ForeignKey(entity = Document::class, parentColumns = arrayOf("id"), childColumns = arrayOf("document_id"), onDelete = CASCADE, onUpdate = CASCADE), ForeignKey(entity = Address::class, parentColumns = arrayOf("id"), childColumns = arrayOf("address_id"), onDelete = CASCADE, onUpdate = CASCADE)]
 )
 data class Photo(
         @PrimaryKey(autoGenerate = true)
@@ -17,4 +15,6 @@ data class Photo(
         @ColumnInfo(name = "file") var file: String = "",
         @ColumnInfo(name = "type") var type: String = "front",
         @ColumnInfo(name = "inserted_at") var insertedAt: Long = System.currentTimeMillis()
-)
+) {
+    @Ignore constructor() : this(id = 0)
+}

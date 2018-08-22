@@ -5,7 +5,6 @@ import android.arch.persistence.room.*
 @Entity(tableName = "user")
 
 data class User(
-
         @PrimaryKey(autoGenerate = true)
         @ColumnInfo(name = "id") var id: Long = 0,
         @ColumnInfo(name = "first_name") var firstName: String = "",
@@ -16,4 +15,6 @@ data class User(
         @ColumnInfo(name = "portrait_preview_file") var portraitPreviewFile: String = "",
         @ColumnInfo(name = "account_address") var accountAddress: String = "",
         @ColumnInfo(name = "inserted_at") var insertedAt: Long = System.currentTimeMillis()
-)
+) {
+    @Ignore constructor() : this(id = 0)
+}
