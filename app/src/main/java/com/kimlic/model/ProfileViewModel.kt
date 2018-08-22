@@ -59,7 +59,7 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     // Tokens
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun tokensBalance() {
         repository.tokenBalanceRequest(Prefs.currentAccountAddress)
     }
