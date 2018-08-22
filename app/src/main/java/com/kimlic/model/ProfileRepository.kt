@@ -20,10 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.kimlic.API.DoAsync
-import com.kimlic.API.KimlicJSONRequest
-import com.kimlic.API.SyncObject
-import com.kimlic.API.VolleySingleton
+import com.kimlic.API.*
 import com.kimlic.BuildConfig
 import com.kimlic.KimlicApp
 import com.kimlic.db.KimlicDB
@@ -35,11 +32,11 @@ import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.quorum.crypto.Sha
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.AppDoc
-import com.kimlic.API.KimlicApi
 import com.kimlic.utils.mappers.BitmapToByteArrayMapper
 import org.json.JSONObject
 import org.spongycastle.util.encoders.Base64
 import org.web3j.protocol.core.methods.response.TransactionReceipt
+import org.web3j.utils.Convert
 import java.io.File
 import java.io.IOException
 import java.io.OutputStreamWriter
@@ -62,7 +59,7 @@ class ProfileRepository private constructor() {
 
     // Variables
 
-    private var db: KimlicDB
+    private var db: KimlicDB = KimlicDB.getInstance()!!
     private var userDao: UserDao
     private var contactDao: ContactDao
     private var documentDao: DocumentDao
@@ -76,7 +73,6 @@ class ProfileRepository private constructor() {
     // Init
 
     init {
-        db = KimlicDB.getInstance()!!
         userDao = db.userDao()
         contactDao = db.contactDao()
         documentDao = db.documentDao()
@@ -194,15 +190,6 @@ class ProfileRepository private constructor() {
 
     // Private
 
-    private fun croppedPreviewInByteArray(data: ByteArray): ByteArray {
-        val originalBitmap = BitmapFactory.decodeByteArray(data, 0, data.size)
-        val resizedBitmap = getResizedBitmap(originalBitmap, 1024, 768, -90f, true)
-        val width = resizedBitmap.width
-        val height = resizedBitmap.height
-        val croppedBitmap = Bitmap.createBitmap(resizedBitmap, (0.15 * width).toInt(), (0.12 * height).toInt(), (0.70 * width).toInt(), (0.72 * height).toInt())
-        val croppedPreviewByteArray = BitmapToByteArrayMapper().transform(croppedBitmap)
-        return croppedPreviewByteArray
-    }
 
     // Backup
 
@@ -302,15 +289,17 @@ class ProfileRepository private constructor() {
         VolleySingleton.getInstance(context).addToRequestQueue(addressRequest)
     }
 
-    // Token balance
+    /*
+    *   Token balance
+    * The function receives the number of Be on the input and converts them into tokens
+    * */
 
     fun tokenBalanceRequest(accountAddress: String) {
         val kimlicTokenContractAddress = QuorumKimlic.getInstance().kimlicTokenAddress
         QuorumKimlic.getInstance().setKimlicToken(kimlicTokenContractAddress)
-        val kimQuantity = QuorumKimlic.getInstance().getTokenBalance(accountAddress)
-
-        // TODO Convert kim from uind256 to humanfrienadly format
-        userDao.updateKimToken(accountAddress, 2)
+        val wei = QuorumKimlic.getInstance().getTokenBalance(accountAddress)
+        val token = Convert.fromWei(wei.toString(), Convert.Unit.ETHER)
+        userDao.updateKimToken(accountAddress, token.toInt())
     }
 
     // Sync user
@@ -606,6 +595,15 @@ class ProfileRepository private constructor() {
         if (!isNecessaryToKeepOrig) bm.recycle()
 
         return resizedBitmap
+    }
+
+    private fun croppedPreviewInByteArray(data: ByteArray): ByteArray {
+        val originalBitmap = BitmapFactory.decodeByteArray(data, 0, data.size)
+        val resizedBitmap = getResizedBitmap(originalBitmap, 1024, 768, -90f, true)
+        val width = resizedBitmap.width
+        val height = resizedBitmap.height
+        val croppedBitmap = Bitmap.createBitmap(resizedBitmap, (0.15 * width).toInt(), (0.12 * height).toInt(), (0.70 * width).toInt(), (0.72 * height).toInt())
+        return BitmapToByteArrayMapper().transform(croppedBitmap)
     }
 
     private fun savePhoto(fileName: String, data: ByteArray) {
