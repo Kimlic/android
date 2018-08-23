@@ -6,6 +6,7 @@ import com.kimlic.db.entity.Address
 import com.kimlic.db.entity.Contact
 import com.kimlic.db.entity.Document
 import com.kimlic.db.entity.User
+import com.kimlic.documents.DocState
 import com.kimlic.preferences.Prefs
 import com.kimlic.vendors.VendorsRepository
 import java.util.*
@@ -31,7 +32,7 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     // User
 
-    fun addUserName(accountAddress: String, firstName: String, lastName: String) = repository.addUserName(accountAddress = accountAddress, firstName = firstName, lastName = lastName)
+    fun updateUserName(firstName: String, lastName: String) = repository.addUserName(Prefs.currentAccountAddress, firstName = firstName, lastName = lastName)
 
     fun updateUser(user: User) = repository.updateUser(user)
 
@@ -94,6 +95,13 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
     fun updateDocument(document: Document) = repository.updateDocument(document)
 
     fun deleteDocument(documentId: Long) = repository.documentDelete(documentId = documentId)
+
+    fun states() = repository.documentStates(Prefs.currentAccountAddress)
+
+    fun hasDocumentInProgress(): Boolean {
+        val states = repository.documentStates(Prefs.currentAccountAddress)
+        return states.contains(DocState.CREATED.state) || states.contains(DocState.CREATED.state)
+    }
 
     // Contact
 
