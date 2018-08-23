@@ -17,13 +17,23 @@ import com.kimlic.R
 import com.kimlic.db.entity.Document
 import com.kimlic.db.entity.User
 import com.kimlic.model.ProfileViewModel
-import com.kimlic.preferences.Prefs
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.AppDoc
 import com.kimlic.utils.mappers.FileNameTxtBase64ToBitmap
 import com.kimlic.vendors.VendorsViewModel
 import kotlinx.android.synthetic.main.activity_verify_details.*
 import java.util.*
+
+/*  Activity has next states
+*   -   Preview
+*               - preview document:   - accepted or in progress all fields aren't available and country is shown. Button is hidden
+*               - preview document:
+*                                     - user hasn't document in progress - firstName and lastName fields are available to modify
+*                                     - user has document in progress - firstName and Last name are Available to modify
+*   -   Send    send document
+*                                     - user have document in progress - name and lastName aren't available
+*                                     - user hasn't document in progress - all fields are editable.
+* */
 
 class DocumentDetails : BaseActivity() {
 
@@ -66,34 +76,10 @@ class DocumentDetails : BaseActivity() {
         fillData(user = user, photos = photosMap, document = currentDocument)
 
         when (action) {
-            "send" -> {
-                countryTil.visibility = View.VISIBLE
-                countryEt.text = Editable.Factory.getInstance().newEditable(country)
-
-                addBt.text = getString(R.string.verify_document)
-                addBt.setOnClickListener {
-                    if (validFields()) {
-                        addBt.isClickable = false
-                        updateUser()
-                        updateDocument()
-                        sendDocument()
-                    }
-                }
-            }
-            "preview" -> {
-                addBt.text = getString(R.string.add_details)
-                countryTil.visibility = View.GONE
-                addBt.setOnClickListener {
-                    if (validFields()) {
-                        updateDocument()
-                        updateUser()
-                        finish()
-                    }
-                }
-            }
+            "send" -> setupSend()
+            "preview" -> setupPreview(currentDocument)
         }
         backBt.setOnClickListener { finish() }
-        expireDateEt.setOnClickListener { datePicker() }
     }
 
     private fun initExtraVariables() {
@@ -107,29 +93,73 @@ class DocumentDetails : BaseActivity() {
         photosMap = model.userDocumentPhotos(documentType = documentType).map { it.type to it.file }.toMap()
     }
 
+    private fun setupPreview(document: Document) {
+        when (document.state) {
+            DocState.CREATED.state, DocState.VERIFIED.state -> {
+                countryEt.text = Editable.Factory.getInstance().newEditable(document.country)
+                countryTil.visibility = View.VISIBLE
+                disableEditing(textFields)
+                addBt.visibility = View.GONE
+            }
+            else -> {
+                if (model.hasDocumentInProgress()) {
+                    disableEditing(textFields.subList(0, 2))
+                }
+
+                countryTil.visibility = View.GONE
+                addBt.text = getString(R.string.add_details)
+
+                expireDateEt.setOnClickListener { datePicker() }
+                addBt.setOnClickListener {
+                    if (validFields()) {
+                        updateDocument()
+                        updateUserName(firstNameEt.text.toString(), lastNameEt.text.toString())
+                        finish()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setupSend() {
+        countryTil.visibility = View.VISIBLE
+        countryEt.text = Editable.Factory.getInstance().newEditable(country)
+
+        if (model.hasDocumentInProgress()) {
+            disableEditing(textFields.subList(0, 2))
+        }
+
+        expireDateEt.setOnClickListener { datePicker() }
+        addBt.text = getString(R.string.verify_document)
+        addBt.setOnClickListener {
+            if (validFields()) {
+                addBt.isClickable = false
+                updateUserName(firstNameEt.text.toString(), lastNameEt.text.toString())
+                updateDocument()
+                sendDocument()
+            }
+        }
+    }
+
     private fun sendDocument() {
         showProgress()
         model.senDoc(docType = documentType, country = country, url = url,
                 onSuccess = {
                     hideProgress()
-                    showPopup("Success!", "Document sent!")
-                    currentDocument.state = "pending"
+                    currentDocument.state = DocState.CREATED.state
                     model.updateDocument(currentDocument) //finish ()
+                    showPopup("Success!", "Document sent!", action = { finish() })
                 },
                 onError = {
                     hideProgress()
                     addBt.isClickable = true
-                    showPopup("Error", message = "Unable to proceed!")
+                    showPopup("Error", message = "Unable to proceed!", action = {})
                 })
     }
 
     // Updates
 
-    private fun updateUser() {
-        user.firstName = firstNameEt.text.toString()
-        user.lastName = lastNameEt.text.toString()
-        model.updateUser(user)
-    }
+    private fun updateUserName(firstName: String, lastName: String) = model.updateUserName(firstName, lastName)
 
     private fun updateDocument() {
         currentDocument.number = numberEt.text.toString()
@@ -195,12 +225,14 @@ class DocumentDetails : BaseActivity() {
         if (blockchainUpdatingFragment != null) blockchainUpdatingFragment?.dismiss(); timer?.cancel()
     }
 
-    override fun showPopup(title: String, message: String) {
+    // exit from activity on succsess adding???
+    fun showPopup(title: String, message: String, action: () -> Unit) {
         val builder = AlertDialog.Builder(this)
         builder.setTitle(title)
                 .setMessage(message)
-                .setPositiveButton(getString(R.string.OK)) { dialog, _ -> dialog?.dismiss() }
+                .setPositiveButton(getString(R.string.OK)) { dialog, _ -> action(); dialog.dismiss() }
                 .setCancelable(true)
+                .setOnDismissListener { action() }
                 .create()
                 .show()
     }
@@ -217,4 +249,7 @@ class DocumentDetails : BaseActivity() {
         dialog.datePicker.minDate = Date().time
         dialog.show()
     }
+
+    private fun disableEditing(views: List<EditText>) =
+            views.forEach { it.isClickable = false; it.isFocusableInTouchMode = false; it.isFocusable = false; it.isCursorVisible = false }
 }
