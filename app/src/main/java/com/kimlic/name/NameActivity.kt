@@ -62,7 +62,7 @@ class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
 
     private fun manageInput() {
         if (validFields()) {
-            model.addUserName(Prefs.currentAccountAddress, nameEt.text.toString(), lastNameEt.text.toString())
+            model.updateUserName(nameEt.text.toString(), lastNameEt.text.toString())
             successful()
         }
     }
