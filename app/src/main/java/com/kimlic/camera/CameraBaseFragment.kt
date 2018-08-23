@@ -137,8 +137,8 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
         params.pictureFormat = ImageFormat.JPEG
         params.jpegQuality = 80
 
-        val supportedFocuseMode = camera.parameters.supportedFocusModes
-        val hasAutoFocus = supportedFocuseMode != null && supportedFocuseMode.contains(Camera.Parameters.FOCUS_MODE_AUTO)
+        val supportedFocusMode = camera.parameters.supportedFocusModes
+        val hasAutoFocus = supportedFocusMode != null && supportedFocusMode.contains(Camera.Parameters.FOCUS_MODE_AUTO)
 
         if (hasAutoFocus) {
             params.focusMode = (Camera.Parameters.FOCUS_MODE_AUTO)
