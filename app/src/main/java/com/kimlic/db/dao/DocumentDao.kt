@@ -26,6 +26,9 @@ interface DocumentDao {
     @Query("DELETE FROM document WHERE id = :id")
     fun delete(id: Long)
 
+    @Query("SELECT D.state FROM document as D INNER JOIN user ON D.user_id = user_id WHERE user.account_address=:accountAddress")
+    fun stateList(accountAddress: String): List<String>
+
     @Delete
     fun deleteDocument(document: Document)
 }
