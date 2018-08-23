@@ -33,6 +33,7 @@ class DocumentVerifyActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_document_verify)
 
+        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         setupUI()
     }
 
@@ -44,7 +45,6 @@ class DocumentVerifyActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         documentType = intent.extras.getString(AppConstants.documentType.key, "")
         initFragments()
 
@@ -53,7 +53,6 @@ class DocumentVerifyActivity : BaseActivity() {
         portraitFragment.setCallback(object : PhotoCallback {
             override fun callback(data: ByteArray) {
                 portraitData = data
-
                 showFragment(R.id.container, frontFragment, DocumentFrontFragment.FRAGMENT_KEY)
             }
         })
