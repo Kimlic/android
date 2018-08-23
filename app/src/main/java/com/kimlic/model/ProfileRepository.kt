@@ -182,6 +182,7 @@ class ProfileRepository private constructor() {
         documentDao.update(document); syncDataBase()
     }
 
+    fun documentStates(accountAddress: String) = documentDao.stateList(accountAddress)
     // Photo
 
     fun userDocumentPhotos(accountAddress: String, documentType: String) = photoDao.selectUserPhotosByDocument(accountAddress = accountAddress, documentType = documentType)
