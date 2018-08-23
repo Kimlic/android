@@ -2,7 +2,6 @@ package com.kimlic.preferences
 
 import com.kimlic.KimlicApp
 import com.kimlic.utils.AppConstants
-import org.spongycastle.crypto.agreement.srp.SRP6Client
 
 object Prefs : BasePreferences(KimlicApp.applicationContext()) {
 
@@ -25,9 +24,7 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
 
         // User profile preferences
 
-        // auth = ""
         currentAccountAddress = ""
-        //documentToverify = ""
     }
 
     // Preferences
@@ -80,27 +77,7 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
         get() = getBoolean(AppConstants.isGoogleSigneIn.key)
         set(value) = setBoolean(AppConstants.isGoogleSigneIn.key, value)
 
-
-    // User photo
-
-//    var isUserPhotoTaken: Boolean
-//        get() = getBoolean(AppConstants.isUserPhotoTaken.key)
-//        set(value) = setBoolean(AppConstants.isUserPhotoTaken.key, value)
-
-    // Profile preferences
-
-//    var auth: String
-//        get() = getString(AppConstants.userAuth.key)
-//        set(value) = setString(AppConstants.userAuth.key, value)
-
     var currentAccountAddress: String
         get() = getString(AppConstants.accountAddress.key)
         set(value) = setString(AppConstants.accountAddress.key, value)
-
-    //val currentId: Long = 0L
-
-//    var documentToverify: String
-//        get() = getString(AppConstants.documentToVerify.key)
-//        set(value) = setString(AppConstants.documentToVerify.key, value)
-
 }
