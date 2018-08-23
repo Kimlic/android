@@ -11,6 +11,7 @@
   <android.support.constraint.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+
     android:background="@drawable/background_fingerprint_texture">
 
     <Space
@@ -231,6 +232,7 @@
         android:layout_width="@dimen/content_width"
         android:layout_height="224dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/rounded_background_transparent">
 
         <ImageView
@@ -246,13 +248,13 @@
         android:id="@+id/addBt"
         android:layout_width="@dimen/content_width"
         android:layout_height="@dimen/button_height"
-        android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/button_rounded_blue"
         android:text="@string/add_new_id"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/button_text_size"/>
+        android:textSize="@dimen/button_text_size"
+        android:visibility="visible"/>
 
     </LinearLayout>
 
