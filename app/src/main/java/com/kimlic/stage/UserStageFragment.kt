@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -158,7 +159,7 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
 
     private fun setupListeners() {
         addressItem.setOnClickListener { PresentationManager.address(activity!!) }
-        nameItem.setOnClickListener { PresentationManager.name(activity!!) }
+        nameItem.setOnClickListener { if (!model.hasDocumentInProgress()) PresentationManager.name(activity!!) }
 
         settingsBt.setOnClickListener { PresentationManager.settings(activity!!) }
 
@@ -167,8 +168,7 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
 //            it.visibility = if (setUserPhoto()) View.INVISIBLE else View.VISIBLE
         }
 
-        kimItem.setOnClickListener{model.tokensBalance()}
-
+        kimItem.setOnClickListener { model.tokensBalance() }
     }
 
     private fun initDivider() {
