@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -39,8 +38,8 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
     // Variables
 
     private lateinit var divider: DividerItemDecoration
-    lateinit var contactsAdapter: ContactsAdapter
-    lateinit var documentsAdapter: DocumentAdapter
+    private lateinit var contactsAdapter: ContactsAdapter
+    private lateinit var documentsAdapter: DocumentAdapter
 
     // Companion
 
@@ -56,6 +55,11 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
 
     // Life
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        retainInstance = true
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_stage_user, container, false)
     }
@@ -63,6 +67,11 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        manageRisks()
     }
 
     // Private
@@ -80,8 +89,6 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
     // Private Helpers
 
     private fun setupRisks() {
-        model.getRisksLiveData()!!.observe(activity!!, Observer<Boolean> { risks -> manageRisks(risks!!) })
-
         risksTv.setOnClickListener {
             if (!Prefs.isPasscodeEnabled) {
                 passcodeForResult(); return@setOnClickListener
@@ -92,18 +99,19 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
         }
     }
 
-    private fun setupUser() {
-        model.userLive().observe(this@UserStageFragment, object : Observer<User> {
-            override fun onChanged(user: User?) {
-                user?.let {
-                    setupNameField(if (user.firstName.isNotEmpty()) {
-                        "${user.firstName} ${user.lastName}"
-                    } else "")
+    private fun manageRisks() = (activity).let { risksTv?.visibility = if (Prefs.isPasscodeEnabled && Prefs.isTouchEnabled) View.GONE else View.VISIBLE }
 
-                    setupKimField(user.kimQuantity)
-                    showPhoto(user.portraitPreviewFile)
-                    manageCameraIcon("preview_" + user.portraitFile)
-                }
+    private fun setupUser() {
+        model.userLive().observe(this@UserStageFragment, Observer<User> { user ->
+            user?.let {
+                setupNameField(if (it.firstName.isNotEmpty()) {
+                    "${it.firstName} ${it.lastName}"
+                } else "")
+
+                setupKimField(it.kimQuantity)
+                showPhoto(it.portraitPreviewFile)
+                manageCameraIcon("preview_" + it.portraitFile)
+//                manageCameraIcon(user.portraitPreviewFile)
             }
         })
     }
@@ -160,14 +168,8 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
     private fun setupListeners() {
         addressItem.setOnClickListener { PresentationManager.address(activity!!) }
         nameItem.setOnClickListener { if (!model.hasDocumentInProgress()) PresentationManager.name(activity!!) }
-
         settingsBt.setOnClickListener { PresentationManager.settings(activity!!) }
-
-        takePhotoLl.setOnClickListener {
-            PresentationManager.portraitPhoto(activity!!)
-//            it.visibility = if (setUserPhoto()) View.INVISIBLE else View.VISIBLE
-        }
-
+        takePhotoLl.setOnClickListener { PresentationManager.portraitPhoto(activity!!) }
         kimItem.setOnClickListener { model.tokensBalance() }
     }
 
@@ -177,14 +179,8 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
     }
 
     private fun manageCameraIcon(fileName: String) {
-        //if (File(activity!!.filesDir.toString() + "/" + fileName).exists()) takePhotoLl.visibility = View.GONE else takePhotoLl.visibility = View.VISIBLE
-        if (File(activity!!.filesDir.toString() + "/" + fileName).exists()) takePhotoLl.visibility = View.VISIBLE else takePhotoLl.visibility = View.VISIBLE
-    }
-
-    // @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun manageRisks(value: Boolean) {
-        (activity).let { risksTv?.visibility = if (Prefs.isPasscodeEnabled && Prefs.isTouchEnabled) View.GONE else View.VISIBLE }
-//        risksTv.visibility = if (value) View.GONE else View.VISIBLE
+        // Gone stub
+        if (File(activity!!.filesDir.toString() + "/" + fileName).exists()) takePhotoLl.visibility = View.GONE else takePhotoLl.visibility = View.VISIBLE
     }
 
     private fun showPhoto(fileName: String) {
