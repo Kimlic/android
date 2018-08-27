@@ -99,7 +99,7 @@ class ProfileRepository private constructor() {
     fun addUserPhoto(accountAddress: String, fileName: String, data: ByteArray) {
         savePhoto(fileName = fileName, data = data)
         savePhoto(fileName = "preview_$fileName", data = croppedPreviewInByteArray(data))
-        val user = userDao.select(accountAddress = accountAddress)
+        val user = userDao.select(accountAddress)
         user.portraitFile = fileName
         user.portraitPreviewFile = "preview_$fileName"
         userDao.update(user = user)
