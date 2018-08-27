@@ -15,24 +15,15 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     // Variables
 
-    private var risksLiveData: MutableLiveData<Boolean>? = object : MutableLiveData<Boolean>() {}
-    private var repository: ProfileRepository
-    private var vendorsRepository: VendorsRepository
+    private var repository: ProfileRepository = ProfileRepository.instance
+    private var vendorsRepository: VendorsRepository = VendorsRepository.instance
     private var timerQueue = ArrayDeque<Long>(listOf(2000L, 4000L))
-
-    // Database
-
-    init {
-        risksLiveData!!.postValue(Prefs.isPasscodeEnabled && Prefs.isTouchEnabled)
-        repository = ProfileRepository.instance
-        vendorsRepository = VendorsRepository.instance
-    }
 
     // Public
 
     // User
 
-    fun updateUserName(firstName: String, lastName: String) = repository.addUserName(Prefs.currentAccountAddress, firstName = firstName, lastName = lastName)
+    fun updateUserName(firstName: String, lastName: String) = repository.addUserName(Prefs.currentAccountAddress, firstName, lastName)
 
     fun updateUser(user: User) = repository.updateUser(user)
 
@@ -40,7 +31,7 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     fun deleteUser(accountAddress: String) = repository.deleteUser(accountAddress)
 
-    fun userLive() = repository.userLive(accountAddress = Prefs.currentAccountAddress)
+    fun userLive() = repository.userLive(Prefs.currentAccountAddress)
 
     fun deleteUserContact(accountAddress: String, contactType: String) = repository.contactDelete(accountAddress, contactType)
 
@@ -61,9 +52,7 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
     // Tokens
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun tokensBalance() {
-        repository.tokenBalanceRequest(Prefs.currentAccountAddress)
-    }
+    fun tokensBalance() = repository.tokenBalanceRequest(Prefs.currentAccountAddress)
 
     // Address
 
@@ -72,7 +61,7 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
         repository.addUserAddress(Prefs.currentAccountAddress, value, fileName, data)
     }
 
-    fun updateUserAddress(address: Address) = repository.addressUpdate(address = address)
+    fun updateUserAddress(address: Address) = repository.addressUpdate(address)
 
     fun deleteAddress(addressId: Long) = repository.addressDelete(addressId)
 
@@ -96,7 +85,7 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     fun deleteDocument(documentId: Long) = repository.documentDelete(documentId = documentId)
 
-    fun states() = repository.documentStates(Prefs.currentAccountAddress)
+    //fun states() = repository.documentStates(Prefs.currentAccountAddress)
 
     fun hasDocumentInProgress(): Boolean {
         val states = repository.documentStates(Prefs.currentAccountAddress)
@@ -108,8 +97,6 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
     fun addContact(accountAddress: String, contact: Contact) = repository.contactAdd(accountAddress, contact)
 
     //fun getUserAddressPhoto(accountAddress: String) = repository.userAddressPhoto(accountAddress = accountAddress)
-
-    fun getRisksLiveData() = risksLiveData
 
     // Sync request
 
@@ -130,7 +117,7 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
             ?: onError()
 
     fun senDoc(docType: String, country: String, url: String, onSuccess: () -> Unit, onError: () -> Unit) {
-        val countrySH = vendorsRepository.countries().filter { it.country == country }.first().sh.toUpperCase()
+        val countrySH = vendorsRepository.countries().first { it.country == country }.sh.toUpperCase()
         repository.sendDoc(documentType = docType, countrySH = countrySH, onSuccess = onSuccess, onError = onError)//, dynamicUrl = "insert url fro qr Coed")
     }
 
