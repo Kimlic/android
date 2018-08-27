@@ -169,7 +169,6 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
         } else if (passcodeConfirm == passcode) {
             Prefs.passcode = passcode
             Prefs.isPasscodeEnabled = true
-            model.getRisksLiveData()?.postValue(true)
             successful()
         } else setupUITryAgain()
     }
