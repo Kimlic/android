@@ -32,7 +32,6 @@ class StageActivity : BaseActivity() {
     private lateinit var accountsStageFragment: AccountsStageFragment
     private lateinit var model: ProfileViewModel
 
-
     // Life
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,10 +45,6 @@ class StageActivity : BaseActivity() {
     override fun onResume() {
         risks()
         super.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
     }
 
     override fun onBackPressed() {
@@ -89,10 +84,8 @@ class StageActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-
         SyncService.signIn(this, GOOGLE_SIGNE_IN_REQUEST_CODE)
         GoogleSignIn.getLastSignedInAccount(this)?.let {
-            Log.d("TAGTASKSYNC", "TEST sync")
             SyncService.getInstance().backupAllFiles(Prefs.currentAccountAddress)
         }
 
@@ -114,7 +107,6 @@ class StageActivity : BaseActivity() {
             replaceAccountsFragment()
         }
         scanBt.setOnClickListener {
-            //PresentationManager.VENDORS(this, path = "demo.kimlic.com")
             IntentIntegrator(this).setOrientationLocked(true).setRequestCode(SCAN_REQUEST_CODE).setCaptureActivity(ScannerActivity::class.java).initiateScan()
         }
     }
