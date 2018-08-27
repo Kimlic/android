@@ -70,6 +70,7 @@ class ProfileRepository private constructor() {
     private var context: Context
 
     private val BASE_URL = BuildConfig.BASE_URL
+
     // Init
 
     init {
@@ -130,9 +131,9 @@ class ProfileRepository private constructor() {
         addressDao.update(address); syncDataBase()
     }
 
-    fun addressLive(accountAddress: String) = addressDao.selectLive(accountAddress = accountAddress)
+    fun addressLive(accountAddress: String) = addressDao.selectLive(accountAddress)
 
-    fun address(accountAddress: String) = addressDao.select(accountAddress = accountAddress)
+    fun address(accountAddress: String) = addressDao.select(accountAddress)
 
     fun addressDelete(addressId: Long) {
         addressDao.delete(addressId); syncDataBase()
@@ -140,7 +141,7 @@ class ProfileRepository private constructor() {
 
     // Contacts
 
-    fun userContactsLive(accountAddress: String): LiveData<List<Contact>> = contactDao.selectLive(accountAddress = accountAddress)
+    fun userContactsLive(accountAddress: String): LiveData<List<Contact>> = contactDao.selectLive(accountAddress)
 
     fun contactAdd(accountAddress: String, contact: Contact) {
         val user = userDao.select(accountAddress)
@@ -154,11 +155,11 @@ class ProfileRepository private constructor() {
 
     // Document
 
-    fun documents(accountAddress: String) = documentDao.select(accountAddress = accountAddress)
+    fun documents(accountAddress: String) = documentDao.select(accountAddress)
 
-    fun documentsLive(accountAddress: String) = documentDao.selectLive(accountAddress = accountAddress)
+    fun documentsLive(accountAddress: String) = documentDao.selectLive(accountAddress)
 
-    fun document(accountAddress: String, documentType: String) = documentDao.select(accountAddress = accountAddress, documentType = documentType)
+    fun document(accountAddress: String, documentType: String) = documentDao.select(accountAddress, documentType)
 
     fun documentDelete(documentId: Long) = { documentDao.delete(id = documentId); syncDataBase() }
 
@@ -185,9 +186,9 @@ class ProfileRepository private constructor() {
     fun documentStates(accountAddress: String) = documentDao.stateList(accountAddress)
     // Photo
 
-    fun userDocumentPhotos(accountAddress: String, documentType: String) = photoDao.selectUserPhotosByDocument(accountAddress = accountAddress, documentType = documentType)
+    fun userDocumentPhotos(accountAddress: String, documentType: String) = photoDao.selectUserPhotosByDocument(accountAddress, documentType)
 
-    fun userAddressPhoto(accountAddress: String) = photoDao.selectUserAddresPhoto(accountAddress = accountAddress)
+    fun userAddressPhoto(accountAddress: String) = photoDao.selectUserAddresPhoto(accountAddress)
 
     // Private
 
@@ -456,7 +457,8 @@ class ProfileRepository private constructor() {
 
         val request = object : JsonObjectRequest(Request.Method.POST, url, params, listener, Response.ErrorListener { error ->
             onError()
-            Log.e("DOC RESPONSE ERROR", error.toString())
+            Log.e("DOC RESPONSE ERROR", "Error = ${error?.networkResponse?.statusCode}")
+            Log.e("DOC RESPONSE ERROR", "Error response = ${error?.networkResponse}")
         }) {
             init {
                 retryPolicy = DefaultRetryPolicy(30000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
