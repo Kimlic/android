@@ -225,8 +225,8 @@ class DocumentDetails : BaseActivity() {
         if (blockchainUpdatingFragment != null) blockchainUpdatingFragment?.dismiss(); timer?.cancel()
     }
 
-    // exit from activity on succsess adding???
-    fun showPopup(title: String, message: String, action: () -> Unit) {
+    // exit from activity on success adding???
+    private fun showPopup(title: String, message: String, action: () -> Unit) {
         val builder = AlertDialog.Builder(this)
         builder.setTitle(title)
                 .setMessage(message)
