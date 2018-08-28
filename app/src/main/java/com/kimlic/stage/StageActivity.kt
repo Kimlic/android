@@ -4,16 +4,12 @@ import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.support.v4.app.FragmentTransaction
-import android.util.Log
 import android.view.View
 import android.widget.Toast
-import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.zxing.integration.android.IntentIntegrator
 import com.kimlic.BaseActivity
 import com.kimlic.R
-import com.kimlic.db.SyncService
 import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.preferences.Prefs
@@ -22,9 +18,10 @@ import kotlinx.android.synthetic.main.activity_stage.*
 
 class StageActivity : BaseActivity() {
 
+    // Constants
+
     private val SCAN_REQUEST_CODE = 1100
     private val SECURITY_REQUESTCODE = 151
-    private val GOOGLE_SIGNE_IN_REQUEST_CODE = 107
 
     // Variables
 
@@ -63,20 +60,8 @@ class StageActivity : BaseActivity() {
             }
 
             SECURITY_REQUESTCODE -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    Log.d("TAGINSTAGE", "from fragment, touch is enabled " + Prefs.isTouchEnabled)
+                if (resultCode == Activity.RESULT_OK)
                     if (!Prefs.isTouchEnabled) PresentationManager.touchCreate(this)
-                }
-
-            }
-            GOOGLE_SIGNE_IN_REQUEST_CODE -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    Handler().postDelayed({
-                        SyncService.getInstance().backupDatabase(Prefs.currentAccountAddress, dataBaseName = "kimlic.db", onSuccess = {
-                            Handler().postDelayed({ SyncService.getInstance().backupAllFiles(accountAddress = Prefs.currentAccountAddress) }, 1000)
-                        })
-                    }, 0)
-                }
             }
         }
     }
@@ -84,11 +69,6 @@ class StageActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        SyncService.signIn(this, GOOGLE_SIGNE_IN_REQUEST_CODE)
-        GoogleSignIn.getLastSignedInAccount(this)?.let {
-            SyncService.getInstance().backupAllFiles(Prefs.currentAccountAddress)
-        }
-
         initFragments()
         lifecycle.addObserver(model)
         lifecycle.addObserver(userStageFragment)
