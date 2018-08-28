@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import butterknife.ButterKnife
 import com.kimlic.BaseActivity
 import com.kimlic.R
+import com.kimlic.db.SyncService
 import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.passcode.PasscodeActivity
@@ -52,7 +53,6 @@ class SettingsActivity : BaseActivity() {
             PASSCODE_REQUEST_CODE -> {
                 if (resultCode == Activity.RESULT_OK)
                     PresentationManager.touchCreate(this@SettingsActivity)
-
             }
         }
     }
@@ -124,6 +124,7 @@ class SettingsActivity : BaseActivity() {
         Prefs.clear()
         clearAllFiles()
         QuorumKimlic.destroyInstance()
+        SyncService.signOut(this)
         PresentationManager.signUpRecovery(this)
     }
 
