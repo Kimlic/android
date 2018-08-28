@@ -7,15 +7,15 @@ import android.view.ViewGroup
 import com.kimlic.BaseDialogFragment
 import com.kimlic.R
 
-class RecoverySuccesfulFragment : BaseDialogFragment() {
+class RecoverySuccessfulFragment : BaseDialogFragment() {
 
     // Companion
 
     companion object {
         val FRAGMENT_KEY = this::class.java.simpleName!!
 
-        fun newInstance(): RecoverySuccesfulFragment {
-            return RecoverySuccesfulFragment()
+        fun newInstance(): RecoverySuccessfulFragment {
+            return RecoverySuccessfulFragment()
         }
     }
 
