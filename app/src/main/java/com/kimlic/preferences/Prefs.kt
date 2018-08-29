@@ -5,8 +5,6 @@ import com.kimlic.utils.AppConstants
 
 object Prefs : BasePreferences(KimlicApp.applicationContext()) {
 
-    private val TAG = this.javaClass.simpleName
-
     // Clear
 
     fun clear() {
@@ -21,8 +19,6 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
         isTutorialShown = false
         isPasscodeOffered = false
         isRecoveryOffered = false
-
-        // User profile preferences
 
         currentAccountAddress = ""
     }
