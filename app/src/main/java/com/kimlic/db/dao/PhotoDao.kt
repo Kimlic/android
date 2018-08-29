@@ -20,7 +20,10 @@ interface PhotoDao {
     fun selectUserPhotosByDocument(accountAddress: String, documentType: String): List<Photo>
 
     @Query("SELECT P.id, P.document_id, P.type, P.file, P.inserted_at, P.address_id FROM photo as P INNER JOIN address ON p.address_id = address.id INNER JOIN user ON address.user_id = user.id WHERE user.account_address =:accountAddress")
-    fun selectUserAddresPhoto(accountAddress: String): List<Photo>
+    fun selectUserAddressPhoto(accountAddress: String): List<Photo>
+
+    @Query("SELECT P.file FROM photo as P INNER JOIN document as D ON P.document_id = D.id INNER JOIN user ON D.user_id = user_id WHERE user.account_address=:accountAddress UNION SELECT portrait_file FROM user WHERE account_address=:accountAddress UNION SELECT portrait_preview_file FROM user WHERE account_address=:accountAddress UNION SELECT p.file FROM photo as P INNER JOIN address as A ON P.address_id = A.id WHERE address_id IN (SELECT address_id FROM user WHERE account_address=:accountAddress)")
+    fun profilePhotos(accountAddress: String): List<String>
 
     @Delete
     fun delete(photo: Photo)
