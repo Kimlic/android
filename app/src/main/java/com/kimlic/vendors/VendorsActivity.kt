@@ -43,7 +43,7 @@ class VendorsActivity : BaseActivity() {
     // Private
 
     fun setupUI() {
-        url = intent.extras.getString("url", "")
+        url = intent.extras.getString("path", "")
         initRecycler()
 
         lifecycle.addObserver(vendorsModel)
