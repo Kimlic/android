@@ -1,63 +1,102 @@
 package com.kimlic.recovery
 
-import android.arch.lifecycle.ViewModel
+import android.app.Application
+import android.arch.lifecycle.AndroidViewModel
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleObserver
+import android.arch.lifecycle.OnLifecycleEvent
 import android.os.Handler
-import android.util.Log
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.kimlic.API.DoAsync
 import com.kimlic.KimlicApp
+import com.kimlic.R
 import com.kimlic.db.KimlicDB
-import com.kimlic.db.SyncService
 import com.kimlic.model.ProfileRepository
+import com.kimlic.preferences.Prefs
+import com.kimlic.quorum.QuorumKimlic
+import java.io.File
+import java.util.*
 
-class RecoveryViewModel : ViewModel() {
+class RecoveryViewModel(application: Application) : AndroidViewModel(application), LifecycleObserver {
 
     // Variables
 
-    private val TAG = this::class.java.simpleName
+    private var profileRepository: ProfileRepository = ProfileRepository.instance
+    private var recoveryRepository: RecoveryRepository = RecoveryRepository.instance
 
-    private lateinit var syncService: SyncService
-    private var googleSignInAccount: GoogleSignInAccount? = null
-    private var db: KimlicDB? = null
-    private var repository: ProfileRepository = ProfileRepository.instance
+    private lateinit var photoQueue: ArrayDeque<File>
+    private lateinit var photoRetrieveQueue: ArrayDeque<String>
+
+    private var timerQueue = ArrayDeque<Long>(listOf(2000L, 4000L))
 
     // Public
 
-    fun retrievePhoto(accountAddress: String, onSuccess: () -> Unit, onError: () -> Unit) {
-        googleSignInAccount = GoogleSignIn.getLastSignedInAccount(KimlicApp.applicationContext())
-
-        googleSignInAccount?.let {
-            Handler().postDelayed({
-                SyncService.getInstance().retrievePhotos(accountAddress = accountAddress)
-            }, 0)
-        }
-    }
-
-    init {
-        db = KimlicDB.getInstance()
-    }
-
     fun initNewUserRegistration(onSuccess: () -> Unit, onError: () -> Unit) {
-        repository.initNewUserRegistration(onSuccess, onError)
+        profileRepository.initNewUserRegistration(onSuccess, onError)
     }
 
-    override fun onCleared() {
-        db = null
-        super.onCleared()
+    // Recovery
+
+    fun recoveryProfile(mnemonic: String, onSuccess: () -> Unit, onError: (message: String) -> Unit) {
+        photoRetrieveQueue = ArrayDeque()
+
+        QuorumKimlic.destroyInstance()
+        val quorumKimlic = QuorumKimlic.createInstance(mnemonic, getApplication())
+        val accountAddress = quorumKimlic.walletAddress
+
+        recoveryRepository.recoveryDataBase(accountAddress,
+                onSuccess = {
+                    recoveryRepository.allPhotos(accountAddress).forEach { photoRetrieveQueue.add(it) }
+                    recoveryPhoto(accountAddress,
+                            onSuccess = {
+                                Prefs.authenticated = true
+                                Prefs.currentAccountAddress = accountAddress
+                                Prefs.isRecoveryEnabled = true
+                                KimlicDB.getInstance()
+                                quorumRequest(onSuccess = { onSuccess() }, onError = { onError(getApplication<KimlicApp>().getString(R.string.server_error)) })
+                            },
+                            onError = { onError(getApplication<KimlicApp>().getString(R.string.photo_recovery_error)) })
+                }, onError = { onError(getApplication<KimlicApp>().getString(R.string.profile_not_found)) })
     }
 
-    fun retrieveDatabase(accountAddress: String, onSuccess: () -> Unit, onError: () -> Unit) {
-        googleSignInAccount = GoogleSignIn.getLastSignedInAccount(KimlicApp.applicationContext())
-        googleSignInAccount?.let {
-            db!!.close()
-
-            if (!db!!.isOpen) {
-                Handler().postDelayed({
-                    SyncService.getInstance().retrieveDataBase(accountAddress, "kimlic.db",
-                            onSuccess = { onSuccess(); Log.d(TAG, "Database restored successfully") },
-                            onError = onError)
-                }, 10)
-            }
-        }
+    private fun recoveryPhoto(accountAddress: String, onSuccess: () -> Unit, onError: () -> Unit) {
+        photoRetrieveQueue.poll()?.let {
+            DoAsync().execute(Runnable {
+                recoveryRepository.recoveryPhoto(accountAddress, it, { recoveryPhoto(accountAddress, onSuccess, onError) }, onError)
+            })
+        } ?: onSuccess()
     }
+
+    // Backup profile
+
+    fun backupProfile(onSuccess: () -> Unit, onError: () -> Unit) {
+        photoQueue = ArrayDeque()
+        val rootFilesDir = File(getApplication<KimlicApp>().filesDir.toString())
+        val files = rootFilesDir.listFiles()
+
+        files.filter { !it.isDirectory }.forEach { photoQueue.add(it) }
+
+        recoveryRepository.backupDatabase(Prefs.currentAccountAddress, onSuccess = { backupPhotos(Prefs.currentAccountAddress, onSuccess, onError) }, onError = {})
+    }
+
+    private fun backupPhotos(accountAddress: String, onSuccess: () -> Unit, onError: () -> Unit) {
+        photoQueue.poll()?.let {
+            DoAsync().execute(Runnable {
+                recoveryRepository.backupPhoto(accountAddress, it.absolutePath.toString(), { backupPhotos(accountAddress, onSuccess, onError) }, onError)
+            })
+        } ?: onSuccess()
+    }
+
+    // Quorum request helpers
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    fun resetQueue() {
+        timerQueue = ArrayDeque(listOf(2000L, 4000L))
+    }
+
+    private fun quorumRequest(onSuccess: () -> Unit, onError: () -> Unit) {
+        profileRepository.quorumRequest(Prefs.currentAccountAddress, onSuccess, onError = { retryQuorumRequest(onSuccess, onError) })
+    }
+
+    private fun retryQuorumRequest(onSuccess: () -> Unit, onError: () -> Unit) = timerQueue.poll()?.let { Handler().postDelayed({ quorumRequest(onSuccess, onError) }, it) }
+            ?: onError()
 }
