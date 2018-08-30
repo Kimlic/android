@@ -1,6 +1,10 @@
 package com.kimlic.model
 
-import android.arch.lifecycle.*
+import android.app.Application
+import android.arch.lifecycle.AndroidViewModel
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleObserver
+import android.arch.lifecycle.OnLifecycleEvent
 import android.os.Handler
 import com.kimlic.db.entity.Address
 import com.kimlic.db.entity.Contact
@@ -11,7 +15,7 @@ import com.kimlic.preferences.Prefs
 import com.kimlic.vendors.VendorsRepository
 import java.util.*
 
-class ProfileViewModel : ViewModel(), LifecycleObserver {
+class ProfileViewModel(application: Application) : AndroidViewModel(application), LifecycleObserver {
 
     // Variables
 
@@ -79,7 +83,7 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     fun userDocument(documentType: String) = repository.document(Prefs.currentAccountAddress, documentType = documentType)
 
-    fun userDocumentPhotos(documentType: String) = repository.userDocumentPhotos(accountAddress = Prefs.currentAccountAddress, documentType = documentType)
+    fun userDocumentPhotos(documentType: String) = repository.userDocumentPhotos(Prefs.currentAccountAddress, documentType)
 
     fun updateDocument(document: Document) = repository.updateDocument(document)
 
@@ -100,7 +104,7 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     // Sync request
 
-    fun syncProfile() = repository.syncProfile(accountAddress = Prefs.currentAccountAddress)
+    fun syncProfile() = repository.syncProfile(Prefs.currentAccountAddress)
 
     // Quorum request
 
@@ -118,8 +122,10 @@ class ProfileViewModel : ViewModel(), LifecycleObserver {
 
     fun senDoc(docType: String, country: String, url: String, onSuccess: () -> Unit, onError: () -> Unit) {
         val countrySH = vendorsRepository.countries().first { it.country == country }.sh.toUpperCase()
-        repository.sendDoc(documentType = docType, countrySH = countrySH, onSuccess = onSuccess, onError = onError)//, dynamicUrl = "insert url fro qr Coed")
+        repository.sendDoc(documentType = docType, countrySH = countrySH, onSuccess = onSuccess, onError = onError, url = url)
     }
+
+    // Backup
 
     fun clearAllFiles() = repository.clearAllFiles()
 }
