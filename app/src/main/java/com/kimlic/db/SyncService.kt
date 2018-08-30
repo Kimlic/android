@@ -13,31 +13,32 @@ import com.google.android.gms.drive.query.Filters
 import com.google.android.gms.drive.query.Query
 import com.google.android.gms.drive.query.SearchableField
 import com.google.android.gms.tasks.Task
+import com.kimlic.BuildConfig
 import com.kimlic.KimlicApp
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
+import java.util.*
 
 class SyncService private constructor(val context: Context) {
 
     // Constants
 
-    private val appFolder: Boolean = false
+    private val appFolder: Boolean = BuildConfig.RECOVERY_FOLDER
 
     // Variables
 
-    private val TAG = this::class.java.simpleName
+    private val TAG = this::class.java.simpleName!!
     private var mGoogleSignInAccount: GoogleSignInAccount? = null // SignIn account
     private var mDriveResourceClient: DriveResourceClient? = null // Handle access to Drive resources/files.
-
 
     // Companion
 
     companion object {
 
         val MIME_TYPE_DATABASE: String = "application/db"
-        val PHOTO_DESCRIPTION: String = "photo"
-        val DATABASE_DECRIPTION: String = "database"
+        val PHOTO_DESCRIPTION: String = "photo" // file description
+        val DATABASE_DECRIPTION: String = "database" // database description
 
         fun signIn(activity: AppCompatActivity, requestCode: Int) {
             val requiredScopes = HashSet<Scope>(2)
@@ -73,84 +74,49 @@ class SyncService private constructor(val context: Context) {
 
     // Public
 
-    fun backupDatabase(accountAddress: String, dataBaseName: String, onSuccess: () -> Unit) {
+    fun backupDatabase(accountAddress: String, dataBaseName: String, onSuccess: () -> Unit, onError: () -> Unit) {
         val db = KimlicApp.applicationContext().getDatabasePath(dataBaseName).toString()
-        backupFile(accountAddress = accountAddress, filePath = db, fileDescription = DATABASE_DECRIPTION, onSuccess = onSuccess)
+        backupFile(accountAddress = accountAddress, filePath = db, fileDescription = DATABASE_DECRIPTION, onSuccess = onSuccess, onError = onError)
     }
 
-    fun backupFile(accountAddress: String, filePath: String, fileDescription: String = PHOTO_DESCRIPTION, onSuccess: () -> Unit): Task<DriveFolder> {
+    fun backupFile(accountAddress: String, filePath: String, fileDescription: String, onSuccess: () -> Unit, onError: () -> Unit): Task<DriveFolder> {
         val backupFolderQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, accountAddress)).build()
         val rootFolder = getRootFolder()
         rootFolder.continueWithTask {
             mDriveResourceClient!!
                     .queryChildren(rootFolder.getResult(), backupFolderQuery)
                     .continueWithTask {
-                        if (it.getResult().count == 0) {
+                        if (it.result.count == 0) {
                             createFolderInFolder(parent = rootFolder.getResult(), folderName = accountAddress)
-                            backupFile(accountAddress = accountAddress, filePath = filePath, fileDescription = fileDescription, onSuccess = {})
+                            backupFile(accountAddress = accountAddress, filePath = filePath, fileDescription = fileDescription, onSuccess = {}, onError = onError)
                         }
                         updateFile(filePath = filePath, driveFolder = it.result[0].driveId.asDriveFolder(), fileDescription = fileDescription)
                     }.addOnSuccessListener {
-                        Log.d("TAG", "ON success in backupFile")
+                        Log.d("TAG", "syncservice ON success in backupFile")
                         onSuccess()
-                    }
+                    }.addOnFailureListener { onError() }
         }
         return rootFolder
     }
 
-    fun backupAllFiles(accountAddress: String) {
-        val rootFilesDir = File(context.filesDir.toString())
-        val files = rootFilesDir.listFiles()
-
-        files.filter { !it.isDirectory }.forEach {
-            Log.d("TAGTASK", " filtered.filepath = " + it.toString())
-            backupFile(accountAddress = accountAddress, filePath = it.toString(), onSuccess = {})
-        }
-
-
-    }
-
-    fun retrievePhotos(accountAddress: String) = retrieveFiles(accountAddress)
-
-    fun deleteFile(rootFolderName: String, fileName: String, mimeType: String) {
-        val fileQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, mimeType)).addFilter(Filters.eq(SearchableField.TITLE, fileName)).build()
-        val backupFolderQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, rootFolderName)).build()
-        val rootFolder = getRootFolder()
-        rootFolder.continueWithTask {
-            mDriveResourceClient!!
-                    .queryChildren(rootFolder.getResult(), backupFolderQuery)
-                    .continueWithTask { mDriveResourceClient!!.queryChildren(it.result[0].driveId.asDriveFolder(), fileQuery) }.addOnSuccessListener {}
-                    .continueWithTask { deleteFileByDriveId(it.result[0].driveId.asDriveFile()) }
-        }
-    }
-
-    fun createAccountFolder(accountAddress: String) {
-        val rootFolder = getRootFolder()
-        rootFolder.continueWithTask {
-            val metadataChangeSet = MetadataChangeSet.Builder().setTitle(accountAddress).setMimeType(DriveFolder.MIME_TYPE).build()
-
-            mDriveResourceClient!!.createFolder(rootFolder.result, metadataChangeSet)
-        }
-    }
-
-    // Private
-
-    private fun retrieveFiles(accountAddress: String) {//}, appFolder: Boolean) {
+    fun retrieveFile(accountAddress: String, fileName: String, onSuccess: () -> Unit, onError: () -> Unit) {
         val rootFolder = getRootFolder()
         val backupFolderQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, accountAddress)).build()
-        val fileQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, MIME_TYPE_DATABASE)).build()
+        val fileQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, MIME_TYPE_DATABASE)).addFilter(Filters.eq(SearchableField.TITLE, fileName)).build()
 
-        rootFolder.continueWithTask {
-            mDriveResourceClient!!
-                    .queryChildren(rootFolder.getResult(), backupFolderQuery)
+        rootFolder.continueWithTask { _ ->
+            mDriveResourceClient!!.queryChildren(rootFolder.result, backupFolderQuery)
                     .continueWithTask {
                         mDriveResourceClient!!.queryChildren(it.result[0].driveId.asDriveFolder(), fileQuery)
-                    }.addOnSuccessListener {
-                        it.forEach {
-                            Log.d(TAG, "files in folder description ${it.description}")
-                            if (it.description == PHOTO_DESCRIPTION) saveFileToDisc(it.title, it.driveId.asDriveFile())
-                        }
-                    }.addOnSuccessListener { }
+                    }.continueWithTask {
+                        val n = it.result[0].title
+                        saveFileToDisc(it.result[0].title, it.result[0].driveId.asDriveFile())
+                    }
+                    .addOnSuccessListener {
+                        onSuccess()
+                    }.addOnFailureListener {
+                        onError()
+                    }
         }
     }
 
@@ -173,10 +139,45 @@ class SyncService private constructor(val context: Context) {
                         }
                         it.forEach {
                             Log.d(TAG, "files in folder description ${it.description}")
-                            if (it.description.equals(DATABASE_DECRIPTION)) saveDataBaseToDisc(it.title, it.driveId.asDriveFile(), onSuccess)
+                            if (it.description == DATABASE_DECRIPTION) saveDataBaseToDisc(it.title, it.driveId.asDriveFile(), onSuccess)
                         }
                     }
+        }
+    }
 
+    // Private
+
+//    }
+
+//    private fun retrievePhotos(accountAddress: String) = retrieveFiles(accountAddress)
+
+    //    private fun retrieveFiles(accountAddress: String) {//}, appFolder: Boolean) {
+//        val rootFolder = getRootFolder()
+//        val backupFolderQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, accountAddress)).build()
+//        val fileQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, MIME_TYPE_DATABASE)).build()
+//
+//        rootFolder.continueWithTask {
+//            mDriveResourceClient!!
+//                    .queryChildren(rootFolder.getResult(), backupFolderQuery)
+//                    .continueWithTask {
+//                        mDriveResourceClient!!.queryChildren(it.result[0].driveId.asDriveFolder(), fileQuery)
+//                    }.addOnSuccessListener { it ->
+//                        it.forEach {
+//                            Log.d(TAG, "files in folder description ${it.description}")
+//                            if (it.description == PHOTO_DESCRIPTION) saveFileToDisc(it.title, it.driveId.asDriveFile())
+//                        }
+//                    }.addOnSuccessListener { }
+//        }
+
+    fun deleteFile(rootFolderName: String, fileName: String, mimeType: String) {
+        val fileQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, mimeType)).addFilter(Filters.eq(SearchableField.TITLE, fileName)).build()
+        val backupFolderQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, rootFolderName)).build()
+        val rootFolder = getRootFolder()
+        rootFolder.continueWithTask {
+            mDriveResourceClient!!
+                    .queryChildren(rootFolder.getResult(), backupFolderQuery)
+                    .continueWithTask { mDriveResourceClient!!.queryChildren(it.result[0].driveId.asDriveFolder(), fileQuery) }.addOnSuccessListener {}
+                    .continueWithTask { deleteFileByDriveId(it.result[0].driveId.asDriveFile()) }
         }
     }
 
@@ -194,10 +195,9 @@ class SyncService private constructor(val context: Context) {
                 .addOnFailureListener {}
     }
 
-
-    private fun saveFileToDisc(fileName: String, driveFile: DriveFile) {
+    private fun saveFileToDisc(fileName: String, driveFile: DriveFile): Task<DriveContents> {
         val openFileTask = mDriveResourceClient!!.openFile(driveFile, DriveFile.MODE_READ_ONLY)
-        openFileTask
+        return openFileTask
                 .addOnSuccessListener {
                     val tempFileName = fileName // + temp
                     val inputStream = it.inputStream
