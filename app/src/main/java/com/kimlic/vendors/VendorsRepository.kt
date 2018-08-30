@@ -94,7 +94,7 @@ class VendorsRepository private constructor() {
 
     private fun syncDataBase() {
         googleSignInAccount?.let {
-            Handler().postDelayed({ SyncService.getInstance().backupDatabase(Prefs.currentAccountAddress, "kimlic.db", onSuccess = {}) }, 0)
+            Handler().postDelayed({ SyncService.getInstance().backupDatabase(Prefs.currentAccountAddress, "kimlic.db", onSuccess = {}, onError = {}) }, 0)
         }
     }
 
