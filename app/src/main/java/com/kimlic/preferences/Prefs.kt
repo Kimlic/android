@@ -69,10 +69,6 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
         get() = getBoolean(AppConstants.fingerprint.key)
         set(value) = setBoolean(AppConstants.fingerprint.key, value)
 
-    var isUserGoogleSigned: Boolean
-        get() = getBoolean(AppConstants.isGoogleSigneIn.key)
-        set(value) = setBoolean(AppConstants.isGoogleSigneIn.key, value)
-
     var currentAccountAddress: String
         get() = getString(AppConstants.accountAddress.key)
         set(value) = setString(AppConstants.accountAddress.key, value)
