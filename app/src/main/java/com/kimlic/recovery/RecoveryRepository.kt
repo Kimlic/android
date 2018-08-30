@@ -34,8 +34,7 @@ class RecoveryRepository {
 
     fun recoveryDataBase(accountAddress: String, onSuccess: () -> Unit, onError: () -> Unit) {
         DoAsync().execute(Runnable {
-            db!!.close()
-            SyncService.getInstance().retrieveDataBase(accountAddress, "kimlic.db", onSuccess = onSuccess, onError = onError)
+            SyncService.getInstance().retrieveDataBase(accountAddress, "kimlic.db", onSuccess, onError)
         })
     }
 
@@ -43,11 +42,11 @@ class RecoveryRepository {
         DoAsync().execute(Runnable { SyncService.getInstance().retrieveFile(accountAddress, fileName, onSuccess, onError) })
     }
 
-    fun backupDatabase(accountAddress: String, onSuccess: () -> Unit) {
-        DoAsync().execute(Runnable { SyncService.getInstance().backupDatabase(accountAddress, "kimlic.db", onSuccess = onSuccess) })
+    fun backupDatabase(accountAddress: String, onSuccess: () -> Unit, onError: () -> Unit) {
+        DoAsync().execute(Runnable { SyncService.getInstance().backupDatabase(accountAddress, "kimlic.db", onSuccess, onError) })
     }
 
     fun backupPhoto(accountAddress: String, filePath: String, onSuccess: () -> Unit, onError: () -> Unit) {
-        DoAsync().execute(Runnable { SyncService.getInstance().backupFile(accountAddress = accountAddress, filePath = filePath, fileDescription = SyncService.DATABASE_DECRIPTION, onSuccess = onSuccess, onError = onError) })
+        DoAsync().execute(Runnable { SyncService.getInstance().backupFile(accountAddress, filePath, SyncService.DATABASE_DECRIPTION, onSuccess, onError) })
     }
 }
