@@ -233,4 +233,6 @@
   <string name="invalid">invalid</string>
   <string name="unable_to_proceed_with_werification">Unable to proceed with verification</string>
   <string name="missing_mnemonic_phrases">Missing mnemonic phrases</string>
+  <string name="photo_recovery_error">Photo recovery error</string>
+  <string name="profile_not_found">Profile not found</string>
 </resources>
