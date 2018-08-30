@@ -81,6 +81,7 @@ class ProfileRepository private constructor() {
         photoDao = db.photoDao()
         vendorDao = db.vendorDao()
         context = KimlicApp.applicationContext()
+        googleSignInAccount = GoogleSignIn.getLastSignedInAccount(context)
     }
 
     // Public
@@ -92,14 +93,15 @@ class ProfileRepository private constructor() {
     fun getUser(accountAddress: String) = userDao.select(accountAddress)
 
     fun deleteUser(accountAddress: String) {
-        userDao.delete(accountAddress); syncDataBase()
+        userDao.delete(accountAddress);
+        //syncDataBase() -- delete
     }
 
     fun userLive(accountAddress: String): LiveData<User> = userDao.selectLive(accountAddress)
 
     fun addUserPhoto(accountAddress: String, fileName: String, data: ByteArray) {
-        savePhoto(fileName = fileName, data = data)
-        savePhoto(fileName = "preview_$fileName", data = croppedPreviewInByteArray(data))
+        savePhoto(accountAddress, fileName = fileName, data = data)
+        savePhoto(accountAddress, fileName = "preview_$fileName", data = croppedPreviewInByteArray(data))
         val user = userDao.select(accountAddress)
         user.portraitFile = fileName
         user.portraitPreviewFile = "preview_$fileName"
@@ -123,8 +125,8 @@ class ProfileRepository private constructor() {
         val addressId = addressDao.insert(address)
         val addressPhoto = Photo(addressId = addressId, type = AppConstants.photoAddressType.key, file = fileName)
         photoDao.insert(photos = arrayOf(addressPhoto).asList())
+        savePhoto(accountAddress, fileName, data)
         syncDataBase()
-        savePhoto(fileName, data)
     }
 
     fun addressUpdate(address: Address) {
@@ -164,18 +166,18 @@ class ProfileRepository private constructor() {
     fun documentDelete(documentId: Long) = { documentDao.delete(id = documentId); syncDataBase() }
 
     fun addDocument(accountAddress: String, documentType: String, portraitName: String, portraitData: ByteArray, frontName: String, frontData: ByteArray, backName: String, backData: ByteArray) {
-        val userId = userDao.select(accountAddress = accountAddress).id
-        val documentId = documentDao.insert(document = Document(type = documentType, userId = userId))
+        val userId = userDao.select(accountAddress).id
+        val documentId = documentDao.insert(Document(type = documentType, userId = userId))
 
         photoDao.insert(photos =
         arrayOf(
-                Photo(documentId = documentId, file = portraitName, type = AppConstants.photoFaceType.key),
+                Photo(documentId, file = portraitName, type = AppConstants.photoFaceType.key),
                 Photo(documentId = documentId, file = frontName, type = AppConstants.photoFrontType.key),
                 Photo(documentId = documentId, file = backName, type = AppConstants.photoBackType.key)).asList())
 
-        savePhoto(portraitName, portraitData)
-        savePhoto(frontName, frontData)
-        savePhoto(backName, backData)
+        savePhoto(accountAddress, portraitName, portraitData)
+        savePhoto(accountAddress, frontName, frontData)
+        savePhoto(accountAddress, backName, backData)
         syncDataBase()
     }
 
@@ -188,18 +190,23 @@ class ProfileRepository private constructor() {
 
     fun userDocumentPhotos(accountAddress: String, documentType: String) = photoDao.selectUserPhotosByDocument(accountAddress, documentType)
 
-    fun userAddressPhoto(accountAddress: String) = photoDao.selectUserAddresPhoto(accountAddress)
+    fun userAddressPhoto(accountAddress: String) = photoDao.selectUserAddressPhoto(accountAddress)
 
     // Private
 
-
     // Backup
 
-    private fun syncDataBase() {
+    private fun syncDataBase(onSuccess: () -> Unit = {}) {
+        googleSignInAccount = GoogleSignIn.getLastSignedInAccount(context) // right here
+        if (Prefs.isRecoveryEnabled && googleSignInAccount != null)
+            DoAsync().execute(Runnable { SyncService.getInstance().backupDatabase(Prefs.currentAccountAddress, "kimlic.db", onSuccess = onSuccess, onError = {}) })
+    }
+
+    private fun syncPhoto(accountAddress: String, fileName: String) {
         googleSignInAccount = GoogleSignIn.getLastSignedInAccount(context)
-        Log.d("TAGSYNC", "syncDatabase " + googleSignInAccount)
-        googleSignInAccount?.let {
-            Handler().postDelayed({ SyncService.getInstance().backupDatabase(Prefs.currentAccountAddress, "kimlic.db", onSuccess = {}) }, 0)
+        if (Prefs.isRecoveryEnabled && googleSignInAccount != null) {
+            val filePath = KimlicApp.applicationContext().filesDir.toString() + "/" + fileName
+            DoAsync().execute(Runnable { SyncService.getInstance().backupFile(accountAddress, filePath, SyncService.PHOTO_DESCRIPTION, onSuccess = {}, onError = {}) })
         }
     }
 
@@ -207,15 +214,6 @@ class ProfileRepository private constructor() {
         val rootFilesDir = File(context.filesDir.toString())
         val files = rootFilesDir.listFiles()
         files.forEach { it.delete() }
-    }
-
-    private fun syncPhoto(fileName: String) {
-        googleSignInAccount?.let {
-            val filePath = KimlicApp.applicationContext().filesDir.toString() + "/" + fileName
-            Handler().postDelayed({
-                SyncService.getInstance().backupFile(Prefs.currentAccountAddress, filePath, SyncService.PHOTO_DESCRIPTION, onSuccess = {})
-            }, 0)
-        }
     }
 
     // New User
@@ -252,8 +250,6 @@ class ProfileRepository private constructor() {
                 Response.ErrorListener { onError() })
         VolleySingleton.getInstance(context).addToRequestQueue(addressRequest)
     }
-
-    // Requests
 
     // Quorum request
 
@@ -293,9 +289,8 @@ class ProfileRepository private constructor() {
 
     /*
     *   Token balance
-    * The function receives the number of Be on the input and converts them into tokens
+    *   The function receives the number of Be on the input and converts them into tokens
     * */
-
     fun tokenBalanceRequest(accountAddress: String) {
         val kimlicTokenContractAddress = QuorumKimlic.getInstance().kimlicTokenAddress
         QuorumKimlic.getInstance().setKimlicToken(kimlicTokenContractAddress)
@@ -400,7 +395,12 @@ class ProfileRepository private constructor() {
 
     // RP request
 
-    fun sendDoc(documentType: String, url: String = "http://40.113.76.56:4000/api/medias", countrySH: String, onSuccess: () -> Unit, onError: () -> Unit) {
+    fun sendDoc(documentType: String, url: String, countrySH: String, onSuccess: () -> Unit, onError: () -> Unit) {
+//    fun sendDoc(documentType: String, url: String, countrySH: String, onSuccess: () -> Unit, onError: () -> Unit) {
+//        "https://40.113.76.56:4000/api/medias"
+        val urlFull = "https://" + url + KimlicApi.MEDIAS.path
+        Log.d("TAGURL", "full url = ${urlFull}")
+
         val user = userDao.select(Prefs.currentAccountAddress)
         val doc: String
         val dataType: String
@@ -433,9 +433,9 @@ class ProfileRepository private constructor() {
             if (receipt == null || receipt.status == "0x0") {
                 onError()
             }
-            send(faceString, "face", doc, firstName, lastName, countrySH, udid, url, Response.Listener { _ ->
-                send(frontString, "document-front", doc, firstName, lastName, countrySH, udid, url, Response.Listener { _ ->
-                    send(backString, "document-back", doc, url, lastName, countrySH, udid, url, Response.Listener { _ ->
+            send(faceString, "face", doc, firstName, lastName, countrySH, udid, urlFull, Response.Listener { _ ->
+                send(frontString, "document-front", doc, firstName, lastName, countrySH, udid, urlFull, Response.Listener { _ ->
+                    send(backString, "document-back", doc, firstName, lastName, countrySH, udid, urlFull, Response.Listener { _ ->
                         onSuccess()
                     }, onError)
                 }, onError)
@@ -459,6 +459,7 @@ class ProfileRepository private constructor() {
             onError()
             Log.e("DOC RESPONSE ERROR", "Error = ${error?.networkResponse?.statusCode}")
             Log.e("DOC RESPONSE ERROR", "Error response = ${error?.networkResponse}")
+            Log.e("DOC RESPONSE ERROR", "Error = ${error}")
         }) {
             init {
                 retryPolicy = DefaultRetryPolicy(30000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
@@ -609,10 +610,10 @@ class ProfileRepository private constructor() {
         return BitmapToByteArrayMapper().transform(croppedBitmap)
     }
 
-    private fun savePhoto(fileName: String, data: ByteArray) {
+    private fun savePhoto(accountAddres: String, fileName: String, data: ByteArray) {
         val data64 = Base64.toBase64String(data)
         writeToFile(context, fileName, data64)
-        syncPhoto(fileName)
+        syncPhoto(accountAddres, fileName)
     }
 
     // Writes file to files directory
