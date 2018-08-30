@@ -21,7 +21,6 @@ class SignUpRecoveryActivity : BaseActivity() {
 
     private val TERMS_ACCEPT_RECOVERY_REQUEST_CODE = 101
     private val TERMS_ACCEPT_CREATE_REQUEST_CODE = 102
-    private val GOOGLE_SIGNE_IN_REQUEST_CODE = 103
 
     // Life
 
@@ -47,22 +46,15 @@ class SignUpRecoveryActivity : BaseActivity() {
                     PresentationManager.recovery(this)
                 }
             }
-            GOOGLE_SIGNE_IN_REQUEST_CODE -> {
-                if (resultCode != Activity.RESULT_OK) {
-                    Prefs.isUserGoogleSigned = false; return
-                }
-                Prefs.isUserGoogleSigned = true
-            }
         }
     }
 
     // Private
 
     private fun setupUI() {
-        //SyncService.signIn(this, GOOGLE_SIGNE_IN_REQUEST_CODE)
         createBt.setOnClickListener {
             recoveryModel.initNewUserRegistration(
-                    onSuccess = {PresentationManager.tutorials(this)},
+                    onSuccess = { PresentationManager.tutorials(this) },
                     onError = { errorPopup(getString(R.string.server_error)) }
             )
         }
