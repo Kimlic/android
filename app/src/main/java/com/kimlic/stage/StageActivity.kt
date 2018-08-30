@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.FragmentTransaction
 import android.view.View
-import android.widget.Toast
 import com.google.zxing.integration.android.IntentIntegrator
 import com.kimlic.BaseActivity
 import com.kimlic.R
@@ -53,9 +52,8 @@ class StageActivity : BaseActivity() {
             SCAN_REQUEST_CODE -> {
                 val result = IntentIntegrator.parseActivityResult(resultCode, data)
                 if (result.contents != null) {
-                    val url = result.contents
-                    Toast.makeText(this, "Scanned: " + result.contents, Toast.LENGTH_LONG).show()
-                    PresentationManager.vendors(this, url = url)
+                    val urlSplitted = result.contents.split("?").first()
+                    PresentationManager.vendors(this, url = urlSplitted)
                 }
             }
 
