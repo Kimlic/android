@@ -3,6 +3,7 @@ package com.kimlic.mnemonic
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.TextInputLayout
+import android.util.Log
 import android.widget.EditText
 import butterknife.BindViews
 import butterknife.ButterKnife
@@ -11,6 +12,7 @@ import com.kimlic.R
 import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.preferences.Prefs
+import com.kimlic.recovery.RecoveryViewModel
 import com.kimlic.utils.BaseCallback
 import kotlinx.android.synthetic.main.activity_verify_passphrase.*
 
@@ -28,6 +30,7 @@ class MnemonicVerifyActivity : BaseActivity() {
 
     private val hintList: List<Int> = listOf(2, 4, 7, 11)
     private lateinit var model: ProfileViewModel
+    private lateinit var recoveryModel: RecoveryViewModel
 
     // Life
 
@@ -36,6 +39,7 @@ class MnemonicVerifyActivity : BaseActivity() {
         setContentView(R.layout.activity_verify_passphrase)
 
         model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        recoveryModel = ViewModelProviders.of(this).get(RecoveryViewModel::class.java)
         ButterKnife.bind(this)
         setupUI()
     }
@@ -47,13 +51,24 @@ class MnemonicVerifyActivity : BaseActivity() {
 
             if (validEmptyFields())
                 if (phrasesMatch()) {
-                    Prefs.isRecoveryEnabled = true; successful()
+                    Prefs.isRecoveryEnabled = true
+                    // onError show popup error recovery activating
+                    // onSuccess - show popup successful and finish
+                    recoveryModel.backupProfile(onSuccess = {
+
+                        Log.d("TAGRECOVERY", "All Files are restored successful")
+                        successful()
+                    }, onError = {
+                        Log.d("TAGRECOVERY", "E R R O R   B A C K U P ")
+                    })
+
                 } else
                     showPopup(message = getString(R.string.mnemonic_phrases_do_not_match))
-
         }
 
-        backTv.setOnClickListener { Prefs.isRecoveryEnabled = false; PresentationManager.stage(this) }
+        backTv.setOnClickListener {
+            PresentationManager.stage(this)
+        }
         setupHints(hintList)
     }
 
