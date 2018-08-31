@@ -1,6 +1,7 @@
 package com.kimlic.vendors
 
-import android.arch.lifecycle.*
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.ViewModel
 import android.os.Handler
 import com.kimlic.db.entity.Document
 import com.kimlic.model.ProfileRepository
@@ -9,7 +10,7 @@ import com.kimlic.preferences.Prefs
 import com.kimlic.utils.AppDoc
 import java.util.*
 
-class VendorsViewModel : ViewModel(), LifecycleObserver {
+class VendorsViewModel : ViewModel() {
 
     // Variables
 
@@ -20,14 +21,9 @@ class VendorsViewModel : ViewModel(), LifecycleObserver {
     private var vendorRequestStatus: SingleLiveEvent<String> = SingleLiveEvent()
     private val timeQueue = ArrayDeque<Long>(listOf(4000L, 5000L, 10000L))
 
-    // public
+    // Public
 
-    @OnLifecycleEvent(value = Lifecycle.Event.ON_START)
-    fun getDocumentsList() = vendorsRepository.initDocuments(Prefs.currentAccountAddress, onError = { retry() })
-
-    private fun retry() {
-        timeQueue.poll()?.let { Handler().postDelayed({ getDocumentsList() }, it) } ?: vendorRequestStatus.postValue("server error")
-    }
+    fun documentsListRequest(url: String) = vendorsRepository.initDocumentsRequest(Prefs.currentAccountAddress, url = url, onError = { retry(url) })
 
     fun vendorRequestStatus() = vendorRequestStatus
 
@@ -51,9 +47,15 @@ class VendorsViewModel : ViewModel(), LifecycleObserver {
                 }
             }
         }
-        // Document user already have added
+
         vendorSupportedDocuments.postValue(supportedDocuments)
     }
 
     fun countries() = vendorsRepository.countries()
+
+    // Private
+
+    private fun retry(url: String) {
+        timeQueue.poll()?.let { Handler().postDelayed({ documentsListRequest(url) }, it) } ?: vendorRequestStatus.postValue("server error")
+    }
 }
