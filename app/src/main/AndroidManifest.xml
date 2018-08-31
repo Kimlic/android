@@ -139,9 +139,7 @@
       android:label="Scanner"
       android:name=".scanner.ScannerActivity"/>
 
-    <!--Double activity creation-->
     <activity
-      android:launchMode="singleInstance"
       android:name=".vendors.VendorsActivity"
       android:screenOrientation="sensorPortrait"
       />
