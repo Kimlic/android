@@ -2,11 +2,13 @@ package com.kimlic.mnemonic
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.support.design.widget.TextInputLayout
 import android.util.Log
 import android.widget.EditText
 import butterknife.BindViews
 import butterknife.ButterKnife
+import com.kimlic.BackupUpdatingFragment
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
@@ -31,6 +33,8 @@ class MnemonicVerifyActivity : BaseActivity() {
     private val hintList: List<Int> = listOf(2, 4, 7, 11)
     private lateinit var model: ProfileViewModel
     private lateinit var recoveryModel: RecoveryViewModel
+    private var timer: CountDownTimer? = null
+    private var backupUpdatingFragment: BackupUpdatingFragment? = null
 
     // Life
 
@@ -51,12 +55,14 @@ class MnemonicVerifyActivity : BaseActivity() {
 
             if (validEmptyFields())
                 if (phrasesMatch()) {
-                    Prefs.isRecoveryEnabled = true
+                    showProgress()
                     // onError show popup error recovery activating
                     // onSuccess - show popup successful and finish
                     recoveryModel.backupProfile(onSuccess = {
 
                         Log.d("TAGRECOVERY", "All Files are restored successful")
+                        Prefs.isRecoveryEnabled = true
+                        hideProgress()
                         successful()
                     }, onError = {
                         Log.d("TAGRECOVERY", "E R R O R   B A C K U P ")
@@ -106,5 +112,25 @@ class MnemonicVerifyActivity : BaseActivity() {
             }
         }
         return noError
+    }
+
+    // Progress
+
+    private fun showProgress() {
+        timer = object : CountDownTimer(0, 0) {
+            override fun onFinish() {
+                val bundle = Bundle()
+                bundle.putString("title", "Backup")
+                bundle.putString("subtitle", "Backup profile to Google Drive")
+                backupUpdatingFragment = BackupUpdatingFragment.newInstance(bundle)
+                backupUpdatingFragment?.show(supportFragmentManager, BackupUpdatingFragment.FRAGMENT_KEY)
+            }
+
+            override fun onTick(millisUntilFinished: Long) {}
+        }.start()
+    }
+
+    private fun hideProgress() = runOnUiThread {
+        if (backupUpdatingFragment != null) backupUpdatingFragment?.dismiss(); timer?.cancel()
     }
 }
