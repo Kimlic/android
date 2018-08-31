@@ -69,7 +69,7 @@ class ProfileRepository private constructor() {
     private var vendorDao: VendorDao
     private var context: Context
 
-    private val BASE_URL = BuildConfig.BASE_URL
+    private val API_URL = BuildConfig.API_CORE_URL
 
     // Init
 
@@ -171,7 +171,7 @@ class ProfileRepository private constructor() {
 
         photoDao.insert(photos =
         arrayOf(
-                Photo(documentId, file = portraitName, type = AppConstants.photoFaceType.key),
+                Photo(documentId = documentId, file = portraitName, type = AppConstants.photoFaceType.key),
                 Photo(documentId = documentId, file = frontName, type = AppConstants.photoFrontType.key),
                 Photo(documentId = documentId, file = backName, type = AppConstants.photoBackType.key)).asList())
 
@@ -219,7 +219,7 @@ class ProfileRepository private constructor() {
     // New User
 
     fun initNewUserRegistration(onSuccess: () -> Unit, onError: () -> Unit) {
-        val url = BASE_URL + KimlicApi.CONFIG.path
+        val url = API_URL + KimlicApi.CONFIG.path
         // 1. Create Quorum instance locally - mnemonic and address
         QuorumKimlic.destroyInstance()
         QuorumKimlic.createInstance(null, context) // moved to QUORUM request
@@ -236,7 +236,7 @@ class ProfileRepository private constructor() {
                     if (!it.getJSONObject("meta").optString("code").startsWith("2")) {
                         onError(); return@Listener
                     }
-
+                    Log.d("TAGRESPONSE", "response = $it")
                     val contextContractAddress = it.getJSONObject("data").optString("context_contract")
                     QuorumKimlic.getInstance().setKimlicContractsContextAddress(contextContractAddress)
                     val accountStorageAdapterAddress = QuorumKimlic.getInstance().accountStorageAdapter
@@ -257,7 +257,8 @@ class ProfileRepository private constructor() {
     * Request to get address for ContractsContext
     * */
     fun quorumRequest(accountAddress: String, onSuccess: () -> Unit, onError: () -> Unit) {
-        val url = BASE_URL + KimlicApi.CONFIG.path
+        val url = API_URL + KimlicApi.CONFIG.path
+        Log.d("TAGURL", "ggg $url")
         val user = userDao.select(accountAddress)
         // 1. Create Quorum instance with current user
 
@@ -275,6 +276,8 @@ class ProfileRepository private constructor() {
                 onError(); return@Listener
             }
 
+            Log.d("TYAGCONFIG", "responce = $it")
+
             val contextContractAddress = it.getJSONObject("data").optString("context_contract")
             QuorumKimlic.getInstance().setKimlicContractsContextAddress(contextContractAddress)
 
@@ -282,7 +285,10 @@ class ProfileRepository private constructor() {
             QuorumKimlic.getInstance().setAccountStorageAdapterAddress(accountStorageAdapterAddress)
             onSuccess()
 
-        }, Response.ErrorListener { onError() })
+        }, Response.ErrorListener {
+            Log.d("TAGERROR", "error = ${it}")
+            onError()
+        })
 
         VolleySingleton.getInstance(context).addToRequestQueue(addressRequest)
     }
@@ -302,7 +308,7 @@ class ProfileRepository private constructor() {
     // Sync user
 
     fun syncProfile(accountAddress: String) {
-        val url = BASE_URL + KimlicApi.PROFILE_SYNC.path
+        val url = API_URL + KimlicApi.PROFILE_SYNC.path
         val headers = mapOf(Pair("account-address", accountAddress))
 
         val syncRequest = KimlicJSONRequest(GET, url, headers, JSONObject(), Response.Listener {
@@ -344,8 +350,8 @@ class ProfileRepository private constructor() {
 
                 val url =
                         when (contactType) {
-                            "phone" -> BASE_URL + KimlicApi.PHONE_VERIFY.path
-                            "email" -> BASE_URL + KimlicApi.EMAIL_VERIFY.path
+                            "phone" -> API_URL + KimlicApi.PHONE_VERIFY.path
+                            "email" -> API_URL + KimlicApi.EMAIL_VERIFY.path
                             else -> " "
                         }
 
@@ -368,8 +374,8 @@ class ProfileRepository private constructor() {
     fun contactApprove(contactType: String, code: String, onSuccess: () -> Unit, onError: (code: String) -> Unit) {
         DoAsync().execute(Runnable {
             val url = when (contactType) {
-                "email" -> BASE_URL + KimlicApi.EMAIL_APPROVE.path
-                "phone" -> BASE_URL + KimlicApi.PHONE_APPROVE.path
+                "email" -> API_URL + KimlicApi.EMAIL_APPROVE.path
+                "phone" -> API_URL + KimlicApi.PHONE_APPROVE.path
                 else -> ""
             }
 
@@ -398,7 +404,8 @@ class ProfileRepository private constructor() {
     fun sendDoc(documentType: String, url: String, countrySH: String, onSuccess: () -> Unit, onError: () -> Unit) {
 //    fun sendDoc(documentType: String, url: String, countrySH: String, onSuccess: () -> Unit, onError: () -> Unit) {
 //        "https://40.113.76.56:4000/api/medias"
-        val urlFull = "https://" + url + KimlicApi.MEDIAS.path
+//        val urlFull = "http://" + url + KimlicApi.MEDIAS.path
+        val urlFull = url + KimlicApi.MEDIAS.path
         Log.d("TAGURL", "full url = ${urlFull}")
 
         val user = userDao.select(Prefs.currentAccountAddress)
@@ -418,7 +425,6 @@ class ProfileRepository private constructor() {
         }
         //@formatter:on
         val documentPhotos = photoDao.selectUserPhotosByDocument(Prefs.currentAccountAddress, documentType)
-
         val faceString = photoString(documentPhotos.first { it.type == AppConstants.photoFaceType.key }.file)
         val frontString = photoString(documentPhotos.first { it.type == AppConstants.photoFrontType.key }.file)
         val backString = photoString(documentPhotos.first { it.type == AppConstants.photoBackType.key }.file)
@@ -473,6 +479,14 @@ class ProfileRepository private constructor() {
                         Pair("Accept", "application/vnd.mobile-api.v1+json")
                 )
             }
+
+//            override fun deliverError(error: VolleyError?) {
+//                super.deliverError(error)
+//                Log.d("TAGDELIVER", "In inherited class")
+//
+//
+//                val redirectedRequest = object :KimlicJSONRequest(method, url,, JSONObject(), listener, )
+//            }
         }
         VolleySingleton.getInstance(context).addToRequestQueue(request)
     }
