@@ -13,7 +13,7 @@ class PhoneVerifyFragment : BasePopupFragment() {
     // Companion
 
     companion object {
-        val FRAGMENT_KEY = this::class.java.simpleName
+        val FRAGMENT_KEY = this::class.java.simpleName!!
 
         fun newInstance() = PhoneVerifyFragment()
     }
@@ -33,7 +33,7 @@ class PhoneVerifyFragment : BasePopupFragment() {
 
     private fun setupUI() {
         titleTv.text = getString(R.string.verify_your_number_)
-        risksTv.text = getString(R.string.number_is_not_verified)
+        subtitleTv.text = getString(R.string.number_is_not_verified)
 
         upperView.visibility = View.VISIBLE
         upperBt.text = getString(R.string.change_number_)
