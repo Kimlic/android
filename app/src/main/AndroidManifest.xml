@@ -138,8 +138,13 @@
     <activity
       android:label="Scanner"
       android:name=".scanner.ScannerActivity"/>
-    <activity android:name=".vendors.VendorsActivity">
-    </activity>
+
+    <!--Double activity creation-->
+    <activity
+      android:launchMode="singleInstance"
+      android:name=".vendors.VendorsActivity"
+      android:screenOrientation="sensorPortrait"
+      />
   </application>
 
 </manifest>
