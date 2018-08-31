@@ -91,7 +91,10 @@ class AccountRecoveryActivity : BaseActivity() {
     private fun showProgress() {
         timer = object : CountDownTimer(0, 0) {
             override fun onFinish() {
-                backupUpdatingFragment = BackupUpdatingFragment.newInstance()
+                val bundle = Bundle()
+                bundle.putString("title", "Recovering ")
+                bundle.putString("subtitle", "Recovering from Google Drive")
+                backupUpdatingFragment = BackupUpdatingFragment.newInstance(bundle)
                 backupUpdatingFragment?.show(supportFragmentManager, BackupUpdatingFragment.FRAGMENT_KEY)
             }
 
