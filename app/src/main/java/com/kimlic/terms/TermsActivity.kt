@@ -84,12 +84,12 @@ class TermsActivity : BaseActivity() {
         when (content) {
             "terms" -> {
                 titleTv.text = getString(R.string.terms_amp_conditions)
-                risksTv.text = getString(R.string.last_modified_23_july_2017)
+                subtitleTv.text = getString(R.string.last_modified_23_july_2017)
                 webView.loadUrl(TERMS_FILE_PATH_URL)
             }
             "privacy" -> {
                 titleTv.text = getString(R.string.privacy_policy)
-                risksTv.text = getString(R.string.last_modified_23_july_2017)
+                subtitleTv.text = getString(R.string.last_modified_23_july_2017)
                 webView.loadUrl(PRIVACY_FILE_PATH_URL)
             }
             else -> throw RuntimeException("Invalid document content")
