@@ -46,8 +46,7 @@ class VendorsActivity : BaseActivity() {
         url = intent.extras.getString("path", "")
         initRecycler()
 
-        lifecycle.addObserver(vendorsModel)
-
+        vendorsModel.documentsListRequest(url)
         vendorsModel.getDocumentsForAdapter().observe(this, Observer<List<Document>> { documents -> documentAdapter.setDocumentsList(documents = documents!!) })
         vendorsModel.vendorRequestStatus().observe(this, Observer<String> { errorPopup(it) })
 
