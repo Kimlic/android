@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="56dp"
+  android:layout_weight="10"
+  android:background="@android:color/transparent"
+  android:clickable="true"
+  android:focusableInTouchMode="false"
+  android:orientation="horizontal"
+  tools:background="@color/redLight"
+  tools:ignore="KeyboardInaccessibleWidget">
+
+  <LinearLayout
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="9"
+    android:layout_gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_marginBottom="4dp"
+      android:orientation="horizontal"
+      tools:ignore="UseCompoundDrawables">
+
+      <TextView
+        android:id="@+id/titleSwitchTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/settings_text_size_large"
+        tools:text="Passcode"/>
+
+      <ImageView
+        android:id="@+id/warningIv"
+        android:layout_width="24dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_gravity="center"
+        android:background="@drawable/ic_profile_warning_red_white_icon"
+        android:contentDescription="@string/warning"/>
+
+    </LinearLayout>
+
+    <TextView
+      android:id="@+id/summaryTv"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textColor="@android:color/white"
+      android:textSize="@dimen/settings_text_size_medium"
+      tools:text="@string/enter_your_passcode_to_proceed"/>
+
+  </LinearLayout>
+
+  <!--<Switch-->
+  <!--android:id="@+id/selector"-->
+  <!--android:layout_width="wrap_content"-->
+  <!--android:layout_height="wrap_content"-->
+  <!--android:layout_weight="1"-->
+  <!--android:layout_gravity="center_vertical"-->
+  <!--android:checked="true"-->
+  <!--android:clickable="false"-->
+  <!--android:focusable="false"-->
+  <!--android:focusableInTouchMode="false"-->
+  <!--android:textSize="10sp"-->
+  <!--android:thumb="@drawable/switch_selector"-->
+  <!--android:track="@drawable/switch_track"/>-->
+
+  <ToggleButton
+    android:id="@+id/selector"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@color/transparent"
+    android:button="@null"
+    android:checked="true"
+    android:clickable="false"
+    android:drawableEnd="@drawable/checkbox_selector"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+    android:text=""
+    android:textOff="@null"
+    android:textOn="@null"/>
+
+</LinearLayout>
+

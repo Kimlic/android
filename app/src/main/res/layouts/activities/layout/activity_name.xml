@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@drawable/ic_fingerprint_background"
+  tools:context="com.kimlic.name.NameActivity">
+
+  <Space
+    android:id="@+id/spacer"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="172dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
+
+  <ImageView
+    android:id="@+id/logoIv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_logo_name"
+    android:contentDescription="@string/phone_logo"
+    app:layout_constraintBottom_toBottomOf="@id/spacer"
+    app:layout_constraintBottom_toTopOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="@id/spacer"/>
+
+  <TextView
+    android:id="@+id/documenTitleTv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/your_full_name"
+    android:textColor="@android:color/white"
+    android:textSize="@dimen/title_text_size"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.502"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/logoIv"/>
+
+  <LinearLayout
+    android:id="@+id/llRootMiddle"
+    android:layout_width="310dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="28dp"
+    android:orientation="vertical"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/documenTitleTv">
+
+    <android.support.design.widget.TextInputLayout
+      android:id="@+id/nameTil"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="@string/first_name"
+      android:textColorHint="@color/lightBlue"
+      app:hintTextAppearance="@style/WhiteTextInputLayout"
+      tools:ignore="LabelFor">
+
+      <EditText
+        android:id="@+id/nameEt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/lightBlue"
+        android:imeOptions="actionDone"
+        android:inputType="textNoSuggestions|textCapWords"
+        android:maxLength="30"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/subtitle_text_size"
+        android:theme="@style/WhiteUnderlineTheme"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+      android:id="@+id/lastNameTil"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="@string/last_name"
+      android:textColorHint="@color/lightBlue"
+      app:hintTextAppearance="@style/WhiteTextInputLayout"
+      tools:ignore="LabelFor">
+
+      <EditText
+        android:id="@+id/lastNameEt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/lightBlue"
+        android:imeOptions="actionDone"
+        android:inputType="textNoSuggestions|textCapWords"
+        android:maxLength="30"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/subtitle_text_size"
+        android:theme="@style/WhiteUnderlineTheme"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+  </LinearLayout>
+
+
+  <Button
+    android:id="@+id/saveBt"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="@dimen/button_height"
+    android:layout_marginBottom="24dp"
+    android:background="@drawable/button_rounded_green"
+    android:elevation="@dimen/button_elevation"
+    android:text="@string/save"
+    android:textAllCaps="false"
+    android:textColor="@android:color/white"
+    android:textSize="@dimen/button_text_size"
+    app:layout_constraintBottom_toTopOf="@id/changeTv"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"/>
+
+  <TextView
+    android:id="@+id/changeTv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:text="@string/cancel"
+    android:textColor="@android:color/white"
+    android:textSize="@dimen/button_text_size"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>

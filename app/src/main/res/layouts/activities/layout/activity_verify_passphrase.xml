@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@drawable/ic_fingerprint_background">
+
+  <LinearLayout
+    android:id="@+id/rootUpper"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="40dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <TextView
+      android:id="@+id/titleTv"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginBottom="16dp"
+      android:gravity="center"
+      android:text="@string/verify_passphrase"
+      android:textColor="@android:color/white"
+      android:textSize="@dimen/title_text_size"/>
+
+    <TextView
+      android:id="@+id/subtitleTv"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="16dp"
+      android:gravity="center"
+      android:text="@string/please_enter_the_missing_words_from_your_mnemonic_passphrase"
+      android:textColor="@android:color/white"
+      android:textSize="@dimen/subtitle_text_size"/>
+
+  </LinearLayout>
+
+  <LinearLayout
+    android:id="@+id/rootMiddle"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:orientation="vertical"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/rootUpper"
+    tools:ignore="LabelFor">
+
+    <android.support.design.widget.TextInputLayout
+      android:id="@+id/phrase1Til"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textColorHint="@color/lightBlue"
+      app:hintTextAppearance="@style/WhiteTextInputLayout"
+      tools:ignore="LabelFor">
+
+      <EditText
+        android:id="@+id/phrase1Et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/lightBlue"
+        android:inputType="text"
+        android:maxLength="30"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/hint_text_size_large"
+        android:theme="@style/WhiteUnderlineTheme"
+        tools:hint="5th word"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+      android:id="@+id/phrase2Til"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textColorHint="@color/lightBlue"
+      app:hintTextAppearance="@style/WhiteTextInputLayout"
+      tools:ignore="LabelFor">
+
+      <EditText
+        android:id="@+id/phrase2Et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/lightBlue"
+        android:inputType="text"
+        android:maxLength="30"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/hint_text_size_large"
+        android:theme="@style/WhiteUnderlineTheme"
+        tools:hint="7th word"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+      android:id="@+id/phrase3Til"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textColorHint="@color/lightBlue"
+      app:hintTextAppearance="@style/WhiteTextInputLayout"
+      tools:ignore="LabelFor">
+
+      <EditText
+        android:id="@+id/phrase3Et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/lightBlue"
+        android:inputType="text"
+        android:maxLength="30"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/hint_text_size_large"
+        android:theme="@style/WhiteUnderlineTheme"
+        tools:hint="2th word"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+      android:id="@+id/phrase4Til"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textColorHint="@color/lightBlue"
+      app:hintTextAppearance="@style/WhiteTextInputLayout"
+      tools:ignore="LabelFor">
+
+      <EditText
+        android:id="@+id/phrase4Et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/lightBlue"
+        android:inputType="text"
+        android:maxLength="30"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/title_text_size"
+        android:theme="@style/WhiteUnderlineTheme"
+        tools:hint="5th word"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+  </LinearLayout>
+
+  <Button
+    android:id="@+id/verifyBt"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="@dimen/button_height"
+    android:layout_marginBottom="16dp"
+    android:paddingStart="48dp"
+    android:paddingEnd="48dp"
+    android:background="@drawable/button_rounded_green"
+    android:drawableStart="@drawable/ic_verify_lock_icon"
+    android:elevation="@dimen/button_elevation"
+    android:text="@string/verify_passphrase"
+    android:textAllCaps="false"
+    android:textColor="@android:color/white"
+    android:textSize="@dimen/button_text_size"
+    app:layout_constraintBottom_toTopOf="@id/backTv"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"/>
+
+  <TextView
+    android:id="@+id/backTv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="24dp"
+    android:layout_gravity="center"
+    android:text="@string/go_back"
+    android:textColor="@android:color/white"
+    android:textSize="@dimen/button_text_size"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>

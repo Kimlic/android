@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/rootLayout"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@drawable/ic_fingerprint_background"
+  tools:context=".address.AddressActivity">
+
+  <Space
+    android:id="@+id/spacer"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="172dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
+
+  <ImageView
+    android:id="@+id/logoIv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_logo_address"
+    android:contentDescription="@string/addrerss_logo"
+    app:layout_constraintBottom_toBottomOf="@id/spacer"
+    app:layout_constraintBottom_toTopOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="@id/spacer"/>
+
+  <TextView
+    android:id="@+id/titleTv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/your_address"
+    android:textColor="@android:color/white"
+    android:textSize="@dimen/title_text_size"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/logoIv"/>
+
+  <RelativeLayout
+    android:id="@+id/rootMiddle"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/titleTv">
+
+    <android.support.design.widget.TextInputLayout
+      android:id="@+id/textInputLayout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:backgroundTint="@color/lightBlue"
+      android:hint="@string/type_your_address"
+      android:textColorHint="@color/lightBlue"
+      app:hintTextAppearance="@style/AddressTextInputLayout">
+
+      <com.kimlic.address.CustomAutoCompleteTextView
+        android:id="@+id/addressEt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/lightBlue"
+        android:imeOptions="actionDone"
+        android:inputType="textNoSuggestions|textCapWords"
+        android:textColor="@android:color/white"
+        android:textCursorDrawable="@null"
+        android:theme="@style/WhiteUnderlineTheme"
+        tools:ignore="LabelFor"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+      android:id="@+id/cancelAddressBt"
+      android:layout_width="18dp"
+      android:layout_height="18dp"
+      android:layout_alignParentEnd="true"
+      android:layout_centerVertical="true"
+      android:background="@drawable/ic_address_close_button"/>
+
+  </RelativeLayout>
+
+  <TextView
+    android:id="@+id/addressTv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/address_document"
+    android:textColor="@color/lightBlue"
+    android:textSize="@dimen/subtitle_text_size"
+    app:layout_constraintStart_toStartOf="@id/rootMiddle"
+    app:layout_constraintTop_toBottomOf="@id/rootMiddle"/>
+
+  <android.support.constraint.ConstraintLayout
+    android:id="@+id/documentFl"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="0dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="16dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:background="@drawable/rounded_background_gradient_blue"
+    app:layout_constraintBottom_toTopOf="@id/saveBt"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/addressTv">
+
+    <ImageView
+      android:id="@+id/documentIv"
+      android:layout_width="96dp"
+      android:layout_height="80dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginBottom="8dp"
+      android:background="@drawable/ic_multiple_files_icon"
+      android:contentDescription="@string/upload_file_icon"
+      app:layout_constraintBottom_toTopOf="@id/addBt"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"/>
+
+    <Button
+      android:id="@+id/addBt"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/button_height"
+      android:layout_margin="8dp"
+      android:background="@drawable/button_rounded_blue"
+      android:text="@string/add_file"
+      android:textAllCaps="false"
+      android:textColor="@android:color/white"
+      android:textSize="@dimen/button_text_size"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"/>
+
+  </android.support.constraint.ConstraintLayout>
+
+  <Button
+    android:id="@+id/saveBt"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="@dimen/button_height"
+    android:layout_marginTop="16dp"
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/button_rounded_green"
+    android:text="@string/save"
+    android:textAllCaps="false"
+    android:textColor="@android:color/white"
+    android:textSize="@dimen/button_text_size"
+    app:layout_constraintBottom_toTopOf="@id/changeTv"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"/>
+
+  <TextView
+    android:id="@+id/changeTv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="24dp"
+    android:gravity="center"
+    android:text="@string/cancel"
+    android:textColor="@android:color/white"
+    android:textSize="@dimen/subtitle_text_size"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>

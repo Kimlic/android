@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@drawable/ic_fingerprint_background">
+
+  <Space
+    android:id="@+id/spacer"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="172dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
+
+  <ImageView
+    android:id="@+id/logoIv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_logo_phone"
+    android:contentDescription="@string/phone_logo"
+    app:layout_constraintBottom_toBottomOf="@id/spacer"
+    app:layout_constraintBottom_toTopOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="@id/spacer"/>
+
+  <Button
+    android:id="@+id/backBt"
+    android:layout_width="@dimen/menu_element_square_size"
+    android:layout_height="@dimen/menu_element_square_size"
+    android:layout_marginTop="24dp"
+    android:layout_marginStart="24dp"
+    android:background="@drawable/ic_close_36dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
+
+  <LinearLayout
+    android:id="@+id/root"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_constraintBottom_toTopOf="@id/saveBt"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/logoIv">
+
+    <TextView
+      android:id="@+id/phoneTv"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:gravity="center"
+      android:text="@string/your_phone_number"
+      android:textColor="@android:color/white"
+      android:textSize="@dimen/title_text_size">
+    </TextView>
+
+    <TextView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginBottom="8dp"
+      android:gravity="center"
+      android:text="@string/why_we_need_your_phone_number"
+      android:textColor="@color/grayLight"
+      android:textSize="@dimen/subtitle_text_size"/>
+
+    <android.support.design.widget.TextInputLayout
+      android:id="@+id/countryTil"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="@string/country"
+      android:textColorHint="@color/lightBlue"
+      app:hintTextAppearance="@style/WhiteTextInputLayout"
+      tools:ignore="LabelFor">
+
+      <EditText
+        android:id="@+id/countryEt"
+        style="@style/KimlicEditText"
+        android:layout_marginTop="28dp"
+        android:clickable="false"
+        android:focusable="false"
+        android:inputType="textNoSuggestions"
+        android:longClickable="false"
+        android:maxLength="20"
+        android:textColor="@android:color/white"
+        tools:ignore="LabelFor"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:clickable="false"
+      android:hint="@string/phone_number"
+      android:textColorHint="@color/lightBlue"
+      app:hintTextAppearance="@style/WhiteTextInputLayout"
+      tools:ignore="LabelFor">
+
+      <EditText
+        android:id="@+id/phoneEt"
+        style="@style/KimlicEditText"
+        android:layout_marginTop="16dp"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:digits="0123456789 ()+"
+        android:focusable="true"
+        android:imeOptions="actionDone"
+        android:inputType="phone"
+        android:longClickable="false"
+        android:maxLength="20"
+        android:text="@string/plus_character"
+        android:textCursorDrawable="@null"
+        tools:ignore="LabelFor"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+  </LinearLayout>
+
+  <Button
+    android:id="@+id/nextBt"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="@dimen/button_height"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="32dp"
+    android:background="@drawable/button_rounded_blue"
+    android:elevation="@dimen/button_elevation"
+    android:text="@string/next"
+    android:textAllCaps="false"
+    android:textColor="@android:color/white"
+    android:textSize="@dimen/button_text_size"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>

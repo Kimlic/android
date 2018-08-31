@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@drawable/ic_fingerprint_background"
+  tools:context=".terms.TermsActivity">
+
+  <LinearLayout
+    android:id="@+id/upperRoot"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="48dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <TextView
+      android:id="@+id/titleTv"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_marginBottom="8dp"
+      android:gravity="center"
+      android:textColor="@android:color/white"
+      android:textSize="@dimen/title_text_size"
+      tools:text="@string/terms_amp_conditions"/>
+
+    <TextView
+      android:id="@+id/subtitleTv"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="8dp"
+      android:gravity="center"
+      android:textColor="@android:color/white"
+      android:textSize="@dimen/subtitle_text_size"
+      tools:text="@string/last_modified_23_july_2017"/>
+
+  </LinearLayout>
+
+  <WebView
+    android:id="@+id/webView"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="0dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginBottom="16dp"
+    android:background="@android:color/transparent"
+    android:overScrollMode="never"
+    android:scrollbars="none"
+    app:layout_constraintBottom_toTopOf="@id/confirmBt"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/upperRoot"/>
+
+  <ProgressBar
+    android:id="@+id/progressBar"
+    style="?android:attr/progressBarStyle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:indeterminateTint="@android:color/white"
+    android:visibility="gone"
+    app:layout_constraintBottom_toBottomOf="@+id/webView"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="@+id/webView"/>
+
+  <Button
+    android:id="@+id/confirmBt"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="@dimen/button_height"
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/button_rounded_green"
+    android:gravity="center"
+    android:text="@string/accept"
+    android:textAllCaps="false"
+    android:textColor="@android:color/white"
+    android:textSize="@dimen/button_text_size"
+    app:layout_constraintBottom_toTopOf="@+id/changeTv"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"/>
+
+  <TextView
+    android:id="@+id/changeTv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="24dp"
+    android:gravity="center"
+    android:text="@string/cancel"
+    android:textColor="@android:color/white"
+    android:textSize="@dimen/button_text_size"
+    android:visibility="gone"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/blueCloudBackground">
+
+    <ImageView
+      android:id="@+id/cloudsIv"
+      android:layout_width="match_parent"
+      android:layout_height="300dp"
+      android:layout_marginBottom="72dp"
+      android:background="@drawable/ic_tutorial_clouds_effect"
+      android:contentDescription="@string/cloud_effect"
+      app:layout_constraintBottom_toBottomOf="@id/titelsLl"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"/>
+
+    <FrameLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="132dp"
+      app:layout_constraintBottom_toBottomOf="@+id/cloudsIv"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+          android:id="@+id/logoRoundedIv"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:background="@drawable/rounded_logo_successfull"
+          android:contentDescription="@string/rounded_logo"
+          app:layout_constraintBottom_toBottomOf="@+id/cloudsIv"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"/>
+
+        <ImageView
+          android:id="@+id/logoIv"
+          android:layout_width="132dp"
+          android:layout_height="@dimen/logo_size_success"
+          android:layout_gravity="center"
+          android:background="@drawable/ic_success_securty_lock_icon"
+          android:contentDescription="@string/phone_logo"/>
+
+    </FrameLayout>
+
+    <LinearLayout
+      android:id="@+id/titelsLl"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="124dp"
+      android:gravity="center"
+      android:orientation="vertical"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:gravity="center"
+          android:text="@string/your_identity_is_secured"
+          android:textColor="@android:color/white"
+          android:textSize="@dimen/title_text_size"/>
+
+        <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:gravity="center"
+          android:text="@string/mnemonic_passphrase_created"
+          android:textColor="@android:color/white"
+          android:textSize="@dimen/subtitle_text_size"/>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
