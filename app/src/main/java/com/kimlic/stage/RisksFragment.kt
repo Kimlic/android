@@ -26,7 +26,7 @@ class RisksFragment : BasePopupFragment() {
     // Companion
 
     companion object {
-        val FRAGMENT_KEY = this::class.java.simpleName
+        val FRAGMENT_KEY = this::class.java.simpleName!!
 
         fun newInstance(bundle: Bundle = Bundle()): RisksFragment {
             val fragment = RisksFragment()
@@ -71,6 +71,6 @@ class RisksFragment : BasePopupFragment() {
             buttons[count++].setOnClickListener { Prefs.isPasscodeOffered = true; dismiss(); PresentationManager.passcode(activity!!) }
         }
 
-        risksTv.text = resources.getString(R.string.you_have_main_risks, count)
+        subtitleTv.text = resources.getString(R.string.you_have_main_risks, count)
     }
 }
