@@ -1,7 +1,7 @@
 package com.kimlic.quorum;
 
 import android.content.Context;
-import com.kimlic.API.KimlicApi;
+import android.util.Log;
 import com.kimlic.BuildConfig;
 import com.kimlic.quorum.bip44.HdKeyNode;
 import com.kimlic.quorum.bip44.hdpath.HdKeyPath;
@@ -24,9 +24,7 @@ public class QuorumKimlic {
 
   // Constants
 
-  //  private final static String QUORUM_URL = "http://40.115.43.126:22000";
-  private final static String BASE_URL = BuildConfig.BASE_URL;
-  private final static String QUORUM_URL = BASE_URL + KimlicApi.QUORUM.getPath();
+  private final static String QUORUM_URL = BuildConfig.QUORUM_URL;
 
   // Variables
 
@@ -121,7 +119,7 @@ public class QuorumKimlic {
   }
 
   /*
-   * Create instance KimlicToken contract; input parametr - address from KimlicContractsContex
+   * Create instance KimlicToken contract; input parameter - address from KimlicContractsContext
    * */
 
   public void setKimlicToken(String address) {
@@ -141,9 +139,9 @@ public class QuorumKimlic {
   private QuorumKimlic(String mnemonic, Context context) {
     sInstance = this;
     mMnemonic = mnemonic;
-
-//    mWeb3 = Web3.getInstance(QUORUM_URL).getWeb3();
+    Log.d("TAGWEB3J", "web3j url =" + QUORUM_URL);
     mWeb3 = Web3.getInstance(QUORUM_URL, context).getWeb3();
+
     ECKeyPair keyPair = generateKeyPair(mMnemonic);
     mWalletAddress = generateAddress(keyPair);
     mCredentials = credentialsFrom(keyPair);
