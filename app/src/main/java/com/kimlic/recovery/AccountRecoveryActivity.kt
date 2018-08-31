@@ -4,7 +4,9 @@ import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.kimlic.BackupUpdatingFragment
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.db.SyncService
@@ -21,6 +23,8 @@ class AccountRecoveryActivity : BaseActivity() {
     // Variables
 
     private var recoveryViewModel: RecoveryViewModel? = null
+    private var timer: CountDownTimer? = null
+    private var backupUpdatingFragment: BackupUpdatingFragment? = null
 
     // Life
 
@@ -52,13 +56,16 @@ class AccountRecoveryActivity : BaseActivity() {
                 showPopup(title = getString(R.string.error), message = getString(R.string.missing_mnemonic_phrases)); return@setOnClickListener
             }
 
-            GoogleSignIn.getLastSignedInAccount(this)?.let { recoveryUserProfile(mnemonic) }
+            GoogleSignIn.getLastSignedInAccount(this)?.let {
+                showProgress()
+                recoveryUserProfile(mnemonic)
+            }
         }
     }
 
     private fun recoveryUserProfile(mnemonic: String) {
         recoveryViewModel!!.recoveryProfile(mnemonic,
-                onSuccess = { successful() },
+                onSuccess = { hideProgress(); successful() },
                 onError = { errorMessage ->
                     errorPopup(errorMessage); return@recoveryProfile
                 })
@@ -79,11 +86,20 @@ class AccountRecoveryActivity : BaseActivity() {
 
     private fun mnemonicValid(mnemonic: String) = mnemonic.split(" ").size == 12
 
-    private fun showProgress() {
+    // Progress
 
+    private fun showProgress() {
+        timer = object : CountDownTimer(0, 0) {
+            override fun onFinish() {
+                backupUpdatingFragment = BackupUpdatingFragment.newInstance()
+                backupUpdatingFragment?.show(supportFragmentManager, BackupUpdatingFragment.FRAGMENT_KEY)
+            }
+
+            override fun onTick(millisUntilFinished: Long) {}
+        }.start()
     }
 
-    private fun hideProgress() {
-
+    private fun hideProgress() = runOnUiThread {
+        if (backupUpdatingFragment != null) backupUpdatingFragment?.dismiss(); timer?.cancel()
     }
 }
