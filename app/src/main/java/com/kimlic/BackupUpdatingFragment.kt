@@ -23,7 +23,7 @@ class BackupUpdatingFragment : BasePopupFragment() {
 
     companion object {
 
-        val FRAGMENT_KEY = this::class.java.simpleName
+        val FRAGMENT_KEY = this::class.java.simpleName!!
 
         fun newInstance(bundle: Bundle? = Bundle()): BackupUpdatingFragment {
             val fragment = BackupUpdatingFragment()
@@ -43,6 +43,12 @@ class BackupUpdatingFragment : BasePopupFragment() {
 
     private fun setupUI() {
         isCancelable = false
+
+        val title = arguments?.getString("title", "")
+        val subtitle = arguments?.getString("subtitle", "")
+        titleTv.text = title
+        subtitleTv.text = subtitle
+
         blockchainWeakReference = WeakReference(blockchainIv)
         playAnimation()
     }
