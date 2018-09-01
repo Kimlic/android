@@ -138,14 +138,12 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
         params.jpegQuality = 80
 
         val supportedFocusMode = camera.parameters.supportedFocusModes
-        val hasAutoFocus = supportedFocusMode != null && supportedFocusMode.contains(Camera.Parameters.FOCUS_MODE_AUTO)
+        val hasAutoFocus = supportedFocusMode != null && supportedFocusMode.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)
 
-        if (hasAutoFocus) {
-            params.focusMode = (Camera.Parameters.FOCUS_MODE_AUTO)
-        }
+        if (hasAutoFocus) params.focusMode = (Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)
 
         params.setPictureSize(currentWidth, currentHeight)
-        setOptimalPrviewSize(params)
+        setOptimalPreviewSize(params)
         camera.parameters = params
     }
 
@@ -188,7 +186,7 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
         return Bitmap.createBitmap(source, 0, 0, source.width, source.height, matrix, true)
     }
 
-    private fun setOptimalPrviewSize(params: Camera.Parameters) {
+    private fun setOptimalPreviewSize(params: Camera.Parameters) {
         val manager = context!!.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val display = manager.defaultDisplay
         val metrics = DisplayMetrics()
