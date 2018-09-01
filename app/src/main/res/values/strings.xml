@@ -235,4 +235,5 @@
   <string name="missing_mnemonic_phrases">Missing mnemonic phrases</string>
   <string name="photo_recovery_error">Photo recovery error</string>
   <string name="profile_not_found">Profile not found</string>
+  <string name="portrait">Portrait</string>
 </resources>

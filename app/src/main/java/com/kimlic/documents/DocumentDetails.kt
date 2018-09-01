@@ -169,6 +169,7 @@ class DocumentDetails : BaseActivity() {
     }
 
     private fun fillData(user: User, photos: Map<String, String>, document: Document) {
+        portraitIv.setImageBitmap(rotateBitmap(FileNameTxtBase64ToBitmap().transform(photos[AppConstants.photoFaceType.key]!!)!!, -90f))
         frontIv.setImageBitmap(cropped(photos[AppConstants.photoFrontType.key]!!))
         backIv.setImageBitmap(cropped(photos[AppConstants.photoBackType.key]!!))
 
