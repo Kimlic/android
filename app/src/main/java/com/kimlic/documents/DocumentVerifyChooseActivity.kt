@@ -86,6 +86,7 @@ class DocumentVerifyChooseActivity : BaseActivity(), View.OnClickListener {
                         elementAt(3).text = types.entries.elementAt(3).value; elementAt(3).tag = types.entries.elementAt(3).key; elementAt(3).visibility = View.VISIBLE
                     }
                 }
+                0 -> finish()
             }
         })
         buttonsList.forEach { it.setOnClickListener(this@DocumentVerifyChooseActivity) }
