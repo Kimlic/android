@@ -38,6 +38,11 @@ abstract class BaseActivity : AppCompatActivity() {
             super.onBackPressed()
     }
 
+    override fun onPause() {
+        hideKeyboard()
+        super.onPause()
+    }
+
     // Public
 
     fun showToast(text: String) {
