@@ -86,6 +86,12 @@ class RecoveryViewModel(application: Application) : AndroidViewModel(application
         } ?: onSuccess()
     }
 
+    // Remove profile
+
+    fun removeProfile(onSuccess: () -> Unit, onError: () -> Unit) {
+        recoveryRepository.removeFile(Prefs.currentAccountAddress, "", onSuccess, onError)
+    }
+
     // Quorum request helpers
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
