@@ -4,10 +4,12 @@ import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.LinearLayout
 import butterknife.ButterKnife
+import com.kimlic.BackupUpdatingFragment
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.db.SyncService
@@ -16,6 +18,7 @@ import com.kimlic.model.ProfileViewModel
 import com.kimlic.passcode.PasscodeActivity
 import com.kimlic.preferences.Prefs
 import com.kimlic.quorum.QuorumKimlic
+import com.kimlic.recovery.RecoveryViewModel
 import com.kimlic.utils.AppConstants
 import kotlinx.android.synthetic.main.activity_settings.*
 
@@ -24,12 +27,16 @@ class SettingsActivity : BaseActivity() {
     // Constants
 
     private val PASSCODE_REQUEST_CODE = 42
+    private val GOOGLE_SIGNE_IN_REQUEST_CODE = 108
 
     // Variables
 
     private lateinit var settingsList: MutableList<Setting>
     private val adapter: SettingsAdapter = SettingsAdapter()
     private lateinit var model: ProfileViewModel
+    private lateinit var recoveryModel: RecoveryViewModel
+    private var timer: CountDownTimer? = null
+    private var backupUpdatingFragment: BackupUpdatingFragment? = null
 
     // Life
 
@@ -38,6 +45,7 @@ class SettingsActivity : BaseActivity() {
         setContentView(R.layout.activity_settings)
 
         model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        recoveryModel = ViewModelProviders.of(this).get(RecoveryViewModel::class.java)
         ButterKnife.bind(this)
         setupUI()
     }
@@ -53,6 +61,22 @@ class SettingsActivity : BaseActivity() {
             PASSCODE_REQUEST_CODE -> {
                 if (resultCode == Activity.RESULT_OK)
                     PresentationManager.touchCreate(this@SettingsActivity)
+            }
+            GOOGLE_SIGNE_IN_REQUEST_CODE -> {
+                if (resultCode != Activity.RESULT_OK) return
+
+                showProgress()
+                recoveryModel.backupProfile(
+                        onSuccess = {
+                            hideProgress()
+                            Prefs.isDriveActive = true
+                            showPopup("Success!", "Your profile synchronization is active")
+                        },
+                        onError = {
+                            hideProgress()
+                            showPopup("Error", "Synchronizing error")
+                        }
+                )
             }
         }
     }
@@ -84,6 +108,18 @@ class SettingsActivity : BaseActivity() {
                         if (Prefs.isTouchEnabled) PresentationManager.touchDisable(this@SettingsActivity)
                         else PresentationManager.touchCreate(this@SettingsActivity)
                     }
+                    "drive" -> {
+                        if (Prefs.isDriveActive)
+                            recoveryModel.removeProfile(
+                                    onSuccess = {
+
+                                    },
+                                    onError = {
+
+                                    })
+                        else
+                            SyncService.signIn(this@SettingsActivity, GOOGLE_SIGNE_IN_REQUEST_CODE)
+                    }
                     "recovery" -> PresentationManager.recoveryEnable(this@SettingsActivity)
                     "terms" -> PresentationManager.termsReview(this@SettingsActivity)
                     "about" -> PresentationManager.about(this@SettingsActivity)
@@ -100,6 +136,7 @@ class SettingsActivity : BaseActivity() {
         settingsList = mutableListOf(
                 SwitchSetting(getString(R.string.passcode), getString(R.string.protect_my_id), "passcode", AppConstants.settingSwitch.intKey, Prefs.isPasscodeEnabled),
                 SwitchSetting(getString(R.string.enable_touch_id), getString(R.string.use_my_touch_id), "touch", AppConstants.settingSwitch.intKey, Prefs.isTouchEnabled),
+               // SwitchSetting("Google drive sync", "Backup profile to google Drive", "drive", AppConstants.settingSwitch.intKey, Prefs.isDriveActive),
                 IntentSetting(getString(R.string.account_recovery), getString(R.string.back_up_your_credentials), "recovery", AppConstants.settingIntent.intKey),
                 IntentSetting(getString(R.string.terms_and_conditions), getString(R.string.last_modified_23_july_2017), "terms", AppConstants.settingIntent.intKey),
                 IntentSetting(getString(R.string.about_kimlic), "", "about", AppConstants.settingIntent.intKey))
@@ -129,4 +166,24 @@ class SettingsActivity : BaseActivity() {
     }
 
     private fun clearAllFiles() = model.clearAllFiles()
+
+    // Progress
+
+    private fun showProgress() {
+        timer = object : CountDownTimer(0, 0) {
+            override fun onFinish() {
+                val bundle = Bundle()
+                bundle.putString("title", "Backup")
+                bundle.putString("subtitle", "Backup profile to Google Drive")
+                backupUpdatingFragment = BackupUpdatingFragment.newInstance(bundle)
+                backupUpdatingFragment?.show(supportFragmentManager, BackupUpdatingFragment.FRAGMENT_KEY)
+            }
+
+            override fun onTick(millisUntilFinished: Long) {}
+        }.start()
+    }
+
+    private fun hideProgress() = runOnUiThread {
+        if (backupUpdatingFragment != null) backupUpdatingFragment?.dismiss(); timer?.cancel()
+    }
 }
