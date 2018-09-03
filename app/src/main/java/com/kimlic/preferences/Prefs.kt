@@ -20,6 +20,8 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
         isPasscodeOffered = false
         isRecoveryOffered = false
 
+        isDriveActive = false
+
         currentAccountAddress = ""
     }
 
@@ -72,4 +74,8 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
     var currentAccountAddress: String
         get() = getString(AppConstants.accountAddress.key)
         set(value) = setString(AppConstants.accountAddress.key, value)
+
+    var isDriveActive: Boolean
+        get() = getBoolean(AppConstants.isDriveActive.key)
+        set(value) = setBoolean(AppConstants.isDriveActive.key, value)
 }
