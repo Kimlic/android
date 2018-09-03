@@ -17,6 +17,7 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
     isRecoveryOffered("IS_RECOVERY_OFFERED"),
 
     isGoogleSigneIn("IS_GOOGLE_SIGNE_IN"),
+    isDriveActive("IS_GOOGLE_DRIVE_ACTIVE"),
 
     terms("TERMS"),
     privacy("PRIVACY"),
