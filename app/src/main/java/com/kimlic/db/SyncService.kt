@@ -147,36 +147,15 @@ class SyncService private constructor(val context: Context) {
 
     // Private
 
-//    }
-
-//    private fun retrievePhotos(accountAddress: String) = retrieveFiles(accountAddress)
-
-    //    private fun retrieveFiles(accountAddress: String) {//}, appFolder: Boolean) {
-//        val rootFolder = getRootFolder()
-//        val backupFolderQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, accountAddress)).build()
-//        val fileQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, MIME_TYPE_DATABASE)).build()
-//
-//        rootFolder.continueWithTask {
-//            mDriveResourceClient!!
-//                    .queryChildren(rootFolder.getResult(), backupFolderQuery)
-//                    .continueWithTask {
-//                        mDriveResourceClient!!.queryChildren(it.result[0].driveId.asDriveFolder(), fileQuery)
-//                    }.addOnSuccessListener { it ->
-//                        it.forEach {
-//                            Log.d(TAG, "files in folder description ${it.description}")
-//                            if (it.description == PHOTO_DESCRIPTION) saveFileToDisc(it.title, it.driveId.asDriveFile())
-//                        }
-//                    }.addOnSuccessListener { }
-//        }
-
     fun deleteFile(rootFolderName: String, fileName: String, mimeType: String) {
         val fileQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, mimeType)).addFilter(Filters.eq(SearchableField.TITLE, fileName)).build()
         val backupFolderQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, rootFolderName)).build()
         val rootFolder = getRootFolder()
         rootFolder.continueWithTask {
             mDriveResourceClient!!
-                    .queryChildren(rootFolder.getResult(), backupFolderQuery)
-                    .continueWithTask { mDriveResourceClient!!.queryChildren(it.result[0].driveId.asDriveFolder(), fileQuery) }.addOnSuccessListener {}
+                    .queryChildren(rootFolder.result, backupFolderQuery)
+                    .continueWithTask { mDriveResourceClient!!.queryChildren(it.result[0].driveId.asDriveFolder(), fileQuery) }
+                    .addOnSuccessListener {}
                     .continueWithTask { deleteFileByDriveId(it.result[0].driveId.asDriveFile()) }
         }
     }
