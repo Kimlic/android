@@ -1,24 +1,17 @@
 package com.kimlic.mnemonic
 
-import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import com.kimlic.BaseActivity
 import com.kimlic.R
-import com.kimlic.db.SyncService
 import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
 import kotlinx.android.synthetic.main.activity_mnemonic_preview.*
 
 class MnemonicPreviewActivity : BaseActivity() {
-
-    // Constants
-
-    private val GOOGLE_SIGNE_IN_REQUEST_CODE = 108
 
     // Variables
 
@@ -34,19 +27,9 @@ class MnemonicPreviewActivity : BaseActivity() {
         setupUI()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        when (requestCode) {
-            GOOGLE_SIGNE_IN_REQUEST_CODE -> {
-                if (resultCode != Activity.RESULT_OK) finish()
-            }
-        }
-    }
-
     // Private
 
     private fun setupUI() {
-        SyncService.signIn(this, GOOGLE_SIGNE_IN_REQUEST_CODE)
-
         phraseBt.tag = "show"
         phraseBt.setOnClickListener {
             when (it.tag) {
