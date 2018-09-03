@@ -9,7 +9,6 @@ import android.util.DisplayMetrics
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.WindowManager
-import org.spongycastle.asn1.ua.DSTU4145NamedCurves.params
 import java.io.IOException
 
 @SuppressLint("ViewConstructor")
@@ -39,17 +38,18 @@ class KimlicSurfaceView(context: Context, val camera: Camera) : SurfaceView(cont
 
     override fun surfaceDestroyed(holder: SurfaceHolder?) {}
 
-//    @SuppressLint("DrawAllocation")
-//    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-//        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-//
-//        val manager = context!!.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-//        val display = manager.defaultDisplay
-//        val metrics = DisplayMetrics()
-//        display.getMetrics(metrics)
-//        val width = metrics.widthPixels
-//        val height = metrics.heightPixels
-//
-//        setMeasuredDimension(width, height)
-//    }
+    @SuppressLint("DrawAllocation")
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+
+        val manager = context!!.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val display = manager.defaultDisplay
+        val metrics = DisplayMetrics()
+        display.getMetrics(metrics)
+        val width = metrics.widthPixels
+        val height = metrics.heightPixels
+//        Log.d("TAGSIZE", "width = $width")
+//        Log.d("TAGSIZE", "height = $height")
+        setMeasuredDimension(width, height)
+    }
 }
