@@ -49,4 +49,8 @@ class RecoveryRepository {
     fun backupPhoto(accountAddress: String, filePath: String, onSuccess: () -> Unit, onError: () -> Unit) {
         DoAsync().execute(Runnable { SyncService.getInstance().backupFile(accountAddress, filePath, SyncService.DATABASE_DECRIPTION, onSuccess, onError) })
     }
+
+    fun removeFile(accountAddress: String, fileName: String, onSuccess: () -> Unit, onError: () -> Unit) {
+        DoAsync().execute(Runnable { SyncService.getInstance().deleteFile(accountAddress, fileName, "") })
+    }
 }
