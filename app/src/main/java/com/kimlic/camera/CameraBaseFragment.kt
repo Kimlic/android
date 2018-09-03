@@ -143,7 +143,7 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
         if (hasAutoFocus) params.focusMode = (Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)
 
         params.setPictureSize(currentWidth, currentHeight)
-        setOptimalPreviewSize(params)
+        // setOptimalPreviewSize(params)
         camera.parameters = params
     }
 
