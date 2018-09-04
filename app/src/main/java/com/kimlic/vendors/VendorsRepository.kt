@@ -4,6 +4,7 @@ import android.os.Handler
 import com.android.volley.Request.Method.GET
 import com.android.volley.Response
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.kimlic.API.DoAsync
@@ -25,7 +26,7 @@ class VendorsRepository private constructor() {
 
     // Variables
 
-    private var googleSignInAccount = GoogleSignIn.getLastSignedInAccount(KimlicApp.applicationContext())
+    private var googleSignInAccount: GoogleSignInAccount? = null
     private var db: KimlicDB = KimlicDB.getInstance()!!
     private var vendorDao = db.vendorDao()
 
@@ -86,9 +87,10 @@ class VendorsRepository private constructor() {
     // Private
 
     private fun syncDataBase() {
-        googleSignInAccount?.let {
+        googleSignInAccount = GoogleSignIn.getLastSignedInAccount(KimlicApp.applicationContext())
+        if (googleSignInAccount != null && Prefs.isDriveActive)
             Handler().postDelayed({ SyncService.getInstance().backupDatabase(Prefs.currentAccountAddress, "kimlic.db", onSuccess = {}, onError = {}) }, 0)
-        }
+
     }
 
     // Holder
