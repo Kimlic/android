@@ -102,12 +102,16 @@ class ProfileRepository private constructor() {
     fun addUserPhoto(accountAddress: String, fileName: String, data: ByteArray) {
         savePhoto(accountAddress, fileName = fileName, data = data)
         savePhoto(accountAddress, fileName = "preview_$fileName", data = croppedPreviewInByteArray(data))
+
         val user = userDao.select(accountAddress)
-        user.portraitFile = fileName
-        user.portraitPreviewFile = "preview_$fileName"
-        userDao.update(user = user)
+        val portraitPhoto = Photo(userId = user.id, type = "portrait", file = fileName)
+        val portraitPreview = Photo(userId = user.id, type = "portrait_preview", file = "preview_$fileName")
+        photoDao.insert(photos = arrayOf(portraitPhoto, portraitPreview).asList())
+
         syncDataBase()
     }
+
+    fun portraitPhotosLive(accountAddress: String) = photoDao.portraitPhotosLive(accountAddress)
 
     fun addUserName(accountAddress: String, firstName: String, lastName: String) {
         val user = userDao.select(accountAddress = accountAddress)
