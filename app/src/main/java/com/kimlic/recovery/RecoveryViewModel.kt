@@ -6,6 +6,7 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
 import android.os.Handler
+import android.util.Log
 import com.kimlic.API.DoAsync
 import com.kimlic.KimlicApp
 import com.kimlic.R
@@ -69,12 +70,13 @@ class RecoveryViewModel(application: Application) : AndroidViewModel(application
     // Backup profile
 
     fun backupProfile(onSuccess: () -> Unit, onError: () -> Unit) {
+        Log.d("TAGBACKUP", "in backup")
         photoQueue = ArrayDeque()
         val rootFilesDir = File(getApplication<KimlicApp>().filesDir.toString())
         val files = rootFilesDir.listFiles()
 
         files.filter { !it.isDirectory }.forEach { photoQueue.add(it) }
-
+        Log.d("TAGBACKUPPHOTOS", "photos = $photoQueue")
         recoveryRepository.backupDatabase(Prefs.currentAccountAddress, onSuccess = { backupPhotos(Prefs.currentAccountAddress, onSuccess, onError) }, onError = {})
     }
 
@@ -105,4 +107,6 @@ class RecoveryViewModel(application: Application) : AndroidViewModel(application
 
     private fun retryQuorumRequest(onSuccess: () -> Unit, onError: () -> Unit) = timerQueue.poll()?.let { Handler().postDelayed({ quorumRequest(onSuccess, onError) }, it) }
             ?: onError()
+
+    fun allPhotos() = recoveryRepository.allPhotos(accountAddress = Prefs.currentAccountAddress)
 }

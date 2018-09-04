@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.LinearLayout
 import butterknife.ButterKnife
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.kimlic.BackupUpdatingFragment
 import com.kimlic.BaseActivity
 import com.kimlic.R
@@ -65,18 +66,7 @@ class SettingsActivity : BaseActivity() {
             GOOGLE_SIGNE_IN_REQUEST_CODE -> {
                 if (resultCode != Activity.RESULT_OK) return
 
-                showProgress()
-                recoveryModel.backupProfile(
-                        onSuccess = {
-                            hideProgress()
-                            Prefs.isDriveActive = true
-                            showPopup("Success!", "Your profile synchronization is active")
-                        },
-                        onError = {
-                            hideProgress()
-                            showPopup("Error", "Synchronizing error")
-                        }
-                )
+                backupProfile()
             }
         }
     }
@@ -109,16 +99,14 @@ class SettingsActivity : BaseActivity() {
                         else PresentationManager.touchCreate(this@SettingsActivity)
                     }
                     "drive" -> {
-                        if (Prefs.isDriveActive)
-                            recoveryModel.removeProfile(
-                                    onSuccess = {
-
-                                    },
-                                    onError = {
-
-                                    })
-                        else
-                            SyncService.signIn(this@SettingsActivity, GOOGLE_SIGNE_IN_REQUEST_CODE)
+                        when {
+                            Prefs.isDriveActive -> {
+                                SyncService.signOut(this@SettingsActivity)
+                                Prefs.isDriveActive = false
+                            }
+                            GoogleSignIn.getLastSignedInAccount(this@SettingsActivity) == null -> SyncService.signIn(this@SettingsActivity, GOOGLE_SIGNE_IN_REQUEST_CODE)
+                            else -> backupProfile()
+                        }
                     }
                     "recovery" -> PresentationManager.recoveryEnable(this@SettingsActivity)
                     "terms" -> PresentationManager.termsReview(this@SettingsActivity)
@@ -136,7 +124,7 @@ class SettingsActivity : BaseActivity() {
         settingsList = mutableListOf(
                 SwitchSetting(getString(R.string.passcode), getString(R.string.protect_my_id), "passcode", AppConstants.settingSwitch.intKey, Prefs.isPasscodeEnabled),
                 SwitchSetting(getString(R.string.enable_touch_id), getString(R.string.use_my_touch_id), "touch", AppConstants.settingSwitch.intKey, Prefs.isTouchEnabled),
-               // SwitchSetting("Google drive sync", "Backup profile to google Drive", "drive", AppConstants.settingSwitch.intKey, Prefs.isDriveActive),
+                SwitchSetting("Google drive sync", "Backup profile to google Drive", "drive", AppConstants.settingSwitch.intKey, Prefs.isDriveActive),
                 IntentSetting(getString(R.string.account_recovery), getString(R.string.back_up_your_credentials), "recovery", AppConstants.settingIntent.intKey),
                 IntentSetting(getString(R.string.terms_and_conditions), getString(R.string.last_modified_23_july_2017), "terms", AppConstants.settingIntent.intKey),
                 IntentSetting(getString(R.string.about_kimlic), "", "about", AppConstants.settingIntent.intKey))
@@ -148,6 +136,21 @@ class SettingsActivity : BaseActivity() {
 
         if (Prefs.isPasscodeEnabled && settingsList.elementAt(1).tag != "change")
             settingsList.add(1, passcodeChange)
+    }
+
+    private fun backupProfile() {
+        showProgress()
+        recoveryModel.backupProfile(
+                onSuccess = {
+                    hideProgress()
+                    Prefs.isDriveActive = true
+                    showPopup("Success!", "Your profile synchronization is active")
+                },
+                onError = {
+                    hideProgress()
+                    showPopup("Error", "Synchronizing error")
+                }
+        )
     }
 
     private fun passcodeForResult() {
