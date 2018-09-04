@@ -26,8 +26,8 @@ android {
         applicationId 'com.kimlic'
         minSdkVersion 24
         targetSdkVersion 27
-        versionCode 9
-        versionName "1.0.9"
+        versionCode 11
+        versionName "1.0.11"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -50,22 +50,17 @@ android {
 
     productFlavors {
         dev {
-//            applicationId 'com.kimlic.dev'
-//            buildConfigField("String", "QUORUM_URL", "\"https://mobile-api-test.kimlic.com\"")// elixir
-            buildConfigField("String", "API_CORE_URL", "\"https://mobile-api-test.kimlic.com\"")// elixir
-            buildConfigField("String", "QUORUM_URL", "\"https://mobile-api-test.kimlic.com/api/quorum\"")// quorum
-            buildConfigField("String", "VENDORS_URL", "\"http://demo.kimlic.com\"")
+            applicationId 'com.kimlic.dev'
+            buildConfigField("String", "QUORUM_URL", "\"http://51.141.123.209:22000\"")// quorum
+            buildConfigField("String", "API_CORE_URL", "\"http://51.140.220.139:4000\"")//
+            //buildConfigField("String", "VENDORS_URL", "\"http://demo.kimlic.com\"")// gets qrCode
             buildConfigField("boolean", "RECOVERY_FOLDER", "false")
         }
         stage {
-//            buildConfigField("String", "API_CORE_URL", "\"https://mobile-api-test.kimlic.com\"")//elixir
-//            buildConfigField("String", "QUORUM_URL", "\"http://51.141.120.215:22000\"")// quorum
-            buildConfigField("String", "QUORUM_URL", "\"http://51.141.123.209:22000\"")// quorum
-            buildConfigField("String", "API_CORE_URL", "\"http://51.140.220.139:4000\"")//
-            buildConfigField("String", "VENDORS_URL", "\"http://demo.kimlic.com\"")// gets qrCode
+            buildConfigField("String", "API_CORE_URL", "\"https://mobile-api-test.kimlic.com\"")// elixir
+            buildConfigField("String", "QUORUM_URL", "\"https://mobile-api-test.kimlic.com/api/quorum\"")// quorum
             buildConfigField("boolean", "RECOVERY_FOLDER", "false")
         }
-
         prod {
             buildConfigField("String", "BASE_URL", "\"https://mobile-api-test.kimlic.com\"")
             buildConfigField("String", "VENDORS_URL", "\"http://demo.kimlic.com\"")
