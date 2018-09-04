@@ -87,12 +87,14 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
 
     private fun setupRisks() {
         risksTv.setOnClickListener {
-            if (!Prefs.isPasscodeEnabled) {
-                passcodeForResult(); return@setOnClickListener
-            }
 
-            if (Prefs.isTouchEnabled) PresentationManager.touchDisable(activity!!)
-            else PresentationManager.touchCreate(activity!!)
+            (getActivity() as StageActivity).risks()
+//            if (!Prefs.isPasscodeEnabled) {
+//                passcodeForResult(); return@setOnClickListener
+//            }
+//
+//            if (Prefs.isTouchEnabled) PresentationManager.touchDisable(activity!!)
+//            else PresentationManager.touchCreate(activity!!)
         }
     }
 
