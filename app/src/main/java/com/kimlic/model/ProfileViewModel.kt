@@ -53,6 +53,8 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
 
     }
 
+    fun userPortraitPhotos() = repository.portraitPhotosLive(Prefs.currentAccountAddress)
+
     // Tokens
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
