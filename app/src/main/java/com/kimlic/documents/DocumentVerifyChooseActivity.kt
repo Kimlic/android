@@ -12,7 +12,7 @@ import butterknife.ButterKnife
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.db.entity.Document
-import com.kimlic.db.entity.User
+import com.kimlic.db.entity.Photo
 import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.utils.AppDoc
@@ -47,7 +47,10 @@ class DocumentVerifyChooseActivity : BaseActivity(), View.OnClickListener {
     // Private
 
     private fun setupUI() {
-        model.userLive().observe(this, Observer<User> { user -> setupBackground(user!!.portraitFile) })
+        model.userPortraitPhotos().observe(this, Observer<List<Photo>> { it ->
+            val photos = it?.map { it.type to it.file }!!.toMap()
+            setupBackground(photos.getOrDefault("portrait", ""))
+        })
 
         model.userDocumentsLive().observe(this, Observer<List<Document>> { documents ->
             types = mutableMapOf(
