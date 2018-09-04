@@ -14,10 +14,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.kimlic.BaseFragment
 import com.kimlic.R
-import com.kimlic.db.entity.Address
-import com.kimlic.db.entity.Contact
-import com.kimlic.db.entity.Document
-import com.kimlic.db.entity.User
+import com.kimlic.db.entity.*
 import com.kimlic.managers.PresentationManager
 import com.kimlic.passcode.PasscodeActivity
 import com.kimlic.preferences.Prefs
@@ -104,15 +101,18 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
     private fun setupUser() {
         model.userLive().observe(this@UserStageFragment, Observer<User> { user ->
             user?.let {
-                setupNameField(if (it.firstName.isNotEmpty()) {
-                    "${it.firstName} ${it.lastName}"
-                } else "")
-
+                setupNameField(
+                        if (it.firstName.isNotEmpty()) {
+                            "${it.firstName} ${it.lastName}"
+                        } else ""
+                )
                 setupKimField(it.kimQuantity)
-                showPhoto(it.portraitPreviewFile)
-                manageCameraIcon("preview_" + it.portraitFile)
-//                manageCameraIcon(user.portraitPreviewFile)
             }
+        })
+        model.userPortraitPhotos().observe(this, Observer<List<Photo>> { list ->
+            val photos = list?.map { it.type to it.file }!!.toMap()
+            showPhoto(photos.getOrDefault("portrait_preview", ""))
+            photos["portrait_preview"]?.let { manageCameraIcon(it) }
         })
     }
 
@@ -179,7 +179,6 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
     }
 
     private fun manageCameraIcon(fileName: String) {
-        // Gone stub
         if (File(activity!!.filesDir.toString() + "/" + fileName).exists()) takePhotoLl.visibility = View.GONE else takePhotoLl.visibility = View.VISIBLE
     }
 
