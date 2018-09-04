@@ -96,7 +96,7 @@ class StageActivity : BaseActivity() {
         accountsStageFragment = AccountsStageFragment.newInstance()
     }
 
-    private fun risks() {
+    fun risks() {
         if (!Prefs.isPasscodeOffered || !Prefs.isRecoveryOffered) {
 
             if (Prefs.isPasscodeEnabled) Prefs.isPasscodeOffered = true
@@ -110,7 +110,7 @@ class StageActivity : BaseActivity() {
         }
     }
 
-// Helpers
+    // Helpers
 
     private fun replaceStageFragment(): Boolean {
         val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
