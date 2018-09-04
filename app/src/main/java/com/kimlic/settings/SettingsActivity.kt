@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import butterknife.ButterKnife
@@ -99,13 +100,26 @@ class SettingsActivity : BaseActivity() {
                         else PresentationManager.touchCreate(this@SettingsActivity)
                     }
                     "drive" -> {
-                        when {
-                            Prefs.isDriveActive -> {
-                                SyncService.signOut(this@SettingsActivity)
-                                Prefs.isDriveActive = false
+                        when (Prefs.isDriveActive) {
+                            true -> {
+                                // Удаляем профиль
+                                recoveryModel.removeProfile(
+                                        onSuccess = {
+                                            SyncService.signOut(this@SettingsActivity)
+                                            Prefs.isDriveActive = false
+                                            Log.d("TAGB", "Profile is removed")
+                                        },
+                                        onError = { Log.d("TAGB", "Profile is not removed") })
+
                             }
-                            GoogleSignIn.getLastSignedInAccount(this@SettingsActivity) == null -> SyncService.signIn(this@SettingsActivity, GOOGLE_SIGNE_IN_REQUEST_CODE)
-                            else -> backupProfile()
+                            false -> {
+                                // Бэкапим профиль
+                                if (GoogleSignIn.getLastSignedInAccount(this@SettingsActivity) == null) SyncService.signIn(this@SettingsActivity, GOOGLE_SIGNE_IN_REQUEST_CODE)
+                                else
+                                    backupProfile()
+
+                            }
+
                         }
                     }
                     "recovery" -> PresentationManager.recoveryEnable(this@SettingsActivity)
