@@ -18,7 +18,7 @@ class PortraitPhotoFragment : CameraBaseFragment() {
     // Companion
 
     companion object {
-        val FRAGMENT_KEY = this::class.java.simpleName
+        val FRAGMENT_KEY = this::class.java.simpleName!!
 
         fun newInstance(bundle: Bundle = Bundle()): PortraitPhotoFragment {
             val fragment = PortraitPhotoFragment()
@@ -67,8 +67,7 @@ class PortraitPhotoFragment : CameraBaseFragment() {
     }
 
     private fun setDocumentBackground() {
-        guidelineIv.setBackgroundResource(R.drawable.ic_face_and_id_guideline)
-        auxilaryContourIv.setBackgroundResource(R.drawable.ic_face_and_id_cutout)
+        auxilaryContourIv.setBackgroundResource(R.drawable.ic_id_validation_white_contour_and_mask_bakcground)
         val layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT)
         auxilaryContourIv.layoutParams = layoutParams
     }
