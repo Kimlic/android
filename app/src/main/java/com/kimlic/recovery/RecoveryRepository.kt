@@ -43,7 +43,8 @@ class RecoveryRepository {
     }
 
     fun backupDatabase(accountAddress: String, onSuccess: () -> Unit, onError: () -> Unit) {
-        DoAsync().execute(Runnable { SyncService.getInstance().backupDatabase(accountAddress, "kimlic.db", onSuccess, onError) })
+        SyncService.getInstance().backupDatabase(accountAddress, "kimlic.db", onSuccess, onError)
+//        DoAsync().execute(Runnable { SyncService.getInstance().backupDatabase(accountAddress, "kimlic.db", onSuccess, onError) })
     }
 
     fun backupPhoto(accountAddress: String, filePath: String, onSuccess: () -> Unit, onError: () -> Unit) {
@@ -52,5 +53,9 @@ class RecoveryRepository {
 
     fun removeFile(accountAddress: String, fileName: String, onSuccess: () -> Unit, onError: () -> Unit) {
         DoAsync().execute(Runnable { SyncService.getInstance().deleteFile(accountAddress, fileName, "") })
+    }
+
+    fun removeProfile(accountAddress: String, onSuccess: () -> Unit, onError: () -> Unit) {
+        DoAsync().execute(Runnable { SyncService.getInstance().deleteFolder(accountAddress, onSuccess = onSuccess, onError = onError) })
     }
 }
