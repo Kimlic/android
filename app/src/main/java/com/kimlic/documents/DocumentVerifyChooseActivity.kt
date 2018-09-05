@@ -17,7 +17,7 @@ import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.utils.AppDoc
 import com.kimlic.utils.mappers.FileNameTxtBase64ToBitmap
-import kotlinx.android.synthetic.main.activity_verify_document.*
+import kotlinx.android.synthetic.main.activity_verify_choose_document.*
 
 class DocumentVerifyChooseActivity : BaseActivity(), View.OnClickListener {
 
@@ -35,7 +35,7 @@ class DocumentVerifyChooseActivity : BaseActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_verify_document)
+        setContentView(R.layout.activity_verify_choose_document)
 
         model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         ButterKnife.bind(this)
