@@ -27,6 +27,7 @@ import com.kimlic.db.KimlicDB
 import com.kimlic.db.SyncService
 import com.kimlic.db.dao.*
 import com.kimlic.db.entity.*
+import com.kimlic.documents.DocState
 import com.kimlic.preferences.Prefs
 import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.quorum.crypto.Sha
@@ -202,13 +203,13 @@ class ProfileRepository private constructor() {
 
     private fun syncDataBase(onSuccess: () -> Unit = {}) {
         googleSignInAccount = GoogleSignIn.getLastSignedInAccount(context) // right here
-        if (Prefs.isRecoveryEnabled && googleSignInAccount != null)
+        if (Prefs.isDriveActive && googleSignInAccount != null)
             DoAsync().execute(Runnable { SyncService.getInstance().backupDatabase(Prefs.currentAccountAddress, "kimlic.db", onSuccess = onSuccess, onError = {}) })
     }
 
     private fun syncPhoto(accountAddress: String, fileName: String) {
         googleSignInAccount = GoogleSignIn.getLastSignedInAccount(context)
-        if (Prefs.isRecoveryEnabled && googleSignInAccount != null) {
+        if (Prefs.isDriveActive && googleSignInAccount != null) {
             val filePath = KimlicApp.applicationContext().filesDir.toString() + "/" + fileName
             DoAsync().execute(Runnable { SyncService.getInstance().backupFile(accountAddress, filePath, SyncService.PHOTO_DESCRIPTION, onSuccess = {}, onError = {}) })
         }
@@ -315,13 +316,20 @@ class ProfileRepository private constructor() {
         val url = API_URL + KimlicApi.PROFILE_SYNC.path
         val headers = mapOf(Pair("account-address", accountAddress))
 
-        val syncRequest = KimlicJSONRequest(GET, url, headers, JSONObject(), Response.Listener {
+        val syncRequest = KimlicJSONRequest(GET, url, headers, JSONObject(), Response.Listener { it ->
             if (!it.getJSONObject("meta").optString("code").startsWith("2")) return@Listener
 
             val jsonToParse = it.getJSONObject("data").getJSONArray("data_fields").toString()
             val type = object : TypeToken<List<SyncObject>>() {}.type
             val approvedObjects: List<SyncObject> = Gson().fromJson(jsonToParse, type)
             val approved = approvedObjects.map { its -> its.name }
+
+            val approvedMap = approvedObjects.map { it.name to it.status }.toMap()
+
+            approvedMap["documents.id_card"]?.let { status -> updateIdCard(AppDoc.ID_CARD.type, status) }
+            approvedMap["documents.driver_license"]?.let { status -> updateIdCard(AppDoc.DRIVERS_LICENSE.type, status) }
+            approvedMap["documents.passport"]?.let { status -> updateIdCard(AppDoc.PASSPORT.type, status) }
+            approvedMap["documents.residence_permit_card"]?.let { status -> updateIdCard(AppDoc.RESIDENCE_PERMIT_CARD.type, status) }
 
             if (!approved.contains("phone")) contactDao.delete(Prefs.currentAccountAddress, "phone")
             if (!approved.contains("email")) contactDao.delete(Prefs.currentAccountAddress, "email")
@@ -406,10 +414,9 @@ class ProfileRepository private constructor() {
     // RP request
 
     fun sendDoc(documentType: String, url: String, countrySH: String, onSuccess: () -> Unit, onError: () -> Unit) {
-//    fun sendDoc(documentType: String, url: String, countrySH: String, onSuccess: () -> Unit, onError: () -> Unit) {
-//        "https://40.113.76.56:4000/api/medias"
 //        val urlFull = "http://" + url + KimlicApi.MEDIAS.path
         val urlFull = url + KimlicApi.MEDIAS.path
+        //val urlFull = "https://51.140.246.76" + KimlicApi.MEDIAS.path
         Log.d("TAGURL", "full url = ${urlFull}")
 
         val user = userDao.select(Prefs.currentAccountAddress)
@@ -628,10 +635,10 @@ class ProfileRepository private constructor() {
         return BitmapToByteArrayMapper().transform(croppedBitmap)
     }
 
-    private fun savePhoto(accountAddres: String, fileName: String, data: ByteArray) {
+    private fun savePhoto(accountAddress: String, fileName: String, data: ByteArray) {
         val data64 = Base64.toBase64String(data)
         writeToFile(context, fileName, data64)
-        syncPhoto(accountAddres, fileName)
+        syncPhoto(accountAddress, fileName)
     }
 
     // Writes file to files directory
@@ -643,6 +650,23 @@ class ProfileRepository private constructor() {
             outputStreamWriter.close()
         } catch (e: IOException) {
             Log.e("TAG", "FileWriteFailed- " + e.toString())
+        }
+    }
+
+    // UpdateUtils
+
+    private fun updateIdCard(documentType: String, status: String?) {
+        val document = documentDao.select(Prefs.currentAccountAddress, documentType)
+        document?.let {
+            when (status) {
+                DocState.VERIFIED.state -> {
+                    it.state = DocState.VERIFIED.state; documentDao.update(it)
+                }
+                DocState.CREATED.state -> {
+                    it.state = DocState.CREATED.state; documentDao.update(it)
+                }
+                DocState.UNVERIFIED.state -> documentDao.delete(it)
+            }
         }
     }
 }
