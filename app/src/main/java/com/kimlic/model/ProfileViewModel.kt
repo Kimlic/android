@@ -95,7 +95,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
 
     fun hasDocumentInProgress(): Boolean {
         val states = repository.documentStates(Prefs.currentAccountAddress)
-        return states.contains(DocState.CREATED.state) || states.contains(DocState.CREATED.state)
+        return states.contains(DocState.CREATED.state) || states.contains(DocState.VERIFIED.state)
     }
 
     // Contact
