@@ -160,6 +160,18 @@ class SyncService private constructor(val context: Context) {
         }
     }
 
+    fun deleteFolder(accountAddress: String, onSuccess: () -> Unit, onError: () -> Unit) {
+        val rootFolder = getRootFolder()
+        val removeFolderQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, accountAddress)).build()
+
+        rootFolder.continueWithTask {
+            mDriveResourceClient!!.queryChildren(rootFolder.result, removeFolderQuery)
+        }.continueWithTask {
+            deleteFolderAsDriveResource(it.result[0].driveId.asDriveResource())
+        }
+                .addOnSuccessListener { onSuccess() }
+    }
+
     private fun saveDataBaseToDisc(dataBaseName: String, driveFile: DriveFile, onSuccess: () -> Unit) {
         val dataBasePath = context.getDatabasePath(dataBaseName).toString()
         val openFileTask = mDriveResourceClient!!.openFile(driveFile, DriveFile.MODE_READ_ONLY)
