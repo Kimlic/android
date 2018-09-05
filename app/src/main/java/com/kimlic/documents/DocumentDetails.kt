@@ -88,7 +88,7 @@ class DocumentDetails : BaseActivity() {
         country = intent.extras.getString("country", "")
         url = intent.extras.getString("path", "")
 
-        currentDocument = model.userDocument(documentType)
+        currentDocument = model.userDocument(documentType)!!
         user = model.user()
         photosMap = model.userDocumentPhotos(documentType = documentType).map { it.type to it.file }.toMap()
     }
