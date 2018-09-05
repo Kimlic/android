@@ -77,7 +77,7 @@ class RecoveryViewModel(application: Application) : AndroidViewModel(application
 
         files.filter { !it.isDirectory }.forEach { photoQueue.add(it) }
         Log.d("TAGBACKUPPHOTOS", "photos = $photoQueue")
-        recoveryRepository.backupDatabase(Prefs.currentAccountAddress, onSuccess = { backupPhotos(Prefs.currentAccountAddress, onSuccess, onError) }, onError = {})
+        recoveryRepository.backupDatabase(Prefs.currentAccountAddress, onSuccess = { backupPhotos(Prefs.currentAccountAddress, onSuccess, onError) }, onError = { onError })
     }
 
     private fun backupPhotos(accountAddress: String, onSuccess: () -> Unit, onError: () -> Unit) {
@@ -91,7 +91,9 @@ class RecoveryViewModel(application: Application) : AndroidViewModel(application
     // Remove profile
 
     fun removeProfile(onSuccess: () -> Unit, onError: () -> Unit) {
-        recoveryRepository.removeFile(Prefs.currentAccountAddress, "", onSuccess, onError)
+        // Need to remove profile
+
+        recoveryRepository.removeProfile(Prefs.currentAccountAddress, onSuccess = onSuccess, onError = onError)
     }
 
     // Quorum request helpers
