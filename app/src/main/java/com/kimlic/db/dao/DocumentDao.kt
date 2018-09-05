@@ -21,14 +21,14 @@ interface DocumentDao {
     fun select(accountAddress: String): List<Document>
 
     @Query("SELECT D.id, D.user_id, D.type, D.value, D.state, D.country, D.document_number, D.expire_date, D.inserted_at FROM document as D INNER JOIN user on D.user_id = user_id WHERE user.account_address =:accountAddress AND type = :documentType LIMIT 1")
-    fun select(accountAddress: String, documentType: String): Document
+    fun select(accountAddress: String, documentType: String): Document?
 
     @Query("DELETE FROM document WHERE id = :id")
     fun delete(id: Long)
 
+    @Delete
+    fun delete(document: Document)
+
     @Query("SELECT D.state FROM document as D INNER JOIN user ON D.user_id = user_id WHERE user.account_address=:accountAddress")
     fun stateList(accountAddress: String): List<String>
-
-    @Delete
-    fun deleteDocument(document: Document)
 }
