@@ -1,16 +1,15 @@
 package com.kimlic.documents.adapter
 
-import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
+import android.widget.BaseAdapter
 import com.kimlic.R
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_country.view.*
 
-class CountryAdapter(context: Context) : ArrayAdapter<String>(context, R.layout.item_country) {
+class CountryAdapter : BaseAdapter() {
 
     // Variables
 
@@ -49,4 +48,8 @@ class CountryAdapter(context: Context) : ArrayAdapter<String>(context, R.layout.
     }
 
     override fun getCount() = countryList.size
+
+    override fun getItem(position: Int): Any = countryList[position]
+
+    override fun getItemId(position: Int): Long = position.toLong()
 }
