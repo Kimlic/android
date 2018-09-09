@@ -45,11 +45,11 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
         repository.addUserPhoto(accountAddress, fileName, data)
     }
 
-    fun saveDocumentAndPhoto(documentType: String, portraitData: ByteArray, frontData: ByteArray, backData: ByteArray) {
+    fun saveDocumentAndPhoto(documentType: String, country: String, portraitData: ByteArray, frontData: ByteArray, backData: ByteArray) {
         val portraitName: String = UUID.nameUUIDFromBytes(portraitData).toString()
         val frontName: String = UUID.nameUUIDFromBytes(frontData).toString()
         val backName: String = UUID.nameUUIDFromBytes(backData).toString()
-        repository.addDocument(Prefs.currentAccountAddress, documentType, portraitName, portraitData, frontName, frontData, backName, backData)
+        repository.addDocument(Prefs.currentAccountAddress, documentType, country, portraitName, portraitData, frontName, frontData, backName, backData)
 
     }
 
