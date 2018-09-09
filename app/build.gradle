@@ -50,10 +50,13 @@ android {
 
     productFlavors {
         dev {
-            buildConfigField("String", "QUORUM_URL", "\"http://51.141.123.209:22000\"")// quorum
-            buildConfigField("String", "API_CORE_URL", "\"http://51.140.220.139:4000\"")//
-            //buildConfigField("String", "VENDORS_URL", "\"http://demo.kimlic.com\"")// gets qrCode
+//            buildConfigField("String", "QUORUM_URL", "\"http://51.141.123.209:22000\"")// quorum
+//            buildConfigField("String", "API_CORE_URL", "\"http://51.140.220.139:4000\"")//
+//            //buildConfigField("String", "VENDORS_URL", "\"http://demo.kimlic.com\"")// gets qrCode
             buildConfigField("boolean", "RECOVERY_FOLDER", "false")
+
+            buildConfigField("String", "QUORUM_URL", "\"http://51.141.126.221:22000\"")// quorum
+            buildConfigField("String", "API_CORE_URL", "\"http://51.140.220.139:4000\"")//
         }
         stage {
             buildConfigField("String", "API_CORE_URL", "\"https://mobile-api-test.kimlic.com\"")// elixir
@@ -79,12 +82,11 @@ android {
         }
     }
 }
-
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation "com.google.firebase:firebase-messaging:17.3.0"
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.google.guava:guava:24.1-android'
@@ -114,7 +116,10 @@ dependencies {
     implementation "com.google.android.gms:play-services-places:15.0.1"
 
     // Picasso
-    //implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    // Circle imageView
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
 
     // Volley
     implementation 'com.android.volley:volley:1.1.0'
@@ -145,7 +150,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:16.0.0'
 
     //Firebase
-    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-core:16.0.3'
 
 }
+
 apply plugin: 'com.google.gms.google-services'
