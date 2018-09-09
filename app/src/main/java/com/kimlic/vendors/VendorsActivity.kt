@@ -91,22 +91,22 @@ class VendorsActivity : BaseActivity() {
                     AppDoc.PASSPORT.type -> {
                         if (presentDocList.contains(AppDoc.PASSPORT.type))
                             PresentationManager.detailsDocumentSend(this@VendorsActivity, AppDoc.PASSPORT.type, url, country)
-                        else PresentationManager.verifyDocument(this@VendorsActivity, AppDoc.PASSPORT.type)
+                        else PresentationManager.verifyDocument(this@VendorsActivity, AppDoc.PASSPORT.type, " ")
                     }
                     AppDoc.ID_CARD.type -> {
                         if (presentDocList.contains(AppDoc.ID_CARD.type))
                             PresentationManager.detailsDocumentSend(this@VendorsActivity, AppDoc.ID_CARD.type, url, country)
-                        else PresentationManager.verifyDocument(this@VendorsActivity, AppDoc.ID_CARD.type)
+                        else PresentationManager.verifyDocument(this@VendorsActivity, AppDoc.ID_CARD.type, " ")
                     }
                     AppDoc.DRIVERS_LICENSE.type -> {
                         if (presentDocList.contains(AppDoc.DRIVERS_LICENSE.type))
                             PresentationManager.detailsDocumentSend(this@VendorsActivity, AppDoc.DRIVERS_LICENSE.type, url, country)
-                        else PresentationManager.verifyDocument(this@VendorsActivity, AppDoc.DRIVERS_LICENSE.type)
+                        else PresentationManager.verifyDocument(this@VendorsActivity, AppDoc.DRIVERS_LICENSE.type, " ")
                     }
                     AppDoc.RESIDENCE_PERMIT_CARD.type -> {
                         if (presentDocList.contains(AppDoc.RESIDENCE_PERMIT_CARD.type))
                             PresentationManager.detailsDocumentSend(this@VendorsActivity, AppDoc.RESIDENCE_PERMIT_CARD.type, url, country)
-                        else PresentationManager.verifyDocument(this@VendorsActivity, AppDoc.RESIDENCE_PERMIT_CARD.type)
+                        else PresentationManager.verifyDocument(this@VendorsActivity, AppDoc.RESIDENCE_PERMIT_CARD.type, "")
                     }
                 }
             }
