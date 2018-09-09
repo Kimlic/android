@@ -46,6 +46,9 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
 
     portraitDocument("portrait_document"),
 
+
+    COUNTRY("country"),
+
     // File path
 
     filePathRezult("FILE_PATH_REZULT"),
