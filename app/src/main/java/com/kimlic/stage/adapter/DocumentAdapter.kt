@@ -42,7 +42,7 @@ open class DocumentAdapter : RecyclerView.Adapter<DocumentAdapter.DocumentHolder
             }
         }
 
-        if (documents.size < 4) tempList.add(Document(type = "add"))
+        if (documents.size < 6) tempList.add(Document(type = "add"))
 
         this.documentList = tempList
         notifyDataSetChanged()
@@ -80,6 +80,8 @@ open class DocumentAdapter : RecyclerView.Adapter<DocumentAdapter.DocumentHolder
                     AppDoc.ID_CARD.type -> contentTv.text = context.getString(R.string.id_card)
                     AppDoc.DRIVERS_LICENSE.type -> contentTv.text = context.getString(R.string.drivers_license)
                     AppDoc.RESIDENCE_PERMIT_CARD.type -> contentTv.text = context.getString(R.string.residence_permit)
+                    AppDoc.SOCIAL_SECURITY_CARD.type -> contentTv.text = context.getString(R.string.social_security_card)
+                    AppDoc.BIRTH_CERTIFICATE.type -> contentTv.text = context.getString(R.string.birth_certificate)
 
                     "add" -> {
                         contentTv.text = context.getString(R.string.add_new_document)
