@@ -32,7 +32,9 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
 
     // Constants
 
-    private val REQUEST_CAMERA_PERMISSION = 1000
+    companion object {
+        const val REQUEST_CAMERA_PERMISSION = 1000
+    }
 
     // Binding
 
