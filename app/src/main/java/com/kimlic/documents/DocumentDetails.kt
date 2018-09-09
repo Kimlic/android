@@ -184,7 +184,11 @@ class DocumentDetails : BaseActivity() {
                     AppDoc.DRIVERS_LICENSE.type -> getString(R.string.driver_license)
                     AppDoc.ID_CARD.type -> getString(R.string.id_card)
                     AppDoc.RESIDENCE_PERMIT_CARD.type -> getString(R.string.residence_permit)
-                    else -> throw Exception("Wrong document type")
+                    AppDoc.SOCIAL_SECURITY_CARD.type -> getString(R.string.social_security_card)
+                    AppDoc.BIRTH_CERTIFICATE.type -> getString(R.string.birth_certificate)
+                    else -> {
+                        throw Exception("Wrong document type")
+                    }
                 }
     }
 
