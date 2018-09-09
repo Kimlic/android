@@ -68,7 +68,7 @@ class SelectCountryFragment : BasePopupFragment() {
 
     private fun setupUI() {
         countries = model.countries().map { it.country }
-        val adapter = CountryAdapter(getActivity()!!)
+        val adapter = CountryAdapter()
         adapter.setCountries(countries)
 
         listView.adapter = adapter
