@@ -1,45 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="wrap_content"
   android:layout_height="wrap_content">
-
 
   <TextView
     android:id="@+id/titleTv"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:text="@string/secure_your_id"
-    android:textColor="@color/grayDark"
-    android:textSize="@dimen/subtitle_text_size"
+    android:layout_marginTop="24dp"
+    android:text="@string/select_your_country"
+    android:textColor="@android:color/white"
+    android:textSize="@dimen/title_text_size"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"/>
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_goneMarginTop="24dp"
+    tools:text="Select your Country"/>
 
-  <android.support.v7.widget.RecyclerView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp"
-    app:layout_constraintBottom_toTopOf="@+id/lowerBt"
+  <ListView
+    android:id="@+id/listView"
+    android:layout_width="280dp"
+    android:layout_height="350dp"
+    android:layout_margin="16dp"
+    android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
+    android:scrollbarTrackVertical="@drawable/scrollbar_track"
+    android:scrollbars="vertical"
+    app:layout_constraintBottom_toTopOf="@+id/continueBt"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/titleTv"/>
 
-
   <Button
-    android:id="@+id/lowerBt"
-    android:layout_width="250dp"
-    android:layout_height="40dp"
+    android:id="@+id/continueBt"
+    android:layout_width="280dp"
+    android:layout_height="@dimen/button_height"
     android:layout_margin="24dp"
-
     android:background="@drawable/button_rounded_green"
+    android:text="@string/continue_"
+    android:textAllCaps="false"
     android:textColor="@android:color/white"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"/>
-
 
 </android.support.constraint.ConstraintLayout>
