@@ -150,7 +150,7 @@
     <item name="android:contentDescription">@string/shevron_right</item>
   </style>
 
-  <!--User stage style-->
+  <!--User stage style; CoutryAdapter Style-->
   <style name="DetailsItemTextView">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
