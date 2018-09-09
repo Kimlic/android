@@ -5,10 +5,7 @@ import android.content.Intent
 import com.kimlic.BaseActivity
 import com.kimlic.address.AddressActivity
 import com.kimlic.auth.TouchIdActivity
-import com.kimlic.documents.DocumentDetails
-import com.kimlic.documents.DocumentVerifyActivity
-import com.kimlic.documents.DocumentVerifyChooseActivity
-import com.kimlic.documents.PortraitActivity
+import com.kimlic.documents.*
 import com.kimlic.email.EmailActivity
 import com.kimlic.email.EmailVerifyActivity
 import com.kimlic.mnemonic.MnemonicPreviewActivity
@@ -139,9 +136,10 @@ object PresentationManager {
         present(presenter = presenter, className = DocumentVerifyChooseActivity::class.java, isStarting = false)
     }
 
-    fun verifyDocument(presenter: BaseActivity, documentType: String) {
+    fun verifyDocument(presenter: BaseActivity, documentType: String, country: String) {
         val params = HashMap<String, String>()
         params[AppConstants.documentType.key] = documentType
+        params[AppConstants.COUNTRY.key] = country
         present(presenter = presenter, className = DocumentVerifyActivity::class.java, isStarting = false, params = params)
     }
 
