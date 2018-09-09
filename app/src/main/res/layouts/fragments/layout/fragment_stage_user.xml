@@ -150,7 +150,7 @@
       <android.support.v7.widget.RecyclerView
         android:id="@+id/documentRecycler"
         android:layout_width="@dimen/content_width"
-        android:layout_height="192dp"
+        android:layout_height="288dp"
         android:overScrollMode="never"/>
 
     </LinearLayout>
