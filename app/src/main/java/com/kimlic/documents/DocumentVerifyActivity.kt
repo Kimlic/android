@@ -21,6 +21,7 @@ class DocumentVerifyActivity : BaseActivity() {
     private lateinit var backFragment: DocumentBackFragment
 
     private lateinit var documentType: String
+    private lateinit var country: String
 
     private lateinit var portraitData: ByteArray
     private lateinit var frontData: ByteArray
@@ -46,6 +47,7 @@ class DocumentVerifyActivity : BaseActivity() {
 
     private fun setupUI() {
         documentType = intent.extras.getString(AppConstants.documentType.key, "")
+        country = intent.extras.getString(AppConstants.COUNTRY.key, "")
         initFragments()
 
         showFragment(R.id.container, portraitFragment, PortraitPhotoFragment.FRAGMENT_KEY)
@@ -65,7 +67,7 @@ class DocumentVerifyActivity : BaseActivity() {
         backFragment.setCallback(object : PhotoCallback {
             override fun callback(data: ByteArray) {
                 backData = data
-                saveDocument(documentType, portraitData, frontData, backData)
+                saveDocument(documentType, country, portraitData, frontData, backData)
                 successful()
             }
         })
@@ -92,7 +94,7 @@ class DocumentVerifyActivity : BaseActivity() {
         fragment.show(supportFragmentManager, VerifySuccessfulFragment.FRAGMENT_KEY)
     }
 
-    private fun saveDocument(documentType: String, portraitData: ByteArray, frontData: ByteArray, backData: ByteArray) {
-        model.saveDocumentAndPhoto(documentType, portraitData, frontData, backData)
+    private fun saveDocument(documentType: String, country: String, portraitData: ByteArray, frontData: ByteArray, backData: ByteArray) {
+        model.saveDocumentAndPhoto(documentType, country, portraitData, frontData, backData)
     }
 }
