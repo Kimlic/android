@@ -26,10 +26,13 @@ import kotlinx.android.synthetic.main.activity_settings.*
 
 class SettingsActivity : BaseActivity() {
 
-    // Constants
 
-    private val PASSCODE_REQUEST_CODE = 42
-    private val GOOGLE_SIGNE_IN_REQUEST_CODE = 108
+    // Companion
+
+    companion object {
+        const val PASSCODE_REQUEST_CODE = 42
+        const val GOOGLE_SIGNE_IN_REQUEST_CODE = 108
+    }
 
     // Variables
 
