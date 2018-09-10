@@ -17,12 +17,6 @@ import com.kimlic.utils.ErrorPopupFragment
 
 abstract class BaseActivity : AppCompatActivity() {
 
-    // Companion
-
-    companion object {
-        val TAG = this::class.java.simpleName
-    }
-
     // Life
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +59,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     fun errorPopup(error: String? = getString(R.string.error)) {
         val bundle = Bundle()
-        bundle.putString(AppConstants.errorDescription.key, error)
+        bundle.putString(AppConstants.ERROR_DESCRIPTION.key, error)
         val errorFragment = ErrorPopupFragment.newInstance(bundle)
         errorFragment.show(this.supportFragmentManager, ErrorPopupFragment.FRAGMENT_KEY)
     }
