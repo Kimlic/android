@@ -12,7 +12,7 @@ class MnemonicSuccessfulFragment : BaseDialogFragment() {
     // Companion
 
     companion object {
-        val FRAGMENT_KEY = this::class.java.simpleName
+        val FRAGMENT_KEY = this::class.java.simpleName!!
 
         fun newInstance() = MnemonicSuccessfulFragment()
     }
