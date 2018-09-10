@@ -3,20 +3,17 @@
 
   <item>
     <layer-list>
-
       <item android:gravity="center" android:height="416dp" android:width="416dp">
         <shape android:shape="oval">
-          <solid android:color="@color/lightBlueSuccessfull"/>
+          <solid android:color="@color/lightBlueSuccessful"/>
         </shape>
       </item>
 
       <item android:gravity="center" android:height="280dp" android:width="280dp">
         <shape android:shape="oval">
-          <solid android:color="@color/lightBlueSuccessfull"/>
+          <solid android:color="@color/lightBlueSuccessful"/>
         </shape>
       </item>
-
     </layer-list>
   </item>
-
 </selector>
