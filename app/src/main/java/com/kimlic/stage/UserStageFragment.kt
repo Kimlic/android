@@ -28,19 +28,11 @@ import java.io.File
 
 class UserStageFragment : BaseFragment(), LifecycleObserver {
 
-    // Constants
-
-    private val SECURITY_SEQUEST_CODE = 151
-
-    // Variables
-
-    private lateinit var divider: DividerItemDecoration
-    private lateinit var contactsAdapter: ContactsAdapter
-    private lateinit var documentsAdapter: DocumentAdapter
-
     // Companion
 
     companion object {
+        private const val SECURITY_REQUEST_CODE = 151
+
         val FRAGMENT_KEY = this::class.java.simpleName!!
 
         fun newInstance(bundle: Bundle = Bundle()): UserStageFragment {
@@ -49,6 +41,12 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
             return fragment
         }
     }
+
+    // Variables
+
+    private lateinit var divider: DividerItemDecoration
+    private lateinit var contactsAdapter: ContactsAdapter
+    private lateinit var documentsAdapter: DocumentAdapter
 
     // Life
 
@@ -87,14 +85,7 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
 
     private fun setupRisks() {
         risksTv.setOnClickListener {
-
             (getActivity() as StageActivity).risks()
-//            if (!Prefs.isPasscodeEnabled) {
-//                passcodeForResult(); return@setOnClickListener
-//            }
-//
-//            if (Prefs.isTouchEnabled) PresentationManager.touchDisable(activity!!)
-//            else PresentationManager.touchCreate(activity!!)
         }
     }
 
@@ -196,7 +187,7 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
     private fun passcodeForResult() {
         val intent = Intent(activity, PasscodeActivity::class.java)
         intent.putExtra("action", "set")
-        getActivity()!!.startActivityForResult(intent, SECURITY_SEQUEST_CODE)
+        getActivity()!!.startActivityForResult(intent, SECURITY_REQUEST_CODE)
     }
 
     // Setup profile Fields
