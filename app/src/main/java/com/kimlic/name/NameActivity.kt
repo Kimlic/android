@@ -10,7 +10,6 @@ import butterknife.ButterKnife
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.model.ProfileViewModel
-import com.kimlic.preferences.Prefs
 import com.kimlic.utils.BaseCallback
 import kotlinx.android.synthetic.main.activity_name.*
 
