@@ -11,7 +11,6 @@ import butterknife.ButterKnife
 import com.kimlic.BasePopupFragment
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
-import com.kimlic.preferences.Prefs
 import kotlinx.android.synthetic.main.fragment_risks.*
 
 class RisksFragment : BasePopupFragment() {
@@ -54,21 +53,20 @@ class RisksFragment : BasePopupFragment() {
         isCancelable = true
         dismissBt.setOnClickListener { dismiss() }
 
-        val recoveryOffered = arguments?.getBoolean("recovery", true)!!
-        val passcodeOffered = arguments?.getBoolean("passcode   ", true)!!
-
+        val recoveryEnabled = arguments?.getBoolean("recovery", true)!!
+        val passcodeEnabled = arguments?.getBoolean("passcode", true)!!
         var count = 0
 
-        if (!recoveryOffered) {
+        if (!recoveryEnabled) {
             views[count].visibility = View.VISIBLE
             buttons[count].text = getString(R.string.enable_account_recovery)
-            buttons[count++].setOnClickListener { Prefs.isRecoveryOffered = true; dismiss(); PresentationManager.passphraseCreate(activity!!) }
+            buttons[count++].setOnClickListener { dismiss(); PresentationManager.passphraseCreate(activity!!) }
         }
 
-        if (!passcodeOffered) {
+        if (!passcodeEnabled) {
             views[count].visibility = View.VISIBLE
             buttons[count].text = getString(R.string.create_passcode)
-            buttons[count++].setOnClickListener { Prefs.isPasscodeOffered = true; dismiss(); PresentationManager.passcode(activity!!) }
+            buttons[count++].setOnClickListener { dismiss(); PresentationManager.passcode(activity!!) }
         }
 
         subtitleTv.text = resources.getString(R.string.you_have_main_risks, count)
