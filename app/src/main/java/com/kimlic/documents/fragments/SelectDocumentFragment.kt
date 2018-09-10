@@ -87,7 +87,7 @@ class SelectDocumentFragment : BasePopupFragment() {
         startBt.setOnClickListener { _ ->
             if (chosenDocumentType != "") {
                 val bundle = Bundle()
-                bundle.putString(AppConstants.documentType.key, chosenDocumentType)
+                bundle.putString(AppConstants.DOCUMENT_TYPE.key, chosenDocumentType)
                 callback.callback(bundle)
             }
         }
