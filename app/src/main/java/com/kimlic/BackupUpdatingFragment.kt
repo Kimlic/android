@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
+import com.kimlic.utils.AppConstants
 import com.kimlic.utils.AppDuration
 import kotlinx.android.synthetic.main.fragment_blockchain_updating.*
 import java.lang.ref.WeakReference
@@ -44,8 +45,8 @@ class BackupUpdatingFragment : BasePopupFragment() {
     private fun setupUI() {
         isCancelable = false
 
-        val title = arguments?.getString("title", "")
-        val subtitle = arguments?.getString("subtitle", "")
+        val title = arguments?.getString(AppConstants.TITLE.key, "")
+        val subtitle = arguments?.getString(AppConstants.SUBTITLE.key, "")
         titleTv.text = title
         subtitleTv.text = subtitle
 
