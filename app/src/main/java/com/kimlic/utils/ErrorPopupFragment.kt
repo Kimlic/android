@@ -43,7 +43,7 @@ class ErrorPopupFragment : BasePopupFragment() {
     // Private
 
     private fun setupUI() {
-        val error = arguments!!.getString(AppConstants.errorDescription.key, getString(R.string.error))
+        val error = arguments!!.getString(AppConstants.ERROR_DESCRIPTION.key, getString(R.string.error))
         errorTv.text = error
         isCancelable = true
     }
