@@ -8,12 +8,12 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.kimlic.R
 
-class PhraseAdapter(var phraseCntext: Context, var resource: Int, var list: List<String>) : ArrayAdapter<String>(phraseCntext, resource, list) {
+class PhraseAdapter(private var phraseContext: Context, var resource: Int, var list: List<String>) : ArrayAdapter<String>(phraseContext, resource, list) {
 
     // Life
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val view: View = convertView ?: LayoutInflater.from(phraseCntext).inflate(R.layout.item_phrase, parent, false)
+        val view: View = convertView ?: LayoutInflater.from(phraseContext).inflate(R.layout.item_phrase, parent, false)
 
         val phrasePosition = view.findViewById<TextView>(R.id.positionTv)
         val phrase = view.findViewById<TextView>(R.id.phrase)
