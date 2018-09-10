@@ -48,7 +48,7 @@ class DocumentVerifyChooseActivity : BaseActivity() {
         documentFragment!!.setCallback(object : DocumentCallback {
 
             override fun callback(bundle: Bundle) {
-                documentType = bundle.getString(AppConstants.documentType.key)
+                documentType = bundle.getString(AppConstants.DOCUMENT_TYPE.key)
                 PresentationManager.verifyDocument(this@DocumentVerifyChooseActivity, documentType, country)
             }
         })
