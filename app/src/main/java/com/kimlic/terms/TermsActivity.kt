@@ -11,14 +11,17 @@ import android.webkit.WebViewClient
 import android.widget.ProgressBar
 import com.kimlic.BaseActivity
 import com.kimlic.R
+import com.kimlic.utils.AppConstants
 import kotlinx.android.synthetic.main.activity_terms.*
 
 class TermsActivity : BaseActivity() {
 
     // Constants
 
-    private val TERMS_FILE_PATH_URL = "file:///android_asset/terms.html"
-    private val PRIVACY_FILE_PATH_URL = "file:///android_asset/privacy.html"
+    companion object {
+        private const val TERMS_FILE_PATH_URL = "file:///android_asset/terms.html"
+        private const val PRIVACY_FILE_PATH_URL = "file:///android_asset/privacy.html"
+    }
 
     // Life
 
@@ -79,15 +82,15 @@ class TermsActivity : BaseActivity() {
         }
         webView.setBackgroundColor(Color.TRANSPARENT)
 
-        val content = intent.extras.getString("content", "terms")
+        val content = intent.extras.getString("content", AppConstants.TERMS.key)
 
         when (content) {
-            "terms" -> {
+            "TERMS" -> {
                 titleTv.text = getString(R.string.terms_amp_conditions)
                 subtitleTv.text = getString(R.string.last_modified_23_july_2017)
                 webView.loadUrl(TERMS_FILE_PATH_URL)
             }
-            "privacy" -> {
+            "PRIVACY" -> {
                 titleTv.text = getString(R.string.privacy_policy)
                 subtitleTv.text = getString(R.string.last_modified_23_july_2017)
                 webView.loadUrl(PRIVACY_FILE_PATH_URL)
