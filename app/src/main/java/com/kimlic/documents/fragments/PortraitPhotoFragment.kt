@@ -22,7 +22,7 @@ class PortraitPhotoFragment : CameraBaseFragment() {
 
         fun newInstance(bundle: Bundle = Bundle()): PortraitPhotoFragment {
             val fragment = PortraitPhotoFragment()
-            bundle.putInt(AppConstants.cameraType.key, AppConstants.cameraFront.intKey)
+            bundle.putInt(AppConstants.CAMERA_TYPE.key, AppConstants.CAMERA_FRONT.intKey)
             fragment.arguments = bundle
             return fragment
         }
@@ -46,7 +46,7 @@ class PortraitPhotoFragment : CameraBaseFragment() {
         val action = arguments?.getString("action", "")
 
         when (action) {
-            AppConstants.portraitDocument.key -> {
+            AppConstants.PORTRAIT_DOCUMENT.key -> {
                 setDocumentBackground()
             }
         }
