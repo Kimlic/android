@@ -12,10 +12,11 @@
   <color name="redLight">#ff5252</color>
 
   <color name="lightBlue">#9bb5de</color>
+  <color name="lightBlueDocIcon">#9bb5de</color>
 
   <color name="transparent">#00ffffff</color>
 
-  <color name="progreesYellow">#B4CB09</color>
+  <color name="progressYellow">#B4CB09</color>
 
   <color name="lightBlueStroke">#4bc1ff</color>
 
@@ -23,7 +24,7 @@
   <color name="lightBlueRounded">#3d0064c2</color>
 
   <!--Rounded background successfull fragment-->
-  <color name="lightBlueSuccessfull">#6f055bae</color>
+  <color name="lightBlueSuccessful">#6f055bae</color>
 
   <!--tutorials Background-->
   <color name="blueCloudBackground">#0273D0</color>
