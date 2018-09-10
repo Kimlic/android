@@ -11,6 +11,7 @@ import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.db.SyncService
 import com.kimlic.managers.PresentationManager
+import com.kimlic.utils.AppConstants
 import com.kimlic.utils.BaseCallback
 import kotlinx.android.synthetic.main.activity_account_recovery.*
 
@@ -18,7 +19,9 @@ class AccountRecoveryActivity : BaseActivity() {
 
     // Constants
 
-    private val GOOGLE_SIGNE_IN_REQUEST_CODE = 105
+    companion object {
+        private const val GOOGLE_SIGNE_IN_REQUEST_CODE = 105
+    }
 
     // Variables
 
@@ -92,8 +95,8 @@ class AccountRecoveryActivity : BaseActivity() {
         timer = object : CountDownTimer(0, 0) {
             override fun onFinish() {
                 val bundle = Bundle()
-                bundle.putString("title", "Recovering ")
-                bundle.putString("subtitle", "Recovering from Google Drive")
+                bundle.putString(AppConstants.TITLE.key, "Recovering ")
+                bundle.putString(AppConstants.SUBTITLE.key, "Recovering from Google Drive")
                 backupUpdatingFragment = BackupUpdatingFragment.newInstance(bundle)
                 backupUpdatingFragment?.show(supportFragmentManager, BackupUpdatingFragment.FRAGMENT_KEY)
             }
