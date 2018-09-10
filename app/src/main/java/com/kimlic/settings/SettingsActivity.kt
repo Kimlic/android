@@ -26,7 +26,6 @@ import kotlinx.android.synthetic.main.activity_settings.*
 
 class SettingsActivity : BaseActivity() {
 
-
     // Companion
 
     companion object {
@@ -139,14 +138,14 @@ class SettingsActivity : BaseActivity() {
 
     private fun initSettingsList() {
         settingsList = mutableListOf(
-                SwitchSetting(getString(R.string.passcode), getString(R.string.protect_my_id), "passcode", AppConstants.settingSwitch.intKey, Prefs.isPasscodeEnabled),
-                SwitchSetting(getString(R.string.enable_touch_id), getString(R.string.use_my_touch_id), "touch", AppConstants.settingSwitch.intKey, Prefs.isTouchEnabled),
-                SwitchSetting("Google drive sync", "Backup profile to google Drive", "drive", AppConstants.settingSwitch.intKey, Prefs.isDriveActive),
-                IntentSetting(getString(R.string.account_recovery), getString(R.string.back_up_your_credentials), "recovery", AppConstants.settingIntent.intKey),
-                IntentSetting(getString(R.string.terms_and_conditions), getString(R.string.last_modified_23_july_2017), "terms", AppConstants.settingIntent.intKey),
-                IntentSetting(getString(R.string.about_kimlic), "", "about", AppConstants.settingIntent.intKey))
+                SwitchSetting(getString(R.string.passcode), getString(R.string.protect_my_id), "passcode", AppConstants.SETTINGS_SWITCH.intKey, Prefs.isPasscodeEnabled),
+                SwitchSetting(getString(R.string.enable_touch_id), getString(R.string.use_my_touch_id), "touch", AppConstants.SETTINGS_SWITCH.intKey, Prefs.isTouchEnabled),
+                SwitchSetting("Google drive sync", "Backup profile to google Drive", "drive", AppConstants.SETTINGS_SWITCH.intKey, Prefs.isDriveActive),
+                IntentSetting(getString(R.string.account_recovery), getString(R.string.back_up_your_credentials), "recovery", AppConstants.SETTINGS_INTENT.intKey),
+                IntentSetting(getString(R.string.terms_and_conditions), getString(R.string.last_modified_23_july_2017), "terms", AppConstants.SETTINGS_INTENT.intKey),
+                IntentSetting(getString(R.string.about_kimlic), "", "about", AppConstants.SETTINGS_INTENT.intKey))
 
-        val passcodeChange = IntentSetting(getStringValue(R.string.change_passcode), "", "change", AppConstants.settingIntent.intKey)
+        val passcodeChange = IntentSetting(getStringValue(R.string.change_passcode), "", "change", AppConstants.SETTINGS_INTENT.intKey)
 
         if (!Prefs.isPasscodeEnabled && settingsList.elementAt(1).tag == "change")
             settingsList.removeAt(1)
@@ -193,8 +192,8 @@ class SettingsActivity : BaseActivity() {
         timer = object : CountDownTimer(0, 0) {
             override fun onFinish() {
                 val bundle = Bundle()
-                bundle.putString("title", "Backup")
-                bundle.putString("subtitle", "Backup profile to Google Drive")
+                bundle.putString(AppConstants.TITLE.key, "Backup")
+                bundle.putString(AppConstants.SUBTITLE.key, "Backup profile to Google Drive")
                 backupUpdatingFragment = BackupUpdatingFragment.newInstance(bundle)
                 backupUpdatingFragment?.show(supportFragmentManager, BackupUpdatingFragment.FRAGMENT_KEY)
             }
