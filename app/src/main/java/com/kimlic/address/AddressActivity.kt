@@ -95,7 +95,7 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
             }
 
             TAKE_PHOTO_REQUEST_CODE -> {
-                val data_ = data?.extras?.getByteArray(AppConstants.documentByteArray.key)
+                val data_ = data?.extras?.getByteArray(AppConstants.DOCUMENT_BYTE_ARRAY.key)
                 addressBitmap = BitmapFactory.decodeByteArray(data_, 0, data_!!.size)
                 addressData = data_
 
