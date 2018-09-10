@@ -141,8 +141,10 @@
 
     <activity
       android:name=".vendors.VendorsActivity"
-      android:screenOrientation="sensorPortrait"
-      />
+      android:screenOrientation="sensorPortrait"/>
+    <activity
+      android:label="Account"
+      android:name=".account.AccountActivity"/>
   </application>
 
 </manifest>
