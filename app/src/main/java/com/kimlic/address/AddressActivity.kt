@@ -211,13 +211,13 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
     private fun cityFilter() = AutocompleteFilter.Builder().setTypeFilter(AutocompleteFilter.TYPE_FILTER_NONE).build()
 
     private fun successful() {
-        val fragment = AddressSuccesfulFragment.newInstance()
+        val fragment = AddressSuccessfulFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
                 PresentationManager.stage(this@AddressActivity)
             }
         })
-        fragment.show(supportFragmentManager, AddressSuccesfulFragment.FRAGMENT_KEY)
+        fragment.show(supportFragmentManager, AddressSuccessfulFragment.FRAGMENT_KEY)
     }
 
     // Implementation
