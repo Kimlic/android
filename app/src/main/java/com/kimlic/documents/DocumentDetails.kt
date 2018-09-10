@@ -83,7 +83,7 @@ class DocumentDetails : BaseActivity() {
     }
 
     private fun initExtraVariables() {
-        documentType = intent.extras.getString(AppConstants.documentType.key, "")
+        documentType = intent.extras.getString(AppConstants.DOCUMENT_TYPE.key, "")
         action = intent.extras.getString("action", "preview")
         country = intent.extras.getString("country", "")
         url = intent.extras.getString("path", "")
@@ -169,9 +169,9 @@ class DocumentDetails : BaseActivity() {
     }
 
     private fun fillData(user: User, photos: Map<String, String>, document: Document) {
-        portraitIv.setImageBitmap(rotateBitmap(FileNameTxtBase64ToBitmap().transform(photos[AppConstants.photoFaceType.key]!!)!!, -90f))
-        frontIv.setImageBitmap(cropped(photos[AppConstants.photoFrontType.key]!!))
-        backIv.setImageBitmap(cropped(photos[AppConstants.photoBackType.key]!!))
+        portraitIv.setImageBitmap(rotateBitmap(FileNameTxtBase64ToBitmap().transform(photos[AppConstants.PHOTO_FACE_TYPE.key]!!)!!, -90f))
+        frontIv.setImageBitmap(cropped(photos[AppConstants.PHOTO_FRONT_TYPE.key]!!))
+        backIv.setImageBitmap(cropped(photos[AppConstants.PHOTO_BACK_TYPE.key]!!))
 
         firstNameEt.text = Editable.Factory.getInstance().newEditable(user.firstName)
         lastNameEt.text = Editable.Factory.getInstance().newEditable(user.lastName)
