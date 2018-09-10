@@ -22,7 +22,6 @@ class CustomAutoCompleteTextView : AutoCompleteTextView {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             val mgr = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             mgr.hideSoftInputFromWindow(this.windowToken, 0)
-            // TODO: Hide your view as you do it in your activity
         }
         return false
     }
