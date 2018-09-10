@@ -20,8 +20,10 @@ class StageActivity : BaseActivity() {
 
     // Constants
 
-    private val SCAN_REQUEST_CODE = 1100
-    private val SECURITY_REQUESTCODE = 151
+    companion object {
+        private const val SCAN_REQUEST_CODE = 1100
+        private const val SECURITY_REQUEST_CODE = 151
+    }
 
     // Variables
 
@@ -58,7 +60,7 @@ class StageActivity : BaseActivity() {
                 }
             }
 
-            SECURITY_REQUESTCODE -> {
+            SECURITY_REQUEST_CODE -> {
                 if (resultCode == Activity.RESULT_OK)
                     if (!Prefs.isTouchEnabled) PresentationManager.touchCreate(this)
             }
@@ -100,13 +102,13 @@ class StageActivity : BaseActivity() {
         if (Prefs.isPasscodeEnabled || !Prefs.isRecoveryEnabled) {
 
             if (Prefs.isPasscodeEnabled) Prefs.isPasscodeOffered = true
-            if (supportFragmentManager.findFragmentByTag("RISKS") != null) return
+            if (supportFragmentManager.findFragmentByTag("risks") != null) return
 
             val bundle = Bundle()
             val risksFragment = RisksFragment.newInstance(bundle)
             bundle.putBoolean("passcode", Prefs.isPasscodeEnabled)
             bundle.putBoolean("recovery", Prefs.isRecoveryEnabled)
-            risksFragment.show(supportFragmentManager, "RISKS")
+            risksFragment.show(supportFragmentManager, "risks")
         }
     }
 
