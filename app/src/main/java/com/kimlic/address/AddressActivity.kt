@@ -36,8 +36,10 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
 
     // Constants
 
-    private val PICK_FILE_REQUEST_CODE = 105
-    private val TAKE_PHOTO_REQUEST_CODE = 106
+    companion object {
+        private const val PICK_FILE_REQUEST_CODE = 105
+        private const val TAKE_PHOTO_REQUEST_CODE = 106
+    }
 
     // Variables
 
@@ -72,7 +74,6 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
                 val uriString = uri.toString()
                 val myFile = File(uriString)
 
-//                val path = myFile.absolutePath
                 var displayName: String? = null
 
                 if (uriString.startsWith("content://")) {
@@ -140,7 +141,7 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
         addressEt.setAdapter(placeAutocompleteAdapter)
         addressEt.setDropDownBackgroundResource(R.color.transparent)
 
-        addressEt.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+        addressEt.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 moveDown(); return@OnEditorActionListener true
             }
@@ -148,7 +149,7 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
         })
 
         addressEt.setOnClickListener { moveUp() }
-        addressEt.setOnItemClickListener { _, _, _, id -> moveDown() }
+        addressEt.setOnItemClickListener { _, _, _, _ -> moveDown() }
         addressEt.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 moveUp()
