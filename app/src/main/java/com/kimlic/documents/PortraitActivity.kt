@@ -47,7 +47,7 @@ class PortraitActivity : BaseActivity() {
 
     private fun initFragment() {
         val bundle = Bundle()
-        bundle.putInt(AppConstants.cameraType.key, AppConstants.cameraFront.intKey)
+        bundle.putInt(AppConstants.CAMERA_TYPE.key, AppConstants.CAMERA_FRONT.intKey)
         portraitFragment = PortraitPhotoFragment.newInstance(bundle)
     }
 
