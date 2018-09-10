@@ -138,20 +138,20 @@ object PresentationManager {
 
     fun verifyDocument(presenter: BaseActivity, documentType: String, country: String) {
         val params = HashMap<String, String>()
-        params[AppConstants.documentType.key] = documentType
+        params[AppConstants.DOCUMENT_TYPE.key] = documentType
         params[AppConstants.COUNTRY.key] = country
         present(presenter = presenter, className = DocumentVerifyActivity::class.java, isStarting = false, params = params)
     }
 
     fun detailsDocument(presenter: BaseActivity, documentType: String) {
         val params = HashMap<String, String>()
-        params[AppConstants.documentType.key] = documentType
+        params[AppConstants.DOCUMENT_TYPE.key] = documentType
         present(presenter = presenter, className = DocumentDetails::class.java, isStarting = false, params = params)
     }
 
     fun detailsDocumentSend(presenter: BaseActivity, documentType: String, url: String, country: String) {
         val params = HashMap<String, String>()
-        params[AppConstants.documentType.key] = documentType
+        params[AppConstants.DOCUMENT_TYPE.key] = documentType
         params["country"] = country
         params["path"] = url
         params["action"] = "send"
@@ -175,21 +175,21 @@ object PresentationManager {
     fun termsReview(presenter: BaseActivity) {
         val params = HashMap<String, String>()
         params["action"] = "review"
-        params["content"] = "terms"
+        params["content"] = AppConstants.TERMS.key
         present(presenter = presenter, className = TermsActivity::class.java, isStarting = false, params = params)
     }
 
     fun termsAccept(presenter: BaseActivity) {
         val params = HashMap<String, String>()
         params["action"] = "accept"
-        params["content"] = "terms"
+        params["content"] = AppConstants.TERMS.key
         present(presenter = presenter, className = TermsActivity::class.java, isStarting = true, params = params)
     }
 
     fun privacyReview(presenter: BaseActivity) {
         val params = HashMap<String, String>()
         params["action"] = "review"
-        params["content"] = "privacy"
+        params["content"] = AppConstants.PRIVACY.key
         present(presenter = presenter, className = TermsActivity::class.java, isStarting = false, params = params)
     }
 
