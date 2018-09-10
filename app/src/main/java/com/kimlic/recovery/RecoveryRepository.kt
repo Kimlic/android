@@ -44,7 +44,7 @@ class RecoveryRepository {
 
     fun backupDatabase(accountAddress: String, onSuccess: () -> Unit, onError: () -> Unit) {
         SyncService.getInstance().backupDatabase(accountAddress, "kimlic.db", onSuccess, onError)
-//        DoAsync().execute(Runnable { SyncService.getInstance().backupDatabase(accountAddress, "kimlic.db", onSuccess, onError) })
+//        DoAsync().execute(Runnable { SyncService.getInstance().backupDatabase(ACCOUNT_ADDRESS, "kimlic.db", onSuccess, onError) })
     }
 
     fun backupPhoto(accountAddress: String, filePath: String, onSuccess: () -> Unit, onError: () -> Unit) {
