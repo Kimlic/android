@@ -56,6 +56,7 @@ class ProfileRepository private constructor() {
 
     companion object {
         val instance: ProfileRepository by lazy(LazyThreadSafetyMode.SYNCHRONIZED) { Holder.INSTANCE }
+        private const val API_URL = BuildConfig.API_CORE_URL
     }
 
     // Variables
@@ -70,7 +71,6 @@ class ProfileRepository private constructor() {
     private var vendorDao: VendorDao
     private var context: Context
 
-    private val API_URL = BuildConfig.API_CORE_URL
 
     // Init
 
@@ -128,7 +128,7 @@ class ProfileRepository private constructor() {
         val userId = userDao.select(accountAddress = accountAddress).id
         val address = Address(userId = userId, value = value)
         val addressId = addressDao.insert(address)
-        val addressPhoto = Photo(addressId = addressId, type = AppConstants.photoAddressType.key, file = fileName)
+        val addressPhoto = Photo(addressId = addressId, type = AppConstants.PHOTO_ADDRESS_TYPE.key, file = fileName)
         photoDao.insert(photos = arrayOf(addressPhoto).asList())
         savePhoto(accountAddress, fileName, data)
         syncDataBase()
@@ -176,9 +176,9 @@ class ProfileRepository private constructor() {
 
         photoDao.insert(photos =
         arrayOf(
-                Photo(documentId = documentId, file = portraitName, type = AppConstants.photoFaceType.key),
-                Photo(documentId = documentId, file = frontName, type = AppConstants.photoFrontType.key),
-                Photo(documentId = documentId, file = backName, type = AppConstants.photoBackType.key)).asList())
+                Photo(documentId = documentId, file = portraitName, type = AppConstants.PHOTO_FACE_TYPE.key),
+                Photo(documentId = documentId, file = frontName, type = AppConstants.PHOTO_FRONT_TYPE.key),
+                Photo(documentId = documentId, file = backName, type = AppConstants.PHOTO_BACK_TYPE.key)).asList())
 
         savePhoto(accountAddress, portraitName, portraitData)
         savePhoto(accountAddress, frontName, frontData)
@@ -191,6 +191,7 @@ class ProfileRepository private constructor() {
     }
 
     fun documentStates(accountAddress: String) = documentDao.stateList(accountAddress)
+
     // Photo
 
     fun userDocumentPhotos(accountAddress: String, documentType: String) = photoDao.selectUserPhotosByDocument(accountAddress, documentType)
@@ -436,9 +437,9 @@ class ProfileRepository private constructor() {
         }
         //@formatter:on
         val documentPhotos = photoDao.selectUserPhotosByDocument(Prefs.currentAccountAddress, documentType)
-        val faceString = photoString(documentPhotos.first { it.type == AppConstants.photoFaceType.key }.file)
-        val frontString = photoString(documentPhotos.first { it.type == AppConstants.photoFrontType.key }.file)
-        val backString = photoString(documentPhotos.first { it.type == AppConstants.photoBackType.key }.file)
+        val faceString = photoString(documentPhotos.first { it.type == AppConstants.PHOTO_FACE_TYPE.key }.file)
+        val frontString = photoString(documentPhotos.first { it.type == AppConstants.PHOTO_FRONT_TYPE.key }.file)
+        val backString = photoString(documentPhotos.first { it.type == AppConstants.PHOTO_BACK_TYPE.key }.file)
 
         val shaFace = Sha.sha256(faceString)
         val shaFront = Sha.sha256(frontString)
@@ -531,7 +532,7 @@ class ProfileRepository private constructor() {
         val vendorDocument = vendorDao.select().find { it.type == docType }
 
         if (vendorDocument!!.contexts.contains("face")) {
-            val faceImage = photoString(documents.first { it.type == AppConstants.photoFaceType.key }.file)
+            val faceImage = photoString(documents.first { it.type == AppConstants.PHOTO_FACE_TYPE.key }.file)
             val faceParams = params.put("type", "face").put("file", faceImage)
             val shaFace = Sha.sha256(faceImage)
             shas.add("\"face\":${shaFace}")
@@ -540,7 +541,7 @@ class ProfileRepository private constructor() {
         }
 
         if (vendorDocument.contexts.contains("document-front")) {
-            val frontImage = photoString(documents.first { it.type == AppConstants.photoFrontType.key }.file)
+            val frontImage = photoString(documents.first { it.type == AppConstants.PHOTO_FRONT_TYPE.key }.file)
             val frontParams = params.put("type", "document-front").put("file", frontImage)
             val shaFront = Sha.sha256(frontImage)
             val frontRequest = docRequest(POST, url, frontParams, Response.Listener { nextRequest(queue, onSuccess) }, Response.ErrorListener { onError() })
@@ -550,7 +551,7 @@ class ProfileRepository private constructor() {
         }
 
         if (vendorDocument.contexts.contains("document-back")) {
-            val backImage = photoString(documents.first { it.type == AppConstants.photoBackType.key }.file)
+            val backImage = photoString(documents.first { it.type == AppConstants.PHOTO_BACK_TYPE.key }.file)
             val shaBack = Sha.sha256(backImage)
             val backParams = params.put("type", "document-back").put("file", backImage)
             val backRequest = docRequest(POST, url, backParams, Response.Listener { nextRequest(queue, onSuccess) }, Response.ErrorListener { onError() })
