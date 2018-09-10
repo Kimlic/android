@@ -99,9 +99,8 @@ class StageActivity : BaseActivity() {
     }
 
     fun risks() {
-        if (Prefs.isPasscodeEnabled || !Prefs.isRecoveryEnabled) {
+        if (!Prefs.isPasscodeEnabled || !Prefs.isRecoveryEnabled) {
 
-            if (Prefs.isPasscodeEnabled) Prefs.isPasscodeOffered = true
             if (supportFragmentManager.findFragmentByTag("risks") != null) return
 
             val bundle = Bundle()
