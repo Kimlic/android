@@ -14,9 +14,11 @@ import kotlinx.android.synthetic.main.activity_tutorial.*
 
 class TutorialActivity : BaseActivity() {
 
-    // Constants content
+    // Constants
 
-    private val TERMS_ACCEPT_REQUEST_CODE = 101
+    companion object {
+        private const val TERMS_ACCEPT_REQUEST_CODE = 101
+    }
 
     // Variables
 
@@ -102,7 +104,7 @@ class TutorialActivity : BaseActivity() {
     private fun termsToAccept(requestCode: Int) {
         val intent = Intent(this, TermsActivity::class.java)
         intent.putExtra("action", "accept")
-        intent.putExtra("content", "terms")
+        intent.putExtra("content", "TERMS")
         startActivityForResult(intent, requestCode)
     }
 }
