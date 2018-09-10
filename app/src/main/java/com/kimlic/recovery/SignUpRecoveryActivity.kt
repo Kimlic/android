@@ -9,18 +9,21 @@ import com.kimlic.R
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
 import com.kimlic.terms.TermsActivity
+import com.kimlic.utils.AppConstants
 import kotlinx.android.synthetic.main.activity_signup_recovery.*
 
 class SignUpRecoveryActivity : BaseActivity() {
 
+    // Constants
+
+    companion object {
+        private const val TERMS_ACCEPT_RECOVERY_REQUEST_CODE = 101
+        private const val TERMS_ACCEPT_CREATE_REQUEST_CODE = 102
+    }
+
     // Variables
 
     private lateinit var recoveryModel: RecoveryViewModel
-
-    // Constants
-
-    private val TERMS_ACCEPT_RECOVERY_REQUEST_CODE = 101
-    private val TERMS_ACCEPT_CREATE_REQUEST_CODE = 102
 
     // Life
 
@@ -66,7 +69,7 @@ class SignUpRecoveryActivity : BaseActivity() {
     private fun termsToAccept(requestCode: Int) {
         val intent = Intent(this, TermsActivity::class.java)
         intent.putExtra("action", "accept")
-        intent.putExtra("content", "terms")
+        intent.putExtra("content", AppConstants.TERMS.key)
         startActivityForResult(intent, requestCode)
     }
 }
