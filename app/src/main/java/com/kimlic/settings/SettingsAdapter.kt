@@ -23,11 +23,9 @@ class SettingsAdapter : RecyclerView.Adapter<SettingsAdapter.SettingsViewHolder>
     override fun getItemViewType(position: Int) = settingsList[position].type
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SettingsViewHolder {
-        val view =
-                if (viewType == 1)
-                    return SettingsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_setting_switch, parent, false))
-                else SettingsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_setting_intent, parent, false))
-        return view
+        return if (viewType == 1)
+            return SettingsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_setting_switch, parent, false))
+        else SettingsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_setting_intent, parent, false))
     }
 
     override fun getItemCount() = settingsList.count()
@@ -58,14 +56,14 @@ class SettingsAdapter : RecyclerView.Adapter<SettingsAdapter.SettingsViewHolder>
             with(itemView) {
                 setOnClickListener(this@SettingsViewHolder)
                 when (itemSetting.type) {
-                    AppConstants.settingSwitch.intKey -> {
+                    AppConstants.SETTINGS_SWITCH.intKey -> {
                         titleSwitchTv.text = itemSetting.title
                         summaryTv.text = itemSetting.summary
                         selector.isChecked = itemSetting.state
                         tag = itemSetting.tag
                         warningIv.visibility = if (!itemSetting.state) ImageView.VISIBLE else ImageView.INVISIBLE
                     }
-                    AppConstants.settingIntent.intKey -> {
+                    AppConstants.SETTINGS_INTENT.intKey -> {
                         if (!itemSetting.summary.equals("")) {
                             summaryITv.visibility = View.VISIBLE
                             summaryITv.text = Editable.Factory.getInstance().newEditable(itemSetting.summary)
