@@ -55,7 +55,7 @@ class RisksFragment : BasePopupFragment() {
         dismissBt.setOnClickListener { dismiss() }
 
         val recoveryOffered = arguments?.getBoolean("recovery", true)!!
-        val passcodeOffered = arguments?.getBoolean("PASSCODE", true)!!
+        val passcodeOffered = arguments?.getBoolean("passcode   ", true)!!
 
         var count = 0
 
