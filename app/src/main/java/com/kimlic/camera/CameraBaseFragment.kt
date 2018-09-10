@@ -98,7 +98,7 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
     // Private
 
     private fun setupUI() {
-        cameraId = arguments!!.getInt(AppConstants.cameraType.key, AppConstants.cameraRear.intKey)
+        cameraId = arguments!!.getInt(AppConstants.CAMERA_TYPE.key, AppConstants.CAMERA_REAR.intKey)
         captureBt.setOnClickListener { takePicture() }
     }
 
