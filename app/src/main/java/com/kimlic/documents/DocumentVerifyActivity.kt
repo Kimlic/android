@@ -46,7 +46,7 @@ class DocumentVerifyActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        documentType = intent.extras.getString(AppConstants.documentType.key, "")
+        documentType = intent.extras.getString(AppConstants.DOCUMENT_TYPE.key, "")
         country = intent.extras.getString(AppConstants.COUNTRY.key, "")
         initFragments()
 
@@ -75,8 +75,8 @@ class DocumentVerifyActivity : BaseActivity() {
 
     private fun initFragments() {
         val portraitBundle = Bundle()
-        portraitBundle.putInt(AppConstants.cameraType.key, AppConstants.cameraFront.intKey)
-        portraitBundle.putString("action", AppConstants.portraitDocument.key)
+        portraitBundle.putInt(AppConstants.CAMERA_TYPE.key, AppConstants.CAMERA_FRONT.intKey)
+        portraitBundle.putString("action", AppConstants.PORTRAIT_DOCUMENT.key)
 
         portraitFragment = PortraitPhotoFragment.newInstance(portraitBundle)
         frontFragment = DocumentFrontFragment.newInstance()
