@@ -14,7 +14,7 @@ open class BasePreferences(context: Context) {
 
     init {
         Log.d(TAG, "initializing")
-        mSharedPreferences = KimlicApp.applicationContext().getSharedPreferences(AppConstants.appPreferences.key, Context.MODE_PRIVATE)
+        mSharedPreferences = KimlicApp.applicationContext().getSharedPreferences(AppConstants.APP_PREFERENCES.key, Context.MODE_PRIVATE)
         mEditor = mSharedPreferences.edit()
     }
 
