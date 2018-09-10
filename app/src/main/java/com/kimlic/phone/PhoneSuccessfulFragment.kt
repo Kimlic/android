@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import com.kimlic.BaseDialogFragment
 import com.kimlic.R
 
-class PhoneSuccessfulFragment() : BaseDialogFragment() {
+class PhoneSuccessfulFragment : BaseDialogFragment() {
 
     // Companion
 
     companion object {
-        val FRAGMENT_KEY = this::class.java.simpleName
+        val FRAGMENT_KEY = this::class.java.simpleName!!
 
         fun newInstance(): PhoneSuccessfulFragment {
             return PhoneSuccessfulFragment()
@@ -24,5 +24,4 @@ class PhoneSuccessfulFragment() : BaseDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_phone_successfull, container, false)
     }
-
 }
