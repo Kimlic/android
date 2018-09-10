@@ -7,15 +7,15 @@ import android.view.ViewGroup
 import com.kimlic.BaseDialogFragment
 import com.kimlic.R
 
-class AddressSuccesfulFragment : BaseDialogFragment() {
+class AddressSuccessfulFragment : BaseDialogFragment() {
 
     // Companion
 
     companion object {
-        val FRAGMENT_KEY = this::class.java.simpleName
+        val FRAGMENT_KEY = this::class.java.simpleName!!
 
-        fun newInstance(bundle: Bundle = Bundle()): AddressSuccesfulFragment {
-            val fragment = AddressSuccesfulFragment()
+        fun newInstance(bundle: Bundle = Bundle()): AddressSuccessfulFragment {
+            val fragment = AddressSuccessfulFragment()
             fragment.arguments = bundle
             return fragment
         }
