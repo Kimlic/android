@@ -2,67 +2,69 @@ package com.kimlic.utils
 
 enum class AppConstants(val key: String, val intKey: Int = -1) {
 
-    appPreferences("KIMLIC_PREFERENCES"),
+    APP_PREFERENCES("KIMLIC_PREFERENCES"),
 
-    auth("AUTH"),
-    userId("USERID"),
-    accountAddress("ACCOUNT_ADDRESS"),
+    AUTH("AUTH"),
+    USER_ID("USERID"),
+    ACCOUNT_ADDRESS("ACCOUNT_ADDRESS"),
 
-    passcode("PASSCODE"),
+    PASSCODE("PASSCODE"),
 
-    isPasscodeEnabled("IS_PASSCODE_ENABLED"),
-    isPasscodeOffered("IS_PASSCODE_OFFERED"),
-    isTouchEnabled("IS_TOUCH_ENABLED"),
-    isRecoveryEnabled("IS_RECOVERY_ENABLED"),
-    isRecoveryOffered("IS_RECOVERY_OFFERED"),
+    IS_PASSCODE_ENABLED("IS_PASSCODE_ENABLED"),
+    IS_PASSCODE_OFFERED("IS_PASSCODE_OFFERED"),
+    IS_TOUCH_ENABLED("IS_TOUCH_ENABLED"),
+    IS_RECOVERY_ENABLED("IS_RECOVERY_ENABLED"),
+    IS_RECOVERY_OFFERED("IS_RECOVERY_OFFERED"),
 
-    isGoogleSigneIn("IS_GOOGLE_SIGNE_IN"),
-    isDriveActive("IS_GOOGLE_DRIVE_ACTIVE"),
+    IS_GOOGLE_SIGNE_IN("IS_GOOGLE_SIGNE_IN"),
+    IS_DRIVE_ACTIVE("IS_GOOGLE_DRIVE_ACTIVE"),
 
-    terms("TERMS"),
-    privacy("PRIVACY"),
+    TERMS("TERMS"),
+    PRIVACY("PRIVACY"),
 
-    tutorials("TUTORIALS"),
-    fingerprint("FINGERPRINT"),
+    TUTORIALS("TUTORIALS"),
+    FINGERPRINT("FINGERPRINT"),
 
     // Camera
 
-    cameraType("CAMERA_TYPE"),
-    cameraFront("CAMERA_FRONT", 1),
-    cameraRear("CAMERA_REAR", 0),
+    CAMERA_TYPE("CAMERA_TYPE"),
+    CAMERA_FRONT("CAMERA_FRONT", 1),
+    CAMERA_REAR("CAMERA_REAR", 0),
 
     // Document type
 
-    documentType("DOCUMENT_TYPE"),
-    documentToVerify("DOCUMENT_TO_VERIFY"),
-    documentByteArray("DOCUMENT_BYTE_ARRAY"),
+    DOCUMENT_TYPE("DOCUMENT_TYPE"),
+    DOCUMENT_TO_VERIFY("DOCUMENT_TO_VERIFY"),
+    DOCUMENT_BYTE_ARRAY("DOCUMENT_BYTE_ARRAY"),
 
     // Photo type
 
-    photoFaceType("face"),
-    photoFrontType("document-front"),
-    photoBackType("document-back"),
-    photoAddressType("address"),
+    PHOTO_FACE_TYPE("face"),
+    PHOTO_FRONT_TYPE("document-front"),
+    PHOTO_BACK_TYPE("document-back"),
+    PHOTO_ADDRESS_TYPE("address"),
 
-    portraitDocument("portrait_document"),
+    PORTRAIT_DOCUMENT("portrait_document"),
 
 
     COUNTRY("country"),
+    TITLE("title"),
+    SUBTITLE("subtitle"),
 
     // File path
 
-    filePathRezult("FILE_PATH_REZULT"),
+    FILE_PATH_RESULT("FILE_PATH_RESULT"),
 
     // Settings type
 
-    settingSwitch("SETTING_SWITCH", 1),
-    settingIntent("SETTING_INFO", 2),
+    SETTINGS_SWITCH("SETTING_SWITCH", 1),
+    SETTINGS_INTENT("SETTING_INFO", 2),
 
     // User profile preferences
 
-    userAuth("USER_AUTH"),
+    USER_AUTH("USER_AUTH"),
 
     // Help constants
 
-    errorDescription("ERROR")
+    ERROR_DESCRIPTION("ERROR")
 }
