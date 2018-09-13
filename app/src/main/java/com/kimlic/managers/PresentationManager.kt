@@ -3,6 +3,7 @@ package com.kimlic.managers
 import android.app.Activity
 import android.content.Intent
 import com.kimlic.BaseActivity
+import com.kimlic.account.AccountActivity
 import com.kimlic.address.AddressActivity
 import com.kimlic.auth.TouchIdActivity
 import com.kimlic.documents.*
@@ -205,6 +206,12 @@ object PresentationManager {
         val params = HashMap<String, String>()
         params["path"] = url
         present(presenter = presenter, className = VendorsActivity::class.java, params = params)
+    }
+
+    fun account(presenter: BaseActivity, url: String) {
+        val params = HashMap<String, String>()
+        params["path"] = url
+        present(presenter = presenter, className = AccountActivity::class.java, params = params, isStarting = false)
     }
 
     // Private
