@@ -49,7 +49,8 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
         val portraitName: String = UUID.nameUUIDFromBytes(portraitData).toString()
         val frontName: String = UUID.nameUUIDFromBytes(frontData).toString()
         val backName: String = UUID.nameUUIDFromBytes(backData).toString()
-        repository.addDocument(Prefs.currentAccountAddress, documentType, country, portraitName, portraitData, frontName, frontData, backName, backData)
+        val countryIso = vendorsRepository.countries().filter { it.country == country }.first().sh.toUpperCase()
+        repository.addDocument(Prefs.currentAccountAddress, documentType, country, countryIso, portraitName, portraitData, frontName, frontData, backName, backData)
 
     }
 
@@ -76,6 +77,8 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     //fun getUserAddress(accountAddress: String) = repository.address(accountAddress = accountAddress)
 
     fun userContactsLive() = repository.userContactsLive(Prefs.currentAccountAddress)
+
+    fun userContacts() = repository.userContacts(Prefs.currentAccountAddress)
 
     // Documents
 
