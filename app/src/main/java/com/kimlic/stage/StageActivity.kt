@@ -56,7 +56,8 @@ class StageActivity : BaseActivity() {
                 val result = IntentIntegrator.parseActivityResult(resultCode, data)
                 if (result.contents != null) {
                     val urlSplitted = result.contents.split("?").first()
-                    PresentationManager.vendors(this, url = urlSplitted)
+                    //  `PresentationManager.vendors(this, url = urlSplitted)
+                    PresentationManager.account(this, url = urlSplitted)
                 }
             }
 
