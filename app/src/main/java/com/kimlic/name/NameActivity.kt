@@ -49,7 +49,7 @@ class NameActivity : BaseActivity(), TextView.OnEditorActionListener {
     private fun setupUI() {
         saveBt.setOnClickListener { manageInput() }
         nameEt.setOnEditorActionListener(this)
-        lastNameEt.setOnEditorActionListener(this)
+        //lastNameEt.setOnEditorActionListener(this)
 
         changeTv.setOnClickListener { finish() }
 
