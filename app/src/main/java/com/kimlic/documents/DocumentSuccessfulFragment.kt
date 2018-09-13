@@ -7,19 +7,19 @@ import android.view.ViewGroup
 import com.kimlic.BaseDialogFragment
 import com.kimlic.R
 
-class VerifySuccessfulFragment : BaseDialogFragment() {
+class DocumentSuccessfulFragment : BaseDialogFragment() {
 
     // Companion
 
     companion object {
-        val FRAGMENT_KEY = this::class.java.simpleName
+        val FRAGMENT_KEY = this::class.java.simpleName!!
 
-        fun newInstance() = VerifySuccessfulFragment()
+        fun newInstance() = DocumentSuccessfulFragment()
     }
 
     // Life
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_id_successful, container, false)
+        return inflater.inflate(R.layout.fragment_document_successful, container, false)
     }
 }
