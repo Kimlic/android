@@ -14,6 +14,7 @@ data class Document(
         @ColumnInfo(name = "document_number") var number: String = "",
         @ColumnInfo(name = "expire_date") var expireDate: String = "",
         @ColumnInfo(name = "country") var country: String = "",
+        @ColumnInfo(name = "country_iso") var countryIso: String = "",
         @ColumnInfo(name = "value") var value: String = "",
         @ColumnInfo(name = "state") var state: String = "",
         @ColumnInfo(name = "type") var type: String = "",
