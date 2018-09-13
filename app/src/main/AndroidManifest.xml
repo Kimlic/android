@@ -146,6 +146,8 @@
       android:label="Account"
       android:name=".account.AccountActivity"
       android:screenOrientation="sensorPortrait"/>
+
+    <activity android:name=".documents.DocumentVerifyChooseActivity__"/>
   </application>
 
 </manifest>
