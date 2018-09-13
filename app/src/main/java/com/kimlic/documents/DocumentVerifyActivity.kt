@@ -48,6 +48,7 @@ class DocumentVerifyActivity : BaseActivity() {
     private fun setupUI() {
         documentType = intent.extras.getString(AppConstants.DOCUMENT_TYPE.key, "")
         country = intent.extras.getString(AppConstants.COUNTRY.key, "")
+
         initFragments()
 
         showFragment(R.id.container, portraitFragment, PortraitPhotoFragment.FRAGMENT_KEY)
@@ -84,14 +85,14 @@ class DocumentVerifyActivity : BaseActivity() {
     }
 
     private fun successful() {
-        val fragment = VerifySuccessfulFragment.newInstance()
+        val fragment = DocumentSuccessfulFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
                 finish()
             }
         })
 
-        fragment.show(supportFragmentManager, VerifySuccessfulFragment.FRAGMENT_KEY)
+        fragment.show(supportFragmentManager, DocumentSuccessfulFragment.FRAGMENT_KEY)
     }
 
     private fun saveDocument(documentType: String, country: String, portraitData: ByteArray, frontData: ByteArray, backData: ByteArray) {
