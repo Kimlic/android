@@ -14,13 +14,13 @@ interface DocumentDao {
     @Update(onConflict = REPLACE)
     fun update(document: Document)
 
-    @Query("SELECT D.id, D.user_id, D.type, D.value, D.state, D.country, D.document_number, D.expire_date, D.inserted_at FROM document as D INNER JOIN user on D.user_id = user_id WHERE user.account_address =:accountAddress")
+    @Query("SELECT D.id, D.user_id, D.type, D.value, D.state, D.country, D.country_iso, D.document_number, D.expire_date, D.inserted_at FROM document as D INNER JOIN user on D.user_id = user_id WHERE user.account_address =:accountAddress")
     fun selectLive(accountAddress: String): LiveData<List<Document>>
 
-    @Query("SELECT D.id, D.user_id, D.type, D.value, D.state, D.country, D.document_number, D.expire_date, D.inserted_at FROM document as D INNER JOIN user on D.user_id = user_id WHERE user.account_address =:accountAddress")
+    @Query("SELECT D.id, D.user_id, D.type, D.value, D.state, D.country, D.country_iso, D.document_number, D.expire_date, D.inserted_at FROM document as D INNER JOIN user on D.user_id = user_id WHERE user.account_address =:accountAddress")
     fun select(accountAddress: String): List<Document>
 
-    @Query("SELECT D.id, D.user_id, D.type, D.value, D.state, D.country, D.document_number, D.expire_date, D.inserted_at FROM document as D INNER JOIN user on D.user_id = user_id WHERE user.account_address =:accountAddress AND type = :documentType LIMIT 1")
+    @Query("SELECT D.id, D.user_id, D.type, D.value, D.state, D.country, D.country_iso, D.document_number, D.expire_date, D.inserted_at FROM document as D INNER JOIN user on D.user_id = user_id WHERE user.account_address =:accountAddress AND type = :documentType LIMIT 1")
     fun select(accountAddress: String, documentType: String): Document?
 
     @Query("DELETE FROM document WHERE id = :id")
