@@ -150,6 +150,8 @@ class ProfileRepository private constructor() {
 
     fun userContactsLive(accountAddress: String): LiveData<List<Contact>> = contactDao.selectLive(accountAddress)
 
+    fun userContacts(accountAddress: String) = contactDao.select(accountAddress)
+
     fun contactAdd(accountAddress: String, contact: Contact) {
         val user = userDao.select(accountAddress)
         val userId = user.id
@@ -170,9 +172,9 @@ class ProfileRepository private constructor() {
 
     fun documentDelete(documentId: Long) = { documentDao.delete(id = documentId); syncDataBase() }
 
-    fun addDocument(accountAddress: String, documentType: String, country: String, portraitName: String, portraitData: ByteArray, frontName: String, frontData: ByteArray, backName: String, backData: ByteArray) {
+    fun addDocument(accountAddress: String, documentType: String, country: String, countryIso: String, portraitName: String, portraitData: ByteArray, frontName: String, frontData: ByteArray, backName: String, backData: ByteArray) {
         val userId = userDao.select(accountAddress).id
-        val documentId = documentDao.insert(Document(type = documentType, userId = userId, country = country))
+        val documentId = documentDao.insert(Document(type = documentType, userId = userId, country = country, countryIso = countryIso))
 
         photoDao.insert(photos =
         arrayOf(
