@@ -1,6 +1,7 @@
 package com.kimlic.vendors
 
 import android.os.Handler
+import android.util.Log
 import com.android.volley.Request.Method.GET
 import com.android.volley.Response
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -31,7 +32,7 @@ class VendorsRepository private constructor() {
     private var vendorDao = db.vendorDao()
 
     // Public
-
+    // Previous version - work now
     fun initDocumentsRequest(accountAddress: String, url: String, onError: () -> Unit) {
         val headers = mapOf(Pair("account-address", accountAddress), Pair("accept", "application/vnd.mobile-api.v1+json"))
 
@@ -59,6 +60,40 @@ class VendorsRepository private constructor() {
         DoAsync().execute(Runnable { VolleySingleton.getInstance(KimlicApp.applicationContext()).requestQueue.add(vendorsRequest) })
     }
 
+    // New request to Vendors - saves RP docs to database
+    fun rpDocumentsRequest(accountAddress: String, url: String, onError: () -> Unit) {
+        val headers = mapOf(Pair("account-address", accountAddress), Pair("accept", "application/vnd.mobile-api.v1+json"))
+        val vendorsRequest = KimlicJSONRequest(GET, url + KimlicApi.VENDORS.path, headers, JSONObject(),
+                Response.Listener { it ->
+                    if (!it.getJSONObject("meta").optString("code").toString().startsWith("2")) {
+                        onError()
+                        return@Listener
+                    }
+                    Log.d("TAGRPREQUEST", "request")
+                    val type = object : TypeToken<Vendors>() {}.type
+                    val data = it.getJSONObject("data").toString()
+
+                    val responseObject: Vendors = Gson().fromJson(data, type)
+                    val entityList: MutableList<VendorDocument> = mutableListOf()
+
+                    responseObject.documents.forEach { entityList.add(JsonToVenDocMapper().transform(it)) }
+                    vendorDao.insertDocs(entityList.toList())
+                    //syncDataBase()
+                },
+                Response.ErrorListener { _ ->
+                    onError()
+                })
+
+        DoAsync().execute(Runnable { VolleySingleton.getInstance(KimlicApp.applicationContext()).requestQueue.add(vendorsRequest) })
+
+    }
+
+    // Clear all vendors from db on start of activity
+    fun clearVendorsDocs() {
+        Log.d("TAGVENDOR", "in remover vendors info from db")
+        vendorDao.deleteAll()
+    }
+
     fun countries(): List<Country> {
         val countries = mutableListOf<Country>()
         var hasNextLine = true
@@ -80,6 +115,7 @@ class VendorsRepository private constructor() {
         return countries
     }
 
+    // Is going to be user for
     fun vendorDocumentsLive() = vendorDao.selectLive()
 
     fun vendorDocuments() = vendorDao.select()
@@ -96,7 +132,6 @@ class VendorsRepository private constructor() {
     // Holder
 
     private object HOLDER {
-
         val INSTANCE = VendorsRepository()
     }
 
