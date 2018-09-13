@@ -1,7 +1,6 @@
 package com.kimlic.vendors
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.*
 import android.os.Handler
 import com.kimlic.db.entity.Document
 import com.kimlic.model.ProfileRepository
@@ -10,7 +9,7 @@ import com.kimlic.preferences.Prefs
 import com.kimlic.utils.AppDoc
 import java.util.*
 
-class VendorsViewModel : ViewModel() {
+class VendorsViewModel : ViewModel(), LifecycleObserver {
 
     // Variables
 
@@ -25,9 +24,17 @@ class VendorsViewModel : ViewModel() {
 
     fun documentsListRequest(url: String) = vendorsRepository.initDocumentsRequest(Prefs.currentAccountAddress, url = url, onError = { retry(url) })
 
+//    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+//    fun clearVendors() = vendorsRepository.clearVendorsDocs()
+
+    // New Requests
+    fun RPDocuments(url: String) = vendorsRepository.rpDocumentsRequest(accountAddress = Prefs.currentAccountAddress, url = url, onError = { retryRpRequest(url) })
+
+    fun vendorsDocumentsToVerify() = vendorsRepository.vendorDocumentsLive()
+
     fun vendorRequestStatus() = vendorRequestStatus
 
-    fun getDocumentsForAdapter() = vendorSupportedDocuments// List Document which are supported in chosen country
+    fun getDocumentsForAdapter() = vendorSupportedDocuments// List Document which need current RP
 
     fun supportedDocuments(country: String) {
         val userDocuments = profileRepository.documents(Prefs.currentAccountAddress)
@@ -57,5 +64,9 @@ class VendorsViewModel : ViewModel() {
 
     private fun retry(url: String) {
         timeQueue.poll()?.let { Handler().postDelayed({ documentsListRequest(url) }, it) } ?: vendorRequestStatus.postValue("server error")
+    }
+
+    private fun retryRpRequest(url: String) {
+        timeQueue.poll()?.let { Handler().postDelayed({ RPDocuments(url) }, it) } ?: vendorRequestStatus.postValue("server error")
     }
 }
