@@ -134,7 +134,7 @@ object PresentationManager {
     // Verification
 
     fun documentChooseVerify(presenter: BaseActivity) {
-        present(presenter = presenter, className = DocumentVerifyChooseActivity::class.java, isStarting = false)
+        present(presenter = presenter, className = DocumentVerifyChooseActivity__::class.java, isStarting = false)
     }
 
     fun verifyDocument(presenter: BaseActivity, documentType: String, country: String) {
