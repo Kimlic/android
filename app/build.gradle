@@ -52,11 +52,10 @@ android {
         dev {
 //            buildConfigField("String", "QUORUM_URL", "\"http://51.141.123.209:22000\"")// quorum
 //            buildConfigField("String", "API_CORE_URL", "\"http://51.140.220.139:4000\"")//
-//            //buildConfigField("String", "VENDORS_URL", "\"http://demo.kimlic.com\"")// gets qrCode
+//            buildConfigField("String", "VENDORS_URL", "\"http://demo.kimlic.com\"")// gets qrCode
             buildConfigField("boolean", "RECOVERY_FOLDER", "false")
-
-            buildConfigField("String", "QUORUM_URL", "\"http://51.141.126.221:22000\"")// quorum
-            buildConfigField("String", "API_CORE_URL", "\"http://51.140.220.139:4000\"")//
+            buildConfigField("String", "QUORUM_URL", "\"http://51.140.222.82:22000\"")// quorum
+            buildConfigField("String", "API_CORE_URL", "\"http://51.141.120.164:4000\"")//
         }
         stage {
             buildConfigField("String", "API_CORE_URL", "\"https://mobile-api-test.kimlic.com\"")// elixir
