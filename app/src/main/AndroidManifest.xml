@@ -144,7 +144,8 @@
       android:screenOrientation="sensorPortrait"/>
     <activity
       android:label="Account"
-      android:name=".account.AccountActivity"/>
+      android:name=".account.AccountActivity"
+      android:screenOrientation="sensorPortrait"/>
   </application>
 
 </manifest>
