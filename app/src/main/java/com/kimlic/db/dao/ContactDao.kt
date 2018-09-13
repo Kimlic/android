@@ -20,6 +20,9 @@ interface ContactDao {
     @Query("SELECT C.value, C.type, C.user_id, C.id, C.approved, C.inserted_at FROM contact as C INNER JOIN user ON C.user_id = user.id AND user.account_address=:accountAddress")
     fun selectLive(accountAddress: String): LiveData<List<Contact>>
 
+    @Query("SELECT C.value, C.type, C.user_id, C.id, C.approved, C.inserted_at FROM contact as C INNER JOIN user ON C.user_id = user.id AND user.account_address=:accountAddress")
+    fun select(accountAddress: String): List<Contact>
+
     @Query("DELETE FROM contact WHERE type=:type AND user_id IN(SELECT id FROM user WHERE account_address=:accountAddress)")
     fun delete(accountAddress: String, type: String)
 
