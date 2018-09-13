@@ -9,5 +9,6 @@
   <string name="witch_document_do_you_want_to_verify">Witch document do you want to verify ?</string>
   <string name="social_security_card">Social Security Card</string>
   <string name="birth_certificate">Birth Certificate</string>
+  <string name="hexagon_background">Hexagon background</string>
 
 </resources>
