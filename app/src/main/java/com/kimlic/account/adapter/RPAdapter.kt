@@ -64,74 +64,76 @@ class RPAdapter : RecyclerView.Adapter<RPAdapter.ContactViewHolder>() {
                     arrowIv.background = resources.getDrawable(R.drawable.ic_done_green_24dp, null)
                     contentTv.setTextColor(Color.WHITE); isClickable = false; isFocusableInTouchMode = false; isFocusable = false
 
-                } else {setOnClickListener(this@ContactViewHolder)}
+                } else {
+                    contentTv.setTextColor(resources.getColor(R.color.lightBlue, null))
+                    arrowIv.background = resources.getDrawable(R.drawable.ic_blue_menu_arrow, null)
+                    setOnClickListener(this@ContactViewHolder)
+                }
                 when (item.type) {
                     "USER_NAME" -> {
                         if (item.value == "") {
-                            iconIv.background = icon(Icons_.NAME_BLUE.icon);contentTv.text = "Add your Name"
+                            iconIv.background = icon(Icons_.NAME_BLUE.icon);contentTv.text = context.getString(R.string.add_your_name)
                         } else {
                             contentTv.text = item.value; iconIv.background = icon(Icons_.NAME_WHITE.icon)
                         }
                     }
                     "email" -> {
                         if (item.value == "") {
-                            iconIv.background = icon(Icons_.EMAIL_BLUE.icon);contentTv.text = "Add your Email"
+                            iconIv.background = icon(Icons_.EMAIL_BLUE.icon);contentTv.text = context.getString(R.string.add_your_email)
                         } else {
                             contentTv.text = item.value; iconIv.background = icon(Icons_.EMAIL_WHITE.icon)
                         }
                     }
                     "phone" -> {
                         if (item.value == "") {
-                            iconIv.background = icon(Icons_.PHONE_BLUE.icon); contentTv.text = "Add your Phone"
+                            iconIv.background = icon(Icons_.PHONE_BLUE.icon); contentTv.text = context.getString(R.string.add_your_phone)
                         } else {
                             contentTv.text = item.value; iconIv.background = icon(Icons_.PHONE_WHITE.icon)
                         }
                     }
                     AppDoc.PASSPORT.type -> {
                         if (item.value == "") {
-                            iconIv.background = icon(Icons_.ID_BLUE.icon); contentTv.text = "Add your Passport"
+                            iconIv.background = icon(Icons_.ID_BLUE.icon); contentTv.text = context.getString(R.string.add_your_passport)
                         } else {
-                            contentTv.text = "Passport"; iconIv.background = icon(Icons_.ID_WHITE.icon)
+                            contentTv.text = context.getString(R.string.passport); iconIv.background = icon(Icons_.ID_WHITE.icon)
                         }
                     }
                     AppDoc.ID_CARD.type -> {
                         if (item.value == "") {
-                            iconIv.background = icon(Icons_.ID_BLUE.icon); contentTv.text = "Add your ID card"
+                            iconIv.background = icon(Icons_.ID_BLUE.icon); contentTv.text = context.getString(R.string.add_your_id_card)
                         } else {
-                            contentTv.text = "Id card"; iconIv.background = resources.getDrawable(Icons_.ID_WHITE.icon, null)
+                            contentTv.text = context.getString(R.string.id_card); iconIv.background = resources.getDrawable(Icons_.ID_WHITE.icon, null)
                         }
                     }
                     AppDoc.DRIVERS_LICENSE.type -> {
                         if (item.value == "") {
-                            iconIv.background = icon(Icons_.ID_BLUE.icon); contentTv.text = "Add your Driver license"
+                            iconIv.background = icon(Icons_.ID_BLUE.icon); contentTv.text = context.getString(R.string.add_your_drivers_license)
                         } else {
-                            contentTv.text = "Drivers License"; iconIv.background = resources.getDrawable(Icons_.ID_WHITE.icon, null)
+                            contentTv.text = context.getString(R.string.drivers_license); iconIv.background = resources.getDrawable(Icons_.ID_WHITE.icon, null)
                         }
                     }
                     AppDoc.RESIDENCE_PERMIT_CARD.type -> {
                         if (item.value == "") {
-                            iconIv.background = icon(Icons_.ID_BLUE.icon); contentTv.text = "Add your Residence Permit"
+                            iconIv.background = icon(Icons_.ID_BLUE.icon); contentTv.text = context.getString(R.string.add_your_residence_permit)
                         } else {
-                            contentTv.text = "Residence Permit"; iconIv.background = resources.getDrawable(Icons_.ID_WHITE.icon, null)
+                            contentTv.text = context.getString(R.string.residence_permit); iconIv.background = resources.getDrawable(Icons_.ID_WHITE.icon, null)
                         }
                     }
                     AppDoc.SOCIAL_SECURITY_CARD.type -> {
                         if (item.value == "") {
-                            iconIv.background = icon(Icons_.ID_BLUE.icon); contentTv.text = "Add your Social Securirty Card"
+                            iconIv.background = icon(Icons_.ID_BLUE.icon); contentTv.text = context.getString(R.string.add_your_social_security_card)
                         } else {
-                            contentTv.text = "Social Security Card"; iconIv.background = resources.getDrawable(Icons_.ID_WHITE.icon, null)
+                            contentTv.text = context.getString(R.string.social_security_card); iconIv.background = resources.getDrawable(Icons_.ID_WHITE.icon, null)
                         }
                     }
                     AppDoc.BIRTH_CERTIFICATE.type -> {
                         if (item.value == "") {
-                            iconIv.background = icon(Icons_.ID_BLUE.icon); contentTv.text = "Add your Birth Certificate"
+                            iconIv.background = icon(Icons_.ID_BLUE.icon); contentTv.text = context.getString(R.string.add_your_birth_certificate)
                         } else {
-                            contentTv.text = "Birth Certificate"; iconIv.background = resources.getDrawable(Icons_.ID_WHITE.icon, null)
+                            contentTv.text = context.getString(R.string.birth_certificate); iconIv.background = resources.getDrawable(Icons_.ID_WHITE.icon, null)
                         }
                     }
                 }
-
-
             }
         }
 

@@ -14,6 +14,7 @@ import com.kimlic.R
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.AppDoc
+import com.kimlic.utils.BaseCallback
 import com.kimlic.utils.Cache
 import com.kimlic.utils.mappers.FileNameTxtBase64ToBitmap
 import kotlinx.android.synthetic.main.activity_verify_details_single.*
@@ -79,13 +80,13 @@ class DocumentDetails_ : BaseActivity() {
                 val documentNumber = numberEt.text.toString()
 
                 model.saveDocumentAndPhoto(documentType, country, documentNumber, expireDate, portraitByteArray, frontByteArray, backByteArray)
+                successful()
 
                 setResult(Activity.RESULT_OK)
                 finish()
             }
         }
     }
-
 
     private fun fillPhotoFrames() {
         portraitIv.setImageBitmap(rotateBitmap(FileNameTxtBase64ToBitmap().transform(Cache.PORTRAIT.file)!!, -90f))
@@ -107,6 +108,17 @@ class DocumentDetails_ : BaseActivity() {
                     }
                 }
         countryEt.text = Editable.Factory.getInstance().newEditable(country)
+    }
+
+    private fun successful() {
+        val fragment = DocumentSuccessfulFragment.newInstance()
+        fragment.setCallback(object : BaseCallback {
+            override fun callback() {
+                finish()
+            }
+        })
+
+        fragment.show(supportFragmentManager, DocumentSuccessfulFragment.FRAGMENT_KEY)
     }
 
     // Private helpers
