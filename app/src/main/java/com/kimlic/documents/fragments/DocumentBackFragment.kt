@@ -17,7 +17,7 @@ class DocumentBackFragment : CameraBaseFragment() {
     // Companion
 
     companion object {
-        val FRAGMENT_KEY = this::class.java.simpleName
+        val FRAGMENT_KEY = this::class.java.simpleName!!
 
         fun newInstance(bundle: Bundle? = Bundle()): DocumentBackFragment {
             val fragment = DocumentBackFragment()
