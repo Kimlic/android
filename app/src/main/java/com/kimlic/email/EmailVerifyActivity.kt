@@ -1,5 +1,6 @@
 package com.kimlic.email
 
+import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.text.Editable
@@ -13,7 +14,6 @@ import butterknife.ButterKnife
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.db.entity.Contact
-import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.phone.PhoneSuccessfulFragment
 import com.kimlic.preferences.Prefs
@@ -110,7 +110,9 @@ class EmailVerifyActivity : BaseActivity() {
         val fragment = EmailSuccesfulFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
-                PresentationManager.stage(this@EmailVerifyActivity)
+                //PresentationManager.stage(this@EmailVerifyActivity)
+                setResult(Activity.RESULT_OK)
+                finish()
             }
         })
         fragment.show(supportFragmentManager, PhoneSuccessfulFragment.FRAGMENT_KEY)
