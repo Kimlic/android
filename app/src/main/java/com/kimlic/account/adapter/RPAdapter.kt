@@ -3,6 +3,7 @@ package com.kimlic.account.adapter
 import android.content.Context
 import android.graphics.Color
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,14 +13,19 @@ import com.kimlic.account.OnDocumentItemClick
 import com.kimlic.stage.adapter.Icons_
 import com.kimlic.utils.AppDoc
 import kotlinx.android.synthetic.main.item_account_document.view.*
+import java.util.*
 
 class RPAdapter : RecyclerView.Adapter<RPAdapter.ContactViewHolder>() {
 
     // Variables
 
-    private var contactList: List<AccountItem> = emptyList()
+    private var contactList: List<AccountItem> = Collections.synchronizedList(emptyList())
     private lateinit var onDocumentItemClick: OnDocumentItemClick
+    private var count = 0
 
+    init {
+        setHasStableIds(true)
+    }
     // Live
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
@@ -36,9 +42,19 @@ class RPAdapter : RecyclerView.Adapter<RPAdapter.ContactViewHolder>() {
 
     // Public
 
+    //@Synchronized
     fun setContacts(contacts: List<AccountItem>) {
+        Log.d("TAGADAPTER", "in adapter ${count++}")
         this.contactList = contacts
         notifyDataSetChanged()
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
     }
 
     fun setOnStageItemClick(onDocumentItemClick: OnDocumentItemClick) {
