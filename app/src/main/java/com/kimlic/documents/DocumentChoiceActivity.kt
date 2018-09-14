@@ -1,16 +1,22 @@
 package com.kimlic.documents
 
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.documents.fragments.SelectCountryFragment
 import com.kimlic.documents.fragments.SelectDocumentFragment
-import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.utils.AppConstants
 
-class DocumentVerifyChooseActivity : BaseActivity() {
+class DocumentChoiceActivity : BaseActivity() {
+
+    // Constants
+
+    companion object {
+        private const val REQUEST_CODE = 777
+    }
 
     // Variables
 
@@ -22,6 +28,14 @@ class DocumentVerifyChooseActivity : BaseActivity() {
     private var documentFragment: SelectDocumentFragment? = null
 
     // Life
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            REQUEST_CODE -> {
+                setResult(REQUEST_CODE); finish()
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,8 +63,17 @@ class DocumentVerifyChooseActivity : BaseActivity() {
 
             override fun callback(bundle: Bundle) {
                 documentType = bundle.getString(AppConstants.DOCUMENT_TYPE.key)
-                PresentationManager.verifyDocument(this@DocumentVerifyChooseActivity, documentType, country)
+                //PresentationManager.verifyDocument(this@DocumentChoiceActivity, documentType, country)
+                startForResult(documentType, country)
             }
         })
+    }
+
+    private fun startForResult(documentType: String, country: String) {
+        val intent = Intent(this, DocumentVerifyActivity::class.java)
+        intent.putExtra(AppConstants.DOCUMENT_TYPE.key, documentType)
+        intent.putExtra(AppConstants.COUNTRY.key, country)
+
+        startActivityForResult(intent, REQUEST_CODE)
     }
 }
