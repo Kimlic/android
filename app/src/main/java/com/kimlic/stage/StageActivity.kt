@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.FragmentTransaction
-import android.util.Log
 import android.view.View
 import com.google.zxing.integration.android.IntentIntegrator
 import com.kimlic.BaseActivity
@@ -56,8 +55,8 @@ class StageActivity : BaseActivity() {
                 val result = IntentIntegrator.parseActivityResult(resultCode, data)
                 if (result.contents != null) {
                     val urlSplitted = result.contents.split("?").first()
-                    PresentationManager.vendors(this, url = urlSplitted)
-                    //PresentationManager.account(this, url = urlSplitted)
+                    //PresentationManager.vendors(this, url = urlSplitted)
+                    PresentationManager.account(this, url = urlSplitted)
                 }
             }
 
@@ -71,7 +70,6 @@ class StageActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        Log.d("TAGACCOUNT", "account-address - ${Prefs.currentAccountAddress}")
         initFragments()
         lifecycle.addObserver(model)
         lifecycle.addObserver(userStageFragment)
