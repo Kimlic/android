@@ -112,7 +112,7 @@
     <activity
       android:label="Verify ID document"
       android:launchMode="singleTask"
-      android:name=".documents.DocumentVerifyChooseActivity"/>
+      android:name=".documents.DocumentChoiceActivity"/>
     <activity
       android:label="Email"
       android:name=".email.EmailActivity"/>
@@ -148,6 +148,7 @@
       android:screenOrientation="sensorPortrait"/>
 
     <activity android:name=".documents.DocumentVerifyChooseActivity__"/>
+    <activity android:name=".documents.DocumentDetails_"/>
   </application>
 
 </manifest>
