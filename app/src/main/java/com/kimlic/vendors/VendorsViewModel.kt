@@ -24,8 +24,8 @@ class VendorsViewModel : ViewModel(), LifecycleObserver {
 
     fun documentsListRequest(url: String) = vendorsRepository.initDocumentsRequest(Prefs.currentAccountAddress, url = url, onError = { retry(url) })
 
-//    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-//    fun clearVendors() = vendorsRepository.clearVendorsDocs()
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    fun clearVendors() = vendorsRepository.clearVendorsDocs()
 
     // New Requests
     fun RPDocuments(url: String) = vendorsRepository.rpDocumentsRequest(accountAddress = Prefs.currentAccountAddress, url = url, onError = { retryRpRequest(url) })
