@@ -33,6 +33,7 @@ import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.quorum.crypto.Sha
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.AppDoc
+import com.kimlic.utils.Cache
 import com.kimlic.utils.mappers.BitmapToByteArrayMapper
 import org.json.JSONObject
 import org.spongycastle.util.encoders.Base64
@@ -171,8 +172,8 @@ class ProfileRepository private constructor() {
     fun document(accountAddress: String, documentType: String) = documentDao.select(accountAddress, documentType)
 
     fun documentDelete(documentId: Long) = { documentDao.delete(id = documentId); syncDataBase() }
-
-    fun addDocument(accountAddress: String, documentType: String, country: String, countryIso: String, documentNumber: String, expireDate: String, portraitName: String, portraitData: ByteArray, frontName: String, frontData: ByteArray, backName: String, backData: ByteArray) {
+    // previous - with big files
+    fun addDocument_(accountAddress: String, documentType: String, country: String, countryIso: String, documentNumber: String, expireDate: String, portraitName: String, portraitData: ByteArray, frontName: String, frontData: ByteArray, backName: String, backData: ByteArray) {
         val userId = userDao.select(accountAddress).id
         val documentId = documentDao.insert(Document(type = documentType, userId = userId, country = country, countryIso = countryIso, number = documentNumber, expireDate = expireDate))
 
@@ -185,6 +186,22 @@ class ProfileRepository private constructor() {
         savePhoto(accountAddress, portraitName, portraitData)
         savePhoto(accountAddress, frontName, frontData)
         savePhoto(accountAddress, backName, backData)
+        syncDataBase()
+    }
+
+    fun addDocument(accountAddress: String, documentType: String, country: String, countryIso: String, documentNumber: String, expireDate: String, portraitName: String, frontName: String, backName: String) {
+        val userId = userDao.select(accountAddress).id
+        val documentId = documentDao.insert(Document(type = documentType, userId = userId, country = country, countryIso = countryIso, number = documentNumber, expireDate = expireDate))
+
+        photoDao.insert(photos =
+        arrayOf(
+                Photo(documentId = documentId, file = portraitName, type = AppConstants.PHOTO_FACE_TYPE.key),
+                Photo(documentId = documentId, file = frontName, type = AppConstants.PHOTO_FRONT_TYPE.key),
+                Photo(documentId = documentId, file = backName, type = AppConstants.PHOTO_BACK_TYPE.key)).asList())
+
+        savePhoto_(accountAddress, Cache.PORTRAIT.file, portraitName)
+        savePhoto_(accountAddress, Cache.FRONT.file, frontName)
+        savePhoto_(accountAddress, Cache.BACK.file, backName)
         syncDataBase()
     }
 
@@ -641,6 +658,11 @@ class ProfileRepository private constructor() {
     private fun savePhoto(accountAddress: String, fileName: String, data: ByteArray) {
         val data64 = Base64.toBase64String(data)
         writeToFile(context, fileName, data64)
+        syncPhoto(accountAddress, fileName)
+    }
+
+    private fun savePhoto_(accountAddress: String, cacheFileName: String, fileName: String) {
+        File(context.filesDir.toString() + "/" + cacheFileName).copyTo(File(context.filesDir.toString() + "/" + fileName), true)
         syncPhoto(accountAddress, fileName)
     }
 
