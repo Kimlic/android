@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import com.kimlic.BasePopupFragment
 import com.kimlic.R
 import com.kimlic.documents.DocumentCallback
-import com.kimlic.documents.DocumentVerifyChooseActivity
+import com.kimlic.documents.DocumentChoiceActivity
 import com.kimlic.documents.DocumentViewModel
 import com.kimlic.documents.adapter.CountryAdapter
 import com.kimlic.utils.AppConstants
@@ -54,7 +54,7 @@ class SelectCountryFragment : BasePopupFragment() {
     }
 
     override fun onDismiss(dialog: DialogInterface?) {
-        (activity as DocumentVerifyChooseActivity).finish()
+        activity?.let { (it as DocumentChoiceActivity).finish() }
         super.onDismiss(dialog)
     }
 
