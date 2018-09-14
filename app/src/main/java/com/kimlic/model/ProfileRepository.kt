@@ -172,9 +172,9 @@ class ProfileRepository private constructor() {
 
     fun documentDelete(documentId: Long) = { documentDao.delete(id = documentId); syncDataBase() }
 
-    fun addDocument(accountAddress: String, documentType: String, country: String, countryIso: String, portraitName: String, portraitData: ByteArray, frontName: String, frontData: ByteArray, backName: String, backData: ByteArray) {
+    fun addDocument(accountAddress: String, documentType: String, country: String, countryIso: String, documentNumber: String, expireDate: String, portraitName: String, portraitData: ByteArray, frontName: String, frontData: ByteArray, backName: String, backData: ByteArray) {
         val userId = userDao.select(accountAddress).id
-        val documentId = documentDao.insert(Document(type = documentType, userId = userId, country = country, countryIso = countryIso))
+        val documentId = documentDao.insert(Document(type = documentType, userId = userId, country = country, countryIso = countryIso, number = documentNumber, expireDate = expireDate))
 
         photoDao.insert(photos =
         arrayOf(
