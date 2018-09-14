@@ -1,6 +1,7 @@
 package com.kimlic.email
 
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.inputmethod.EditorInfo
@@ -8,10 +9,15 @@ import android.widget.TextView
 import com.kimlic.BaseActivity
 import com.kimlic.BlockchainUpdatingFragment
 import com.kimlic.R
-import com.kimlic.managers.PresentationManager
 import kotlinx.android.synthetic.main.activity_email.*
 
 class EmailActivity : BaseActivity() {
+
+    // Constants
+
+    companion object {
+        private const val EMAIL_VERIFY_REQUEST_CODE = 92
+    }
 
     // Variables
 
@@ -32,6 +38,12 @@ class EmailActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         showSoftKeyboard(emailEt)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            EMAIL_VERIFY_REQUEST_CODE -> finish()
+        }
     }
 
     // Private
@@ -61,7 +73,10 @@ class EmailActivity : BaseActivity() {
             val email = emailEt.text.toString()
 
             emailModel.emailVerify(email,
-                    onSuccess = { hideProgress(); PresentationManager.emailVerify(this@EmailActivity, emailEt.text.toString()) },
+                    onSuccess = {
+                        hideProgress();emailVerify(emailEt.text.toString())
+                        //PresentationManager.emailVerify(this@EmailActivity, emailEt.text.toString())
+                    },
                     onError = { unableToProceed() })
         }
     }
@@ -87,5 +102,11 @@ class EmailActivity : BaseActivity() {
     private fun unableToProceed() {
         hideProgress()
         runOnUiThread { nextBt.isClickable = true; showPopup(message = getString(R.string.unable_to_proceed_with_werification)) }
+    }
+
+    private fun emailVerify(email: String) {
+        val verifyIntent = Intent(this, EmailVerifyActivity::class.java)
+        verifyIntent.putExtra("email", email)
+        startActivityForResult(verifyIntent, EMAIL_VERIFY_REQUEST_CODE)
     }
 }
