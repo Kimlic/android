@@ -45,12 +45,21 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
         repository.addUserPhoto(accountAddress, fileName, data)
     }
 
-    fun saveDocumentAndPhoto(documentType: String, country: String, portraitData: ByteArray, frontData: ByteArray, backData: ByteArray) {
+    fun saveDocumentAndPhoto_(documentType: String, country: String, portraitData: ByteArray, frontData: ByteArray, backData: ByteArray) {
         val portraitName: String = UUID.nameUUIDFromBytes(portraitData).toString()
         val frontName: String = UUID.nameUUIDFromBytes(frontData).toString()
         val backName: String = UUID.nameUUIDFromBytes(backData).toString()
-        val countryIso = ""//vendorsRepository.countries().filter { it.country == country }.first().sh.toUpperCase()
-        repository.addDocument(Prefs.currentAccountAddress, documentType, country, countryIso, portraitName, portraitData, frontName, frontData, backName, backData)
+        val countryIso = vendorsRepository.countries().filter { it.country == country }.first().sh.toUpperCase()
+        repository.addDocument(Prefs.currentAccountAddress, documentType, country, countryIso, "", "", portraitName, portraitData, frontName, frontData, backName, backData)
+
+    }
+
+    fun saveDocumentAndPhoto(documentType: String, country: String, documentNumber: String, expireDate: String, portraitData: ByteArray, frontData: ByteArray, backData: ByteArray) {
+        val portraitName: String = UUID.nameUUIDFromBytes(portraitData).toString()
+        val frontName: String = UUID.nameUUIDFromBytes(frontData).toString()
+        val backName: String = UUID.nameUUIDFromBytes(backData).toString()
+        val countryIso = vendorsRepository.countries().filter { it.country == country }.first().sh.toUpperCase()
+        repository.addDocument(Prefs.currentAccountAddress, documentType, country, countryIso, documentNumber, expireDate, portraitName, portraitData, frontName, frontData, backName, backData)
 
     }
 
