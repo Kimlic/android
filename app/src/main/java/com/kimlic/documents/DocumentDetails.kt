@@ -64,8 +64,8 @@ class DocumentDetails : BaseActivity() {
 
     private fun setupUI() {
         initExtraVariables()
-        fillData(user = user, photos = photosMap, document = currentDocument)
-        setupPreview(currentDocument)
+        fillData(photos = photosMap, document = currentDocument)
+        setupPreview()
 
         backBt.setOnClickListener { finish() }
     }
@@ -77,10 +77,10 @@ class DocumentDetails : BaseActivity() {
 
         currentDocument = model.userDocument(documentType)!!
         user = model.user()
-        photosMap = model.userDocumentPhotos(documentType = documentType).map { it.type to it.file }.toMap()
+        photosMap = model.userDocumentPhotos(documentType).map { it.type to it.file }.toMap()
     }
 
-    private fun setupPreview(document: Document) {
+    private fun setupPreview() {
         disableEditing(textFields.subList(0, 2))
         countryTil.visibility = View.VISIBLE
         addBt.text = getString(R.string.ok)
@@ -89,7 +89,7 @@ class DocumentDetails : BaseActivity() {
 
     // Updates
 
-    private fun fillData(user: User, photos: Map<String, String>, document: Document) {
+    private fun fillData(photos: Map<String, String>, document: Document) {
         portraitIv.setImageBitmap(rotateBitmap(FileNameTxtBase64ToBitmap().transform(photos[AppConstants.PHOTO_FACE_TYPE.key]!!)!!, -90f))
         frontIv.setImageBitmap(cropped(photos[AppConstants.PHOTO_FRONT_TYPE.key]!!))
         backIv.setImageBitmap(cropped(photos[AppConstants.PHOTO_BACK_TYPE.key]!!))
@@ -127,6 +127,7 @@ class DocumentDetails : BaseActivity() {
 
     private fun cropped(fileName: String): Bitmap {
         val bitmap = FileNameTxtBase64ToBitmap().transform(fileName)
+
         val originalBitmap = rotateBitmap(bitmap!!, 90f)
         val width = originalBitmap.width
         val height = originalBitmap.height
