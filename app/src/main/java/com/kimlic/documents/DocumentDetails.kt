@@ -4,7 +4,6 @@ import android.app.DatePickerDialog
 import android.arch.lifecycle.ViewModelProviders
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.view.View
@@ -12,7 +11,6 @@ import android.widget.EditText
 import butterknife.BindViews
 import butterknife.ButterKnife
 import com.kimlic.BaseActivity
-import com.kimlic.BlockchainUpdatingFragment
 import com.kimlic.R
 import com.kimlic.db.entity.Document
 import com.kimlic.db.entity.User
@@ -20,7 +18,6 @@ import com.kimlic.model.ProfileViewModel
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.AppDoc
 import com.kimlic.utils.mappers.FileNameTxtBase64ToBitmap
-import com.kimlic.vendors.VendorsViewModel
 import kotlinx.android.synthetic.main.activity_verify_details.*
 import java.util.*
 
@@ -39,22 +36,17 @@ class DocumentDetails : BaseActivity() {
 
     // Binding
 
-    @BindViews(R.id.firstNameEt, R.id.lastNameEt, R.id.numberEt, R.id.expireDateEt)
+    @BindViews(R.id.numberEt, R.id.expireDateEt, R.id.countryEt)
     lateinit var textFields: List<@JvmSuppressWildcards EditText>
 
     // Variables
 
-    private var timer: CountDownTimer? = null
-    private var blockchainUpdatingFragment: BlockchainUpdatingFragment? = null
-
     private lateinit var model: ProfileViewModel
-    private lateinit var vendorsModel: VendorsViewModel
     private lateinit var user: User
     private lateinit var photosMap: Map<String, String>
     private lateinit var documentType: String
     private lateinit var currentDocument: Document
     private lateinit var country: String
-    private lateinit var url: String
     private lateinit var action: String
 
     // Life
@@ -64,7 +56,6 @@ class DocumentDetails : BaseActivity() {
         setContentView(R.layout.activity_verify_details)
 
         model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-        vendorsModel = ViewModelProviders.of(this).get(VendorsViewModel::class.java)
         ButterKnife.bind(this)
         setupUI()
     }
@@ -74,11 +65,8 @@ class DocumentDetails : BaseActivity() {
     private fun setupUI() {
         initExtraVariables()
         fillData(user = user, photos = photosMap, document = currentDocument)
+        setupPreview(currentDocument)
 
-        when (action) {
-            "send" -> setupSend()
-            "preview" -> setupPreview(currentDocument)
-        }
         backBt.setOnClickListener { finish() }
     }
 
@@ -86,7 +74,6 @@ class DocumentDetails : BaseActivity() {
         documentType = intent.extras.getString(AppConstants.DOCUMENT_TYPE.key, "")
         action = intent.extras.getString("action", "preview")
         country = intent.extras.getString("country", "")
-        url = intent.extras.getString("path", "")
 
         currentDocument = model.userDocument(documentType)!!
         user = model.user()
@@ -94,89 +81,22 @@ class DocumentDetails : BaseActivity() {
     }
 
     private fun setupPreview(document: Document) {
-        when (document.state) {
-            DocState.CREATED.state, DocState.VERIFIED.state -> {
-                countryEt.text = Editable.Factory.getInstance().newEditable(document.country)
-                countryTil.visibility = View.VISIBLE
-                disableEditing(textFields)
-                addBt.visibility = View.GONE
-            }
-            else -> {
-                if (model.hasDocumentInProgress()) {
-                    disableEditing(textFields.subList(0, 2))
-                }
-
-                countryTil.visibility = View.GONE
-                addBt.text = getString(R.string.add_details)
-
-                expireDateEt.setOnClickListener { datePicker() }
-                addBt.setOnClickListener {
-                    if (validFields()) {
-                        updateDocument()
-                        updateUserName(firstNameEt.text.toString(), lastNameEt.text.toString())
-                        finish()
-                    }
-                }
-            }
-        }
-    }
-
-    private fun setupSend() {
+        disableEditing(textFields.subList(0, 2))
         countryTil.visibility = View.VISIBLE
-        countryEt.text = Editable.Factory.getInstance().newEditable(country)
-
-        if (model.hasDocumentInProgress()) {
-            disableEditing(textFields.subList(0, 2))
-        }
-
-        expireDateEt.setOnClickListener { datePicker() }
-        addBt.text = getString(R.string.verify_document)
-        addBt.setOnClickListener {
-            if (validFields()) {
-                addBt.isClickable = false
-                updateUserName(firstNameEt.text.toString(), lastNameEt.text.toString())
-                updateDocument()
-                sendDocument()
-            }
-        }
-    }
-
-    private fun sendDocument() {
-        showProgress()
-        model.senDoc(docType = documentType, country = country, url = url,
-                onSuccess = {
-                    hideProgress()
-                    currentDocument.state = DocState.CREATED.state
-                    model.updateDocument(currentDocument) //finish ()
-                    showPopup("Success!", "Document sent!", action = { finish() })
-                },
-                onError = {
-                    hideProgress()
-                    addBt.isClickable = true
-                    showPopup("Error", message = "Unable to proceed!", action = {})
-                })
+        addBt.text = getString(R.string.ok)
+        addBt.setOnClickListener { finish() }
     }
 
     // Updates
-
-    private fun updateUserName(firstName: String, lastName: String) = model.updateUserName(firstName, lastName)
-
-    private fun updateDocument() {
-        currentDocument.number = numberEt.text.toString()
-        currentDocument.expireDate = expireDateEt.text.toString()
-        currentDocument.country = countryEt.text.toString()
-        model.updateDocument(currentDocument)
-    }
 
     private fun fillData(user: User, photos: Map<String, String>, document: Document) {
         portraitIv.setImageBitmap(rotateBitmap(FileNameTxtBase64ToBitmap().transform(photos[AppConstants.PHOTO_FACE_TYPE.key]!!)!!, -90f))
         frontIv.setImageBitmap(cropped(photos[AppConstants.PHOTO_FRONT_TYPE.key]!!))
         backIv.setImageBitmap(cropped(photos[AppConstants.PHOTO_BACK_TYPE.key]!!))
 
-        firstNameEt.text = Editable.Factory.getInstance().newEditable(user.firstName)
-        lastNameEt.text = Editable.Factory.getInstance().newEditable(user.lastName)
         numberEt.text = Editable.Factory.getInstance().newEditable(document.number)
         expireDateEt.text = Editable.Factory.getInstance().newEditable(document.expireDate)
+        countryEt.text = Editable.Factory.getInstance().newEditable(document.country)
 
         titleTv.text =
                 when (document.type) {
@@ -192,7 +112,7 @@ class DocumentDetails : BaseActivity() {
                 }
     }
 
-    // Private helpers
+// Private helpers
 
     private fun validFields(): Boolean {
         val error = textFields.map {
@@ -215,22 +135,6 @@ class DocumentDetails : BaseActivity() {
 
     // Progress
 
-    private fun showProgress() {
-        timer = object : CountDownTimer(0, 0) {
-            override fun onFinish() {
-                blockchainUpdatingFragment = BlockchainUpdatingFragment.newInstance()
-                blockchainUpdatingFragment?.show(supportFragmentManager, BlockchainUpdatingFragment.FRAGMENT_KEY)
-            }
-
-            override fun onTick(millisUntilFinished: Long) {}
-        }.start()
-    }
-
-    private fun hideProgress() = runOnUiThread {
-        if (blockchainUpdatingFragment != null) blockchainUpdatingFragment?.dismiss(); timer?.cancel()
-    }
-
-    // exit from activity on success adding???
     private fun showPopup(title: String, message: String, action: () -> Unit) {
         val builder = AlertDialog.Builder(this)
         builder.setTitle(title)
