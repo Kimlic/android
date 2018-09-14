@@ -16,9 +16,9 @@ import com.kimlic.utils.AppConstants
 import com.kimlic.utils.AppDoc
 import com.kimlic.utils.BaseCallback
 import com.kimlic.utils.Cache
+import com.kimlic.utils.mappers.BitmapToByteArrayMapper
 import com.kimlic.utils.mappers.FileNameTxtBase64ToBitmap
 import kotlinx.android.synthetic.main.activity_verify_details_single.*
-import java.io.File
 import java.util.*
 
 /*  Activity has next states
@@ -72,15 +72,16 @@ class DocumentDetails_ : BaseActivity() {
 
         saveBt.setOnClickListener {
             if (validFields()) {
-                val portraitByteArray = File(filesDir.toString() + "/${Cache.PORTRAIT.file}").readBytes()
-                val frontByteArray = File(filesDir.toString() + "/${Cache.FRONT.file}").readBytes()
-                val backByteArray = File(filesDir.toString() + "/${Cache.BACK.file}").readBytes()
+                saveBt.isClickable = false
+                val portraitByteArray = BitmapToByteArrayMapper().transform(FileNameTxtBase64ToBitmap().transform(Cache.PORTRAIT.file)!!)
+                val frontByteArray = BitmapToByteArrayMapper().transform(FileNameTxtBase64ToBitmap().transform(Cache.FRONT.file)!!)
+                val backByteArray = BitmapToByteArrayMapper().transform(FileNameTxtBase64ToBitmap().transform(Cache.BACK.file)!!)
 
                 val expireDate = expireDateEt.text.toString()
                 val documentNumber = numberEt.text.toString()
 
                 model.saveDocumentAndPhoto(documentType, country, documentNumber, expireDate, portraitByteArray, frontByteArray, backByteArray)
-                successful()
+                // successful()
 
                 setResult(Activity.RESULT_OK)
                 finish()
@@ -114,6 +115,8 @@ class DocumentDetails_ : BaseActivity() {
         val fragment = DocumentSuccessfulFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
+                //finish()
+                setResult(Activity.RESULT_OK)
                 finish()
             }
         })
