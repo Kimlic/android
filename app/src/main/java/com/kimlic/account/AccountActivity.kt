@@ -5,11 +5,14 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.LinearLayout
 import com.kimlic.BaseActivity
+import com.kimlic.BlockchainUpdatingFragment
 import com.kimlic.R
 import com.kimlic.account.adapter.RPAdapter
 import com.kimlic.account.fragment.MissingInformationFragment
@@ -22,6 +25,7 @@ import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.vendors.VendorsViewModel
 import kotlinx.android.synthetic.main.activity_account.*
+import java.util.*
 
 class AccountActivity : BaseActivity() {
 
@@ -39,7 +43,8 @@ class AccountActivity : BaseActivity() {
     private var contactList: MutableList<ContactItem> = mutableListOf()
     private var documentList: List<DocumentItem> = mutableListOf()
 
-    //private lateinit var vendorsDocs:
+    private var timer: CountDownTimer? = null
+    private var blockchainUpdatingFragment: BlockchainUpdatingFragment? = null
 
     private lateinit var url: String
     private lateinit var adapter: RPAdapter
@@ -48,6 +53,8 @@ class AccountActivity : BaseActivity() {
     private var missedContacts: Boolean = true
     private var missedDocuments: Boolean = true
 
+
+    private lateinit var documentQueue: LinkedList<DocumentItem>
     // Life
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,9 +68,9 @@ class AccountActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        setupNextButton()
         setupAdapter()
-        missingInfo(missingDoc())
+        missingInfo(missedName || missedContacts || missedDocuments)
+
     }
 
     // Private
@@ -73,28 +80,23 @@ class AccountActivity : BaseActivity() {
         url = intent.extras.getString("path", "")
         vendorsModel.RPDocuments(url)
 
-
         adapter = RPAdapter()
         contactRecycler.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
         contactRecycler.adapter = adapter
         setupAdapterListener()
 
-
         //val vendorsMockList = listOf(VendorDocument(type = "PASSPORT"), VendorDocument(type = "ID_CARD"), VendorDocument(type = "DRIVERS_LICENSE"), VendorDocument(type = "RESIDENCE_PERMIT_CARD"))
         vendorsModel.vendorsDocumentsToVerify().observe(this, Observer<List<VendorDocument>> {
-
-            //            val docs = it!!.map { it.type to it.countries }.toMap().toMutableMap()
             vendorsDocs = it!!.map { it.type to it.countries }.toMap().toMutableMap()
 
-            setupDocuments()
             setupName()
+            setupDocuments()
             setupContacts()
             Log.d("TAGHASMISSED", "has missed fields = ${missingDoc()}")
             setupAdapter()
         })
 
-
-        setupNextButton()
+        setupNextButton(missedName && missedContacts && missedDocuments)
         cancelTv.setOnClickListener { finish() }
     }
 
@@ -108,54 +110,65 @@ class AccountActivity : BaseActivity() {
                     2 -> {
                         val emailIntent = Intent(this@AccountActivity, EmailActivity::class.java)
                         startActivityForResult(emailIntent, EMAIL_VERIFY_REQUEST_CODE)
-
-                    }//PresentationManager.email(this@AccountActivity)
+                    }
                     3, 4, 5, 6 -> PresentationManager.documentChooseVerify(this@AccountActivity)
                 }
             }
         })
     }
 
-    private fun setupNextButton() {
-        with(createBt) {
-            if (missingDoc()) {
-                isClickable = false
-                background = resources.getDrawable(R.drawable.button_rounded_grey, null)
-                setTextColor(Color.GRAY)
-            } else {
-                isClickable = true
-                background = resources.getDrawable(R.drawable.button_rounded_green, null)
-                setTextColor(Color.WHITE)
-            }
-        }
-        createBt.setOnClickListener {
-            Log.d("TAGSEND", "documentList = $documentList")
+    private fun setupNextButton(missedDocs: Boolean) {
+        Log.d("TAGMISSED", "in button setup - ${!missedName || !missedContacts || !missedDocuments}")
+        val bt = findViewById<Button>(R.id.aaaaaaBt)
+
+        if (missedName || missedContacts || !missedDocuments) {
+            Log.d("TAGSETUPBUTTON", "in setup button missed docs = ${!missedName && !missedContacts && !missedDocuments}")
+            aaaaaaBt.isClickable = false
+            aaaaaaBt.isFocusableInTouchMode = false // true flow
+
+            bt.setTextColor(Color.WHITE)
+            bt.setBackgroundDrawable(resources.getDrawable(R.drawable.button_rounded_green))// = resources.getDrawable(R.drawable.button_rounded_green, null)
 
 
-//            val country = model.userDocuments().filter { it.type == documentList[0].type }.first().country
-//            model.senDoc(documentList[0].type, country, url, onSuccess = {
-//
-//                Log.d("TAG", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-//
-//                val country = model.userDocuments().filter { it.type == documentList[1].type }.first().country
-//                model.senDoc(documentList[1].type, country, url, onSuccess = {
-//
-//                    Log.d("TAG", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-//
-//                }, onError = { Log.d("TAG", "HUYNY)((((((((((((((((((((((((((((((((") })
-//
-//            }, onError = { Log.d("TAG", "HUYNY)((((((((((((((((((((((((((((((((") })
+        } else {//
+            Log.d("TAGSETUPBUTTON", "in setup next button else")
+            bt.background = resources.getDrawable(R.drawable.button_rounded_grey, null)
+            bt.setTextColor(Color.GRAY)
 
-            for (doc in documentList) {
-                val country = model.userDocuments().filter { it.type == doc.type }.first().country
-                model.senDoc(doc.type, country, url, onSuccess = {
+            aaaaaaBt.setOnClickListener {
+                Log.d("TAGSEND", "documentList = $documentList")
 
-                    Log.d("TAG", "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                }, onError = { Log.d("TAG", "HUYNY)((((((((((((((((((((((((((((((((") })
+                if (documentList.isNotEmpty())
+                    showProgress()
+
+                documentQueue = LinkedList(documentList)
+
+
+                showProgress()
+                sendFromQueue({ hideProgress(); Log.d("TAGS", "SUCCSESS")}, { Log.d("TAGS", "error") })
+
 
             }
 
+
         }
+    }
+
+    private fun sendFromQueue(onSuccess: () -> Unit, onError: () -> Unit) {
+
+        documentQueue.poll()?.let { docItem ->
+            val country = model.userDocuments().filter { it.type == docItem.type }.first().country
+            model.senDoc(docItem.type, country, url, onSuccess = {
+                hideProgress()
+                Log.d("TAG", "${docItem.type}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                sendFromQueue({}, {})
+            }, onError = {
+                onError()
+                hideProgress()
+                Log.d("TAG", "HUYNY)((((((((((((((((((((((((((((((((")
+            })
+        } ?: onSuccess()
+
     }
 
     private fun missingDoc(): Boolean = (missedName && missedContacts && missedDocuments)
@@ -168,21 +181,6 @@ class AccountActivity : BaseActivity() {
         }
     }
 
-    private fun setupContacts() {
-        model.userContactsLive().observe(this, Observer<List<Contact>> {
-            val userContact = it?.orEmpty()
-            val tempList = mutableListOf(ContactItem(Contact(type = "phone")), ContactItem(Contact(type = "email")))
-            userContact!!.forEach {
-                if (it.type == "phone") tempList[0] = ContactItem(it)
-                if (it.type == "email") tempList[1] = ContactItem(it)
-            }
-            contactList = tempList
-            setupAdapter()
-            Log.d("TAGMISSED", "missed contact = $missedName")
-            setupNextButton()
-        })
-    }
-
     private fun setupName() {
         model.userLive().observe(this, Observer<User> {
             nameItem = if (it?.firstName == "") {
@@ -192,37 +190,89 @@ class AccountActivity : BaseActivity() {
             }
             Log.d("TAGMISSED", "missed name = $missedName")
             setupAdapter()
-            setupNextButton()
+            setupNextButton(missedName && missedContacts && missedDocuments)
+        })
+    }
+
+    private fun setupContacts() {
+        model.userContactsLive().observe(this, Observer<List<Contact>> {
+            val userContact = it?.orEmpty()
+            val tempList = mutableListOf(ContactItem(Contact(type = "phone")), ContactItem(Contact(type = "email")))
+
+            var count = 0
+            userContact!!.forEach {
+                if (it.type == "phone") {
+                    tempList[0] = ContactItem(it)
+                }
+                if (it.type == "email") {
+                    tempList[1] = ContactItem(it); count += 1
+                }
+            }
+
+            missedContacts = count != 1
+            contactList = tempList
+            setupAdapter()
+            Log.d("TAGMISSED", "missed contact = $missedContacts")
+
+            setupNextButton(missedName && missedContacts && missedDocuments)
+
         })
     }
 
     private fun setupDocuments() {
         model.userDocumentsLive().observe(this, Observer<List<Document>> {
             val newList = mutableListOf<DocumentItem>()
-            val userDocumentsMap = it?.map { it.type to it }?.toMap().orEmpty()
+            val userDocumentsMap = it?.map { it.type to it }?.toMap().orEmpty()// документы, которые есть у пользователя
 
-            //vendorsDocs.remove("PASSPORT")
-            vendorsDocs.remove("ID_CARD")
-            vendorsDocs.remove("DRIVERS_LICENSE")
-            vendorsDocs.remove("RESIDENCE_PERMIT_CARD")
 
+            //vendorsDocs.remove("PASSPORT") // vendorsDocs - документы, которые требует vendors
+            //vendorsDocs.remove("ID_CARD")
+            //vendorsDocs.remove("DRIVERS_LICENSE")
+            //vendorsDocs.remove("RESIDENCE_PERMIT_CARD")
+
+            var missed = 0
             vendorsDocs.forEach {
                 if (it.key in userDocumentsMap) {
                     newList.add(DocumentItem(userDocumentsMap[it.key]!!))
-                } else
+
+                } else {
+                    missed++
                     newList.add(DocumentItem(Document(type = it.key)))
+                }
+//                    missed++
+//                newList.add(DocumentItem(Document(type = it.key)))
             }
             documentList = newList
+            Log.d("TAGNEWLIST", "newList = $documentList")
 
-            missedDocuments = false
+            missedDocuments = missed != 0
+            Log.d("TAGMISSED", "missed documents = $missedDocuments")
+
             setupAdapter()
-            setupNextButton()
+            setupNextButton(missedName && missedContacts && missedDocuments)
         })
     }
 
     private fun setupAdapter() {
         adapter.setContacts(listOf(nameItem) + contactList + documentList)
         Log.d("TAGLIST", "adapters list ${listOf(nameItem) + contactList + documentList}")
+    }
+
+    private fun showProgress() {
+        //aaaaaaBt.isClickable = false
+        timer = object : CountDownTimer(500, 500) {
+            override fun onFinish() {
+                blockchainUpdatingFragment = BlockchainUpdatingFragment.newInstance()
+                blockchainUpdatingFragment?.show(supportFragmentManager, BlockchainUpdatingFragment.FRAGMENT_KEY)
+            }
+
+            override fun onTick(millisUntilFinished: Long) {}
+        }.start()
+    }
+
+    private fun hideProgress() {
+        if (blockchainUpdatingFragment != null) blockchainUpdatingFragment?.dismiss(); timer?.cancel()
+        //aaaaaaBt.isClickable = true
     }
 
 }
