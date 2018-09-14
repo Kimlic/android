@@ -50,7 +50,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
         val frontName: String = UUID.nameUUIDFromBytes(frontData).toString()
         val backName: String = UUID.nameUUIDFromBytes(backData).toString()
         val countryIso = vendorsRepository.countries().filter { it.country == country }.first().sh.toUpperCase()
-        repository.addDocument(Prefs.currentAccountAddress, documentType, country, countryIso, "", "", portraitName, portraitData, frontName, frontData, backName, backData)
+        repository.addDocument_(Prefs.currentAccountAddress, documentType, country, countryIso, "", "", portraitName, portraitData, frontName, frontData, backName, backData)
 
     }
 
@@ -59,7 +59,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
         val frontName: String = UUID.nameUUIDFromBytes(frontData).toString()
         val backName: String = UUID.nameUUIDFromBytes(backData).toString()
         val countryIso = vendorsRepository.countries().filter { it.country == country }.first().sh.toUpperCase()
-        repository.addDocument(Prefs.currentAccountAddress, documentType, country, countryIso, documentNumber, expireDate, portraitName, portraitData, frontName, frontData, backName, backData)
+        repository.addDocument(Prefs.currentAccountAddress, documentType, country, countryIso, documentNumber, expireDate, portraitName, frontName, backName)
 
     }
 
