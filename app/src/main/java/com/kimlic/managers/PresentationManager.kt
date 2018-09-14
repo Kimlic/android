@@ -134,7 +134,7 @@ object PresentationManager {
     // Verification
 
     fun documentChooseVerify(presenter: BaseActivity) {
-        present(presenter = presenter, className = DocumentVerifyChooseActivity__::class.java, isStarting = false)
+        present(presenter = presenter, className = DocumentChoiceActivity::class.java, isStarting = false)
     }
 
     fun verifyDocument(presenter: BaseActivity, documentType: String, country: String) {
@@ -146,6 +146,17 @@ object PresentationManager {
 
     fun detailsDocument(presenter: BaseActivity, documentType: String) {
         val params = HashMap<String, String>()
+        params[AppConstants.DOCUMENT_TYPE.key] = documentType
+        present(presenter = presenter, className = DocumentDetails::class.java, isStarting = false, params = params)
+    }
+
+    // New variant
+    fun detailsDocumentToSave(presenter: BaseActivity, documentType: String, country: String, portraitData: ByteArray, frontData: ByteArray, backData: ByteArray) {
+        val params = HashMap<String, String>()
+        params[AppConstants.DOCUMENT_TYPE.key] = documentType
+        params[AppConstants.DOCUMENT_TYPE.key] = documentType
+        params[AppConstants.DOCUMENT_TYPE.key] = documentType
+        params[AppConstants.DOCUMENT_TYPE.key] = documentType
         params[AppConstants.DOCUMENT_TYPE.key] = documentType
         present(presenter = presenter, className = DocumentDetails::class.java, isStarting = false, params = params)
     }
