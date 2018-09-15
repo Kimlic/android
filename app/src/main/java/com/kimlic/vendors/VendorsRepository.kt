@@ -62,7 +62,8 @@ class VendorsRepository private constructor() {
 
     // New request to Vendors - saves RP docs to database
     fun rpDocumentsRequest(accountAddress: String, url: String, onError: () -> Unit) {
-        val headers = mapOf(Pair("account-address", accountAddress), Pair("accept", "application/vnd.mobile-api.v1+json"))
+        //Log.d("TAGRPREQUEST", "url = $url")
+        val headers = mapOf(Pair("account-address", accountAddress), Pair("accept", "application/vnd.mobile-api.v1+json"), Pair("Content-Type", "application/json"))
         val vendorsRequest = KimlicJSONRequest(GET, url + KimlicApi.VENDORS.path, headers, JSONObject(),
                 Response.Listener { it ->
                     if (!it.getJSONObject("meta").optString("code").toString().startsWith("2")) {
