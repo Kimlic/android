@@ -9,7 +9,7 @@
   <FrameLayout
     android:id="@+id/rpFl"
     android:layout_width="260dp"
-    android:layout_height="200dp"
+    android:layout_height="wrap_content"
     android:layout_marginTop="16dp"
     android:layout_marginStart="16dp"
     android:layout_marginEnd="8dp"
@@ -35,7 +35,7 @@
   </FrameLayout>
 
   <LinearLayout
-    android:id="@+id/roootLl"
+    android:id="@+id/rootLl"
     android:layout_width="@dimen/content_width"
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
@@ -51,7 +51,7 @@
       android:id="@+id/titleTv"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="Kimlic RP"
+      android:text="@string/kimlic_rp"
       android:textColor="@android:color/white"
       android:textSize="@dimen/title_text_size"
       tools:text="Kimlic RP"/>
@@ -61,8 +61,8 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="8dp"
-      android:text="Identity verification by Veriff"
-      android:textColor="@color/lightBlue"
+      android:text="@string/identity_verification_by_veriff"
+      android:textColor="@android:color/white"
       android:textSize="@dimen/subtitle_text_size"
       />
 
@@ -71,8 +71,8 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="8dp"
-      android:text="Your following details to be shared"
-      android:textColor="@color/lightBlue"
+      android:text="@string/your_following_details_to_be_shared"
+      android:textColor="@android:color/white"
       android:textSize="@dimen/subtitle_text_size"
       />
   </LinearLayout>
@@ -86,10 +86,10 @@
     android:orientation="vertical"
     android:overScrollMode="never"
     android:scrollbars="none"
-    app:layout_constraintBottom_toTopOf="@id/aaaaaaBt"
+    app:layout_constraintBottom_toTopOf="@id/acceptBt"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/roootLl">
+    app:layout_constraintTop_toBottomOf="@+id/rootLl">
 
     <android.support.v7.widget.RecyclerView
       android:id="@+id/contactRecycler"
@@ -100,15 +100,16 @@
   </ScrollView>
 
   <Button
-    android:id="@+id/aaaaaaBt"
+    android:id="@+id/acceptBt"
     android:layout_width="@dimen/content_width"
     android:layout_height="@dimen/button_height"
-    android:layout_marginBottom="42dp"
-    android:text="Create"
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/button_rounded_grey"
+    android:text="@string/accept"
     android:textAllCaps="false"
-    android:textColor="@android:color/white"
+    android:textColor="@android:color/darker_gray"
     android:textSize="@dimen/button_text_size"
-    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintBottom_toTopOf="@id/cancelTv"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"/>
 
@@ -116,7 +117,7 @@
     android:id="@+id/cancelTv"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="18dp"
+    android:layout_marginBottom="16dp"
     android:gravity="center"
     android:text="@string/cancel"
     android:textColor="@android:color/white"
