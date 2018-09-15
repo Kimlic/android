@@ -9,7 +9,7 @@
   <FrameLayout
     android:id="@+id/rpFl"
     android:layout_width="260dp"
-    android:layout_height="wrap_content"
+    android:layout_height="200dp"
     android:layout_marginTop="16dp"
     android:layout_marginStart="16dp"
     android:layout_marginEnd="8dp"
@@ -35,7 +35,7 @@
   </FrameLayout>
 
   <LinearLayout
-    android:id="@+id/rootLl"
+    android:id="@+id/roootLl"
     android:layout_width="@dimen/content_width"
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
@@ -77,19 +77,38 @@
       />
   </LinearLayout>
 
-
-  <Button
-    android:id="@+id/createBt"
-    android:layout_width="@dimen/content_width"
-    android:layout_height="@dimen/button_height"
+  <ScrollView
+    android:id="@+id/scrollView"
+    android:layout_width="310dp"
+    android:layout_height="200dp"
     android:layout_marginTop="16dp"
     android:layout_marginBottom="16dp"
-    android:background="@drawable/button_rounded_green"
+    android:orientation="vertical"
+    android:overScrollMode="never"
+    android:scrollbars="none"
+    app:layout_constraintBottom_toTopOf="@id/aaaaaaBt"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/roootLl">
+
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/contactRecycler"
+      android:layout_width="@dimen/content_width"
+      android:layout_height="200dp"
+      android:overScrollMode="never"
+      />
+  </ScrollView>
+
+  <Button
+    android:id="@+id/aaaaaaBt"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="@dimen/button_height"
+    android:layout_marginBottom="42dp"
     android:text="Create"
     android:textAllCaps="false"
     android:textColor="@android:color/white"
     android:textSize="@dimen/button_text_size"
-    app:layout_constraintBottom_toTopOf="@id/cancelTv"
+    app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"/>
 
@@ -97,7 +116,7 @@
     android:id="@+id/cancelTv"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="16dp"
+    android:layout_marginBottom="18dp"
     android:gravity="center"
     android:text="@string/cancel"
     android:textColor="@android:color/white"
@@ -106,31 +125,5 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"/>
 
-  <ScrollView
-    android:id="@+id/scrollView"
-    android:layout_width="310dp"
-    android:layout_height="200dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp"
-    android:fillViewport="true"
-    android:orientation="vertical"
-    android:overScrollMode="never"
-    android:scrollbars="none"
-    app:layout_constraintBottom_toTopOf="@id/createBt"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/rootLl">
-
-    <android.support.v7.widget.RecyclerView
-      android:id="@+id/contactRecycler"
-      android:layout_width="@dimen/content_width"
-      android:layout_height="200dp"
-      android:overScrollMode="never"
-      app:layout_constraintBottom_toTopOf="@+id/nextBt"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/rootLl"/>
-
-  </ScrollView>
-
 </android.support.constraint.ConstraintLayout>
+
