@@ -11,9 +11,8 @@
         android:topRightRadius="12dp"/>
       <gradient
         android:angle="270"
-        android:centerColor="#e74fcec8"
         android:endColor="#40aca7"
-        android:startColor="#bf37938f"/>
+        android:startColor="#37938f"/>
     </shape>
 
   </item>
@@ -27,9 +26,8 @@
         android:topRightRadius="12dp"/>
       <gradient
         android:angle="270"
-        android:centerColor="#e74fcec8"
         android:endColor="#40aca7"
-        android:startColor="#bf37938f"/>
+        android:startColor="#37938f"/>
     </shape>
   </item>
 
