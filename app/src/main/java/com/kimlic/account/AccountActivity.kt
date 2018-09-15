@@ -70,7 +70,6 @@ class AccountActivity : BaseActivity() {
         super.onResume()
         setupAdapter()
         missingInfo(missedName || missedContacts || missedDocuments)
-
     }
 
     // Private
@@ -85,7 +84,6 @@ class AccountActivity : BaseActivity() {
         contactRecycler.adapter = adapter
         setupAdapterListener()
 
-        //val vendorsMockList = listOf(VendorDocument(type = "PASSPORT"), VendorDocument(type = "ID_CARD"), VendorDocument(type = "DRIVERS_LICENSE"), VendorDocument(type = "RESIDENCE_PERMIT_CARD"))
         vendorsModel.vendorsDocumentsToVerify().observe(this, Observer<List<VendorDocument>> {
             vendorsDocs = it!!.map { it.type to it.countries }.toMap().toMutableMap()
 
@@ -121,20 +119,20 @@ class AccountActivity : BaseActivity() {
         Log.d("TAGMISSED", "in button setup - ${!missedName || !missedContacts || !missedDocuments}")
         val bt = findViewById<Button>(R.id.aaaaaaBt)
 
-        if (missedName || missedContacts || !missedDocuments) {
+        if (missedName || missedContacts || missedDocuments) {
             Log.d("TAGSETUPBUTTON", "in setup button missed docs = ${!missedName && !missedContacts && !missedDocuments}")
             aaaaaaBt.isClickable = false
             aaaaaaBt.isFocusableInTouchMode = false // true flow
 
             bt.setTextColor(Color.WHITE)
-            bt.setBackgroundDrawable(resources.getDrawable(R.drawable.button_rounded_green))// = resources.getDrawable(R.drawable.button_rounded_green, null)
+            bt.setBackgroundColor(Color.LTGRAY)// = resources.getDrawable(R.drawable.button_rounded_green, null)
 
 
         } else {//
             Log.d("TAGSETUPBUTTON", "in setup next button else")
-            bt.background = resources.getDrawable(R.drawable.button_rounded_grey, null)
+//                    bt.setCompoundDrawablesWithIntrinsicBounds(R.drawable.button_rounded_grey, 0,0,0,0)// = resources.getDrawable(R.drawable.button_rounded_grey, null)
             bt.setTextColor(Color.GRAY)
-
+            bt.setBackgroundColor(Color.GREEN)
             aaaaaaBt.setOnClickListener {
                 Log.d("TAGSEND", "documentList = $documentList")
 
@@ -145,7 +143,7 @@ class AccountActivity : BaseActivity() {
 
 
                 showProgress()
-                sendFromQueue({ hideProgress(); Log.d("TAGS", "SUCCSESS")}, { Log.d("TAGS", "error") })
+                sendFromQueue({ hideProgress(); Log.d("TAGS", "SUCCSESS") }, { Log.d("TAGS", "error") })
 
 
             }
