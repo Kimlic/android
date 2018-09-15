@@ -6,13 +6,12 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
 import android.os.Handler
-import com.kimlic.db.entity.Address
-import com.kimlic.db.entity.Contact
-import com.kimlic.db.entity.Document
-import com.kimlic.db.entity.User
+import com.kimlic.db.entity.*
 import com.kimlic.documents.DocState
 import com.kimlic.preferences.Prefs
+import com.kimlic.utils.Cache
 import com.kimlic.vendors.VendorsRepository
+import java.io.File
 import java.util.*
 
 class ProfileViewModel(application: Application) : AndroidViewModel(application), LifecycleObserver {
@@ -45,6 +44,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
         repository.addUserPhoto(accountAddress, fileName, data)
     }
 
+    // Unused
     fun saveDocumentAndPhoto_(documentType: String, country: String, portraitData: ByteArray, frontData: ByteArray, backData: ByteArray) {
         val portraitName: String = UUID.nameUUIDFromBytes(portraitData).toString()
         val frontName: String = UUID.nameUUIDFromBytes(frontData).toString()
@@ -54,13 +54,13 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
 
     }
 
-    fun saveDocumentAndPhoto(documentType: String, country: String, documentNumber: String, expireDate: String, portraitData: ByteArray, frontData: ByteArray, backData: ByteArray) {
-        val portraitName: String = UUID.nameUUIDFromBytes(portraitData).toString()
-        val frontName: String = UUID.nameUUIDFromBytes(frontData).toString()
-        val backName: String = UUID.nameUUIDFromBytes(backData).toString()
+    fun saveDocumentAndPhoto(documentType: String, country: String, documentNumber: String, expireDate: String) {
+        val portraitName: String = UUID.nameUUIDFromBytes(File(getApplication<Application>().filesDir.toString() + "/" + Cache.PORTRAIT.file).readBytes()).toString()
+        val frontName: String = UUID.nameUUIDFromBytes(File(getApplication<Application>().filesDir.toString() + "/" + Cache.FRONT.file).readBytes()).toString()
+        val backName: String = UUID.nameUUIDFromBytes(File(getApplication<Application>().filesDir.toString() + "/" + Cache.BACK.file).readBytes()).toString()
+
         val countryIso = vendorsRepository.countries().filter { it.country == country }.first().sh.toUpperCase()
         repository.addDocument(Prefs.currentAccountAddress, documentType, country, countryIso, documentNumber, expireDate, portraitName, frontName, backName)
-
     }
 
     fun userPortraitPhotos() = repository.portraitPhotosLive(Prefs.currentAccountAddress)
@@ -116,7 +116,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
 
     //fun getUserAddressPhoto(accountAddress: String) = repository.userAddressPhoto(accountAddress = accountAddress)
 
-    // Sync request
+    //Sync request
 
     fun syncProfile() = repository.syncProfile(Prefs.currentAccountAddress)
 
@@ -134,9 +134,10 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     private fun retryQuorumRequest(onSuccess: () -> Unit, onError: () -> Unit) = timerQueue.poll()?.let { Handler().postDelayed({ quorumRequest(onSuccess, onError) }, it) }
             ?: onError()
 
-    fun senDoc(docType: String, country: String, url: String, onSuccess: () -> Unit, onError: () -> Unit) {
+    fun senDoc(docType: String, country: String, url: String, vendorDocument: VendorDocument, onSuccess: () -> Unit, onError: () -> Unit) {
         val countrySH = vendorsRepository.countries().first { it.country == country }.sh.toUpperCase()
-        repository.sendDoc(documentType = docType, countrySH = countrySH, onSuccess = onSuccess, onError = onError, url = url)
+        repository.senDoc_(documentType = docType, countrySH = countrySH, vendorDocument = vendorDocument, onSuccess = onSuccess, onError = onError, url = url)
+//        repository.senDoc(documentType = docType, countrySH = countrySH, onSuccess = onSuccess, onError = onError, url = url)
     }
 
     // Backup
