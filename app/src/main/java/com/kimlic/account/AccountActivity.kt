@@ -9,7 +9,6 @@ import android.os.CountDownTimer
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
-import android.widget.Button
 import android.widget.LinearLayout
 import com.kimlic.BaseActivity
 import com.kimlic.BlockchainUpdatingFragment
@@ -53,8 +52,8 @@ class AccountActivity : BaseActivity() {
     private var missedContacts: Boolean = true
     private var missedDocuments: Boolean = true
 
-
     private lateinit var documentQueue: LinkedList<DocumentItem>
+
     // Life
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,7 +67,7 @@ class AccountActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        setupAdapter()
+        setupAdapterList()
         missingInfo(missedName || missedContacts || missedDocuments)
     }
 
@@ -79,23 +78,25 @@ class AccountActivity : BaseActivity() {
         url = intent.extras.getString("path", "")
         vendorsModel.RPDocuments(url)
 
+        setupAdapter()
+        setupAdapterList()
+        setupAdapterListener()
+
+        vendorsRequest()
+
+        setupNextButton()
+        cancelTv.setOnClickListener { finish() }
+    }
+
+    private fun setupAdapter() {
         adapter = RPAdapter()
         contactRecycler.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
         contactRecycler.adapter = adapter
-        setupAdapterListener()
+    }
 
-        vendorsModel.vendorsDocumentsToVerify().observe(this, Observer<List<VendorDocument>> {
-            vendorsDocs = it!!.map { it.type to it.countries }.toMap().toMutableMap()
-
-            setupName()
-            setupDocuments()
-            setupContacts()
-            Log.d("TAGHASMISSED", "has missed fields = ${missingDoc()}")
-            setupAdapter()
-        })
-
-        setupNextButton(missedName && missedContacts && missedDocuments)
-        cancelTv.setOnClickListener { finish() }
+    private fun setupAdapterList() {
+        adapter.setContacts(listOf(nameItem) + contactList + documentList)
+        Log.d("TAGLIST", "adapters list ${listOf(nameItem) + contactList + documentList}")
     }
 
     private fun setupAdapterListener() {
@@ -115,81 +116,35 @@ class AccountActivity : BaseActivity() {
         })
     }
 
-    private fun setupNextButton(missedDocs: Boolean) {
-        Log.d("TAGMISSED", "in button setup - ${!missedName || !missedContacts || !missedDocuments}")
-        val bt = findViewById<Button>(R.id.aaaaaaBt)
+    private fun vendorsRequest() {
+        vendorsModel.vendorsDocumentsToVerify().observe(this, Observer<List<VendorDocument>> {
+            vendorsDocs = it!!.map { it.type to it.countries }.toMap().toMutableMap()
 
-        if (missedName || missedContacts || missedDocuments) {
-            Log.d("TAGSETUPBUTTON", "in setup button missed docs = ${!missedName && !missedContacts && !missedDocuments}")
-            aaaaaaBt.isClickable = false
-            aaaaaaBt.isFocusableInTouchMode = false // true flow
+            setupName()
+            setupDocuments()
+            setupContacts()
+            setupAdapterList()
+        })
 
-            bt.setTextColor(Color.WHITE)
-            bt.setBackgroundColor(Color.LTGRAY)// = resources.getDrawable(R.drawable.button_rounded_green, null)
-
-
-        } else {//
-            Log.d("TAGSETUPBUTTON", "in setup next button else")
-//                    bt.setCompoundDrawablesWithIntrinsicBounds(R.drawable.button_rounded_grey, 0,0,0,0)// = resources.getDrawable(R.drawable.button_rounded_grey, null)
-            bt.setTextColor(Color.GRAY)
-            bt.setBackgroundColor(Color.GREEN)
-            aaaaaaBt.setOnClickListener {
-                Log.d("TAGSEND", "documentList = $documentList")
-
-                if (documentList.isNotEmpty())
-                    showProgress()
-
-                documentQueue = LinkedList(documentList)
-
-
-                showProgress()
-                sendFromQueue({ hideProgress(); Log.d("TAGS", "SUCCSESS") }, { Log.d("TAGS", "error") })
-
-
-            }
-
-
-        }
-    }
-
-    private fun sendFromQueue(onSuccess: () -> Unit, onError: () -> Unit) {
-
-        documentQueue.poll()?.let { docItem ->
-            val country = model.userDocuments().filter { it.type == docItem.type }.first().country
-            model.senDoc(docItem.type, country, url, onSuccess = {
-                hideProgress()
-                Log.d("TAG", "${docItem.type}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                sendFromQueue({}, {})
-            }, onError = {
-                onError()
-                hideProgress()
-                Log.d("TAG", "HUYNY)((((((((((((((((((((((((((((((((")
-            })
-        } ?: onSuccess()
-
-    }
-
-    private fun missingDoc(): Boolean = (missedName && missedContacts && missedDocuments)
-
-    private fun missingInfo(missedDocs: Boolean) {
-        if (missedDocs) {
-
-            val missingFragment = MissingInformationFragment.getInstance()
-            missingFragment.show(supportFragmentManager, MissingInformationFragment.FRAGMENT_KEY)
-        }
     }
 
     private fun setupName() {
-        model.userLive().observe(this, Observer<User> {
-            nameItem = if (it?.firstName == "") {
+        model.userLive().observe(this, Observer<User> { user ->
+            nameItem = if (user?.firstName == "") {
                 missedName = true; NameItem("")
             } else {
-                missedName = false; it!!.let { NameItem(it.firstName + " " + it.lastName) }
+                missedName = false; user!!.let { NameItem(it.firstName + " " + it.lastName) }
             }
-            Log.d("TAGMISSED", "missed name = $missedName")
-            setupAdapter()
-            setupNextButton(missedName && missedContacts && missedDocuments)
+            setupAdapterList()
+            setupNextButton()
         })
+    }
+
+    private fun missingInfo(missedDocs: Boolean) {
+        if (!missedDocs) {
+            val missingFragment = MissingInformationFragment.getInstance()
+            missingFragment.show(supportFragmentManager, MissingInformationFragment.FRAGMENT_KEY)
+        }
     }
 
     private fun setupContacts() {
@@ -198,66 +153,88 @@ class AccountActivity : BaseActivity() {
             val tempList = mutableListOf(ContactItem(Contact(type = "phone")), ContactItem(Contact(type = "email")))
 
             var count = 0
+
             userContact!!.forEach {
-                if (it.type == "phone") {
-                    tempList[0] = ContactItem(it)
-                }
+                if (it.type == "phone") tempList[0] = ContactItem(it)
                 if (it.type == "email") {
-                    tempList[1] = ContactItem(it); count += 1
+                    tempList[1] = ContactItem(it); count++
                 }
             }
 
             missedContacts = count != 1
             contactList = tempList
-            setupAdapter()
-            Log.d("TAGMISSED", "missed contact = $missedContacts")
-
-            setupNextButton(missedName && missedContacts && missedDocuments)
-
+            setupAdapterList()
+            setupNextButton()
         })
     }
 
     private fun setupDocuments() {
-        model.userDocumentsLive().observe(this, Observer<List<Document>> {
+        model.userDocumentsLive().observe(this, Observer<List<Document>> { userDocumentsList ->
             val newList = mutableListOf<DocumentItem>()
-            val userDocumentsMap = it?.map { it.type to it }?.toMap().orEmpty()// документы, которые есть у пользователя
-
-
-            //vendorsDocs.remove("PASSPORT") // vendorsDocs - документы, которые требует vendors
+            val userDocumentsMap = userDocumentsList?.map { it.type to it }?.toMap().orEmpty()
+            //vendorsDocs.remove("PASSPORT")
             //vendorsDocs.remove("ID_CARD")
             //vendorsDocs.remove("DRIVERS_LICENSE")
             //vendorsDocs.remove("RESIDENCE_PERMIT_CARD")
+            var count = 0
 
-            var missed = 0
             vendorsDocs.forEach {
-                if (it.key in userDocumentsMap) {
+                if (it.key in userDocumentsMap)
                     newList.add(DocumentItem(userDocumentsMap[it.key]!!))
-
-                } else {
-                    missed++
-                    newList.add(DocumentItem(Document(type = it.key)))
+                else {
+                    count++; newList.add(DocumentItem(Document(type = it.key)))
                 }
-//                    missed++
-//                newList.add(DocumentItem(Document(type = it.key)))
             }
+
             documentList = newList
-            Log.d("TAGNEWLIST", "newList = $documentList")
-
-            missedDocuments = missed != 0
-            Log.d("TAGMISSED", "missed documents = $missedDocuments")
-
-            setupAdapter()
-            setupNextButton(missedName && missedContacts && missedDocuments)
+            missedDocuments = count != 0
+            setupAdapterList()
+            setupNextButton()
         })
     }
 
-    private fun setupAdapter() {
-        adapter.setContacts(listOf(nameItem) + contactList + documentList)
-        Log.d("TAGLIST", "adapters list ${listOf(nameItem) + contactList + documentList}")
+    private fun setupNextButton() {
+        if (missedName || missedContacts || missedDocuments) {
+            acceptBt.isClickable = false
+            acceptBt.isFocusableInTouchMode = false
+        } else {
+            acceptBt.setTextColor(Color.WHITE)
+            acceptBt.setBackgroundResource(R.drawable.button_rounded_green_no_duration)
+            acceptBt.setOnClickListener {
+                if (documentList.isNotEmpty()) {
+                    acceptBt.isClickable = false
+                    showProgress()
+                    documentQueue = LinkedList(documentList)
+
+                    sendFromQueue(
+                            onSuccess = {
+                                hideProgress(); Log.d("TAGS", "SUCCSESS")
+                            },
+                            onError = {
+                                hideProgress(); finish(); Log.d("TAGS", "error")
+                            })
+                }
+            }
+        }
     }
 
+    private fun sendFromQueue(onSuccess: () -> Unit, onError: () -> Unit) {
+        documentQueue.poll()?.let { docItem ->
+            val country = model.userDocuments().filter { it.type == docItem.type }.first().country
+            model.senDoc(docItem.type, country, url, onSuccess = {
+                hideProgress()
+                Log.d("TAG", "${docItem.type}!!!!!!!!!!")
+                sendFromQueue({}, {})
+            }, onError = {
+                onError()
+                hideProgress()
+                Log.d("TAG", "(((((")
+            })
+        } ?: onSuccess()
+    }
+
+
     private fun showProgress() {
-        //aaaaaaBt.isClickable = false
         timer = object : CountDownTimer(500, 500) {
             override fun onFinish() {
                 blockchainUpdatingFragment = BlockchainUpdatingFragment.newInstance()
@@ -270,9 +247,7 @@ class AccountActivity : BaseActivity() {
 
     private fun hideProgress() {
         if (blockchainUpdatingFragment != null) blockchainUpdatingFragment?.dismiss(); timer?.cancel()
-        //aaaaaaBt.isClickable = true
     }
-
 }
 
 interface AccountItem {
