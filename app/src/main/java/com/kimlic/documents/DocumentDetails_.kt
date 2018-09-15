@@ -73,18 +73,18 @@ class DocumentDetails_ : BaseActivity() {
         saveBt.setOnClickListener {
             if (validFields()) {
                 saveBt.isClickable = false
-                val portraitByteArray = BitmapToByteArrayMapper().transform(FileNameTxtBase64ToBitmap().transform(Cache.PORTRAIT.file)!!)
-                val frontByteArray = BitmapToByteArrayMapper().transform(FileNameTxtBase64ToBitmap().transform(Cache.FRONT.file)!!)
-                val backByteArray = BitmapToByteArrayMapper().transform(FileNameTxtBase64ToBitmap().transform(Cache.BACK.file)!!)
+//                val portraitByteArray = BitmapToByteArrayMapper().transform(FileNameTxtBase64ToBitmap().transform(Cache.PORTRAIT.file)!!)
+//                val frontByteArray = BitmapToByteArrayMapper().transform(FileNameTxtBase64ToBitmap().transform(Cache.FRONT.file)!!)
+//                val backByteArray = BitmapToByteArrayMapper().transform(FileNameTxtBase64ToBitmap().transform(Cache.BACK.file)!!)
 
                 val expireDate = expireDateEt.text.toString()
                 val documentNumber = numberEt.text.toString()
 
-                model.saveDocumentAndPhoto(documentType, country, documentNumber, expireDate, portraitByteArray, frontByteArray, backByteArray)
-                // successful()
+                model.saveDocumentAndPhoto(documentType, country, documentNumber, expireDate)//, portraitByteArray, frontByteArray, backByteArray)
+                 successful()
 
-                setResult(Activity.RESULT_OK)
-                finish()
+//                setResult(Activity.RESULT_OK)
+//                finish()
             }
         }
     }
@@ -115,7 +115,7 @@ class DocumentDetails_ : BaseActivity() {
         val fragment = DocumentSuccessfulFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
-                //finish()
+
                 setResult(Activity.RESULT_OK)
                 finish()
             }
