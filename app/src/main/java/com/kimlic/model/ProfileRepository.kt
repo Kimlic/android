@@ -199,9 +199,9 @@ class ProfileRepository private constructor() {
                 Photo(documentId = documentId, file = frontName, type = AppConstants.PHOTO_FRONT_TYPE.key),
                 Photo(documentId = documentId, file = backName, type = AppConstants.PHOTO_BACK_TYPE.key)).asList())
 
-        savePhoto_(accountAddress, Cache.PORTRAIT.file, portraitName)
-        savePhoto_(accountAddress, Cache.FRONT.file, frontName)
-        savePhoto_(accountAddress, Cache.BACK.file, backName)
+        savePhotoFromCache(accountAddress, Cache.PORTRAIT.file, portraitName)
+        savePhotoFromCache(accountAddress, Cache.FRONT.file, frontName)
+        savePhotoFromCache(accountAddress, Cache.BACK.file, backName)
         syncDataBase()
     }
 
@@ -346,10 +346,10 @@ class ProfileRepository private constructor() {
 
             val approvedMap = approvedObjects.map { it.name to it.status }.toMap()
 
-            approvedMap["documents.id_card"]?.let { status -> updateIdCard(AppDoc.ID_CARD.type, status) }
-            approvedMap["documents.driver_license"]?.let { status -> updateIdCard(AppDoc.DRIVERS_LICENSE.type, status) }
-            approvedMap["documents.passport"]?.let { status -> updateIdCard(AppDoc.PASSPORT.type, status) }
-            approvedMap["documents.residence_permit_card"]?.let { status -> updateIdCard(AppDoc.RESIDENCE_PERMIT_CARD.type, status) }
+            approvedMap["documents.id_card"]?.let { status -> updateDocument(AppDoc.ID_CARD.type, status) }
+            approvedMap["documents.driver_license"]?.let { status -> updateDocument(AppDoc.DRIVERS_LICENSE.type, status) }
+            approvedMap["documents.passport"]?.let { status -> updateDocument(AppDoc.PASSPORT.type, status) }
+            approvedMap["documents.residence_permit_card"]?.let { status -> updateDocument(AppDoc.RESIDENCE_PERMIT_CARD.type, status) }
 
             if (!approved.contains("phone")) contactDao.delete(Prefs.currentAccountAddress, "phone")
             if (!approved.contains("email")) contactDao.delete(Prefs.currentAccountAddress, "email")
@@ -433,7 +433,7 @@ class ProfileRepository private constructor() {
 
     // RP request
 
-    fun sendDoc(documentType: String, url: String, countrySH: String, onSuccess: () -> Unit, onError: () -> Unit) {
+    fun senDoc(documentType: String, url: String, countrySH: String, onSuccess: () -> Unit, onError: () -> Unit) {
 //        val urlFull = "http://" + url + KimlicApi.MEDIAS.path
         val urlFull = url + KimlicApi.MEDIAS.path
         //val urlFull = "https://51.140.246.76" + KimlicApi.MEDIAS.path
@@ -466,7 +466,7 @@ class ProfileRepository private constructor() {
 
         DoAsync().execute(Runnable {
             val receipt = QuorumKimlic.getInstance().setFieldMainData("{\"face\":${shaFace},\"document-front\":${shaFront},\"document-back\":${shaBack}}", dataType)
-
+            Log.d("TAGSEND", "string witch works -  {\"face\":${shaFace},\"document-front\":${shaFront},\"document-back\":${shaBack}}")
             if (receipt == null || receipt.status == "0x0") {
                 onError()
             }
@@ -522,10 +522,12 @@ class ProfileRepository private constructor() {
         VolleySingleton.getInstance(context).addToRequestQueue(request)
     }
 
-    fun senDoc_(documentType: String, url: String = "http://40.113.76.56:4000/api/medias", countrySH: String, onSuccess: () -> Unit, onError: () -> Unit) {
+    fun senDoc_(documentType: String, url: String, countrySH: String, vendorDocument: VendorDocument, onSuccess: () -> Unit, onError: () -> Unit) {
         var faceRequest: JsonObjectRequest? = null
         val queue = ArrayDeque<JsonObjectRequest>()
         val shas = mutableListOf<String>()
+
+        val urlFull = url + KimlicApi.MEDIAS.path
 
         val dataType: String
         val docType: String
@@ -538,32 +540,33 @@ class ProfileRepository private constructor() {
 
         //@formatter:off
         when (documentType) {
-            "passport" -> { docType = "PASSPORT"; dataType = "documents.passport" }
-            "id" -> { docType = "ID_CARD"; dataType = "documents.id_card" }
-            "license" -> { docType = "DRIVERS_LICENSE"; dataType = "documents.driver_license" }
-            "permit" -> { docType = "RESIDENCE_PERMIT_CARD"; dataType = "documents.residence_permit_card"}
+            AppDoc.PASSPORT.type -> { docType = "PASSPORT"; dataType = "documents.passport" }
+            AppDoc.ID_CARD.type -> { docType = "ID_CARD"; dataType = "documents.id_card" }
+            AppDoc.DRIVERS_LICENSE.type -> { docType = "DRIVERS_LICENSE"; dataType = "documents.driver_license" }
+            AppDoc.RESIDENCE_PERMIT_CARD.type -> { docType = "RESIDENCE_PERMIT_CARD"; dataType = "documents.residence_permit_card"}
             else -> { docType = ""; dataType = "" }
         }
         //@formatter:on
 
         val params = params(docType, udid, firstName, lastName, countrySH)
         val documents = photoDao.selectUserPhotosByDocument(Prefs.currentAccountAddress, documentType)
-        val vendorDocument = vendorDao.select().find { it.type == docType }
+//      val vendorDocument = vendorDao.select().find { it.type == docType }
+        Log.d("TAGSEND", "vendorDoc = $vendorDocument")
 
-        if (vendorDocument!!.contexts.contains("face")) {
+        if (vendorDocument.contexts.contains("face")) {
             val faceImage = photoString(documents.first { it.type == AppConstants.PHOTO_FACE_TYPE.key }.file)
             val faceParams = params.put("type", "face").put("file", faceImage)
             val shaFace = Sha.sha256(faceImage)
             shas.add("\"face\":${shaFace}")
 
-            faceRequest = docRequest(POST, url, faceParams, Response.Listener { nextRequest(queue, onSuccess) }, Response.ErrorListener { onError() })
+            faceRequest = docRequest(POST, urlFull, faceParams, Response.Listener { nextRequest(queue, onSuccess) }, Response.ErrorListener { onError() })
         }
 
         if (vendorDocument.contexts.contains("document-front")) {
             val frontImage = photoString(documents.first { it.type == AppConstants.PHOTO_FRONT_TYPE.key }.file)
             val frontParams = params.put("type", "document-front").put("file", frontImage)
             val shaFront = Sha.sha256(frontImage)
-            val frontRequest = docRequest(POST, url, frontParams, Response.Listener { nextRequest(queue, onSuccess) }, Response.ErrorListener { onError() })
+            val frontRequest = docRequest(POST, urlFull, frontParams, Response.Listener { nextRequest(queue, onSuccess) }, Response.ErrorListener { onError() })
 
             queue.add(frontRequest)
             shas.add("\"document-front\":${shaFront}")
@@ -573,13 +576,16 @@ class ProfileRepository private constructor() {
             val backImage = photoString(documents.first { it.type == AppConstants.PHOTO_BACK_TYPE.key }.file)
             val shaBack = Sha.sha256(backImage)
             val backParams = params.put("type", "document-back").put("file", backImage)
-            val backRequest = docRequest(POST, url, backParams, Response.Listener { nextRequest(queue, onSuccess) }, Response.ErrorListener { onError() })
+            val backRequest = docRequest(POST, urlFull, backParams, Response.Listener { nextRequest(queue, onSuccess) }, Response.ErrorListener { onError() })
 
             shas.add("\"document-back\":${shaBack}")
             queue.add(backRequest)
         }
 
         dataValue = "{" + shas.joinToString(",") + "}"
+
+        Log.d("TAGSEND", "data value = $dataValue")
+
         val receipt = QuorumKimlic.getInstance().setFieldMainData(dataValue, dataType)
 
         if (receipt.status == "0x0") {
@@ -661,7 +667,8 @@ class ProfileRepository private constructor() {
         syncPhoto(accountAddress, fileName)
     }
 
-    private fun savePhoto_(accountAddress: String, cacheFileName: String, fileName: String) {
+    // Fun create cofy from files in cache
+    private fun savePhotoFromCache(accountAddress: String, cacheFileName: String, fileName: String) {
         File(context.filesDir.toString() + "/" + cacheFileName).copyTo(File(context.filesDir.toString() + "/" + fileName), true)
         syncPhoto(accountAddress, fileName)
     }
@@ -680,7 +687,7 @@ class ProfileRepository private constructor() {
 
     // UpdateUtils
 
-    private fun updateIdCard(documentType: String, status: String?) {
+    private fun updateDocument(documentType: String, status: String?) {
         val document = documentDao.select(Prefs.currentAccountAddress, documentType)
         document?.let {
             when (status) {
@@ -691,6 +698,7 @@ class ProfileRepository private constructor() {
                     it.state = DocState.CREATED.state; documentDao.update(it)
                 }
                 DocState.UNVERIFIED.state -> documentDao.delete(it)
+                "" -> documentDao.delete(it)
             }
         }
     }
