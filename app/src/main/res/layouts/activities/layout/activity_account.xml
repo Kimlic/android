@@ -104,7 +104,7 @@
     android:layout_width="@dimen/content_width"
     android:layout_height="@dimen/button_height"
     android:layout_marginBottom="16dp"
-    android:background="@drawable/button_rounded_grey"
+    android:background="@drawable/button_rounded_grey_no_duration"
     android:text="@string/accept"
     android:textAllCaps="false"
     android:textColor="@android:color/darker_gray"
