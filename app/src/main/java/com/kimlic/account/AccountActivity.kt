@@ -217,7 +217,7 @@ class AccountActivity : BaseActivity() {
 
                     sendFromQueue(
                             onSuccess = {
-                                hideProgress(); showPopup("Success", "Documents sent for verification"); Log.d("TAGS", "SUCCSESS")
+                                hideProgress(); successShow(); Log.d("TAGS", "SUCCSESS")
                             },
                             onError = {
                                 hideProgress(); errorShow(); Log.d("TAGS", "error")
@@ -265,6 +265,16 @@ class AccountActivity : BaseActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Error")
                 .setMessage("Documents sending error")
+                .setPositiveButton(getString(R.string.OK)) { dialog, _ -> dialog?.dismiss(); finish() }.setCancelable(true)
+                .setOnDismissListener(DialogInterface.OnDismissListener { finish() })
+        val dialog = builder.create()
+        dialog.show()
+    }
+
+    fun successShow() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Success!")
+                .setMessage("Documents sent successfully")
                 .setPositiveButton(getString(R.string.OK)) { dialog, _ -> dialog?.dismiss(); finish() }.setCancelable(true)
                 .setOnDismissListener(DialogInterface.OnDismissListener { finish() })
         val dialog = builder.create()
