@@ -242,6 +242,20 @@
   <string name="add_your_id_card">Add your ID card</string>
   <string name="add_your_drivers_license">Add your Driver License</string>
   <string name="add_your_residence_permit">Add your Residence Permit</string>
-  <string name="add_your_social_security_card">Add your Social Securirty Card</string>
+  <string name="add_your_social_security_card">Add your Social Security Card</string>
   <string name="add_your_birth_certificate">Add your Birth Certificate</string>
+
+  <string name="your_document_is_prepared_for_verification">Your document is prepared for verification</string>
+  <string name="country_flag">Country Flag</string>
+  <string name="done">Done</string>
+  <string name="select_your_country">Select your Country</string>
+  <string name="start">Start</string>
+  <string name="witch_document_do_you_want_to_verify">Witch document do you want to verify ?</string>
+  <string name="social_security_card">Social Security Card</string>
+  <string name="birth_certificate">Birth Certificate</string>
+  <string name="hexagon_background">Hexagon background</string>
+  <string name="create">Create</string>
+  <string name="kimlic_rp">Kimlic RP</string>
+  <string name="your_following_details_to_be_shared">Your following details to be shared</string>
+  <string name="identity_verification_by_veriff">Identity verification by Veriff</string>
 </resources>
