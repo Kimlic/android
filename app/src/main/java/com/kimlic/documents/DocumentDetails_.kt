@@ -67,7 +67,7 @@ class DocumentDetails_ : BaseActivity() {
         setupTitle()
         fillPhotoFrames()
 
-        expireDateEt.setOnClickListener { datePicker() }
+        expireDateEt.setOnClickListener { hideKeyboard();datePicker() }
         backBt.setOnClickListener { finish() }
 
         saveBt.setOnClickListener {
