@@ -49,7 +49,7 @@ class MnemonicVerifyActivity : BaseActivity() {
         verifyBt.setOnClickListener {
             if (validEmptyFields())
                 if (phrasesMatch()) {
-                    Prefs.isPasscodeEnabled = true
+                    Prefs.isRecoveryEnabled = true
                     successful()
                 } else showPopup(getString(R.string.error), getString(R.string.mnemonic_phrases_do_not_match))
         }
