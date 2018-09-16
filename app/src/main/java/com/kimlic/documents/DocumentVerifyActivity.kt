@@ -1,6 +1,5 @@
 package com.kimlic.documents
 
-import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
@@ -11,9 +10,9 @@ import com.kimlic.R
 import com.kimlic.documents.fragments.DocumentBackFragment
 import com.kimlic.documents.fragments.DocumentFrontFragment
 import com.kimlic.documents.fragments.PortraitPhotoFragment
+import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.utils.AppConstants
-import com.kimlic.utils.BaseCallback
 import com.kimlic.utils.Cache
 import com.kimlic.utils.PhotoCallback
 import org.spongycastle.util.encoders.Base64
@@ -47,7 +46,7 @@ class DocumentVerifyActivity : BaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             DOCUMENT_TAKE_PHOTO_REQUEST_CODE -> {
-                setResult(Activity.RESULT_OK); finish()
+                setResult(RESULT_OK); finish()
             }
         }
     }
@@ -90,9 +89,12 @@ class DocumentVerifyActivity : BaseActivity() {
         backFragment.setCallback(object : PhotoCallback {
             override fun callback(data: ByteArray) {
                 backData = data
-                //saveDocument(documentType, country, portraitData, frontData, backData)
-                intentToDetails(documentType, country, portraitData, frontData, backData)
-                //successful()
+
+                saveTempFileToDisk(Cache.PORTRAIT.file, portraitData)
+                saveTempFileToDisk(Cache.FRONT.file, frontData)
+                saveTempFileToDisk(Cache.BACK.file, backData)
+
+                PresentationManager.detailsDocumentSave(this@DocumentVerifyActivity, documentType, country, DOCUMENT_TAKE_PHOTO_REQUEST_CODE)
             }
         })
     }
@@ -104,31 +106,6 @@ class DocumentVerifyActivity : BaseActivity() {
         portraitFragment = PortraitPhotoFragment.newInstance(portraitBundle)
         frontFragment = DocumentFrontFragment.newInstance()
         backFragment = DocumentBackFragment.newInstance()
-    }
-
-    private fun successful() {
-        val fragment = DocumentSuccessfulFragment.newInstance()
-        fragment.setCallback(object : BaseCallback {
-            override fun callback() {
-                finish()
-            }
-        })
-
-        fragment.show(supportFragmentManager, DocumentSuccessfulFragment.FRAGMENT_KEY)
-    }
-
-    private fun intentToDetails(documentType: String, country: String, portraitData: ByteArray, frontData: ByteArray, backData: ByteArray) {
-        saveTempFileToDisk(Cache.PORTRAIT.file, portraitData)
-        saveTempFileToDisk(Cache.FRONT.file, frontData)
-        saveTempFileToDisk(Cache.BACK.file, backData)
-
-
-        val detailsIntent = Intent(this@DocumentVerifyActivity, DocumentDetails_::class.java)
-        detailsIntent.putExtra(AppConstants.DOCUMENT_TYPE.key, documentType)
-        detailsIntent.putExtra("action", "previewAndSave")
-        detailsIntent.putExtra("country", country)
-
-        startActivityForResult(detailsIntent, DOCUMENT_TAKE_PHOTO_REQUEST_CODE)
     }
 
     private fun saveTempFileToDisk(fileName: String, data: ByteArray) {
