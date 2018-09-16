@@ -140,15 +140,10 @@
       android:name=".scanner.ScannerActivity"/>
 
     <activity
-      android:name=".vendors.VendorsActivity"
-      android:screenOrientation="sensorPortrait"/>
-    <activity
       android:label="Account"
       android:name=".account.AccountActivity"
       />
-    <!--android:screenOrientation="sensorPortrait"-->
 
-    <activity android:name=".documents.DocumentVerifyChooseActivity__"/>
     <activity android:name=".documents.DocumentDetails_"/>
   </application>
 
