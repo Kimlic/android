@@ -1,7 +1,6 @@
 package com.kimlic.passcode
 
 import android.app.Activity
-import android.arch.lifecycle.ViewModelProviders
 import android.graphics.drawable.Animatable
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -16,7 +15,6 @@ import butterknife.ButterKnife
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
-import com.kimlic.model.ProfileViewModel
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.BaseCallback
 import kotlinx.android.synthetic.main.activity_passcode.*
@@ -35,7 +33,6 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
 
     private var passcode: String
     private lateinit var passcodeConfirm: String
-    private lateinit var model: ProfileViewModel
     private lateinit var action: String
     private var firstInput: Boolean
 
@@ -74,7 +71,6 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
     // Private
 
     private fun setupUI() {
-        model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         mBtnList.forEach { it.setOnClickListener(this) }
         setupTextSwitcher()
 
@@ -88,7 +84,7 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
         }
 
         passcodeDeleteBt.setOnClickListener { deletePasscode() }
-        changeTv.setOnClickListener { finish() }
+        cancelTv.setOnClickListener { finish() }
         //passcodeOkBt.setOnClickListener { usePasscode(action) }
     }
 
@@ -225,7 +221,7 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
 
                 override fun onTick(millisUntilFinished: Long) {}
             }
-                    .start()// TODO use automatic ok enter
+                    .start()
     }
 
     // Text switcher
