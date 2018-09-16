@@ -1,7 +1,7 @@
 package com.kimlic.utils.mappers
 
 import com.kimlic.db.entity.VendorDocument
-import com.kimlic.vendors.Document_
+import com.kimlic.vendors.entity.Document_
 
 class JsonToVenDocMapper : BaseMapper<Document_, VendorDocument> {
     override fun transform(input: Document_): VendorDocument {
