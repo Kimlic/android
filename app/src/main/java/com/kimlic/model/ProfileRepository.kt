@@ -587,7 +587,7 @@ class ProfileRepository private constructor() {
         Log.d("TAGSEND", "data value = $dataValue")
 
         val receipt = QuorumKimlic.getInstance().setFieldMainData(dataValue, dataType)
-
+        Log.d("TAGSEND", "data value = $receipt")
         if (receipt.status == "0x0") {
             Log.e("RECEIPT ERROR", receipt.toString())
             onError()
@@ -598,6 +598,7 @@ class ProfileRepository private constructor() {
     }
 
     private fun nextRequest(queue: Queue<JsonObjectRequest>, onSuccess: () -> Unit) {
+        Log.d("TAGSENDCOUNT", "request +")
         if (queue.peek() != null) {
             VolleySingleton.getInstance(context).addToRequestQueue(queue.poll())
         } else onSuccess()
