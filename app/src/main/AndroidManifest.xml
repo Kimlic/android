@@ -64,77 +64,95 @@
       android:label="Splash Screen"
       android:name=".splash.SplashScreenActivity"
       android:screenOrientation="portrait"/>
+
     <activity
       android:label="Passcode"
       android:name=".passcode.PasscodeActivity"
       android:screenOrientation="portrait"/>
+
     <activity
       android:label="Tutorial"
       android:name=".tutorial.TutorialActivity"
       android:screenOrientation="portrait"/>
+
     <activity
       android:label="Touch ID"
       android:name=".auth.TouchIdActivity"
       android:screenOrientation="portrait"/>
+
     <activity
       android:label="Verify"
       android:name=".mnemonic.MnemonicVerifyActivity"
       android:screenOrientation="portrait"/>
+
     <activity
       android:label="Mnemonic Phrase"
       android:name=".mnemonic.MnemonicPreviewActivity"
       android:screenOrientation="portrait"/>
+
     <activity
       android:label="Account recovery"
       android:name=".recovery.AccountRecoveryActivity"/>
+
     <activity
       android:label="Terms &amp; Privacy"
       android:name=".terms.TermsActivity"/>
+
     <activity
       android:label="SignUp Recovery"
       android:name=".recovery.SignUpRecoveryActivity"/>
+
     <activity
       android:label="Settings"
       android:name=".settings.SettingsActivity"/>
+
     <activity
       android:label="Main Stage"
       android:launchMode="singleTask"
       android:name=".stage.StageActivity"/>
+
     <activity
       android:label="Phone"
       android:name=".phone.PhoneActivity"/>
+
     <activity
       android:label="Phone Verify"
       android:name=".phone.PhoneVerifyActivity"/>
+
     <activity
       android:label="Name"
       android:name=".name.NameActivity"/>
+
     <activity
       android:label="Verify ID document"
       android:launchMode="singleTask"
       android:name=".documents.DocumentChoiceActivity"/>
+
     <activity
       android:label="Email"
       android:name=".email.EmailActivity"/>
+
     <activity
       android:label="Email verify"
       android:name=".email.EmailVerifyActivity"/>
+
     <activity
       android:label="Document Verify"
       android:name=".documents.DocumentVerifyActivity"/>
+
     <activity
       android:label="Address"
       android:name=".address.AddressActivity"
       android:windowSoftInputMode="adjustResize|adjustPan"/>
+
     <activity
       android:label="Portrait"
       android:name=".documents.PortraitActivity"/>
-    <activity
-      android:label="Document verify details"
-      android:name=".documents.DocumentDetails"/>
+
     <activity
       android:label="Bill"
       android:name=".documents.BillActivity"/>
+
     <activity
       android:label="Scanner"
       android:name=".scanner.ScannerActivity"/>
@@ -144,7 +162,9 @@
       android:name=".account.AccountActivity"
       />
 
-    <activity android:name=".documents.DocumentDetails_"/>
+    <activity
+      android:label="DocumentDetails"
+      android:name=".documents.DocumentDetails"/>
   </application>
 
 </manifest>
