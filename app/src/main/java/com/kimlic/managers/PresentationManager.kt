@@ -36,10 +36,10 @@ object PresentationManager {
 
     // Passcode
 
-    fun passcode(presenter: BaseActivity) {
+    fun passcode(presenter: BaseActivity, requestCode: Int) {
         val params = HashMap<String, String>()
         params["action"] = "set"
-        present(presenter = presenter, className = PasscodeActivity::class.java, isStarting = false, params = params)
+        present(presenter = presenter, className = PasscodeActivity::class.java, isStarting = false, params = params, requestCode = requestCode)
     }
 
     fun passcodeUnlock(presenter: BaseActivity) {
