@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v4.app.FragmentTransaction
 import android.util.Log
 import android.view.View
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.zxing.integration.android.IntentIntegrator
 import com.kimlic.BaseActivity
 import com.kimlic.R
@@ -56,7 +57,6 @@ class StageActivity : BaseActivity() {
                 val result = IntentIntegrator.parseActivityResult(resultCode, data)
                 if (result.contents != null) {
                     val urlSplitted = result.contents.split("?").first()
-                    //PresentationManager.vendors(this, url = urlSplitted)
                     PresentationManager.account(this, url = urlSplitted)
                 }
             }
@@ -72,6 +72,7 @@ class StageActivity : BaseActivity() {
 
     private fun setupUI() {
         Log.d("TAGACCOUNT", "account address - ${Prefs.currentAccountAddress}")
+        Log.d("TAGACCOUNT", "firebase - ${FirebaseInstanceId.getInstance().token!!}")
         initFragments()
         lifecycle.addObserver(model)
         lifecycle.addObserver(userStageFragment)
