@@ -3,7 +3,6 @@ package com.kimlic.account
 import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -16,6 +15,7 @@ import com.kimlic.BaseActivity
 import com.kimlic.BlockchainUpdatingFragment
 import com.kimlic.R
 import com.kimlic.account.adapter.RPAdapter
+import com.kimlic.account.fragment.IdentitySentSuccessfulFragment
 import com.kimlic.account.fragment.MissingInformationFragment
 import com.kimlic.db.entity.Contact
 import com.kimlic.db.entity.Document
@@ -24,6 +24,7 @@ import com.kimlic.db.entity.VendorDocument
 import com.kimlic.email.EmailActivity
 import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
+import com.kimlic.utils.BaseCallback
 import com.kimlic.vendors.VendorsViewModel
 import kotlinx.android.synthetic.main.activity_account.*
 import java.util.*
@@ -40,22 +41,21 @@ class AccountActivity : BaseActivity() {
 
     private lateinit var model: ProfileViewModel
     private lateinit var vendorsModel: VendorsViewModel
+
     private var nameItem: NameItem = NameItem("")
     private var contactList: MutableList<ContactItem> = mutableListOf()
     private var documentList: List<DocumentItem> = mutableListOf()
-
     private var timer: CountDownTimer? = null
     private var blockchainUpdatingFragment: BlockchainUpdatingFragment? = null
-
-    private lateinit var url: String
-    private lateinit var adapter: RPAdapter
-    private lateinit var vendorsDocs: MutableMap<String, VendorDocument>
     private var missedName: Boolean = true
     private var missedContacts: Boolean = true
     private var missedDocuments: Boolean = true
 
     private lateinit var documentQueue: LinkedList<DocumentItem>
     private lateinit var vendorDocumentsList: List<VendorDocument>
+    private lateinit var url: String
+    private lateinit var adapter: RPAdapter
+    private lateinit var vendorsDocs: MutableMap<String, VendorDocument>
 
     // Life
 
@@ -80,17 +80,17 @@ class AccountActivity : BaseActivity() {
         lifecycle.addObserver(vendorsModel)
         url = intent.extras.getString("path", "")
 
-        val urltoParce = url.split("/")
-        val urlnew = urltoParce[0] + "//" + urltoParce[1] + urltoParce[2]
+        val urlToParce = url.split("/")
+        val urlNew = urlToParce[0] + "//" + urlToParce[1] + urlToParce[2]
 
-        url = urlnew
-        vendorsModel.RPDocuments(url)
+        url = urlNew
+        vendorsModel.rpDocuments(url)// Request for RP documents.
 
         setupAdapter()
         setupAdapterList()
         setupAdapterListener()
 
-        vendorsRequest()
+        fetchVendorDocs()
 
         setupNextButton()
         cancelTv.setOnClickListener { finish() }
@@ -124,9 +124,8 @@ class AccountActivity : BaseActivity() {
         })
     }
 
-    private fun vendorsRequest() {
-        vendorsModel.vendorsDocumentsToVerify().observe(this, Observer<List<VendorDocument>> {
-            Log.d("TAGVENDORS", "venorsList - $it")
+    private fun fetchVendorDocs() {
+        vendorsModel.vendorsDocumentsToVerify().observe(this, Observer<List<VendorDocument>> { it ->
             vendorsDocs = it!!.map { it.type to it }.toMap().toMutableMap()
             vendorDocumentsList = it
             setupName()
@@ -134,7 +133,6 @@ class AccountActivity : BaseActivity() {
             setupContacts()
             setupAdapterList()
         })
-
     }
 
     private fun setupName() {
@@ -216,12 +214,8 @@ class AccountActivity : BaseActivity() {
                     documentQueue = LinkedList(documentList)
 
                     sendFromQueue(
-                            onSuccess = {
-                                hideProgress(); successShow(); Log.d("TAGS", "SUCCSESS")
-                            },
-                            onError = {
-                                hideProgress(); errorShow(); Log.d("TAGS", "error")
-                            })
+                            onSuccess = { hideProgress(); successful() },
+                            onError = { hideProgress(); errorShow() })
                 }
             }
         }
@@ -232,19 +226,14 @@ class AccountActivity : BaseActivity() {
             val country = model.userDocuments().filter { it.type == docItem.type }.first().country
 
             val vendorDocument = vendorDocumentsList.filter { it.type == docItem.type }.first()
+
             model.senDoc(docItem.type, country, url, vendorDocument = vendorDocument,
                     onSuccess = {
-                        Log.d("TAGSENDQUEUE", "success!!!! ${docItem.type}!!!!!!!!!!")
                         sendFromQueue({ onSuccess() }, { onError() })
                     },
-                    onError = {
-                        onError()
-                        hideProgress()
-                        Log.d("TAGSENDQUEUE", " (((((")
-                    })
+                    onError = { onError() })
         } ?: onSuccess()
     }
-
 
     private fun showProgress() {
         timer = object : CountDownTimer(500, 500) {
@@ -261,24 +250,24 @@ class AccountActivity : BaseActivity() {
         if (blockchainUpdatingFragment != null) blockchainUpdatingFragment?.dismiss(); timer?.cancel()
     }
 
-    fun errorShow() {
+    private fun errorShow() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Error")
                 .setMessage("Documents sending error")
                 .setPositiveButton(getString(R.string.OK)) { dialog, _ -> dialog?.dismiss(); finish() }.setCancelable(true)
-                .setOnDismissListener(DialogInterface.OnDismissListener { finish() })
+                .setOnDismissListener { finish() }
         val dialog = builder.create()
         dialog.show()
     }
 
-    fun successShow() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Success!")
-                .setMessage("Documents sent successfully")
-                .setPositiveButton(getString(R.string.OK)) { dialog, _ -> dialog?.dismiss(); finish() }.setCancelable(true)
-                .setOnDismissListener(DialogInterface.OnDismissListener { finish() })
-        val dialog = builder.create()
-        dialog.show()
+    private fun successful() {
+        val fragment = IdentitySentSuccessfulFragment.newInstance()
+        fragment.setCallback(object : BaseCallback {
+            override fun callback() {
+                finish()
+            }
+        })
+        fragment.show(supportFragmentManager, IdentitySentSuccessfulFragment.FRAGMENT_KEY)
     }
 }
 
