@@ -18,6 +18,7 @@ import com.kimlic.db.SyncService
 import com.kimlic.db.entity.VendorDocument
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.mappers.JsonToVenDocMapper
+import com.kimlic.vendors.entity.Vendors
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.IOException
@@ -31,38 +32,9 @@ class VendorsRepository private constructor() {
     private var db: KimlicDB = KimlicDB.getInstance()!!
     private var vendorDao = db.vendorDao()
 
-    // Public
-    // Previous version - work now
-    fun initDocumentsRequest(accountAddress: String, url: String, onError: () -> Unit) {
-        val headers = mapOf(Pair("account-address", accountAddress), Pair("accept", "application/vnd.mobile-api.v1+json"))
+    // New request to Vendors - saves RP docs to database. database provides this docs by LiveData
 
-        val vendorsRequest = KimlicJSONRequest(GET, url + KimlicApi.VENDORS.path, headers, JSONObject(),
-                Response.Listener { it ->
-                    if (!it.getJSONObject("meta").optString("code").toString().startsWith("2")) {
-                        onError()
-                        return@Listener
-                    }
-
-                    val type = object : TypeToken<Vendors>() {}.type
-                    val data = it.getJSONObject("data").toString()
-
-                    val responseObject: Vendors = Gson().fromJson(data, type)
-                    val entityList: MutableList<VendorDocument> = mutableListOf()
-
-                    responseObject.documents.forEach { entityList.add(JsonToVenDocMapper().transform(it)) }
-                    vendorDao.insertDocs(entityList.toList())
-                    syncDataBase()
-                },
-                Response.ErrorListener { _ ->
-                    onError()
-                })
-
-        DoAsync().execute(Runnable { VolleySingleton.getInstance(KimlicApp.applicationContext()).requestQueue.add(vendorsRequest) })
-    }
-
-    // New request to Vendors - saves RP docs to database
     fun rpDocumentsRequest(accountAddress: String, url: String, onError: () -> Unit) {
-        //Log.d("TAGRPREQUEST", "url = $url")
         val headers = mapOf(Pair("account-address", accountAddress), Pair("accept", "application/vnd.mobile-api.v1+json"), Pair("Content-Type", "application/json"))
         val vendorsRequest = KimlicJSONRequest(GET, url + KimlicApi.VENDORS.path, headers, JSONObject(),
                 Response.Listener { it ->
@@ -70,7 +42,6 @@ class VendorsRepository private constructor() {
                         onError()
                         return@Listener
                     }
-                    Log.d("TAGRPREQUEST", "request")
                     val type = object : TypeToken<Vendors>() {}.type
                     val data = it.getJSONObject("data").toString()
 
@@ -116,7 +87,7 @@ class VendorsRepository private constructor() {
         return countries
     }
 
-    // Is going to be user for
+
     fun vendorDocumentsLive() = vendorDao.selectLive()
 
     fun vendorDocuments() = vendorDao.select()
@@ -127,7 +98,6 @@ class VendorsRepository private constructor() {
         googleSignInAccount = GoogleSignIn.getLastSignedInAccount(KimlicApp.applicationContext())
         if (googleSignInAccount != null && Prefs.isDriveActive)
             Handler().postDelayed({ SyncService.getInstance().backupDatabase(Prefs.currentAccountAddress, "kimlic.db", onSuccess = {}, onError = {}) }, 0)
-
     }
 
     // Holder
