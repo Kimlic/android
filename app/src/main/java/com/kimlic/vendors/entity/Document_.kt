@@ -1,4 +1,4 @@
-package com.kimlic.vendors
+package com.kimlic.vendors.entity
 
 import com.google.gson.annotations.SerializedName
 
