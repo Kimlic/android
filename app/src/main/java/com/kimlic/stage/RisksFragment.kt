@@ -66,7 +66,7 @@ class RisksFragment : BasePopupFragment() {
         if (!passcodeEnabled) {
             views[count].visibility = View.VISIBLE
             buttons[count].text = getString(R.string.create_passcode)
-            buttons[count++].setOnClickListener { dismiss(); PresentationManager.passcode(activity!!) }
+            buttons[count++].setOnClickListener { dismiss(); PresentationManager.passcode(activity!!, StageActivity.SECURITY_REQUEST_CODE) }
         }
 
         subtitleTv.text = resources.getString(R.string.you_have_main_risks, count)
