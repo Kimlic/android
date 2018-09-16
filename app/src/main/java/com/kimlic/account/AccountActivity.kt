@@ -47,6 +47,7 @@ class AccountActivity : BaseActivity() {
     private var documentList: List<DocumentItem> = mutableListOf()
     private var timer: CountDownTimer? = null
     private var blockchainUpdatingFragment: BlockchainUpdatingFragment? = null
+    private var missingFragment: MissingInformationFragment? = null
     private var missedName: Boolean = true
     private var missedContacts: Boolean = true
     private var missedDocuments: Boolean = true
@@ -148,9 +149,9 @@ class AccountActivity : BaseActivity() {
     }
 
     private fun missingInfo(missedDocs: Boolean) {
-        if (!missedDocs) {
-            val missingFragment = MissingInformationFragment.getInstance()
-            missingFragment.show(supportFragmentManager, MissingInformationFragment.FRAGMENT_KEY)
+        if (missedDocs && missingFragment == null) {
+            missingFragment = MissingInformationFragment.getInstance()
+            missingFragment!!.show(supportFragmentManager, MissingInformationFragment.FRAGMENT_KEY)
         }
     }
 
@@ -161,10 +162,10 @@ class AccountActivity : BaseActivity() {
 
             var count = 0
 
-            userContact!!.forEach {
-                if (it.type == "phone") tempList[0] = ContactItem(it)
-                if (it.type == "email") {
-                    tempList[1] = ContactItem(it); count++
+            userContact!!.forEach { contact ->
+                if (contact.type == "phone") tempList[0] = ContactItem(contact)
+                if (contact.type == "email") {
+                    tempList[1] = ContactItem(contact); count++
                 }
             }
 
@@ -252,8 +253,8 @@ class AccountActivity : BaseActivity() {
 
     private fun errorShow() {
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("Error")
-                .setMessage("Documents sending error")
+        builder.setTitle(getString(R.string.error))
+                .setMessage(getString(R.string.documents_sending_error))
                 .setPositiveButton(getString(R.string.OK)) { dialog, _ -> dialog?.dismiss(); finish() }.setCancelable(true)
                 .setOnDismissListener { finish() }
         val dialog = builder.create()
