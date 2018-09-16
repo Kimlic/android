@@ -44,7 +44,6 @@ class RPAdapter : RecyclerView.Adapter<RPAdapter.ContactViewHolder>() {
 
     //@Synchronized
     fun setContacts(contacts: List<AccountItem>) {
-        Log.d("TAGADAPTER", "in adapter ${count++}")
         this.contactList = contacts
         notifyDataSetChanged()
     }
