@@ -3,12 +3,10 @@ package com.kimlic.account
 import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import com.kimlic.BaseActivity
@@ -21,7 +19,6 @@ import com.kimlic.db.entity.Contact
 import com.kimlic.db.entity.Document
 import com.kimlic.db.entity.User
 import com.kimlic.db.entity.VendorDocument
-import com.kimlic.email.EmailActivity
 import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.utils.BaseCallback
@@ -30,12 +27,6 @@ import kotlinx.android.synthetic.main.activity_account.*
 import java.util.*
 
 class AccountActivity : BaseActivity() {
-
-    // Constants
-
-    companion object {
-        private const val EMAIL_VERIFY_REQUEST_CODE = 879
-    }
 
     // Variables
 
@@ -105,7 +96,6 @@ class AccountActivity : BaseActivity() {
 
     private fun setupAdapterList() {
         adapter.setContacts(listOf(nameItem) + contactList + documentList)
-        Log.d("TAGLIST", "adapters list ${listOf(nameItem) + contactList + documentList}")
     }
 
     private fun setupAdapterListener() {
@@ -115,11 +105,8 @@ class AccountActivity : BaseActivity() {
                 when (position) {
                     0 -> PresentationManager.name(this@AccountActivity)
                     1 -> PresentationManager.phoneNumber(this@AccountActivity)
-                    2 -> {
-                        val emailIntent = Intent(this@AccountActivity, EmailActivity::class.java)
-                        startActivityForResult(emailIntent, EMAIL_VERIFY_REQUEST_CODE)
-                    }
-                    3, 4, 5, 6 -> PresentationManager.documentChooseVerify(this@AccountActivity)
+                    2 -> PresentationManager.email(this@AccountActivity)
+                    3, 4, 5, 6 -> PresentationManager.documentChoiseVerify(this@AccountActivity)
                 }
             }
         })
@@ -248,7 +235,9 @@ class AccountActivity : BaseActivity() {
     }
 
     private fun hideProgress() {
-        if (blockchainUpdatingFragment != null) blockchainUpdatingFragment?.dismiss(); timer?.cancel()
+        if (blockchainUpdatingFragment != null) blockchainUpdatingFragment?.dismiss()
+
+        timer?.cancel()
     }
 
     private fun errorShow() {
@@ -293,12 +282,8 @@ class DocumentItem(val document: Document) : AccountItem {
 }
 
 class NameItem(val name: String = "") : AccountItem {
-    override val tag: String
-        get() = "name"
-    override val type: String
-        get() = "USER_NAME"
-    override val value: String
-        get() = name
-
+    override val tag: String get() = "name"
+    override val type: String get() = "USER_NAME"
+    override val value: String get() = name
     override fun toString(): String = this::class.java.simpleName
 }
