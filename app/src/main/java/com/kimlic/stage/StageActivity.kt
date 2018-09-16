@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.support.v4.app.FragmentTransaction
 import android.util.Log
 import android.view.View
-import com.google.firebase.iid.FirebaseInstanceId
 import com.google.zxing.integration.android.IntentIntegrator
 import com.kimlic.BaseActivity
 import com.kimlic.R
@@ -23,7 +22,7 @@ class StageActivity : BaseActivity() {
 
     companion object {
         private const val SCAN_REQUEST_CODE = 1100
-        private const val SECURITY_REQUEST_CODE = 151
+        const val SECURITY_REQUEST_CODE = 151
     }
 
     // Variables
@@ -72,7 +71,6 @@ class StageActivity : BaseActivity() {
 
     private fun setupUI() {
         Log.d("TAGACCOUNT", "account address - ${Prefs.currentAccountAddress}")
-        Log.d("TAGACCOUNT", "firebase - ${FirebaseInstanceId.getInstance().token!!}")
         initFragments()
         lifecycle.addObserver(model)
         lifecycle.addObserver(userStageFragment)
