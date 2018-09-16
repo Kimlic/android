@@ -1,12 +1,11 @@
 package com.kimlic.documents
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.arch.lifecycle.ViewModelProviders
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.text.Editable
-import android.view.View
 import android.widget.EditText
 import butterknife.BindViews
 import butterknife.ButterKnife
@@ -17,37 +16,31 @@ import com.kimlic.db.entity.User
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.AppDoc
+import com.kimlic.utils.BaseCallback
+import com.kimlic.utils.Cache
 import com.kimlic.utils.mappers.FileNameTxtBase64ToBitmap
 import kotlinx.android.synthetic.main.activity_verify_details.*
 import java.util.*
-
-/*  Activity has next states
-*   -   Preview
-*               - preview document:   - accepted or in progress all fields aren't available and country is shown. Button is hidden
-*               - preview document:
-*                                     - user hasn't document in progress - firstName and lastName fields are available to modify
-*                                     - user has document in progress - firstName and Last name are Available to modify
-*   -   Send    send document
-*                                     - user have document in progress - name and lastName aren't available
-*                                     - user hasn't document in progress - all fields are editable.
-* */
 
 class DocumentDetails : BaseActivity() {
 
     // Binding
 
-    @BindViews(R.id.numberEt, R.id.expireDateEt, R.id.countryEt)
+    @BindViews(R.id.numberEt, R.id.expireDateEt)
     lateinit var textFields: List<@JvmSuppressWildcards EditText>
 
     // Variables
 
+
     private lateinit var model: ProfileViewModel
-    private lateinit var user: User
-    private lateinit var photosMap: Map<String, String>
     private lateinit var documentType: String
-    private lateinit var currentDocument: Document
     private lateinit var country: String
     private lateinit var action: String
+
+    private lateinit var user: User
+    private lateinit var photosMap: Map<String, String>
+
+    private lateinit var currentDocument: Document
 
     // Life
 
@@ -56,6 +49,7 @@ class DocumentDetails : BaseActivity() {
         setContentView(R.layout.activity_verify_details)
 
         model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+
         ButterKnife.bind(this)
         setupUI()
     }
@@ -63,43 +57,69 @@ class DocumentDetails : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        initExtraVariables()
-        fillData(photos = photosMap, document = currentDocument)
-        setupPreview()
-
-        backBt.setOnClickListener { finish() }
-    }
-
-    private fun initExtraVariables() {
         documentType = intent.extras.getString(AppConstants.DOCUMENT_TYPE.key, "")
-        action = intent.extras.getString("action", "preview")
         country = intent.extras.getString("country", "")
+        action = intent.extras.getString("action", "preview")
 
-        currentDocument = model.userDocument(documentType)!!
-        user = model.user()
-        photosMap = model.userDocumentPhotos(documentType).map { it.type to it.file }.toMap()
+        when (action) {
+            "preview" -> setupPreview()
+            "previewAndSave" -> setupPreviewAndSave()
+        }
     }
 
     private fun setupPreview() {
+        currentDocument = model.userDocument(documentType)!!
+        user = model.user()
+        photosMap = model.userDocumentPhotos(documentType).map { it.type to it.file }.toMap()
+
+        setupTitle(documentType)
+        filPhotoFramesPreview(photosMap)
+
         disableEditing(textFields.subList(0, 2))
-        countryTil.visibility = View.VISIBLE
-        addBt.text = getString(R.string.ok)
-        addBt.setOnClickListener { finish() }
+
+        numberEt.text = Editable.Factory.getInstance().newEditable(currentDocument.number)
+        expireDateEt.text = Editable.Factory.getInstance().newEditable(currentDocument.expireDate)
+        countryEt.text = Editable.Factory.getInstance().newEditable(currentDocument.country)
+
+        saveBt.text = getString(R.string.ok)
+        saveBt.setOnClickListener { finish() }
+        backBt.setOnClickListener { finish() }
     }
 
-    // Updates
+    private fun setupPreviewAndSave() {
+        setupTitle(documentType)
+        fillPhotoFramesFromCache()
 
-    private fun fillData(photos: Map<String, String>, document: Document) {
+        saveBt.setOnClickListener {
+            if (validFields()) {
+                saveBt.isClickable = false
+
+                val expireDate = expireDateEt.text.toString()
+                val documentNumber = numberEt.text.toString()
+
+                model.saveDocumentAndPhoto(documentType, country, documentNumber, expireDate)
+                successful()
+            }
+        }
+        expireDateEt.setOnClickListener { hideKeyboard();datePicker() }
+        backBt.setOnClickListener { finish() }
+    }
+
+    private fun fillPhotoFramesFromCache() {
+        portraitIv.setImageBitmap(rotateBitmap(FileNameTxtBase64ToBitmap().transform(Cache.PORTRAIT.file)!!, -90f))
+        frontIv.setImageBitmap(cropped(Cache.FRONT.file))
+        backIv.setImageBitmap(cropped(Cache.BACK.file))
+    }
+
+    private fun filPhotoFramesPreview(photos: Map<String, String>) {
         portraitIv.setImageBitmap(rotateBitmap(FileNameTxtBase64ToBitmap().transform(photos[AppConstants.PHOTO_FACE_TYPE.key]!!)!!, -90f))
         frontIv.setImageBitmap(cropped(photos[AppConstants.PHOTO_FRONT_TYPE.key]!!))
         backIv.setImageBitmap(cropped(photos[AppConstants.PHOTO_BACK_TYPE.key]!!))
+    }
 
-        numberEt.text = Editable.Factory.getInstance().newEditable(document.number)
-        expireDateEt.text = Editable.Factory.getInstance().newEditable(document.expireDate)
-        countryEt.text = Editable.Factory.getInstance().newEditable(document.country)
-
+    private fun setupTitle(documentType: String) {
         titleTv.text =
-                when (document.type) {
+                when (documentType) {
                     AppDoc.PASSPORT.type -> getString(R.string.passport)
                     AppDoc.DRIVERS_LICENSE.type -> getString(R.string.driver_license)
                     AppDoc.ID_CARD.type -> getString(R.string.id_card)
@@ -110,9 +130,23 @@ class DocumentDetails : BaseActivity() {
                         throw Exception("Wrong document type")
                     }
                 }
+        countryEt.text = Editable.Factory.getInstance().newEditable(country)
     }
 
-// Private helpers
+    private fun successful() {
+        val fragment = DocumentSuccessfulFragment.newInstance()
+        fragment.setCallback(object : BaseCallback {
+            override fun callback() {
+
+                setResult(Activity.RESULT_OK)
+                finish()
+            }
+        })
+
+        fragment.show(supportFragmentManager, DocumentSuccessfulFragment.FRAGMENT_KEY)
+    }
+
+    // Private helpers
 
     private fun validFields(): Boolean {
         val error = textFields.map {
@@ -127,24 +161,10 @@ class DocumentDetails : BaseActivity() {
 
     private fun cropped(fileName: String): Bitmap {
         val bitmap = FileNameTxtBase64ToBitmap().transform(fileName)
-
         val originalBitmap = rotateBitmap(bitmap!!, 90f)
         val width = originalBitmap.width
         val height = originalBitmap.height
         return Bitmap.createBitmap(originalBitmap, (0.15 * width).toInt(), (0.22 * height).toInt(), (0.7 * width).toInt(), (0.35 * height).toInt())
-    }
-
-    // Progress
-
-    private fun showPopup(title: String, message: String, action: () -> Unit) {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(title)
-                .setMessage(message)
-                .setPositiveButton(getString(R.string.OK)) { dialog, _ -> action(); dialog.dismiss() }
-                .setCancelable(true)
-                .setOnDismissListener { action() }
-                .create()
-                .show()
     }
 
     private fun datePicker() {
@@ -154,7 +174,7 @@ class DocumentDetails : BaseActivity() {
         val day = c.get(Calendar.DAY_OF_MONTH)
 
         val dialog = DatePickerDialog(this, R.style.DatePickerStyle, DatePickerDialog.OnDateSetListener { _, year_, monthOfYear, dayOfMonth ->
-            expireDateEt.text = Editable.Factory.getInstance().newEditable("$dayOfMonth / $monthOfYear / $year_")
+            expireDateEt.text = Editable.Factory.getInstance().newEditable("$dayOfMonth - $monthOfYear - $year_")
         }, year, month, day)
         dialog.datePicker.minDate = Date().time
         dialog.show()
