@@ -9,6 +9,7 @@ import android.widget.TextView
 import com.kimlic.BaseActivity
 import com.kimlic.BlockchainUpdatingFragment
 import com.kimlic.R
+import com.kimlic.managers.PresentationManager
 import kotlinx.android.synthetic.main.activity_email.*
 
 class EmailActivity : BaseActivity() {
@@ -74,8 +75,8 @@ class EmailActivity : BaseActivity() {
 
             emailModel.emailVerify(email,
                     onSuccess = {
-                        hideProgress();emailVerify(emailEt.text.toString())
-                        //PresentationManager.emailVerify(this@EmailActivity, emailEt.text.toString())
+                        hideProgress()
+                        PresentationManager.emailVerify(this@EmailActivity, emailEt.text.toString(), EMAIL_VERIFY_REQUEST_CODE)
                     },
                     onError = { unableToProceed() })
         }
@@ -102,11 +103,5 @@ class EmailActivity : BaseActivity() {
     private fun unableToProceed() {
         hideProgress()
         runOnUiThread { nextBt.isClickable = true; showPopup(message = getString(R.string.unable_to_proceed_with_werification)) }
-    }
-
-    private fun emailVerify(email: String) {
-        val verifyIntent = Intent(this, EmailVerifyActivity::class.java)
-        verifyIntent.putExtra("email", email)
-        startActivityForResult(verifyIntent, EMAIL_VERIFY_REQUEST_CODE)
     }
 }
