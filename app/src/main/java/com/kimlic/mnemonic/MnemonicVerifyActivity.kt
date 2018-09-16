@@ -10,6 +10,7 @@ import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
+import com.kimlic.preferences.Prefs
 import com.kimlic.recovery.RecoveryViewModel
 import com.kimlic.utils.BaseCallback
 import kotlinx.android.synthetic.main.activity_verify_passphrase.*
@@ -47,8 +48,10 @@ class MnemonicVerifyActivity : BaseActivity() {
     private fun setupUI() {
         verifyBt.setOnClickListener {
             if (validEmptyFields())
-                if (phrasesMatch()) successful()
-                else showPopup(getString(R.string.error), getString(R.string.mnemonic_phrases_do_not_match))
+                if (phrasesMatch()) {
+                    Prefs.isPasscodeEnabled = true
+                    successful()
+                } else showPopup(getString(R.string.error), getString(R.string.mnemonic_phrases_do_not_match))
         }
 
         backTv.setOnClickListener { PresentationManager.stage(this) }
