@@ -150,7 +150,7 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
         documentsAdapter.setOnStageItemClick(object : OnStageItemClick {
             override fun onClick(view: View, position: Int, type: String, approved: Boolean, state: String) {
 
-                if (type == "add") PresentationManager.documentChooseVerify(activity!!)
+                if (type == "add") PresentationManager.documentChoiseVerify(activity!!)
                 else PresentationManager.detailsDocument(activity!!, type)
             }
         })
