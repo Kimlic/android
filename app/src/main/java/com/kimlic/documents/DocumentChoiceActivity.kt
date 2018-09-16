@@ -7,6 +7,7 @@ import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.documents.fragments.SelectCountryFragment
 import com.kimlic.documents.fragments.SelectDocumentFragment
+import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.utils.AppConstants
 
@@ -15,7 +16,7 @@ class DocumentChoiceActivity : BaseActivity() {
     // Constants
 
     companion object {
-        private const val REQUEST_CODE = 777
+        private const val TAKE_PHOTOS_REQUEST_CODE = 777
     }
 
     // Variables
@@ -31,8 +32,8 @@ class DocumentChoiceActivity : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
-            REQUEST_CODE -> {
-                setResult(REQUEST_CODE); finish()
+            TAKE_PHOTOS_REQUEST_CODE -> {
+                setResult(RESULT_OK); finish()
             }
         }
     }
@@ -63,17 +64,8 @@ class DocumentChoiceActivity : BaseActivity() {
 
             override fun callback(bundle: Bundle) {
                 documentType = bundle.getString(AppConstants.DOCUMENT_TYPE.key)
-                //PresentationManager.verifyDocument(this@DocumentChoiceActivity, documentType, country)
-                startForResult(documentType, country)
+                PresentationManager.verifyDocument(this@DocumentChoiceActivity, documentType, country, TAKE_PHOTOS_REQUEST_CODE)
             }
         })
-    }
-
-    private fun startForResult(documentType: String, country: String) {
-        val intent = Intent(this, DocumentVerifyActivity::class.java)
-        intent.putExtra(AppConstants.DOCUMENT_TYPE.key, documentType)
-        intent.putExtra(AppConstants.COUNTRY.key, country)
-
-        startActivityForResult(intent, REQUEST_CODE)
     }
 }
