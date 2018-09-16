@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import com.kimlic.BaseActivity
@@ -172,12 +173,25 @@ class AccountActivity : BaseActivity() {
             //vendorsDocs.remove("DRIVERS_LICENSE")
             //vendorsDocs.remove("RESIDENCE_PERMIT_CARD")
             var count = 0
-
+            // Добавить проверку по странам???
             vendorsDocs.forEach {
-                if (it.key in userDocumentsMap)
+
+                Log.d("TAGCONTAINS", "contains ${it.value.countries.contains(userDocumentsMap[it.key]?.countryIso?.toUpperCase())}")
+
+
+
+                if (it.key in userDocumentsMap) {
                     newList.add(DocumentItem(userDocumentsMap[it.key]!!))
-                else {
+                } else {
                     count++; newList.add(DocumentItem(Document(type = it.key)))
+                }
+
+
+                if (it.key in userDocumentsMap) {
+                    if (!it.value.countries.contains(userDocumentsMap[it.key]?.countryIso?.toUpperCase())) {
+
+                        newList.removeAt(newList.lastIndex)
+                    }
                 }
             }
 
@@ -192,6 +206,7 @@ class AccountActivity : BaseActivity() {
         if (missedName || missedContacts || missedDocuments) {
             acceptBt.isClickable = false
             acceptBt.isFocusableInTouchMode = false
+            acceptBt.setBackgroundResource(R.drawable.button_rounded_grey_no_duration)
         } else {
             acceptBt.setTextColor(Color.WHITE)
             acceptBt.setBackgroundResource(R.drawable.button_rounded_green_no_duration)
