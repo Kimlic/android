@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import butterknife.ButterKnife
@@ -92,7 +91,7 @@ class SettingsActivity : BaseActivity() {
                 when (view.tag) {
                     "passcode" ->
                         if (Prefs.isPasscodeEnabled) PresentationManager.passcodeDisable(this@SettingsActivity)
-                        else PresentationManager.passcode(this@SettingsActivity)
+                        else PresentationManager.passcode(this@SettingsActivity, 45)// unused request code
                     "touch" -> {
                         if (!Prefs.isPasscodeEnabled) {
                             passcodeForResult(); return
@@ -109,9 +108,8 @@ class SettingsActivity : BaseActivity() {
                                         onSuccess = {
                                             SyncService.signOut(this@SettingsActivity)
                                             Prefs.isDriveActive = false
-                                            Log.d("TAGB", "Profile is removed")
                                         },
-                                        onError = { Log.d("TAGB", "Profile is not removed") })
+                                        onError = { })
 
                             }
                             false -> {
@@ -119,7 +117,6 @@ class SettingsActivity : BaseActivity() {
                                 if (GoogleSignIn.getLastSignedInAccount(this@SettingsActivity) == null) SyncService.signIn(this@SettingsActivity, GOOGLE_SIGNE_IN_REQUEST_CODE)
                                 else
                                     backupProfile()
-
                             }
 
                         }
