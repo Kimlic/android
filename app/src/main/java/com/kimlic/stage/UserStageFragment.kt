@@ -89,7 +89,7 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
         }
     }
 
-    private fun manageRisks() = (activity).let { risksTv?.visibility = if (Prefs.isPasscodeEnabled && Prefs.isTouchEnabled) View.GONE else View.VISIBLE }
+    private fun manageRisks() = (activity).let { risksTv?.visibility = if (Prefs.isPasscodeEnabled && Prefs.isRecoveryEnabled) View.GONE else View.VISIBLE }
 
     private fun setupUser() {
         model.userLive().observe(this@UserStageFragment, Observer<User> { user ->
