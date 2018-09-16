@@ -6,7 +6,10 @@ import com.kimlic.BaseActivity
 import com.kimlic.account.AccountActivity
 import com.kimlic.address.AddressActivity
 import com.kimlic.auth.TouchIdActivity
-import com.kimlic.documents.*
+import com.kimlic.documents.DocumentChoiceActivity
+import com.kimlic.documents.DocumentDetails
+import com.kimlic.documents.DocumentVerifyActivity
+import com.kimlic.documents.PortraitActivity
 import com.kimlic.email.EmailActivity
 import com.kimlic.email.EmailVerifyActivity
 import com.kimlic.mnemonic.MnemonicPreviewActivity
@@ -22,7 +25,6 @@ import com.kimlic.stage.StageActivity
 import com.kimlic.terms.TermsActivity
 import com.kimlic.tutorial.TutorialActivity
 import com.kimlic.utils.AppConstants
-import com.kimlic.vendors.VendorsActivity
 
 object PresentationManager {
 
@@ -101,10 +103,10 @@ object PresentationManager {
         present(presenter = presenter, className = EmailActivity::class.java, isStarting = false)
     }
 
-    fun emailVerify(presenter: BaseActivity, email: String = "") {
+    fun emailVerify(presenter: BaseActivity, email: String = "", requestCode: Int) {
         val params = HashMap<String, String>()
         params["email"] = email
-        present(presenter = presenter, className = EmailVerifyActivity::class.java, isStarting = false, params = params)
+        present(presenter = presenter, className = EmailVerifyActivity::class.java, isStarting = false, params = params, requestCode = requestCode)
     }
 
     // Name
@@ -147,26 +149,6 @@ object PresentationManager {
     fun detailsDocument(presenter: BaseActivity, documentType: String) {
         val params = HashMap<String, String>()
         params[AppConstants.DOCUMENT_TYPE.key] = documentType
-        present(presenter = presenter, className = DocumentDetails::class.java, isStarting = false, params = params)
-    }
-
-    // New variant
-    fun detailsDocumentToSave(presenter: BaseActivity, documentType: String, country: String, portraitData: ByteArray, frontData: ByteArray, backData: ByteArray) {
-        val params = HashMap<String, String>()
-        params[AppConstants.DOCUMENT_TYPE.key] = documentType
-        params[AppConstants.DOCUMENT_TYPE.key] = documentType
-        params[AppConstants.DOCUMENT_TYPE.key] = documentType
-        params[AppConstants.DOCUMENT_TYPE.key] = documentType
-        params[AppConstants.DOCUMENT_TYPE.key] = documentType
-        present(presenter = presenter, className = DocumentDetails::class.java, isStarting = false, params = params)
-    }
-
-    fun detailsDocumentSend(presenter: BaseActivity, documentType: String, url: String, country: String) {
-        val params = HashMap<String, String>()
-        params[AppConstants.DOCUMENT_TYPE.key] = documentType
-        params["country"] = country
-        params["path"] = url
-        params["action"] = "send"
         present(presenter = presenter, className = DocumentDetails::class.java, isStarting = false, params = params)
     }
 
@@ -213,12 +195,6 @@ object PresentationManager {
         present(presenter = presenter, className = AddressActivity::class.java, isStarting = false)
     }
 
-    fun vendors(presenter: BaseActivity, url: String) {
-        val params = HashMap<String, String>()
-        params["path"] = url
-        present(presenter = presenter, className = VendorsActivity::class.java, params = params)
-    }
-
     fun account(presenter: BaseActivity, url: String) {
         val params = HashMap<String, String>()
         params["path"] = url
@@ -227,7 +203,7 @@ object PresentationManager {
 
     // Private
 
-    private fun present(presenter: BaseActivity, className: Class<out Activity>, isStarting: Boolean = false, params: HashMap<String, String>? = null) {
+    private fun present(presenter: BaseActivity, className: Class<out Activity>, isStarting: Boolean = false, params: HashMap<String, String>? = null, requestCode: Int? = null) {
         val intent = Intent(presenter, className)
         params?.let { it.forEach { (key, value) -> intent.putExtra(key, value) } }
 
@@ -237,6 +213,7 @@ object PresentationManager {
             presenter.finish()
         }
 
-        presenter.startActivity(intent)
+        if (requestCode == null)
+            presenter.startActivity(intent) else presenter.startActivityForResult(intent, requestCode)
     }
 }
