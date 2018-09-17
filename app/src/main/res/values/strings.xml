@@ -259,4 +259,5 @@
   <string name="your_following_details_to_be_shared">Your following details to be shared</string>
   <string name="identity_verification_by_veriff">Identity verification by Veriff</string>
   <string name="documents_sending_error">Documents sending error</string>
+  <string name="accounts">Accounts</string>
 </resources>
