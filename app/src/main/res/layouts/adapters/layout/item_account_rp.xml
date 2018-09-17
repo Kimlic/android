@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="64dp"
+  android:layout_marginTop="4dp"
+  android:layout_marginBottom="4dp"
+  app:cardBackgroundColor="@android:color/transparent"
+  app:cardCornerRadius="8dp"
+  app:cardElevation="1dp">
+
+  <RelativeLayout
+    android:id="@+id/rootRl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <FrameLayout
+      android:layout_width="64dp"
+      android:layout_height="64dp"
+      android:layout_marginStart="8dp"
+      android:layout_alignParentStart="true"
+      android:layout_centerVertical="true"
+      android:gravity="center">
+
+      <ImageView
+        android:id="@+id/backgroundIv"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:background="@color/darkBlue"
+        android:contentDescription="@string/background"/>
+
+      <ImageView
+        android:id="@+id/prLogoIv"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+        android:background="@drawable/ic_kimlic_logo_with_text"
+        android:contentDescription="@string/background"/>
+
+    </FrameLayout>
+
+    <LinearLayout
+      android:layout_width="120dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="96dp"
+      android:layout_alignParentStart="true"
+      android:layout_centerVertical="true"
+      android:orientation="vertical">
+
+      <TextView
+        android:id="@+id/rpTitleTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/subtitle_text_size"
+        tools:text="Kimlic RP"/>
+
+      <TextView
+        android:id="@+id/rpSubtitleTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/small_text_size"
+        tools:text="Kimlic RP"/>
+    </LinearLayout>
+
+    <ImageView
+
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="16dp"
+      android:layout_alignParentEnd="true"
+      android:layout_centerVertical="true"
+      android:background="@drawable/ic_white_menu_arrow"
+      android:contentDescription="@string/done"/>
+
+  </RelativeLayout>
+
+</android.support.v7.widget.CardView>
