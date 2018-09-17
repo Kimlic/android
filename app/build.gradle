@@ -26,8 +26,8 @@ android {
         applicationId 'com.kimlic'
         minSdkVersion 24
         targetSdkVersion 27
-        versionCode 12
-        versionName "1.0.12"
+        versionCode 13
+        versionName "1.0.13"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -50,14 +50,9 @@ android {
 
     productFlavors {
         dev {
-//            buildConfigField("String", "QUORUM_URL", "\"http://51.141.123.209:22000\"")// quorum
-//            buildConfigField("String", "API_CORE_URL", "\"http://51.140.220.139:4000\"")//
-//            buildConfigField("String", "VENDORS_URL", "\"http://demo.kimlic.com\"")// gets qrCode
             buildConfigField("boolean", "RECOVERY_FOLDER", "false")
-            buildConfigField("String", "QUORUM_URL", "\"http://40.87.94.79:22000\"")// quorum
+            buildConfigField("String", "QUORUM_URL", "\"http://137.135.110.105:22000\"")// quorum
             buildConfigField("String", "API_CORE_URL", "\"http://23.96.41.254:4000\"")//
-
-
         }
         stage {
             buildConfigField("String", "API_CORE_URL", "\"https://mobile-api-test.kimlic.com\"")// elixir
@@ -95,8 +90,10 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
-    // Butter Knife
+    //CardView
+    implementation "com.android.support:cardview-v7:27.1.1"
 
+    // Butter Knife
     implementation 'com.jakewharton:butterknife:8.8.1'
     kapt 'com.jakewharton:butterknife-compiler:8.8.1'
 
