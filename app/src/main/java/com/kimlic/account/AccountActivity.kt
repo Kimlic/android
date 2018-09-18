@@ -64,7 +64,7 @@ class AccountActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         setupAdapterList()
-        Handler().postDelayed({ missingInfo(missedName || missedContacts || missedDocuments) }, 1500000)
+        Handler().postDelayed({ missingInfo(missedName || missedContacts || missedDocuments) }, 1500)
     }
 
     // Private
