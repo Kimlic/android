@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import butterknife.ButterKnife
@@ -103,22 +104,19 @@ class SettingsActivity : BaseActivity() {
                     "drive" -> {
                         when (Prefs.isDriveActive) {
                             true -> {
-                                // Удаляем профиль
                                 recoveryModel.removeProfile(
                                         onSuccess = {
                                             SyncService.signOut(this@SettingsActivity)
                                             Prefs.isDriveActive = false
                                         },
-                                        onError = { })
-
+                                        onError = { Log.d("TAG", "") }
+                                )
                             }
                             false -> {
-                                // Бэкапим профиль
                                 if (GoogleSignIn.getLastSignedInAccount(this@SettingsActivity) == null) SyncService.signIn(this@SettingsActivity, GOOGLE_SIGNE_IN_REQUEST_CODE)
                                 else
                                     backupProfile()
                             }
-
                         }
                     }
                     "recovery" -> PresentationManager.recoveryEnable(this@SettingsActivity)
@@ -137,7 +135,7 @@ class SettingsActivity : BaseActivity() {
         settingsList = mutableListOf(
                 SwitchSetting(getString(R.string.passcode), getString(R.string.protect_my_id), "passcode", AppConstants.SETTINGS_SWITCH.intKey, Prefs.isPasscodeEnabled),
                 SwitchSetting(getString(R.string.enable_touch_id), getString(R.string.use_my_touch_id), "touch", AppConstants.SETTINGS_SWITCH.intKey, Prefs.isTouchEnabled),
-                SwitchSetting("Google drive sync", "Backup profile to google Drive", "drive", AppConstants.SETTINGS_SWITCH.intKey, Prefs.isDriveActive),
+                //SwitchSetting("Google drive sync", "Backup profile to google Drive", "drive", AppConstants.SETTINGS_SWITCH.intKey, Prefs.isDriveActive),
                 IntentSetting(getString(R.string.account_recovery), getString(R.string.back_up_your_credentials), "recovery", AppConstants.SETTINGS_INTENT.intKey),
                 IntentSetting(getString(R.string.terms_and_conditions), getString(R.string.last_modified_23_july_2017), "terms", AppConstants.SETTINGS_INTENT.intKey),
                 IntentSetting(getString(R.string.about_kimlic), "", "about", AppConstants.SETTINGS_INTENT.intKey))
