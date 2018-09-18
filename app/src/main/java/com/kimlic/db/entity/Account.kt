@@ -18,4 +18,6 @@ data class Account(
         @ColumnInfo(name = "status") var status: String = "",
         @ColumnInfo(name = "documents") var documents: List<String> = ArrayList(),
         @ColumnInfo(name = "logo_url") var logoUrl: String = ""
-)
+) {
+    @Ignore constructor() : this(id = 0)
+}
