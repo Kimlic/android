@@ -111,7 +111,6 @@ class EmailVerifyActivity : BaseActivity() {
         val fragment = EmailSuccesfulFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
-                //PresentationManager.stage(this@EmailVerifyActivity)
                 setResult(Activity.RESULT_OK)
                 finish()
             }
