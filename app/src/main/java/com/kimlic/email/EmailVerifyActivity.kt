@@ -87,6 +87,7 @@ class EmailVerifyActivity : BaseActivity() {
             emailViewModel.emailApprove(code.toString(),
                     onSuccess = { insertEmail(email); successful() },
                     onError = {
+
                         when (it.first().toString()) {
                             "4" -> unableVerifyCode()
                             else -> unableToProceed()
@@ -125,6 +126,7 @@ class EmailVerifyActivity : BaseActivity() {
     }
 
     private fun unableVerifyCode() {
+        progressBar.visibility = View.GONE
         progressBar.visibility - View.GONE
         verifyBt.isClickable = true
         digitsList.forEach { it.text.clear() }
