@@ -56,7 +56,7 @@ class AccountsStageFragment : BaseFragment() {
         recycler.adapter = adapter
 
         val mockList = listOf("Kimlic", "Ebay", "Amazon", "EXMP", "BP", "AWS", "MacBookPro", "Xiaomi")
-        adapter.setAccountsList(mockList)
+        //adapter.setAccountsList(mockList)
 
     }
 }
