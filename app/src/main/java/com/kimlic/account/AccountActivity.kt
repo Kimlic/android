@@ -6,8 +6,8 @@ import android.arch.lifecycle.ViewModelProviders
 import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import com.kimlic.BaseActivity
@@ -64,7 +64,7 @@ class AccountActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         setupAdapterList()
-        missingInfo(missedName || missedContacts || missedDocuments)
+        Handler().postDelayed({ missingInfo(missedName || missedContacts || missedDocuments) }, 1500000)
     }
 
     // Private
@@ -175,21 +175,14 @@ class AccountActivity : BaseActivity() {
             var count = 0
             // Добавить проверку по странам???
             vendorsDocs.forEach {
-
-                Log.d("TAGCONTAINS", "contains ${it.value.countries.contains(userDocumentsMap[it.key]?.countryIso?.toUpperCase())}")
-
-
-
                 if (it.key in userDocumentsMap) {
                     newList.add(DocumentItem(userDocumentsMap[it.key]!!))
                 } else {
                     count++; newList.add(DocumentItem(Document(type = it.key)))
                 }
 
-
                 if (it.key in userDocumentsMap) {
                     if (!it.value.countries.contains(userDocumentsMap[it.key]?.countryIso?.toUpperCase())) {
-
                         newList.removeAt(newList.lastIndex)
                     }
                 }
