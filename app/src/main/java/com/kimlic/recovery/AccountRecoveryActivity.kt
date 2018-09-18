@@ -49,21 +49,21 @@ class AccountRecoveryActivity : BaseActivity() {
 
     private fun setupUI() {
         lifecycle.addObserver(recoveryViewModel!!)
-        SyncService.signIn(this, GOOGLE_SIGNE_IN_REQUEST_CODE)
+        //SyncService.signIn(this, GOOGLE_SIGNE_IN_REQUEST_CODE)
         backTv.setOnClickListener { PresentationManager.signUpRecovery(this) }
 
-        verifyBt.setOnClickListener { _ ->
-            val mnemonic = phraseEt.text.toString().trim()
-
-            if (!mnemonicValid(mnemonic)) {
-                showPopup(title = getString(R.string.error), message = getString(R.string.missing_mnemonic_phrases)); return@setOnClickListener
-            }
-
-            GoogleSignIn.getLastSignedInAccount(this)?.let {
-                showProgress()
-                recoveryUserProfile(mnemonic)
-            }
-        }
+//        verifyBt.setOnClickListener { _ ->
+//            val mnemonic = phraseEt.text.toString().trim()
+//
+//            if (!mnemonicValid(mnemonic)) {
+//                showPopup(title = getString(R.string.error), message = getString(R.string.missing_mnemonic_phrases)); return@setOnClickListener
+//            }
+//
+//            GoogleSignIn.getLastSignedInAccount(this)?.let {
+//                showProgress()
+//                recoveryUserProfile(mnemonic)
+//            }
+//        }
     }
 
     private fun recoveryUserProfile(mnemonic: String) {
