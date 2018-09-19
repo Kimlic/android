@@ -36,9 +36,9 @@ class SyncService private constructor(val context: Context) {
 
     companion object {
 
-        val MIME_TYPE_DATABASE: String = "application/db"
-        val PHOTO_DESCRIPTION: String = "photo" // file description
-        val DATABASE_DECRIPTION: String = "database" // database description
+        const val MIME_TYPE_DATABASE: String = "application/db"
+        const val PHOTO_DESCRIPTION: String = "photo" // file description
+        const val DATABASE_DECRIPTION: String = "database" // database description
 
         fun signIn(activity: AppCompatActivity, requestCode: Int) {
             val requiredScopes = HashSet<Scope>(2)
@@ -84,15 +84,18 @@ class SyncService private constructor(val context: Context) {
         val rootFolder = getRootFolder()
         rootFolder.continueWithTask {
             mDriveResourceClient!!
-                    .queryChildren(rootFolder.getResult(), backupFolderQuery)
+                    .queryChildren(rootFolder.result, backupFolderQuery)
                     .continueWithTask {
                         if (it.result.count == 0) {
-                            createFolderInFolder(parent = rootFolder.getResult(), folderName = accountAddress)
-                            backupFile(accountAddress = accountAddress, filePath = filePath, fileDescription = fileDescription, onSuccess = {}, onError = onError)
+                            Log.d("TAGBACLUP", "InCreateFolder")
+                            createFolderInFolder(parent = rootFolder.result, folderName = accountAddress).addOnSuccessListener { backupFile(accountAddress = accountAddress, filePath = filePath, fileDescription = fileDescription, onSuccess = { Log.d("TAGBACLUP", "I!!!!!!!!!!!!!!!!");onSuccess }, onError = onError) }
+
                         }
+                        Log.d("TAGBACLUP", "afterCreateFolder")
                         updateFile(filePath = filePath, driveFolder = it.result[0].driveId.asDriveFolder(), fileDescription = fileDescription)
                     }.addOnSuccessListener {
-                        Log.d("TAG", "syncservice ON success in backupFile")
+                        Log.d("TAGBACLUP", "syncservice ON success in backupFile")
+                        //backupFile(accountAddress = accountAddress, filePath = filePath, fileDescription = fileDescription, onSuccess = { onSuccess }, onError = onError)
                         onSuccess()
                     }.addOnFailureListener { onError() }
         }
@@ -242,11 +245,11 @@ class SyncService private constructor(val context: Context) {
                     try {
                         IOUtils.copyStream(FileInputStream(File(filePath)), driveContents.outputStream)
                     } catch (e: IOException) {
-                        Log.e(TAG, "rewrite exception" + e.toString())
+                        Log.e("TAGBACLUP", "rewrite exception" + e.toString())
                     }
                     mDriveResourceClient!!.commitContents(driveContents, null)
                 }
-                .addOnSuccessListener { Log.i(TAG, "File is rewrited") }
+                .addOnSuccessListener { Log.d("TAGBACLUP", "File is rewrited") }
                 .addOnFailureListener { }
     }
 
