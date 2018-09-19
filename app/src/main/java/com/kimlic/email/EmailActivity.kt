@@ -83,14 +83,8 @@ class EmailActivity : BaseActivity() {
     }
 
     private fun showProgress() {
-        timer = object : CountDownTimer(500, 500) {
-            override fun onFinish() {
-                blockchainUpdatingFragment = BlockchainUpdatingFragment.newInstance()
-                blockchainUpdatingFragment?.show(supportFragmentManager, BlockchainUpdatingFragment.FRAGMENT_KEY)
-            }
-
-            override fun onTick(millisUntilFinished: Long) {}
-        }.start()
+        blockchainUpdatingFragment = BlockchainUpdatingFragment.newInstance()
+        blockchainUpdatingFragment?.show(supportFragmentManager, BlockchainUpdatingFragment.FRAGMENT_KEY)
     }
 
     private fun hideProgress() {
