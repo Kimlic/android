@@ -109,7 +109,7 @@ class SettingsActivity : BaseActivity() {
                                             SyncService.signOut(this@SettingsActivity)
                                             Prefs.isDriveActive = false
                                         },
-                                        onError = { Log.d("TAG", "") }
+                                        onError = { Log.d("TAGBACKUP", "error") }
                                 )
                             }
                             false -> {
@@ -135,7 +135,7 @@ class SettingsActivity : BaseActivity() {
         settingsList = mutableListOf(
                 SwitchSetting(getString(R.string.passcode), getString(R.string.protect_my_id), "passcode", AppConstants.SETTINGS_SWITCH.intKey, Prefs.isPasscodeEnabled),
                 SwitchSetting(getString(R.string.enable_touch_id), getString(R.string.use_my_touch_id), "touch", AppConstants.SETTINGS_SWITCH.intKey, Prefs.isTouchEnabled),
-                //SwitchSetting("Google drive sync", "Backup profile to google Drive", "drive", AppConstants.SETTINGS_SWITCH.intKey, Prefs.isDriveActive),
+                SwitchSetting("Google drive sync", "Backup profile to google Drive", "drive", AppConstants.SETTINGS_SWITCH.intKey, Prefs.isDriveActive),
                 IntentSetting(getString(R.string.account_recovery), getString(R.string.back_up_your_credentials), "recovery", AppConstants.SETTINGS_INTENT.intKey),
                 IntentSetting(getString(R.string.terms_and_conditions), getString(R.string.last_modified_23_july_2017), "terms", AppConstants.SETTINGS_INTENT.intKey),
                 IntentSetting(getString(R.string.about_kimlic), "", "about", AppConstants.SETTINGS_INTENT.intKey))
