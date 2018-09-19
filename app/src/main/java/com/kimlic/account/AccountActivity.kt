@@ -232,14 +232,14 @@ class AccountActivity : BaseActivity() {
     }
 
     private fun showProgress() {
-        timer = object : CountDownTimer(500, 500) {
-            override fun onFinish() {
-                blockchainUpdatingFragment = BlockchainUpdatingFragment.newInstance()
-                blockchainUpdatingFragment?.show(supportFragmentManager, BlockchainUpdatingFragment.FRAGMENT_KEY)
-            }
+        //timer = object : CountDownTimer(10, 10) {
+        //  override fun onFinish() {
+        blockchainUpdatingFragment = BlockchainUpdatingFragment.newInstance()
+        blockchainUpdatingFragment?.show(supportFragmentManager, BlockchainUpdatingFragment.FRAGMENT_KEY)
+        //}
 
-            override fun onTick(millisUntilFinished: Long) {}
-        }.start()
+        //override fun onTick(millisUntilFinished: Long) {}
+        //}.start()
     }
 
     private fun hideProgress() {
