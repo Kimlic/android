@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.text.Editable
+import android.view.View
 import android.widget.EditText
 import butterknife.BindViews
 import butterknife.ButterKnife
@@ -108,13 +109,24 @@ class DocumentDetails : BaseActivity() {
     private fun fillPhotoFramesFromCache() {
         portraitIv.setImageBitmap(rotateBitmap(FileNameTxtBase64ToBitmap().transform(Cache.PORTRAIT.file)!!, -90f))
         frontIv.setImageBitmap(cropped(Cache.FRONT.file))
-        backIv.setImageBitmap(cropped(Cache.BACK.file))
+        if (documentType != AppDoc.PASSPORT.type) {
+            backIv.setImageBitmap(cropped(Cache.BACK.file))
+        } else {
+            backSideTv.visibility = View.GONE
+            backFl.visibility = View.GONE
+        }
+
     }
 
     private fun filPhotoFramesPreview(photos: Map<String, String>) {
         portraitIv.setImageBitmap(rotateBitmap(FileNameTxtBase64ToBitmap().transform(photos[AppConstants.PHOTO_FACE_TYPE.key]!!)!!, -90f))
         frontIv.setImageBitmap(cropped(photos[AppConstants.PHOTO_FRONT_TYPE.key]!!))
-        backIv.setImageBitmap(cropped(photos[AppConstants.PHOTO_BACK_TYPE.key]!!))
+        if (currentDocument.type != AppDoc.PASSPORT.type) {
+            backIv.setImageBitmap(cropped(photos[AppConstants.PHOTO_BACK_TYPE.key]!!))
+        } else {
+            backSideTv.visibility = View.GONE
+            backFl.visibility = View.GONE
+        }
     }
 
     private fun setupTitle(documentType: String) {
