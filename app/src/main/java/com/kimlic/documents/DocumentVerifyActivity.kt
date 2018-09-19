@@ -13,6 +13,7 @@ import com.kimlic.documents.fragments.PortraitPhotoFragment
 import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.utils.AppConstants
+import com.kimlic.utils.AppDoc
 import com.kimlic.utils.Cache
 import com.kimlic.utils.PhotoCallback
 import org.spongycastle.util.encoders.Base64
@@ -30,6 +31,7 @@ class DocumentVerifyActivity : BaseActivity() {
     // Variables
 
     private lateinit var portraitFragment: PortraitPhotoFragment
+    //    private lateinit var portraitFragment: PortraitPhotoFragment_
     private lateinit var frontFragment: DocumentFrontFragment
     private lateinit var backFragment: DocumentBackFragment
 
@@ -83,7 +85,15 @@ class DocumentVerifyActivity : BaseActivity() {
         frontFragment.setCallback(object : PhotoCallback {
             override fun callback(data: ByteArray) {
                 frontData = data
-                showFragment(R.id.container, backFragment, DocumentBackFragment.FRAGMENT_KEY)
+
+                if (documentType == AppDoc.PASSPORT.type) {
+                    saveTempFileToDisk(Cache.PORTRAIT.file, portraitData)
+                    saveTempFileToDisk(Cache.FRONT.file, frontData)
+                    saveTempFileToDisk(Cache.BACK.file, frontData)
+                    PresentationManager.detailsDocumentSave(this@DocumentVerifyActivity, documentType, country, DOCUMENT_TAKE_PHOTO_REQUEST_CODE)
+                } else {
+                    showFragment(R.id.container, backFragment, DocumentBackFragment.FRAGMENT_KEY)
+                }
             }
         })
         backFragment.setCallback(object : PhotoCallback {
