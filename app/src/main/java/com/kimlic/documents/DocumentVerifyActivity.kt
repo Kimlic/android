@@ -31,7 +31,6 @@ class DocumentVerifyActivity : BaseActivity() {
     // Variables
 
     private lateinit var portraitFragment: PortraitPhotoFragment
-    //    private lateinit var portraitFragment: PortraitPhotoFragment_
     private lateinit var frontFragment: DocumentFrontFragment
     private lateinit var backFragment: DocumentBackFragment
 
