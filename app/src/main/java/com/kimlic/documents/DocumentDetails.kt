@@ -3,6 +3,7 @@ package com.kimlic.documents
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.text.Editable
@@ -149,8 +150,10 @@ class DocumentDetails : BaseActivity() {
         val fragment = DocumentSuccessfulFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
-
-                setResult(Activity.RESULT_OK)
+                val intent = Intent()
+                // Send added document to Account Activity
+                intent.putExtra(AppConstants.DOCUMENT_TYPE.key, documentType)
+                setResult(Activity.RESULT_OK, intent)
                 finish()
             }
         })
