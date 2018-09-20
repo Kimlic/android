@@ -148,6 +148,12 @@ class RPAdapter : RecyclerView.Adapter<RPAdapter.ContactViewHolder>() {
                             contentTv.text = context.getString(R.string.birth_certificate); iconIv.background = resources.getDrawable(Icons_.ID_WHITE.icon, null)
                         }
                     }
+                    "addDocument" -> {
+                        iconIv.background = icon(Icons_.ID_BLUE.icon);
+                        contentTv.text = "Add Your Document"
+                    }
+
+
                 }
             }
         }
