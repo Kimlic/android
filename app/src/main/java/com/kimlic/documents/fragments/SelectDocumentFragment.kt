@@ -66,7 +66,7 @@ class SelectDocumentFragment : BasePopupFragment() {
     private fun setupUI() {
         val documentAdapter = DocumentAdapter()
 
-        documentModel.documents().observe(this, Observer<List<Document>> { it ->
+        documentModel.documentsLive().observe(this, Observer<List<Document>> { it ->
             documents = it!!
             val types = mutableListOf(AppDoc.PASSPORT.type, AppDoc.ID_CARD.type, AppDoc.DRIVERS_LICENSE.type, AppDoc.RESIDENCE_PERMIT_CARD.type, AppDoc.SOCIAL_SECURITY_CARD.type, AppDoc.BIRTH_CERTIFICATE.type)
             it.forEach { if (types.contains(it.type)) types.remove(it.type) }
