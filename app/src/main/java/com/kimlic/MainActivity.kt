@@ -31,7 +31,7 @@ class MainActivity : BaseActivity() {
         splashScreenShow()
 
         if (Prefs.authenticated) {
-            syncProfile();
+            syncProfile()
             quorumRequest()
         } else signUpRecovery()
     }
