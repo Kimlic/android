@@ -18,4 +18,6 @@ class DocumentViewModel(application: Application) : AndroidViewModel(application
     fun countries() = repository.countries()
 
     fun documentsLive() = profileRepository.documentsLive(Prefs.currentAccountAddress)
+
+    fun documents() = profileRepository.documents(Prefs.currentAccountAddress)
 }
