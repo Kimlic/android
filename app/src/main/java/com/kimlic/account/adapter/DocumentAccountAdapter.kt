@@ -35,7 +35,7 @@ class DocumentAccountAdapter : BaseAdapter() {
 
                 AppDoc.PASSPORT.type -> {
                     if (documents[position].number == "") {
-                        documentTv.text = context.getString(R.string.add_your_passport); tag = AppDoc.PASSPORT.type
+                        documentTv.text = context.getString(R.string.add_passport); tag = AppDoc.PASSPORT.type
                         documentIv.background = if (!checked) icon(DocIcons.PASSPORT_BLUE.icon) else icon(DocIcons.PASSPORT_WHITE.icon)
                     } else {
                         documentTv.text = context.getString(R.string.passport)
@@ -44,7 +44,7 @@ class DocumentAccountAdapter : BaseAdapter() {
                 }
                 AppDoc.ID_CARD.type -> {
                     if (documents[position].number == "") {
-                        documentTv.text = context.getString(R.string.add_your_id_card); tag = AppDoc.ID_CARD.type
+                        documentTv.text = context.getString(R.string.add_id_card); tag = AppDoc.ID_CARD.type
                         documentIv.background = if (!checked) icon(DocIcons.ID_BLUE.icon) else icon(DocIcons.ID_WHITE.icon)
                     } else {
                         documentTv.text = context.getString(R.string.id_card)
@@ -53,7 +53,7 @@ class DocumentAccountAdapter : BaseAdapter() {
                 }
                 AppDoc.DRIVERS_LICENSE.type -> {
                     if (documents[position].number == "") {
-                        documentTv.text = context.getString(R.string.add_your_drivers_license); tag = AppDoc.DRIVERS_LICENSE
+                        documentTv.text = context.getString(R.string.add_drivers_license); tag = AppDoc.DRIVERS_LICENSE
                         documentIv.background = if (!checked) icon(DocIcons.DRIVERS_LICENSE_BLUE.icon) else icon(DocIcons.DRIVERS_LICENSE_WHITE.icon)
                     } else {
                         documentTv.text = context.getString(R.string.drivers_license)
@@ -62,7 +62,7 @@ class DocumentAccountAdapter : BaseAdapter() {
                 }
                 AppDoc.RESIDENCE_PERMIT_CARD.type -> {
                     if (documents[position].number == "") {
-                        documentTv.text = context.getString(R.string.add_your_residence_permit); tag = AppDoc.RESIDENCE_PERMIT_CARD.type
+                        documentTv.text = context.getString(R.string.add_residense_permit); tag = AppDoc.RESIDENCE_PERMIT_CARD.type
                         documentIv.background = if (!checked) icon(DocIcons.RESIDENCE_PERMIT_BLUE.icon) else icon(DocIcons.RESIDENCE_PERMIT_WHITE.icon)
                     } else {
                         documentTv.text = context.getString(R.string.residence_permit)
@@ -71,7 +71,7 @@ class DocumentAccountAdapter : BaseAdapter() {
                 }
                 AppDoc.SOCIAL_SECURITY_CARD.type -> {
                     if (documents[position].number == "") {
-                        documentTv.text = context.getString(R.string.add_your_social_security_card); tag = AppDoc.SOCIAL_SECURITY_CARD
+                        documentTv.text = context.getString(R.string.add_social_security_card); tag = AppDoc.SOCIAL_SECURITY_CARD
                         documentIv.background = if (!checked) icon(DocIcons.SOCIAL_SECURITY_CARD_BLUE.icon) else icon(DocIcons.SOCIAL_SECURITY_CARD_WHITE.icon)
                     } else {
                         documentTv.text = context.getString(R.string.social_security_card)
@@ -80,10 +80,10 @@ class DocumentAccountAdapter : BaseAdapter() {
                 }
                 AppDoc.BIRTH_CERTIFICATE.type -> {
                     if (documents[position].number == "") {
-                        documentTv.text = context.getString(R.string.birth_certificate); tag = AppDoc.BIRTH_CERTIFICATE
+                        documentTv.text = context.getString(R.string.add_birth_certificate); tag = AppDoc.BIRTH_CERTIFICATE
                         documentIv.background = if (!checked) icon(DocIcons.BIRTH_CERTIFICATE_BLUE.icon) else icon(DocIcons.BIRTH_CERTIFICATE_WHITE.icon)
                     } else {
-                        documentTv.text = context.getString(R.string.add_your_birth_certificate)
+                        documentTv.text = context.getString(R.string.birth_certificate)
                         documentIv.background = if (!checked) icon(DocIcons.BIRTH_CERTIFICATE_BLUE.icon) else icon(DocIcons.BIRTH_CERTIFICATE_WHITE.icon)
                     }
                 }
