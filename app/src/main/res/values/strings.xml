@@ -252,7 +252,6 @@
   <string name="start">Start</string>
   <string name="witch_document_do_you_want_to_verify">Witch document do you want to verify ?</string>
   <string name="social_security_card">Social Security Card</string>
-  <string name="birth_certificate">Birth Certificate</string>
   <string name="hexagon_background">Hexagon background</string>
   <string name="create">Create</string>
   <string name="kimlic_rp">Kimlic RP</string>
@@ -260,4 +259,12 @@
   <string name="identity_verification_by_veriff">Identity verification by Veriff</string>
   <string name="documents_sending_error">Documents sending error</string>
   <string name="accounts">Accounts</string>
+
+  <string name="add_passport">Add Passport</string>
+  <string name="add_id_card">Add ID Card</string>
+  <string name="add_drivers_license">Add Drivers License</string>
+  <string name="add_residense_permit">Add Residence Permit</string>
+  <string name="add_social_security_card">Add Social Security Card</string>
+  <string name="add_birth_certificate">Add Birth Certificate</string>
+  <string name="birth_certificate">Birth Certificate</string>
 </resources>
