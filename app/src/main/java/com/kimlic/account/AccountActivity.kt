@@ -203,7 +203,7 @@ class AccountActivity : BaseActivity() {
             setupDocuments()
             setupContacts()
             setupAdapterList()
-            Handler().postDelayed({ missingInfo(missedName || missedContacts || missedDocuments) }, 200)
+           // Handler().postDelayed({ missingInfo(missedName || missedContacts || missedDocuments) }, 200)
         })
     }
 
