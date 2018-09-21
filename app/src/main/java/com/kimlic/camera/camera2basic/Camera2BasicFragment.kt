@@ -34,9 +34,9 @@ import android.util.Log
 import android.util.Size
 import android.util.SparseIntArray
 import android.view.*
-import com.example.android.camera2basic.ImageSaver
 import com.kimlic.R
 import com.kimlic.utils.PhotoCallback
+import kotlinx.android.synthetic.main.fragment_document_portrait_.*
 import java.io.File
 import java.util.Arrays
 import java.util.Collections
@@ -44,9 +44,7 @@ import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
-open class Camera2BasicFragment : Fragment(), View.OnClickListener,
-        ActivityCompat.OnRequestPermissionsResultCallback {
-
+open class Camera2BasicFragment : Fragment(), View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
     // Variables
 
@@ -76,29 +74,18 @@ open class Camera2BasicFragment : Fragment(), View.OnClickListener,
 
     }
 
-    /**
-     * ID of the current [CameraDevice].
-     */
     private lateinit var cameraId: String
 
-    /**
-     * An [AutoFitTextureView] for camera preview.
-     */
     private lateinit var textureView: AutoFitTextureView
 
-    /**
-     * A [CameraCaptureSession] for camera preview.
-     */
     private var captureSession: CameraCaptureSession? = null
 
-    /**
-     * A reference to the opened [CameraDevice].
-     */
+    //A reference to the opened [CameraDevice].
+
     private var cameraDevice: CameraDevice? = null
 
-    /**
-     * The [android.util.Size] of camera preview.
-     */
+    // The [android.util.Size] of camera preview.
+
     private lateinit var previewSize: Size
 
     /**
@@ -150,7 +137,18 @@ open class Camera2BasicFragment : Fragment(), View.OnClickListener,
      * still image is ready to be saved.
      */
     private val onImageAvailableListener = ImageReader.OnImageAvailableListener {
-        backgroundHandler?.post(ImageSaver(it.acquireNextImage(), file))
+        val image = it.acquireLatestImage()
+        val buffer = image.planes[0].buffer
+        val bytes = ByteArray(buffer.remaining())
+        buffer.get(bytes)
+
+        closeCamera()
+
+        activity?.runOnUiThread({ confirmLl.visibility = View.VISIBLE; showResultPhoto(bytes) })
+
+        // previewIv.callback.callback(data = bytes)
+
+        // backgroundHandler?.post(ImageSaver(it.acquireNextImage(), file))
     }
 
     /**
@@ -231,34 +229,44 @@ open class Camera2BasicFragment : Fragment(), View.OnClickListener,
             }
         }
 
-        override fun onCaptureProgressed(session: CameraCaptureSession,
-                request: CaptureRequest,
-                partialResult: CaptureResult) {
+        override fun onCaptureProgressed(session: CameraCaptureSession, request: CaptureRequest, partialResult: CaptureResult) {
             process(partialResult)
         }
 
-        override fun onCaptureCompleted(session: CameraCaptureSession,
-                request: CaptureRequest,
-                result: TotalCaptureResult) {
+        override fun onCaptureCompleted(session: CameraCaptureSession, request: CaptureRequest, result: TotalCaptureResult) {
             process(result)
         }
 
     }
 
-    override fun onCreateView(inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_camera2_basic, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        //view.findViewById<View>(R.id.picture).setOnClickListener(this)
-       // view.findViewById<View>(R.id.info).setOnClickListener(this)
-        textureView = view.findViewById(R.id.texture)
-    }
+    // Live
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         file = File(activity!!.getExternalFilesDir(null), PIC_FILE_NAME)//TODO
+    }
+
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.fragment_camera2_basic, container, false)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        view.findViewById<View>(R.id.picture).setOnClickListener(this)
+         view.findViewById<View>(R.id.info).setOnClickListener(this)
+
+
+//        captureBt.setOnClickListener { lockFocus() }
+//        retakelBt.setOnClickListener {}
+//        confirmBt.setOnClickListener {}
+
+        textureView = view.findViewById(R.id.texture)
+    }
+
+
+    override fun onPause() {
+        closeCamera()
+        stopBackgroundThread()
+        super.onPause()
     }
 
     override fun onResume() {
@@ -276,12 +284,6 @@ open class Camera2BasicFragment : Fragment(), View.OnClickListener,
         }
     }
 
-    override fun onPause() {
-        closeCamera()
-        stopBackgroundThread()
-        super.onPause()
-    }
-
     private fun requestCameraPermission() {
         if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
             ConfirmationDialog().show(childFragmentManager, FRAGMENT_DIALOG)
@@ -290,9 +292,7 @@ open class Camera2BasicFragment : Fragment(), View.OnClickListener,
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int,
-            permissions: Array<String>,
-            grantResults: IntArray) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
             if (grantResults.size != 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                 ErrorDialog.newInstance(getString(R.string.request_permission))
@@ -322,17 +322,12 @@ open class Camera2BasicFragment : Fragment(), View.OnClickListener,
                     continue
                 }
 
-                val map = characteristics.get(
-                        CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP) ?: continue
+                val map = characteristics.get( CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP) ?: continue
 
                 // For still image captures, we use the largest available size.
-                val largest = Collections.max(
-                        Arrays.asList(*map.getOutputSizes(ImageFormat.JPEG)),
-                        CompareSizesByArea())
-                imageReader = ImageReader.newInstance(largest.width, largest.height,
-                        ImageFormat.JPEG, /*maxImages*/ 2).apply {
-                    setOnImageAvailableListener(onImageAvailableListener, backgroundHandler)
-                }
+                val largest = Collections.max(Arrays.asList(*map.getOutputSizes(ImageFormat.JPEG)), CompareSizesByArea())
+
+                imageReader = ImageReader.newInstance(largest.width, largest.height, ImageFormat.JPEG, /*maxImages*/ 2).apply { setOnImageAvailableListener(onImageAvailableListener, backgroundHandler) }
 
                 // Find out if we need to swap dimension to get the preview size relative to sensor
                 // coordinate.
@@ -367,8 +362,7 @@ open class Camera2BasicFragment : Fragment(), View.OnClickListener,
                 }
 
                 // Check if the flash is supported.
-                flashSupported =
-                        characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
+                flashSupported = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
 
                 this.cameraId = cameraId
 
@@ -467,9 +461,6 @@ open class Camera2BasicFragment : Fragment(), View.OnClickListener,
         backgroundHandler = Handler(backgroundThread?.looper)
     }
 
-    /**
-     * Stops the background thread and its [Handler].
-     */
     private fun stopBackgroundThread() {
         backgroundThread?.quitSafely()
         try {
@@ -581,8 +572,7 @@ open class Camera2BasicFragment : Fragment(), View.OnClickListener,
                     CameraMetadata.CONTROL_AF_TRIGGER_START)
             // Tell #captureCallback to wait for the lock.
             state = STATE_WAITING_LOCK
-            captureSession?.capture(previewRequestBuilder.build(), captureCallback,
-                    backgroundHandler)
+            captureSession?.capture(previewRequestBuilder.build(), captureCallback, backgroundHandler)
         } catch (e: CameraAccessException) {
             Log.e(TAG, e.toString())
         }
@@ -596,8 +586,10 @@ open class Camera2BasicFragment : Fragment(), View.OnClickListener,
     private fun runPrecaptureSequence() {
         try {
             // This is how to tell the camera to trigger.
-            previewRequestBuilder.set(CaptureRequest.CONTROL_AE_PRECAPTURE_TRIGGER,
-                    CaptureRequest.CONTROL_AE_PRECAPTURE_TRIGGER_START)
+            previewRequestBuilder.set(CaptureRequest.CONTROL_AE_PRECAPTURE_TRIGGER, CaptureRequest.CONTROL_AE_PRECAPTURE_TRIGGER_START)
+
+//            previewRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_OFF);
+//            previewRequestBuilder.set(CaptureRequest.CONTROL_AWB_MODE, CaptureRequest.CONTROL_AWB_MODE_OFF);
             // Tell #captureCallback to wait for the precapture sequence to be set.
             state = STATE_WAITING_PRECAPTURE
             captureSession?.capture(previewRequestBuilder.build(), captureCallback,
@@ -626,19 +618,15 @@ open class Camera2BasicFragment : Fragment(), View.OnClickListener,
                 // We have to take that into account and rotate JPEG properly.
                 // For devices with orientation of 90, we return our mapping from ORIENTATIONS.
                 // For devices with orientation of 270, we need to rotate the JPEG 180 degrees.
-                set(CaptureRequest.JPEG_ORIENTATION,
-                        (ORIENTATIONS.get(rotation!!) + sensorOrientation + 270) % 360)//TODO
+                set(CaptureRequest.JPEG_ORIENTATION, (ORIENTATIONS.get(rotation!!) + sensorOrientation + 270) % 360)//TODO
 
                 // Use the same AE and AF modes as the preview.
-                set(CaptureRequest.CONTROL_AF_MODE,
-                        CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
+                set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE)
             }?.also { setAutoFlash(it) }
 
             val captureCallback = object : CameraCaptureSession.CaptureCallback() {
 
-                override fun onCaptureCompleted(session: CameraCaptureSession,
-                        request: CaptureRequest,
-                        result: TotalCaptureResult) {
+                override fun onCaptureCompleted(session: CameraCaptureSession, request: CaptureRequest, result: TotalCaptureResult) {
                     activity?.showToast("Saved: $file")// TODO
                     Log.d(TAG, file.toString())
                     unlockFocus()
@@ -684,7 +672,7 @@ open class Camera2BasicFragment : Fragment(), View.OnClickListener,
             R.id.info -> {
                 if (activity != null) {
                     AlertDialog.Builder(activity)
-                           // .setMessage(R.string.intro_message)// TODO
+                            // .setMessage(R.string.intro_message)// TODO
                             .setPositiveButton(android.R.string.ok, null)
                             .show()
                 }
@@ -714,44 +702,21 @@ open class Camera2BasicFragment : Fragment(), View.OnClickListener,
             ORIENTATIONS.append(Surface.ROTATION_270, 180)
         }
 
-        /**
-         * Tag for the [Log].
-         */
         private val TAG = "Camera2BasicFragment"
-
-        /**
-         * Camera state: Showing camera preview.
-         */
+        //Camera state: Showing camera preview
         private val STATE_PREVIEW = 0
-
-        /**
-         * Camera state: Waiting for the focus to be locked.
-         */
+        // Camera state: Waiting for the focus to be locked.
         private val STATE_WAITING_LOCK = 1
-
-        /**
-         * Camera state: Waiting for the exposure to be precapture state.
-         */
+        //  Camera state: Waiting for the exposure to be precapture state.
         private val STATE_WAITING_PRECAPTURE = 2
-
-        /**
-         * Camera state: Waiting for the exposure state to be something other than precapture.
-         */
+        //Camera state: Waiting for the exposure state to be something other than precapture.
         private val STATE_WAITING_NON_PRECAPTURE = 3
 
-        /**
-         * Camera state: Picture was taken.
-         */
+
+        // Camera state: Picture was taken.
+
         private val STATE_PICTURE_TAKEN = 4
-
-        /**
-         * Max preview width that is guaranteed by Camera2 API
-         */
         private val MAX_PREVIEW_WIDTH = 1920
-
-        /**
-         * Max preview height that is guaranteed by Camera2 API
-         */
         private val MAX_PREVIEW_HEIGHT = 1080
 
         /**
@@ -770,7 +735,8 @@ open class Camera2BasicFragment : Fragment(), View.OnClickListener,
          * @param aspectRatio       The aspect ratio
          * @return The optimal `Size`, or an arbitrary one if none were big enough
          */
-        @JvmStatic private fun chooseOptimalSize(
+        @JvmStatic
+        private fun chooseOptimalSize(
                 choices: Array<Size>,
                 textureViewWidth: Int,
                 textureViewHeight: Int,
@@ -808,6 +774,33 @@ open class Camera2BasicFragment : Fragment(), View.OnClickListener,
             }
         }
 
-        @JvmStatic fun newInstance(): Camera2BasicFragment = Camera2BasicFragment()
+        @JvmStatic
+        fun newInstance(): Camera2BasicFragment = Camera2BasicFragment()
+    }
+
+    // Private
+
+    private fun rotateBitmap(source: Bitmap, angel: Float): Bitmap {
+        val matrix = Matrix()
+        matrix.postRotate(angel)
+        return Bitmap.createBitmap(source, 0, 0, source.width, source.height, matrix, false)
+    }
+
+    private fun showResultPhoto(data: ByteArray?) {
+        val bitmap = BitmapFactory.decodeByteArray(data, 0, data!!.size)
+        captureBt.visibility = View.GONE
+//        previewIv.setImageBitmap(rotateBitmap(bitmap, if (cameraId =="") -90f else 90f))
+        previewIv.setImageBitmap(bitmap)
+        confirmLl.visibility = View.VISIBLE
+
+        confirmBt.setOnClickListener { closeCamera(); callback.callback(data) }
+
+        retakelBt.setOnClickListener {
+            confirmLl.visibility = View.GONE
+            captureBt.visibility = View.VISIBLE
+            //openCamera()
+            //kimlicSurfaceView = KimlicSurfaceView(KimlicApp.applicationContext(), camera)
+            //frameLayout.addView(kimlicSurfaceView)
+        }
     }
 }
