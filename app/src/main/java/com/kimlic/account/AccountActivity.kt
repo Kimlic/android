@@ -1,13 +1,16 @@
 package com.kimlic.account
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import com.kimlic.BaseActivity
@@ -16,12 +19,17 @@ import com.kimlic.R
 import com.kimlic.account.adapter.RPAdapter
 import com.kimlic.account.fragment.IdentitySentSuccessfulFragment
 import com.kimlic.account.fragment.MissingInformationFragment
+import com.kimlic.account.fragment.SelectAccountDocumentFragment
 import com.kimlic.db.entity.Contact
 import com.kimlic.db.entity.Document
 import com.kimlic.db.entity.User
 import com.kimlic.db.entity.VendorDocument
+import com.kimlic.documents.DocumentCallback
+import com.kimlic.documents.fragments.SelectCountryFragment
+import com.kimlic.documents.fragments.SelectDocumentFragment
 import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
+import com.kimlic.utils.AppConstants
 import com.kimlic.utils.BaseCallback
 import com.kimlic.vendors.VendorsViewModel
 import kotlinx.android.synthetic.main.activity_account.*
@@ -40,6 +48,9 @@ class AccountActivity : BaseActivity() {
     private var timer: CountDownTimer? = null
     private var blockchainUpdatingFragment: BlockchainUpdatingFragment? = null
     private var missingFragment: MissingInformationFragment? = null
+
+    private lateinit var chosenCountry: String
+
     private var missedName: Boolean = true
     private var missedContacts: Boolean = true
     private var missedDocuments: Boolean = true
@@ -49,6 +60,13 @@ class AccountActivity : BaseActivity() {
     private lateinit var url: String
     private lateinit var adapter: RPAdapter
     private lateinit var vendorsDocs: MutableMap<String, VendorDocument>
+
+    private lateinit var selectCountryFragment: SelectCountryFragment
+    private lateinit var selectAccountDocumentFragment: SelectAccountDocumentFragment
+
+    companion object {
+        private const val DOCUMENT_VERIFY_REQUEST_CODE = 4444
+    }
 
     // Life
 
@@ -64,7 +82,24 @@ class AccountActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         setupAdapterList()
-        Handler().postDelayed({ missingInfo(missedName || missedContacts || missedDocuments) }, 1500)
+//        Handler().postDelayed({ missingInfo(missedName || missedContacts || missedDocuments) }, 1500)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == DOCUMENT_VERIFY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            Log.d("TAGSELECTEDDOCUMENT", "on activity result")
+
+            val acceptedDocumet = data?.getStringExtra(AppConstants.DOCUMENT_TYPE.key)
+            Log.d("TAGSELECTEDDOCUMENT", "on activity result $acceptedDocumet")
+            acceptedDocumet?.let {
+                val document = model.userDocument(it)!!
+                Log.d("TAGSELECTEDDOCUMENT", "in accepted - document = $document")
+                documentList = listOf(DocumentItem(document))
+                missedDocuments = false
+                setupAdapterList()
+                setupNextButton()
+            }
+        }
     }
 
     // Private
@@ -76,8 +111,21 @@ class AccountActivity : BaseActivity() {
         val urlToParce = url.split("/")
         val urlNew = urlToParce[0] + "//" + urlToParce[1] + urlToParce[2]
 
+        selectCountryFragment = SelectCountryFragment.getInstance()
+
+
+        selectCountryFragment.setCallback(object : DocumentCallback {
+            override fun callback(bundle: Bundle) {
+                chosenCountry = bundle.getString(AppConstants.COUNTRY.key)
+
+                showSelectDocumentFragment(chosenCountry = chosenCountry)
+                Log.d("TAGDOCUMENT", "chosen country = $chosenCountry")
+            }
+        })
+
+
         url = urlNew
-        vendorsModel.rpDocuments(url)// Request for RP documents.
+        vendorsModel.rpDocuments(url)// Request for RP documentsLive.
 
         setupAdapter()
         setupAdapterList()
@@ -106,11 +154,45 @@ class AccountActivity : BaseActivity() {
                 when (position) {
                     0 -> PresentationManager.name(this@AccountActivity)
                     1 -> PresentationManager.phoneNumber(this@AccountActivity)
-                    2 -> PresentationManager.email(this@AccountActivity)
-                    3, 4, 5, 6 -> PresentationManager.documentChoiseVerify(this@AccountActivity)
+                    //2 -> PresentationManager.email(this@AccountActivity)
+//                    3, 4, 5, 6 -> PresentationManager.documentChoiseVerify(this@AccountActivity)
+                    2 -> {
+                        selectCountryFragment.show(supportFragmentManager, SelectCountryFragment.FRAGMENT_KEY)
+                    }
                 }
             }
         })
+    }
+
+    private fun showSelectDocumentFragment(chosenCountry: String) {
+        val bundle = Bundle()
+        bundle.putString(AppConstants.COUNTRY.key, chosenCountry)
+
+        selectAccountDocumentFragment = SelectAccountDocumentFragment.getInstance(bundle)
+        selectAccountDocumentFragment.setCallback(object : DocumentCallback {
+            override fun callback(bundle: Bundle) {
+                selectCountryFragment.dismiss()
+                selectAccountDocumentFragment.dismiss()
+                val documentToVerify = bundle.getString(AppConstants.DOCUMENT_TYPE.key, "")
+                val action = bundle.getString("action", "")
+
+                when (action) {
+                    "apply" -> {
+                        val document = model.userDocument(documentToVerify)!!
+                        documentList = listOf(DocumentItem(document))
+                        missedDocuments = false
+                        setupAdapterList()
+                        setupNextButton()
+                    }
+                    "add" -> {
+                        PresentationManager.verifyDocument(this@AccountActivity, documentType = documentToVerify, country = chosenCountry, requestCode = DOCUMENT_VERIFY_REQUEST_CODE)
+                    }
+                }
+
+                Log.d("TAGSELECTEDDOCUMENT", "selected document = ${documentToVerify}")
+            }
+        })
+        selectAccountDocumentFragment.show(supportFragmentManager, SelectDocumentFragment.FRAGMENT_KEY)
     }
 
     private fun fetchVendorDocs() {
@@ -121,6 +203,7 @@ class AccountActivity : BaseActivity() {
             setupDocuments()
             setupContacts()
             setupAdapterList()
+            Handler().postDelayed({ missingInfo(missedName || missedContacts || missedDocuments) }, 200)
         })
     }
 
@@ -146,18 +229,18 @@ class AccountActivity : BaseActivity() {
     private fun setupContacts() {
         model.userContactsLive().observe(this, Observer<List<Contact>> {
             val userContact = it?.orEmpty()
-            val tempList = mutableListOf(ContactItem(Contact(type = "phone")), ContactItem(Contact(type = "email")))
+            val tempList = mutableListOf(ContactItem(Contact(type = "phone")))//, ContactItem(Contact(type = "email")))
 
             var count = 0
 
             userContact!!.forEach { contact ->
                 if (contact.type == "phone") tempList[0] = ContactItem(contact)
-                if (contact.type == "email") {
-                    tempList[1] = ContactItem(contact); count++
-                }
+//                if (contact.type == "email") {
+//                    tempList[1] = ContactItem(contact); count++
+//                }
             }
 
-            missedContacts = count != 1
+            missedContacts = false//count != 1
             contactList = tempList
             setupAdapterList()
             setupNextButton()
@@ -165,6 +248,8 @@ class AccountActivity : BaseActivity() {
     }
 
     private fun setupDocuments() {
+
+
         model.userDocumentsLive().observe(this, Observer<List<Document>> { userDocumentsList ->
             val newList = mutableListOf<DocumentItem>()
             val userDocumentsMap = userDocumentsList?.map { it.type to it }?.toMap().orEmpty()
@@ -174,25 +259,30 @@ class AccountActivity : BaseActivity() {
             //vendorsDocs.remove("RESIDENCE_PERMIT_CARD")
             var count = 0
             // Добавить проверку по странам???
-            vendorsDocs.forEach {
-                if (it.key in userDocumentsMap) {
-                    newList.add(DocumentItem(userDocumentsMap[it.key]!!))
-                } else {
-                    count++; newList.add(DocumentItem(Document(type = it.key)))
-                }
+//            vendorsDocs.forEach {
+//                if (it.key in userDocumentsMap) {
+//                    newList.add(DocumentItem(userDocumentsMap[it.key]!!))
+//                } else {
+//                    count++; newList.add(DocumentItem(Document(type = it.key)))
+//                }
+//
+//                if (it.key in userDocumentsMap) {
+//                    if (!it.value.countries.contains(userDocumentsMap[it.key]?.countryIso?.toUpperCase())) {
+//                        newList.removeAt(newList.lastIndex)
+//                    }
+//                }
+//            }
 
-                if (it.key in userDocumentsMap) {
-                    if (!it.value.countries.contains(userDocumentsMap[it.key]?.countryIso?.toUpperCase())) {
-                        newList.removeAt(newList.lastIndex)
-                    }
-                }
-            }
-
-            documentList = newList
-            missedDocuments = count != 0
-            setupAdapterList()
-            setupNextButton()
+//            newList.add(DocumentItem(Document(type = "addDocument")))
+//            documentList = newList
+//            missedDocuments = count != 0
+//            setupAdapterList()
+//            setupNextButton()
         })
+        documentList = mutableListOf<DocumentItem>(DocumentItem(Document(type = "addDocument")))
+        missedDocuments = true
+        setupAdapterList()
+        setupNextButton()
     }
 
     private fun setupNextButton() {
@@ -223,7 +313,9 @@ class AccountActivity : BaseActivity() {
 
             val vendorDocument = vendorDocumentsList.filter { it.type == docItem.type }.first()
 
+            // val urlHardcoded = "http://13.68.143.152/api/medias"
             model.senDoc(docItem.type, country, url, vendorDocument = vendorDocument,
+//            model.senDoc(docItem.type, country, urlHardcoded, vendorDocument = vendorDocument,
                     onSuccess = {
                         sendFromQueue({ onSuccess() }, { onError() })
                     },
@@ -232,14 +324,9 @@ class AccountActivity : BaseActivity() {
     }
 
     private fun showProgress() {
-        //timer = object : CountDownTimer(10, 10) {
-        //  override fun onFinish() {
         blockchainUpdatingFragment = BlockchainUpdatingFragment.newInstance()
         blockchainUpdatingFragment?.show(supportFragmentManager, BlockchainUpdatingFragment.FRAGMENT_KEY)
-        //}
 
-        //override fun onTick(millisUntilFinished: Long) {}
-        //}.start()
     }
 
     private fun hideProgress() {
