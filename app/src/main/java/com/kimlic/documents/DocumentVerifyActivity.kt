@@ -47,7 +47,7 @@ class DocumentVerifyActivity : BaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             DOCUMENT_TAKE_PHOTO_REQUEST_CODE -> {
-                setResult(RESULT_OK); finish()
+                setResult(RESULT_OK, data); finish()
             }
         }
     }
