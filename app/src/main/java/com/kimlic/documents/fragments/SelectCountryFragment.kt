@@ -54,7 +54,9 @@ class SelectCountryFragment : BasePopupFragment() {
     }
 
     override fun onDismiss(dialog: DialogInterface?) {
-        activity?.let { (it as DocumentChoiceActivity).finish() }
+        if (activity is DocumentChoiceActivity) {
+            (activity as DocumentChoiceActivity).finish()
+        }
         super.onDismiss(dialog)
     }
 
