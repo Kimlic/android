@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +24,9 @@ import io.fotoapparat.Fotoapparat
 import io.fotoapparat.characteristic.LensPosition
 import io.fotoapparat.parameter.ScaleType
 import io.fotoapparat.selector.LensPositionSelector
+import io.fotoapparat.selector.back
+import io.fotoapparat.selector.firstAvailable
+import io.fotoapparat.selector.front
 import kotlinx.android.synthetic.main.fragment_document_card_.*
 import java.io.File
 
@@ -87,7 +91,7 @@ abstract class CameraBaseFragment_ : BaseFragment() {
 
     private fun setupUI() {
         cameraId = arguments!!.getInt(AppConstants.CAMERA_TYPE.key, AppConstants.CAMERA_REAR.intKey)
-
+        Log.d("TAGCAMERABASE", "cameraid = $cameraId")
 
 //        Fotoapparat.with(activity!!.applicationContext)
 //                .into(cameraView)           // view which will draw the camera preview
@@ -97,11 +101,15 @@ abstract class CameraBaseFragment_ : BaseFragment() {
 
         fotoapparat = Fotoapparat.with(activity!!.applicationContext)
                 .into(cameraView)
+                .lensPosition(if (cameraId == AppConstants.CAMERA_REAR.intKey) back() else front())
                 .previewScaleType(ScaleType.CenterCrop)
+                //.focusMode(firstAvailable<>())
                 .build()
+
 
         captureBt.setOnClickListener {
             val results = fotoapparat.takePicture()
+
             results.saveToFile(File(activity!!.filesDir.toString() + "/" + "ffffff"))
 
             confirmLl.visibility = View.VISIBLE
