@@ -28,6 +28,8 @@ class MainActivity : BaseActivity() {
 
     private fun setupUI() {
         initFragment()
+//        val intent = Intent(this, DocumentVerifyActivity_test::class.java)
+//        startActivity(intent)
         splashScreenShow()
 
         if (Prefs.authenticated) {
