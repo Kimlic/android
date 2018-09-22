@@ -33,15 +33,12 @@ class DocumentDetails : BaseActivity() {
 
     // Variables
 
-
     private lateinit var model: ProfileViewModel
     private lateinit var documentType: String
     private lateinit var country: String
     private lateinit var action: String
-
     private lateinit var user: User
     private lateinit var photosMap: Map<String, String>
-
     private lateinit var currentDocument: Document
 
     // Life
@@ -108,7 +105,7 @@ class DocumentDetails : BaseActivity() {
     }
 
     private fun fillPhotoFramesFromCache() {
-        portraitIv.setImageBitmap(rotateBitmap(FileNameTxtBase64ToBitmap().transform(Cache.PORTRAIT.file)!!, -90f))
+        portraitIv.setImageBitmap(rotateBitmap(FileNameTxtBase64ToBitmap().transform(Cache.PORTRAIT.file)!!, 0f))//-90f Previous value with old camera
         frontIv.setImageBitmap(cropped(Cache.FRONT.file))
         if (documentType != AppDoc.PASSPORT.type) {
             backIv.setImageBitmap(cropped(Cache.BACK.file))
@@ -120,7 +117,7 @@ class DocumentDetails : BaseActivity() {
     }
 
     private fun filPhotoFramesPreview(photos: Map<String, String>) {
-        portraitIv.setImageBitmap(rotateBitmap(FileNameTxtBase64ToBitmap().transform(photos[AppConstants.PHOTO_FACE_TYPE.key]!!)!!, -90f))
+        portraitIv.setImageBitmap(rotateBitmap(FileNameTxtBase64ToBitmap().transform(photos[AppConstants.PHOTO_FACE_TYPE.key]!!)!!, 0f))//-90f Previous value with old camera
         frontIv.setImageBitmap(cropped(photos[AppConstants.PHOTO_FRONT_TYPE.key]!!))
         if (currentDocument.type != AppDoc.PASSPORT.type) {
             backIv.setImageBitmap(cropped(photos[AppConstants.PHOTO_BACK_TYPE.key]!!))
@@ -176,7 +173,7 @@ class DocumentDetails : BaseActivity() {
 
     private fun cropped(fileName: String): Bitmap {
         val bitmap = FileNameTxtBase64ToBitmap().transform(fileName)
-        val originalBitmap = rotateBitmap(bitmap!!, 90f)
+        val originalBitmap = rotateBitmap(bitmap!!, 0f)//-90f Previous value with old camera
         val width = originalBitmap.width
         val height = originalBitmap.height
         return Bitmap.createBitmap(originalBitmap, (0.15 * width).toInt(), (0.22 * height).toInt(), (0.7 * width).toInt(), (0.35 * height).toInt())
