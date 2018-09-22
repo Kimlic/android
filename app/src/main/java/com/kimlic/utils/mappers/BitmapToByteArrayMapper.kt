@@ -9,7 +9,7 @@ class BitmapToByteArrayMapper : BaseMapper<Bitmap, ByteArray> {
 
     override fun transform(input: Bitmap): ByteArray {
         val stream = ByteArrayOutputStream()
-        input.compress(Bitmap.CompressFormat.JPEG, 30, stream)
+        input.compress(Bitmap.CompressFormat.JPEG, 40, stream)
         return stream.toByteArray()
     }
 }
