@@ -159,16 +159,11 @@
 
     <activity
       android:label="Account"
-      android:name=".account.AccountActivity"
-      />
+      android:name=".account.AccountActivity"/>
 
     <activity
       android:label="DocumentDetails"
       android:name=".documents.DocumentDetails"/>
-
-
-    <activity android:name=".camera.camera2basic.CameraActivity"/>
-    <activity android:name=".documents.DocumentVerifyActivity_test"/>
 
   </application>
 
