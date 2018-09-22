@@ -29,6 +29,7 @@ import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.BaseCallback
+import com.kimlic.utils.bitmap.BitmapUtils
 import kotlinx.android.synthetic.main.activity_address.*
 import java.io.File
 
@@ -227,7 +228,7 @@ class AddressActivity : BaseActivity(), GoogleApiClient.OnConnectionFailedListen
     // Private helpers
 
     private fun cropped(bitmap: Bitmap): Bitmap {
-        val originalBitmap = rotateBitmap(bitmap, 90f)
+        val originalBitmap = BitmapUtils.rotateBitmap(bitmap, 0f)
         val width = originalBitmap.width
         val height = originalBitmap.height
         return Bitmap.createBitmap(originalBitmap, (0.15 * width).toInt(), (0.08 * height).toInt(), (0.7 * width).toInt(), (0.5 * height).toInt())
