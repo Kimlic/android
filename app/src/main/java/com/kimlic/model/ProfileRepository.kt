@@ -94,8 +94,7 @@ class ProfileRepository private constructor() {
     fun getUser(accountAddress: String) = userDao.select(accountAddress)
 
     fun deleteUser(accountAddress: String) {
-        userDao.delete(accountAddress);
-        //syncDataBase() -- delete
+        userDao.delete(accountAddress)
     }
 
     fun userLive(accountAddress: String): LiveData<User> = userDao.selectLive(accountAddress)
@@ -506,14 +505,6 @@ class ProfileRepository private constructor() {
                         Pair("Accept", "application/vnd.mobile-api.v1+json")
                 )
             }
-
-//            override fun deliverError(error: VolleyError?) {
-//                super.deliverError(error)
-//                Log.d("TAGDELIVER", "In inherited class")
-//
-//
-//                val redirectedRequest = object :KimlicJSONRequest(method, url,, JSONObject(), listener, )
-//            }
         }
         VolleySingleton.getInstance(context).addToRequestQueue(request)
     }
@@ -646,7 +637,7 @@ class ProfileRepository private constructor() {
         syncPhoto(accountAddress, fileName)
     }
 
-    // Fun create cofy from files in cache
+    // Fun create copy from files in cache
     private fun savePhotoFromCache(accountAddress: String, cacheFileName: String, fileName: String) {
         File(context.filesDir.toString() + "/" + cacheFileName).copyTo(File(context.filesDir.toString() + "/" + fileName), true)
         syncPhoto(accountAddress, fileName)

@@ -38,7 +38,7 @@ class SyncService private constructor(val context: Context) {
 
         const val MIME_TYPE_DATABASE: String = "application/db"
         const val PHOTO_DESCRIPTION: String = "photo" // file description
-        const val DATABASE_DECRIPTION: String = "database" // database description
+        const val DATABASE_DESCRIPTION: String = "database" // database description
 
         fun signIn(activity: AppCompatActivity, requestCode: Int) {
             val requiredScopes = HashSet<Scope>(2)
@@ -76,7 +76,7 @@ class SyncService private constructor(val context: Context) {
 
     fun backupDatabase(accountAddress: String, dataBaseName: String, onSuccess: () -> Unit, onError: () -> Unit) {
         val db = KimlicApp.applicationContext().getDatabasePath(dataBaseName).toString()
-        backupFile(accountAddress = accountAddress, filePath = db, fileDescription = DATABASE_DECRIPTION, onSuccess = onSuccess, onError = onError)
+        backupFile(accountAddress = accountAddress, filePath = db, fileDescription = DATABASE_DESCRIPTION, onSuccess = onSuccess, onError = onError)
     }
 
     fun backupFile(accountAddress: String, filePath: String, fileDescription: String, onSuccess: () -> Unit, onError: () -> Unit): Task<DriveFolder> {
@@ -87,15 +87,13 @@ class SyncService private constructor(val context: Context) {
                     .queryChildren(rootFolder.result, backupFolderQuery)
                     .continueWithTask {
                         if (it.result.count == 0) {
-                            Log.d("TAGBACLUP", "InCreateFolder")
-                            createFolderInFolder(parent = rootFolder.result, folderName = accountAddress).addOnSuccessListener { backupFile(accountAddress = accountAddress, filePath = filePath, fileDescription = fileDescription, onSuccess = { Log.d("TAGBACLUP", "I!!!!!!!!!!!!!!!!");onSuccess }, onError = onError) }
-
+                            createFolderInFolder(parent = rootFolder.result, folderName = accountAddress)
+                                    .addOnSuccessListener {
+                                        backupFile(accountAddress = accountAddress, filePath = filePath, fileDescription = fileDescription, onSuccess = { onSuccess() }, onError = onError)
+                                    }
                         }
-                        Log.d("TAGBACLUP", "afterCreateFolder")
                         updateFile(filePath = filePath, driveFolder = it.result[0].driveId.asDriveFolder(), fileDescription = fileDescription)
                     }.addOnSuccessListener {
-                        Log.d("TAGBACLUP", "syncservice ON success in backupFile")
-                        //backupFile(accountAddress = accountAddress, filePath = filePath, fileDescription = fileDescription, onSuccess = { onSuccess }, onError = onError)
                         onSuccess()
                     }.addOnFailureListener { onError() }
         }
@@ -142,7 +140,7 @@ class SyncService private constructor(val context: Context) {
                         }
                         it.forEach {
                             Log.d(TAG, "files in folder description ${it.description}")
-                            if (it.description == DATABASE_DECRIPTION) saveDataBaseToDisc(it.title, it.driveId.asDriveFile(), onSuccess)
+                            if (it.description == DATABASE_DESCRIPTION) saveDataBaseToDisc(it.title, it.driveId.asDriveFile(), onSuccess)
                         }
                     }
         }
