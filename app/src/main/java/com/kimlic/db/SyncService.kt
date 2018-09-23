@@ -135,11 +135,9 @@ class SyncService private constructor(val context: Context) {
                     }.addOnSuccessListener {
 
                         if (it.count == 0) {
-                            Log.d(TAG, "found folders = ${it.count}")
                             onError(); return@addOnSuccessListener
                         }
                         it.forEach {
-                            Log.d(TAG, "files in folder description ${it.description}")
                             if (it.description == DATABASE_DESCRIPTION) saveDataBaseToDisc(it.title, it.driveId.asDriveFile(), onSuccess)
                         }
                     }
