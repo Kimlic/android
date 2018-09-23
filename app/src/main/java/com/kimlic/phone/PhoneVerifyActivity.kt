@@ -3,6 +3,7 @@ package com.kimlic.phone
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.text.Editable
+import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.View
 import android.widget.EditText
@@ -59,7 +60,7 @@ class PhoneVerifyActivity : BaseActivity() {
         backBt.setOnClickListener { finish() }
         changeTv.setOnClickListener { PresentationManager.phoneNumber(this) }
 
-        phone = intent.extras!!.getString("phone", "")
+        phone = intent.extras?.getString("phone", "").orEmpty()
         titleTv.text = Editable.Factory.getInstance().newEditable(this.getString(R.string.code_sent_to, phone))
 
         showSoftKeyboard(digit1Et)
@@ -130,7 +131,6 @@ class PhoneVerifyActivity : BaseActivity() {
 
     private fun setupDigitListener() {
         digitsList.forEach {
-
             it.setOnKeyListener(object : View.OnKeyListener {
                 val position = Integer.valueOf(it.tag.toString())
 
@@ -138,28 +138,10 @@ class PhoneVerifyActivity : BaseActivity() {
                     if (event!!.action != KeyEvent.ACTION_DOWN)
                         return false
 
-                    when (keyCode) {
-                        KeyEvent.KEYCODE_0 -> moveNext(0)
-                        KeyEvent.KEYCODE_1 -> moveNext(1)
-                        KeyEvent.KEYCODE_2 -> moveNext(2)
-                        KeyEvent.KEYCODE_3 -> moveNext(3)
-                        KeyEvent.KEYCODE_4 -> moveNext(4)
-                        KeyEvent.KEYCODE_5 -> moveNext(5)
-                        KeyEvent.KEYCODE_6 -> moveNext(6)
-                        KeyEvent.KEYCODE_7 -> moveNext(7)
-                        KeyEvent.KEYCODE_8 -> moveNext(8)
-                        KeyEvent.KEYCODE_9 -> moveNext(9)
-                        KeyEvent.KEYCODE_DEL -> moveBack()
-                    }
-                    return false
-                }
+                    if (keyCode == KeyEvent.KEYCODE_DEL)
+                        moveBack()
 
-                private fun moveNext(keyCode: Int) {
-                    if (position < 4) {
-                        digitsList.elementAt(position).text = Editable.Factory.getInstance().newEditable(keyCode.toString())
-                        digitsList.elementAt(position).background = resources.getDrawable(R.drawable.square_edittext_background_dark, null)
-                        if (position < 3) digitsList.elementAt(position + 1).requestFocus()
-                    }
+                    return false
                 }
 
                 private fun moveBack() {
@@ -167,8 +149,49 @@ class PhoneVerifyActivity : BaseActivity() {
                     digitsList.elementAt(position).text = Editable.Factory.getInstance().newEditable("")
 
                     if (position > 0) digitsList.elementAt(position - 1).requestFocus()
+                    refreshState()
                 }
             })
+
+            it.addTextChangedListener(object : TextWatcher {
+                val position = it.tag.toString().toInt()
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    when (s.toString().length) {
+                        //0 -> moveBack()
+                        1 -> moveNext()
+                        2 -> {
+                            it.text = Editable.Factory.getInstance().newEditable(s!![count - 1].toString()); moveNext()
+                        }
+                    }
+                }
+
+                override fun afterTextChanged(s: Editable?) {}
+
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+                private fun moveNext() {
+                    if (position < 3) digitsList.elementAt(position + 1).requestFocus()
+
+                    refreshState()
+                }
+
+                private fun moveBack() {
+                    if (position > 0) digitsList.elementAt(position - 1).requestFocus()
+
+                    refreshState()
+                }
+            })
+        }
+    }
+
+    private fun refreshState() {
+        digitsList.forEach {
+            if (it.text.toString() == "") {
+                it.background = resources.getDrawable(R.drawable.square_edittext_background_trasparent, null)
+            } else {
+                it.background = resources.getDrawable(R.drawable.square_edittext_background_dark, null)
+            }
         }
     }
 }
