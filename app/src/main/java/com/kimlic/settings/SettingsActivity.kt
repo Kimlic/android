@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
@@ -103,15 +104,7 @@ class SettingsActivity : BaseActivity() {
                     }
                     "drive" -> {
                         when (Prefs.isDriveActive) {
-                            true -> {
-                                recoveryModel.removeProfile(
-                                        onSuccess = {
-                                            SyncService.signOut(this@SettingsActivity)
-                                            Prefs.isDriveActive = false
-                                        },
-                                        onError = { Log.d("TAGBACKUP", "error") }
-                                )
-                            }
+                            true -> gDriveWarningPopup()
                             false -> {
                                 if (GoogleSignIn.getLastSignedInAccount(this@SettingsActivity) == null) SyncService.signIn(this@SettingsActivity, GOOGLE_SIGNE_IN_REQUEST_CODE)
                                 else
@@ -126,21 +119,25 @@ class SettingsActivity : BaseActivity() {
                 }
             }
         }
+        refreshSettingsList()
+        recycler.adapter = adapter
+    }
+
+    private fun refreshSettingsList() {
         initSettingsList()
         adapter.setSettingsList(settingsList)
-        recycler.adapter = adapter
     }
 
     private fun initSettingsList() {
         settingsList = mutableListOf(
-                SwitchSetting(getString(R.string.passcode), getString(R.string.protect_my_id), "passcode", AppConstants.SETTINGS_SWITCH.intKey, Prefs.isPasscodeEnabled),
-                SwitchSetting(getString(R.string.enable_touch_id), getString(R.string.use_my_touch_id), "touch", AppConstants.SETTINGS_SWITCH.intKey, Prefs.isTouchEnabled),
-                //SwitchSetting("Google drive sync", "Backup profile to google Drive", "drive", AppConstants.SETTINGS_SWITCH.intKey, Prefs.isDriveActive),
-                IntentSetting(getString(R.string.account_recovery), getString(R.string.back_up_your_credentials), "recovery", AppConstants.SETTINGS_INTENT.intKey),
-                IntentSetting(getString(R.string.terms_and_conditions), getString(R.string.last_modified_23_july_2017), "terms", AppConstants.SETTINGS_INTENT.intKey),
-                IntentSetting(getString(R.string.about_kimlic), "", "about", AppConstants.SETTINGS_INTENT.intKey))
+                SwitchSetting(getString(R.string.passcode), getString(R.string.protect_my_id), "passcode", Prefs.isPasscodeEnabled),
+                SwitchSetting(getString(R.string.enable_touch_id), getString(R.string.use_my_touch_id), "touch", Prefs.isTouchEnabled),
+                SwitchSetting(getString(R.string.google_drive_sync), getString(R.string.backup_profile_to_goggle_drive), "drive", Prefs.isDriveActive),
+                IntentSetting(getString(R.string.account_recovery), getString(R.string.back_up_your_credentials), "recovery"),
+                IntentSetting(getString(R.string.terms_and_conditions), getString(R.string.last_modified_23_july_2017), "terms"),
+                IntentSetting(getString(R.string.about_kimlic), "", "about"))
 
-        val passcodeChange = IntentSetting(getStringValue(R.string.change_passcode), "", "change", AppConstants.SETTINGS_INTENT.intKey)
+        val passcodeChange = IntentSetting(getStringValue(R.string.change_passcode), "", "change")
 
         if (!Prefs.isPasscodeEnabled && settingsList.elementAt(1).tag == "change")
             settingsList.removeAt(1)
@@ -155,11 +152,13 @@ class SettingsActivity : BaseActivity() {
                 onSuccess = {
                     hideProgress()
                     Prefs.isDriveActive = true
-                    showPopup("Success!", "Your profile synchronization is active")
+                    refreshSettingsList()
+                    showPopup(getString(R.string.success_), getString(R.string.your_profile_synchronization_is_active))
                 },
                 onError = {
                     hideProgress()
-                    showPopup("Error", "Synchronizing error")
+                    refreshSettingsList()
+                    showPopup(getString(R.string.error_), getString(R.string.synchronizing_error))
                 }
         )
     }
@@ -187,8 +186,8 @@ class SettingsActivity : BaseActivity() {
         timer = object : CountDownTimer(0, 0) {
             override fun onFinish() {
                 val bundle = Bundle()
-                bundle.putString(AppConstants.TITLE.key, "Backup")
-                bundle.putString(AppConstants.SUBTITLE.key, "Backup profile to Google Drive")
+                bundle.putString(AppConstants.TITLE.key, getString(R.string.backup))
+                bundle.putString(AppConstants.SUBTITLE.key, getString(R.string.backup_profile_to_google_drive))
                 backupUpdatingFragment = BackupUpdatingFragment.newInstance(bundle)
                 backupUpdatingFragment?.show(supportFragmentManager, BackupUpdatingFragment.FRAGMENT_KEY)
             }
@@ -199,5 +198,34 @@ class SettingsActivity : BaseActivity() {
 
     private fun hideProgress() = runOnUiThread {
         if (backupUpdatingFragment != null) backupUpdatingFragment?.dismiss(); timer?.cancel()
+    }
+
+    private fun gDriveWarningPopup() {
+        val builder = AlertDialog.Builder(this)
+        builder
+                .setTitle(getString(R.string.warning_))
+                .setMessage(getString(R.string.if_you_disable_google_drive_sync))
+                .setPositiveButton(getString(R.string.disable)) { dialog, _ ->
+                    recoveryModel.removeProfile(
+                            onSuccess = {
+                                SyncService.signOut(this@SettingsActivity)
+                                Prefs.isDriveActive = false
+                                refreshSettingsList()
+                            },
+                            onError = {
+                                Prefs.isDriveActive = false// ???
+                                Log.d("TAGBACKUP", "error")
+                            }
+                    )
+                    dialog?.dismiss()
+                }
+                .setNegativeButton(getString(R.string.cancel)) { _, _ ->
+                    refreshSettingsList()
+                }
+                .setOnDismissListener { refreshSettingsList() }
+                .setCancelable(true)
+
+        val dialog = builder.create()
+        dialog.show()
     }
 }
