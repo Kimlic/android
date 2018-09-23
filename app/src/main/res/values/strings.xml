@@ -267,4 +267,11 @@
   <string name="add_social_security_card">Add Social Security Card</string>
   <string name="add_birth_certificate">Add Birth Certificate</string>
   <string name="birth_certificate">Birth Certificate</string>
+
+  <string name="if_you_disable_google_drive_sync">If you disable Google Drive sync, you will not be able to restore your account</string>
+  <string name="backup">Backup</string>
+  <string name="backup_profile_to_google_drive">Backup profile to Google Drive</string>
+  <string name="google_drive_sync">Google Drive sync</string>
+  <string name="backup_profile_to_goggle_drive">Backup profile to Google Drive</string>
+  <string name="disable">Disable</string>
 </resources>
