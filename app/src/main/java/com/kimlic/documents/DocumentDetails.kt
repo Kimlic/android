@@ -20,6 +20,7 @@ import com.kimlic.utils.AppConstants
 import com.kimlic.utils.AppDoc
 import com.kimlic.utils.BaseCallback
 import com.kimlic.utils.Cache
+import com.kimlic.utils.bitmap.BitmapUtils
 import com.kimlic.utils.mappers.FileNameTxtBase64ToBitmap
 import kotlinx.android.synthetic.main.activity_verify_details.*
 import java.util.*
@@ -105,7 +106,7 @@ class DocumentDetails : BaseActivity() {
     }
 
     private fun fillPhotoFramesFromCache() {
-        portraitIv.setImageBitmap(rotateBitmap(FileNameTxtBase64ToBitmap().transform(Cache.PORTRAIT.file)!!, 0f))//-90f Previous value with old camera
+        portraitIv.setImageBitmap(BitmapUtils.rotateBitmap(FileNameTxtBase64ToBitmap().transform(Cache.PORTRAIT.file)!!, 0f))//-90f Previous value with old camera
         frontIv.setImageBitmap(cropped(Cache.FRONT.file))
         if (documentType != AppDoc.PASSPORT.type) {
             backIv.setImageBitmap(cropped(Cache.BACK.file))
@@ -117,7 +118,7 @@ class DocumentDetails : BaseActivity() {
     }
 
     private fun filPhotoFramesPreview(photos: Map<String, String>) {
-        portraitIv.setImageBitmap(rotateBitmap(FileNameTxtBase64ToBitmap().transform(photos[AppConstants.PHOTO_FACE_TYPE.key]!!)!!, 0f))//-90f Previous value with old camera
+        portraitIv.setImageBitmap(BitmapUtils.rotateBitmap(FileNameTxtBase64ToBitmap().transform(photos[AppConstants.PHOTO_FACE_TYPE.key]!!)!!, 0f))//-90f Previous value with old camera
         frontIv.setImageBitmap(cropped(photos[AppConstants.PHOTO_FRONT_TYPE.key]!!))
         if (currentDocument.type != AppDoc.PASSPORT.type) {
             backIv.setImageBitmap(cropped(photos[AppConstants.PHOTO_BACK_TYPE.key]!!))
@@ -173,7 +174,7 @@ class DocumentDetails : BaseActivity() {
 
     private fun cropped(fileName: String): Bitmap {
         val bitmap = FileNameTxtBase64ToBitmap().transform(fileName)
-        val originalBitmap = rotateBitmap(bitmap!!, 0f)//-90f Previous value with old camera
+        val originalBitmap = BitmapUtils.rotateBitmap(bitmap!!, 0f)//-90f Previous value with old camera
         val width = originalBitmap.width
         val height = originalBitmap.height
         return Bitmap.createBitmap(originalBitmap, (0.15 * width).toInt(), (0.22 * height).toInt(), (0.7 * width).toInt(), (0.35 * height).toInt())
