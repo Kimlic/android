@@ -5,14 +5,19 @@
   android:layout_height="match_parent"
   android:background="@drawable/ic_simple_background">
 
-  <FrameLayout
-    android:id="@+id/frameLayout"
+  <!--<FrameLayout-->
+  <!--android:id="@+id/frameLayout"-->
+  <!--android:layout_width="match_parent"-->
+  <!--android:layout_height="match_parent"-->
+  <!--app:layout_constraintBottom_toBottomOf="parent"-->
+  <!--app:layout_constraintEnd_toEndOf="parent"-->
+  <!--app:layout_constraintStart_toStartOf="parent"-->
+  <!--app:layout_constraintTop_toTopOf="parent"/>-->
+
+  <io.fotoapparat.view.CameraView
+    android:id="@+id/cameraView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"/>
+    android:layout_height="match_parent"/>
 
   <ImageView
     android:id="@+id/auxilaryContourIv"
@@ -83,7 +88,9 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:contentDescription="@string/photo_preview"
-      android:scaleType="centerCrop"/>
+      />
+
+    <!--android:scaleType="fitXY"-->
 
     <Button
       android:id="@+id/retakelBt"
