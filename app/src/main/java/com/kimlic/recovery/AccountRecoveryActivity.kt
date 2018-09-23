@@ -11,6 +11,7 @@ import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.db.SyncService
 import com.kimlic.managers.PresentationManager
+import com.kimlic.preferences.Prefs
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.BaseCallback
 import kotlinx.android.synthetic.main.activity_account_recovery.*
@@ -49,26 +50,30 @@ class AccountRecoveryActivity : BaseActivity() {
 
     private fun setupUI() {
         lifecycle.addObserver(recoveryViewModel!!)
-        //SyncService.signIn(this, GOOGLE_SIGNE_IN_REQUEST_CODE)
+        SyncService.signIn(this, GOOGLE_SIGNE_IN_REQUEST_CODE)
         backTv.setOnClickListener { PresentationManager.signUpRecovery(this) }
 
-//        verifyBt.setOnClickListener { _ ->
-//            val mnemonic = phraseEt.text.toString().trim()
-//
-//            if (!mnemonicValid(mnemonic)) {
-//                showPopup(title = getString(R.string.error), message = getString(R.string.missing_mnemonic_phrases)); return@setOnClickListener
-//            }
-//
-//            GoogleSignIn.getLastSignedInAccount(this)?.let {
-//                showProgress()
-//                recoveryUserProfile(mnemonic)
-//            }
-//        }
+        verifyBt.setOnClickListener { _ ->
+            val mnemonic = phraseEt.text.toString().trim()
+
+            if (!mnemonicValid(mnemonic)) {
+                showPopup(title = getString(R.string.error), message = getString(R.string.missing_mnemonic_phrases)); return@setOnClickListener
+            }
+
+            GoogleSignIn.getLastSignedInAccount(this)?.let {
+                showProgress()
+                recoveryUserProfile(mnemonic)
+            }
+        }
     }
 
     private fun recoveryUserProfile(mnemonic: String) {
         recoveryViewModel!!.recoveryProfile(mnemonic,
-                onSuccess = { hideProgress(); successful() },
+                onSuccess = {
+                    hideProgress()
+                    Prefs.isRecoveryEnabled = true
+                    successful()
+                },
                 onError = { errorMessage ->
                     errorPopup(errorMessage); return@recoveryProfile
                 })
