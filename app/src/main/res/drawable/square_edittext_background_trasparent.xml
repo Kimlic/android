@@ -1,24 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android" android:enterFadeDuration="40" android:exitFadeDuration="40">
-
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
   <item android:state_focused="false">
     <shape
       android:shape="rectangle"
       android:thickness="6dp"
-      android:useLevel="false">
-
+      android:useLevel="true">
       <solid android:color="@android:color/transparent"/>
-
       <stroke
         android:color="@color/darkBlue"
-        android:width="2dp"/>
-
+        android:width="3dp"/>
       <corners
         android:bottomLeftRadius="8dp"
         android:bottomRightRadius="8dp"
         android:topLeftRadius="8dp"
         android:topRightRadius="8dp"/>
-
     </shape>
   </item>
 
@@ -26,9 +21,8 @@
     <shape
       android:shape="rectangle"
       android:thickness="6dp"
-      android:useLevel="false">
+      android:useLevel="true">
       <solid android:color="@android:color/transparent"/>
-
       <stroke
         android:color="@android:color/white"
         android:width="2dp"/>
@@ -37,8 +31,6 @@
         android:bottomRightRadius="8dp"
         android:topLeftRadius="8dp"
         android:topRightRadius="8dp"/>
-
     </shape>
   </item>
-
 </selector>
