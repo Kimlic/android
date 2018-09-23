@@ -117,7 +117,7 @@
     <item name="android:textColor">@android:color/white</item>
     <item name="android:textSize">40sp</item>
     <item name="android:gravity">center</item>
-    <item name="android:maxLength">1</item>
+    <item name="android:maxLength">2</item>
     <item name="android:background">@drawable/square_edittext_background_trasparent</item>
     <item name="android:cursorVisible">false</item>
     <item name="android:longClickable">false</item>
