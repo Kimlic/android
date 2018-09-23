@@ -5,7 +5,6 @@ import android.arch.lifecycle.LiveData
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Matrix
 import android.os.Handler
 import android.util.Log
 import com.android.volley.AuthFailureError
@@ -434,9 +433,7 @@ class ProfileRepository private constructor() {
     // RP request
 
     fun senDoc(documentType: String, url: String, countrySH: String, onSuccess: () -> Unit, onError: () -> Unit) {
-//        val urlFull = "http://" + url + KimlicApi.MEDIAS.path
         val urlFull = url + KimlicApi.MEDIAS.path
-        //val urlFull = "https://51.140.246.76" + KimlicApi.MEDIAS.path
         Log.d("TAGURL", "full url = ${urlFull}")
 
         val user = userDao.select(Prefs.currentAccountAddress)
@@ -466,7 +463,6 @@ class ProfileRepository private constructor() {
 
         DoAsync().execute(Runnable {
             val receipt = QuorumKimlic.getInstance().setFieldMainData("{\"face\":${shaFace},\"document-front\":${shaFront},\"document-back\":${shaBack}}", dataType)
-            Log.d("TAGSEND", "string witch works -  {\"face\":${shaFace},\"document-front\":${shaFront},\"document-back\":${shaBack}}")
             if (receipt == null || receipt.status == "0x0") {
                 onError()
             }
@@ -636,29 +632,11 @@ class ProfileRepository private constructor() {
 
     private fun photoString(fileName: String) = File(context.filesDir.toString() + "/" + fileName).readText(Charset.forName("UTF-8"))
 
-    // Bitmap transformations
-
-    private fun getResizedBitmap(bm: Bitmap, newWidth: Int, newHeight: Int, angel: Float, isNecessaryToKeepOrig: Boolean): Bitmap {
-        val width = bm.width
-        val height = bm.height
-        val scaleWidth = newWidth.toFloat() / width
-        val scaleHeight = newHeight.toFloat() / height
-        val matrix = Matrix()
-        matrix.postScale(scaleWidth, scaleHeight)
-        matrix.postRotate(angel)
-        val resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false)
-
-        if (!isNecessaryToKeepOrig) bm.recycle()
-
-        return resizedBitmap
-    }
-
     private fun croppedPreviewInByteArray(data: ByteArray): ByteArray {
         val originalBitmap = BitmapFactory.decodeByteArray(data, 0, data.size)
-        val resizedBitmap = getResizedBitmap(originalBitmap, 1024, 768, -90f, true)
-        val width = resizedBitmap.width
-        val height = resizedBitmap.height
-        val croppedBitmap = Bitmap.createBitmap(resizedBitmap, (0.15 * width).toInt(), (0.12 * height).toInt(), (0.70 * width).toInt(), (0.72 * height).toInt())
+        val width = originalBitmap.width
+        val height = originalBitmap.height
+        val croppedBitmap = Bitmap.createBitmap(originalBitmap, (0.15 * width).toInt(), (0.12 * height).toInt(), (0.70 * width).toInt(), (0.72 * height).toInt())
         return BitmapToByteArrayMapper().transform(croppedBitmap)
     }
 
