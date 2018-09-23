@@ -3,52 +3,51 @@
 package com.kimlic.camera
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.ImageFormat
-import android.graphics.Matrix
-import android.hardware.Camera
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
-import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.Button
-import android.widget.FrameLayout
+import android.widget.ImageView
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.kimlic.BaseFragment
-import com.kimlic.KimlicApp
 import com.kimlic.R
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.PhotoCallback
-import kotlinx.android.synthetic.main.fragment_document_portrait.*
+import com.kimlic.utils.bitmap.BitmapUtils
+import com.kimlic.utils.mappers.BitmapToByteArrayMapper
+import io.fotoapparat.Fotoapparat
+import io.fotoapparat.parameter.ScaleType
+import io.fotoapparat.selector.back
+import io.fotoapparat.selector.front
+import io.fotoapparat.selector.highestResolution
+import io.fotoapparat.selector.manualJpegQuality
+import kotlinx.android.synthetic.main.fragment_document_card.*
 
-abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
+abstract class CameraBaseFragment : BaseFragment() {
 
     // Constants
 
     companion object {
         const val REQUEST_CAMERA_PERMISSION = 1000
+        private const val PHOTO_SIZE_VALUE = 1500
     }
 
     // Binding
 
-    @BindView(R.id.frameLayout)
-    lateinit var frameLayout: FrameLayout
     @BindView(R.id.captureBt)
     lateinit var captureBt: Button
 
     // Variables
 
     private var cameraId = 0
-    private lateinit var camera: Camera
-    private var kimlicSurfaceView: KimlicSurfaceView? = null
     private lateinit var callback: PhotoCallback
+    private lateinit var fotoapparat: Fotoapparat
+
 
     // Live
 
@@ -66,27 +65,14 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
     override fun onResume() {
         super.onResume()
 
-        if (ActivityCompat.checkSelfPermission(activity!!, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity!!,
-                    arrayOf(Manifest.permission.CAMERA,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    , REQUEST_CAMERA_PERMISSION)
-            return
-        }
-
-        openCamera()
-        kimlicSurfaceView = KimlicSurfaceView(KimlicApp.applicationContext(), camera)
-        frameLayout.addView(kimlicSurfaceView)
+        if (!permissionsGranted()) return
+        fotoapparat.start()
     }
+
 
     override fun onPause() {
         super.onPause()
-        closeCamera()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        camera.release()
+        fotoapparat.stop()
     }
 
     // Public
@@ -99,54 +85,25 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
 
     private fun setupUI() {
         cameraId = arguments!!.getInt(AppConstants.CAMERA_TYPE.key, AppConstants.CAMERA_REAR.intKey)
-        captureBt.setOnClickListener { takePicture() }
-    }
 
-    private fun takePicture() {
-        camera.takePicture(null, null, null, this)
-    }
+        fotoapparat = Fotoapparat.with(activity!!.applicationContext)
+                .into(cameraView)
+                .lensPosition(if (cameraId == AppConstants.CAMERA_REAR.intKey) back() else front())
+                .previewScaleType(ScaleType.CenterCrop)
+                .photoResolution(highestResolution())
+                .jpegQuality(manualJpegQuality(90))
+                .build()
 
-    private fun openCamera() {
-        if (!permissionsGranted()) return else {
-            camera = Camera.open(cameraId)
-            setCameraParams(camera)
-            camera.startPreview()
+        captureBt.setOnClickListener {
+            fotoapparat.focus()
+            val results = fotoapparat.takePicture()
+            results
+                    .toBitmap()//scaled(1f)
+                    .whenAvailable { bitmapPhoto ->
+                        fotoapparat.stop()
+                        showResultPhoto(bitmapPhoto!!.bitmap, -bitmapPhoto.rotationDegrees.toFloat())
+                    }
         }
-    }
-
-    private fun closeCamera() {
-        if (!permissionsGranted()) return
-
-        camera.stopPreview()
-        frameLayout.removeAllViews()
-        kimlicSurfaceView = null
-    }
-
-    private fun setCameraParams(camera: Camera) {
-        camera.setDisplayOrientation(90)
-        val params = camera.parameters
-        val sizes: List<Camera.Size> = params.supportedPictureSizes
-        var currentWidth = 640
-        var currentHeight = 480
-
-        for (size in sizes) {
-            if (size.height > currentHeight && size.width > currentWidth && size.height < 3000 && size.width < 2500) {
-                currentHeight = size.height
-                currentWidth = size.width
-            }
-        }
-
-        params.pictureFormat = ImageFormat.JPEG
-        params.jpegQuality = 80
-
-        val supportedFocusMode = camera.parameters.supportedFocusModes
-        val hasAutoFocus = supportedFocusMode != null && supportedFocusMode.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)
-
-        if (hasAutoFocus) params.focusMode = (Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)
-
-        params.setPictureSize(currentWidth, currentHeight)
-        // setOptimalPreviewSize(params)
-        camera.parameters = params
     }
 
     // Permissions
@@ -160,46 +117,31 @@ abstract class CameraBaseFragment : BaseFragment(), Camera.PictureCallback {
         return true
     }
 
-    private fun showResultPhoto(data: ByteArray?) {
-        val bitmap = BitmapFactory.decodeByteArray(data, 0, data!!.size)
+    private fun showResultPhoto(bitmap: Bitmap, angle: Float) {
         captureBt.visibility = View.GONE
-        previewIv.setImageBitmap(rotateBitmap(bitmap, if (cameraId == 1) -90f else 90f))
+        auxilaryContourIv.visibility = View.INVISIBLE
+        documenTitleTv.visibility = View.GONE
+        documentTypeIv.visibility = View.GONE
+
         confirmLl.visibility = View.VISIBLE
 
-        confirmBt.setOnClickListener { closeCamera(); callback.callback(data) }
+        val bitmapRotated = BitmapUtils.rotateBitmap(bitmap, angle)
+
+        previewIv.setImageBitmap(bitmapRotated)
+        previewIv.scaleType = ImageView.ScaleType.CENTER_CROP
+
+        confirmBt.setOnClickListener {
+            val height = bitmapRotated.height
+            val width = bitmapRotated.width
+            callback.callback(data = BitmapToByteArrayMapper().transform(BitmapUtils.getScaledBitmap(bitmapRotated, PHOTO_SIZE_VALUE, ((height / width.toFloat()) * PHOTO_SIZE_VALUE).toInt(), false)))
+        }
 
         retakelBt.setOnClickListener {
-            confirmLl.visibility = View.GONE
+            previewIv.visibility = View.GONE
+            fotoapparat.start()
+            auxilaryContourIv.visibility = View.VISIBLE
             captureBt.visibility = View.VISIBLE
-            openCamera()
-            kimlicSurfaceView = KimlicSurfaceView(KimlicApp.applicationContext(), camera)
-            frameLayout.addView(kimlicSurfaceView)
-        }
-    }
-
-    override fun onPictureTaken(data: ByteArray?, camera: Camera?) {
-        closeCamera()
-        showResultPhoto(data)
-    }
-
-    private fun rotateBitmap(source: Bitmap, angel: Float): Bitmap {
-        val matrix = Matrix()
-        matrix.postRotate(angel)
-        return Bitmap.createBitmap(source, 0, 0, source.width, source.height, matrix, true)
-    }
-
-    private fun setOptimalPreviewSize(params: Camera.Parameters) {
-        val manager = context!!.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        val display = manager.defaultDisplay
-        val metrics = DisplayMetrics()
-        display.getMetrics(metrics)
-        val width = metrics.widthPixels
-        val height = metrics.heightPixels
-
-        try {
-            params.setPreviewSize(height, width)
-        } catch (e: Exception) {
-            e.printStackTrace()
+            confirmLl.visibility = View.GONE
         }
     }
 }
