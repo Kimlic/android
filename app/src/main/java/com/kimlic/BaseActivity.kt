@@ -2,8 +2,6 @@ package com.kimlic
 
 import android.content.Context
 import android.content.pm.ActivityInfo
-import android.graphics.Bitmap
-import android.graphics.Matrix
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
@@ -90,11 +88,5 @@ abstract class BaseActivity : AppCompatActivity() {
 
         val dialog = builder.create()
         dialog.show()
-    }
-
-    fun rotateBitmap(source: Bitmap, angel: Float): Bitmap {
-        val matrix = Matrix()
-        matrix.postRotate(angel)
-        return Bitmap.createBitmap(source, 0, 0, source.width, source.height, matrix, true)
     }
 }
