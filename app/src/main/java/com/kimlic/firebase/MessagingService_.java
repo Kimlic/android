@@ -5,16 +5,13 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-public class MessagingService extends FirebaseMessagingService {
+public class MessagingService_ extends FirebaseMessagingService {
 
-  private static final String LOG_TAG = MessagingService.class.getSimpleName();
+  private static final String LOG_TAG = MessagingService_.class.getSimpleName();
 
   @Override
   public void onMessageReceived(RemoteMessage remoteMessage) {
-    // ...
 
-    // TODO(developer): Handle FCM messages here.
-    // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
     Log.d(LOG_TAG, "From: " + remoteMessage.getFrom());
 
     // Check if message contains a data payload.
@@ -40,3 +37,5 @@ public class MessagingService extends FirebaseMessagingService {
     // message, here is where that should be initiated. See sendNotification method below.
   }
 }
+
+
