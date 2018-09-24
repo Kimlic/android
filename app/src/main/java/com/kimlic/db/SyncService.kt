@@ -80,8 +80,9 @@ class SyncService private constructor(val context: Context) {
     }
 
     fun backupFile(accountAddress: String, filePath: String, fileDescription: String, onSuccess: () -> Unit, onError: () -> Unit): Task<DriveFolder> {
-        val backupFolderQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, accountAddress)).build()
         val rootFolder = getRootFolder()
+        val backupFolderQuery = getBackupFolder(accountAddress)
+
         rootFolder.continueWithTask {
             mDriveResourceClient!!
                     .queryChildren(rootFolder.result, backupFolderQuery)
@@ -102,7 +103,7 @@ class SyncService private constructor(val context: Context) {
 
     fun retrieveFile(accountAddress: String, fileName: String, onSuccess: () -> Unit, onError: () -> Unit) {
         val rootFolder = getRootFolder()
-        val backupFolderQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, accountAddress)).build()
+        val backupFolderQuery = getBackupFolder(accountAddress)
         val fileQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, MIME_TYPE_DATABASE)).addFilter(Filters.eq(SearchableField.TITLE, fileName)).build()
 
         rootFolder.continueWithTask { _ ->
@@ -147,15 +148,17 @@ class SyncService private constructor(val context: Context) {
     // Private
 
     fun deleteFile(rootFolderName: String, fileName: String, mimeType: String) {
-        val fileQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, mimeType)).addFilter(Filters.eq(SearchableField.TITLE, fileName)).build()
-        val backupFolderQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, rootFolderName)).build()
         val rootFolder = getRootFolder()
+        val backupFolderQuery = getBackupFolder(rootFolderName)
+        val fileQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, mimeType)).addFilter(Filters.eq(SearchableField.TITLE, fileName)).build()
+
         rootFolder.continueWithTask {
-            mDriveResourceClient!!
-                    .queryChildren(rootFolder.result, backupFolderQuery)
-                    .continueWithTask { mDriveResourceClient!!.queryChildren(it.result[0].driveId.asDriveFolder(), fileQuery) }
-                    .addOnSuccessListener {}
-                    .continueWithTask { deleteFileByDriveId(it.result[0].driveId.asDriveFile()) }
+            mDriveResourceClient!!.queryChildren(rootFolder.result, backupFolderQuery)
+                    .continueWithTask {
+                        mDriveResourceClient!!.queryChildren(it.result[0].driveId.asDriveFolder(), fileQuery)
+                    }.continueWithTask {
+                        deleteFileByDriveId(it.result[0].driveId.asDriveFile())
+                    }
         }
     }
 
@@ -253,6 +256,8 @@ class SyncService private constructor(val context: Context) {
 
     private fun getRootFolder() = if (appFolder) mDriveResourceClient!!.appFolder else mDriveResourceClient!!.rootFolder
 
+    private fun getBackupFolder(rootFolderName: String) = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, rootFolderName)).build()
+
     private fun createFolderInFolder(parent: DriveFolder, folderName: String): Task<DriveFolder> {
         val changeSet = MetadataChangeSet.Builder()
                 .setTitle(folderName)
@@ -268,9 +273,10 @@ class SyncService private constructor(val context: Context) {
 
     private fun deleteFileByDriveId(driveFile: DriveFile): Task<Void> {
         val driveResource = mDriveResourceClient!!.delete(driveFile)
-        return driveResource
+        driveResource
                 .addOnCompleteListener { }
                 .addOnFailureListener { }
+        return driveResource
     }
 
     private fun deleteFolderAsDriveResource(driveResource: DriveResource): Task<Void> {
