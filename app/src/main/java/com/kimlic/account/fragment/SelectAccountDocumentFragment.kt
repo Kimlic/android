@@ -128,6 +128,8 @@ class SelectAccountDocumentFragment : BasePopupFragment() {
 
         startBt.setOnClickListener { _ ->
             val bundle = Bundle()
+            if(previousPosition<0) activity!!.finish()// TODO check this
+
             if (adaptersList[previousPosition].number != "") {
                 bundle.putString("action", "apply")
                 bundle.putString(AppConstants.DOCUMENT_TYPE.key, adaptersList[previousPosition].type)
