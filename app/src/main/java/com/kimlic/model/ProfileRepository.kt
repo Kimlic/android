@@ -233,12 +233,30 @@ class ProfileRepository private constructor() {
         }
     }
 
+    /*
+    * Remove file from GoogleDrive by file neme from user folder
+    * */
+    private fun removePhotoGDrive(accountAddress: String, fileName: String) {
+        googleSignInAccount = GoogleSignIn.getLastSignedInAccount(context)
+        if (Prefs.isDriveActive && googleSignInAccount != null)
+            SyncService.getInstance().deleteFile(accountAddress, fileName, SyncService.MIME_TYPE_DATABASE)
+    }
+
     fun clearAllFiles() {
         val rootFilesDir = File(context.filesDir.toString())
         val files = rootFilesDir.listFiles()
         files.forEach { it.delete() }
     }
 
+    /*
+    * Delete file from filesFolder
+    * */
+
+    private fun deleteFile(fileName: String) {
+        val rootFilesDir = File(context.filesDir.toString())
+        val files = rootFilesDir.listFiles()
+        files.first { it.name == fileName }.delete()
+    }
     // New User
 
     fun initNewUserRegistration(onSuccess: () -> Unit, onError: () -> Unit) {
@@ -344,10 +362,10 @@ class ProfileRepository private constructor() {
 
             val approvedMap = approvedObjects.map { it.name to it.status }.toMap()
 
-            approvedMap["documents.id_card"]?.let { status -> updateDocument(AppDoc.ID_CARD.type, status) }
-            approvedMap["documents.driver_license"]?.let { status -> updateDocument(AppDoc.DRIVERS_LICENSE.type, status) }
-            approvedMap["documents.passport"]?.let { status -> updateDocument(AppDoc.PASSPORT.type, status) }
-            approvedMap["documents.residence_permit_card"]?.let { status -> updateDocument(AppDoc.RESIDENCE_PERMIT_CARD.type, status) }
+            approvedMap["documents.id_card"]?.let { status -> updateDocument(accountAddress, AppDoc.ID_CARD.type, status) }
+            approvedMap["documents.driver_license"]?.let { status -> updateDocument(accountAddress, AppDoc.DRIVERS_LICENSE.type, status) }
+            approvedMap["documents.passport"]?.let { status -> updateDocument(accountAddress, AppDoc.PASSPORT.type, status) }
+            approvedMap["documents.residence_permit_card"]?.let { status -> updateDocument(accountAddress, AppDoc.RESIDENCE_PERMIT_CARD.type, status) }
 
             if (!approved.contains("phone")) contactDao.delete(Prefs.currentAccountAddress, "phone")
             if (!approved.contains("email")) contactDao.delete(Prefs.currentAccountAddress, "email")
@@ -537,7 +555,6 @@ class ProfileRepository private constructor() {
 
         val params = params(docType, udid, firstName, lastName, countrySH)
         val documents = photoDao.selectUserPhotosByDocument(Prefs.currentAccountAddress, documentType)
-//      val vendorDocument = vendorDao.select().find { it.type == docType }
         Log.d("TAGSEND", "vendorDoc = $vendorDocument")
 
         if (vendorDocument.contexts.contains("face")) {
@@ -585,7 +602,6 @@ class ProfileRepository private constructor() {
     }
 
     private fun nextRequest(queue: Queue<JsonObjectRequest>, onSuccess: () -> Unit) {
-        Log.d("TAGSENDCOUNT", "request +")
         if (queue.peek() != null) {
             VolleySingleton.getInstance(context).addToRequestQueue(queue.poll())
         } else onSuccess()
@@ -657,9 +673,9 @@ class ProfileRepository private constructor() {
 
     // UpdateUtils
 
-    private fun updateDocument(documentType: String, status: String?) {
-        val document = documentDao.select(Prefs.currentAccountAddress, documentType)
-        document?.let {
+    private fun updateDocument(accountAddress: String, documentType: String, status: String?) {
+        val document = documentDao.select(accountAddress, documentType)
+        document?.let { it ->
             when (status) {
                 DocState.VERIFIED.state -> {
                     it.state = DocState.VERIFIED.state; documentDao.update(it)
@@ -667,8 +683,12 @@ class ProfileRepository private constructor() {
                 DocState.CREATED.state -> {
                     it.state = DocState.CREATED.state; documentDao.update(it)
                 }
-                DocState.UNVERIFIED.state -> documentDao.delete(it)
-                "" -> documentDao.delete(it)
+                DocState.UNVERIFIED.state, "" -> {
+                    val documentPhotos = photoDao.selectUserPhotosByDocument(accountAddress, documentType).map { it.file }
+                    documentPhotos.forEach { photo -> deleteFile(photo) }
+                    documentPhotos.forEach { photo -> removePhotoGDrive(accountAddress, photo) }
+                    documentDao.delete(it)
+                }
             }
         }
     }
