@@ -72,6 +72,7 @@ class AccountRecoveryActivity : BaseActivity() {
                 onSuccess = {
                     hideProgress()
                     Prefs.isRecoveryEnabled = true
+                    Prefs.isDriveActive = true
                     successful()
                 },
                 onError = { errorMessage ->
@@ -97,17 +98,11 @@ class AccountRecoveryActivity : BaseActivity() {
     // Progress
 
     private fun showProgress() {
-        timer = object : CountDownTimer(0, 0) {
-            override fun onFinish() {
-                val bundle = Bundle()
-                bundle.putString(AppConstants.TITLE.key, "Recovering ")
-                bundle.putString(AppConstants.SUBTITLE.key, "Recovering from Google Drive")
-                backupUpdatingFragment = BackupUpdatingFragment.newInstance(bundle)
-                backupUpdatingFragment?.show(supportFragmentManager, BackupUpdatingFragment.FRAGMENT_KEY)
-            }
-
-            override fun onTick(millisUntilFinished: Long) {}
-        }.start()
+        val bundle = Bundle()
+        bundle.putString(AppConstants.TITLE.key, "Recovering ")
+        bundle.putString(AppConstants.SUBTITLE.key, "Recovering from Google Drive")
+        backupUpdatingFragment = BackupUpdatingFragment.newInstance(bundle)
+        backupUpdatingFragment?.show(supportFragmentManager, BackupUpdatingFragment.FRAGMENT_KEY)
     }
 
     private fun hideProgress() = runOnUiThread {
