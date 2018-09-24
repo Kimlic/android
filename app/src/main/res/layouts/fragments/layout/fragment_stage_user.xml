@@ -61,7 +61,7 @@
   <ScrollView
     android:id="@+id/scrollView"
     android:layout_width="wrap_content"
-    android:layout_height="288dp"
+    android:layout_height="280dp"
     android:layout_marginTop="40dp"
     android:fillViewport="true"
     android:orientation="vertical"
@@ -74,14 +74,14 @@
 
     <LinearLayout
       android:layout_width="@dimen/content_width"
-      android:layout_height="460dp"
+      android:layout_height="wrap_content"
       android:orientation="vertical"
       tools:ignore="ContentDescription">
 
       <RelativeLayout
         android:id="@+id/nameItem"
         android:layout_width="@dimen/content_width"
-        android:layout_height="48dp"
+        android:layout_height="40dp"
         android:layout_marginTop="8dp"
         android:focusableInTouchMode="false">
 
@@ -134,6 +134,19 @@
         android:layout_width="@dimen/content_width"
         android:layout_height="98dp"/>
 
+
+      <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
+          android:id="@+id/documentRecycler"
+          android:layout_width="@dimen/content_width"
+          android:layout_height="wrap_content"
+          android:overScrollMode="never"/>
+
+      </RelativeLayout>
+
       <!--Address-->
 
       <include
@@ -146,12 +159,6 @@
         android:layout_width="@dimen/content_width"
         android:layout_height="1dp"
         android:background="@color/lightBlue"/>
-
-      <android.support.v7.widget.RecyclerView
-        android:id="@+id/documentRecycler"
-        android:layout_width="@dimen/content_width"
-        android:layout_height="288dp"
-        android:overScrollMode="never"/>
 
     </LinearLayout>
 
