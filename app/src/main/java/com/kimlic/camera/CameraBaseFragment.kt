@@ -5,6 +5,7 @@ package com.kimlic.camera
 import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.view.LayoutInflater
@@ -47,7 +48,7 @@ abstract class CameraBaseFragment : BaseFragment() {
     private var cameraId = 0
     private lateinit var callback: PhotoCallback
     private lateinit var fotoapparat: Fotoapparat
-
+    private lateinit var mediaPlayer: MediaPlayer
 
     // Live
 
@@ -85,6 +86,8 @@ abstract class CameraBaseFragment : BaseFragment() {
 
     private fun setupUI() {
         cameraId = arguments!!.getInt(AppConstants.CAMERA_TYPE.key, AppConstants.CAMERA_REAR.intKey)
+        mediaPlayer = MediaPlayer.create(activity, R.raw.camera_shutter_click_)
+        mediaPlayer.setVolume(100f, 100f)
 
         fotoapparat = Fotoapparat.with(activity!!.applicationContext)
                 .into(cameraView)
@@ -95,6 +98,7 @@ abstract class CameraBaseFragment : BaseFragment() {
                 .build()
 
         captureBt.setOnClickListener {
+            mediaPlayer.start()
             fotoapparat.focus()
             val results = fotoapparat.takePicture()
             results
