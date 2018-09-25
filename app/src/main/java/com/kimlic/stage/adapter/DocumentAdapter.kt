@@ -16,6 +16,8 @@ open class DocumentAdapter : RecyclerView.Adapter<DocumentAdapter.DocumentHolder
     private var documentList: List<Document> = emptyList()
     private lateinit var onStageItemClick: OnStageItemClick
 
+    private val MAX_DOCUMENTS_COUNT = 1
+
     // Life
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DocumentHolder {
@@ -42,7 +44,7 @@ open class DocumentAdapter : RecyclerView.Adapter<DocumentAdapter.DocumentHolder
             }
         }
 
-        if (documents.size < 6) tempList.add(Document(type = "add"))
+        if (documents.size < MAX_DOCUMENTS_COUNT) tempList.add(Document(type = "add"))
 
         this.documentList = tempList
         notifyDataSetChanged()
