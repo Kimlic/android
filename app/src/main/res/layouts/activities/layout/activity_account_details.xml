@@ -34,13 +34,16 @@
 
   </FrameLayout>
 
+  <!-- android:layout_width="@dimen/menu_element_square_size"
+    android:layout_height="@dimen/menu_element_square_size"-->
+
   <Button
     android:id="@+id/backBt"
-    android:layout_width="@dimen/menu_element_square_size"
-    android:layout_height="@dimen/menu_element_square_size"
+    android:layout_width="32dp"
+    android:layout_height="32dp"
     android:layout_marginTop="24dp"
     android:layout_marginStart="24dp"
-    android:background="@drawable/ic_close_36dp"
+    android:background="@drawable/ic_chevron_left_white_32dp"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"/>
 
