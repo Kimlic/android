@@ -280,4 +280,7 @@
   <string name="success_">Success!</string>
   <string name="your_profile_synchronization_is_active">Your profile synchronization is active</string>
   <string name="synchronizing_error">Synchronizing error</string>
+
+  <string name="unlink_account">Unlink Account</string>
+  <string name="view_kimlic_explorer">View Kimlic Explorer</string>
 </resources>
