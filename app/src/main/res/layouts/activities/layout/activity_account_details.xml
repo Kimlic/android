@@ -34,6 +34,16 @@
 
   </FrameLayout>
 
+  <Button
+    android:id="@+id/backBt"
+    android:layout_width="@dimen/menu_element_square_size"
+    android:layout_height="@dimen/menu_element_square_size"
+    android:layout_marginTop="24dp"
+    android:layout_marginStart="24dp"
+    android:background="@drawable/ic_close_36dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
+
   <LinearLayout
     android:id="@+id/rootLl"
     android:layout_width="@dimen/content_width"
@@ -86,40 +96,46 @@
     android:orientation="vertical"
     android:overScrollMode="never"
     android:scrollbars="none"
-    app:layout_constraintBottom_toTopOf="@id/acceptBt"
+    app:layout_constraintBottom_toTopOf="@id/viewExplorerBt"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/rootLl">
 
-    <android.support.v7.widget.RecyclerView
-      android:id="@+id/contactRecycler"
-      android:layout_width="@dimen/content_width"
-      android:layout_height="200dp"
-      android:overScrollMode="never"
-      />
+    <RelativeLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content">
+
+      <android.support.v7.widget.RecyclerView
+        android:id="@+id/accountRecycler"
+        android:layout_width="@dimen/content_width"
+        android:layout_height="200dp"
+        android:overScrollMode="never"/>
+    </RelativeLayout>
+
   </ScrollView>
 
   <Button
-    android:id="@+id/acceptBt"
+    android:id="@+id/viewExplorerBt"
     android:layout_width="@dimen/content_width"
     android:layout_height="@dimen/button_height"
     android:layout_marginBottom="16dp"
-    android:background="@drawable/button_rounded_grey_no_duration"
-    android:text="@string/accept"
+    android:background="@drawable/button_rounded_blue"
+    android:text="@string/view_kimlic_explorer"
     android:textAllCaps="false"
-    android:textColor="@android:color/darker_gray"
+    android:textColor="@android:color/white"
     android:textSize="@dimen/button_text_size"
-    app:layout_constraintBottom_toTopOf="@id/cancelTv"
+    app:layout_constraintBottom_toTopOf="@id/unlinkBt"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"/>
 
-  <TextView
-    android:id="@+id/cancelTv"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+  <Button
+    android:id="@+id/unlinkBt"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="@dimen/button_height"
     android:layout_marginBottom="16dp"
-    android:gravity="center"
-    android:text="@string/cancel"
+    android:background="@drawable/button_rounded_red"
+    android:text="@string/unlink_account"
+    android:textAllCaps="false"
     android:textColor="@android:color/white"
     android:textSize="@dimen/button_text_size"
     app:layout_constraintBottom_toBottomOf="parent"
