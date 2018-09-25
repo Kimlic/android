@@ -255,7 +255,7 @@ class ProfileRepository private constructor() {
     private fun deleteFile(fileName: String) {
         val rootFilesDir = File(context.filesDir.toString())
         val files = rootFilesDir.listFiles()
-        files.first { it.name == fileName }.delete()
+        files?.first { it.name == fileName }?.let{ it.delete()}
     }
     // New User
 
