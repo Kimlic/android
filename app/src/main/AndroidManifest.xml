@@ -31,12 +31,14 @@
       android:name="io.fabric.ApiKey"
       android:value="a5f149222cca55fee6eb72b0c20f2347242e97a2"/>
 
-    <service android:name=".firebase.Firebase">
-      <intent-filter>
-        <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-      </intent-filter>
-    </service>
-    <service android:name=".firebase.MessagingService">
+    <!--<service android:name=".firebase.Firebase">-->
+      <!--<intent-filter>-->
+        <!--<action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>-->
+      <!--</intent-filter>-->
+    <!--</service>-->
+
+    <!--Firebase Messaging Service-->
+    <service android:name=".firebase.KimlicMessagingService">
       <intent-filter>
         <action android:name="com.google.firebase.MESSAGING_EVENT"/>
       </intent-filter>
@@ -54,11 +56,11 @@
       </intent-filter>
     </activity>
 
-    <receiver android:name=".notification.KimlicReceiver">
-      <intent-filter>
-        <action android:name="mock"/>
-      </intent-filter>
-    </receiver>
+    <!--<receiver android:name=".notification.KimlicReceiver">-->
+      <!--<intent-filter>-->
+        <!--<action android:name="mock"/>-->
+      <!--</intent-filter>-->
+    <!--</receiver>-->
 
     <activity
       android:label="Splash Screen"
