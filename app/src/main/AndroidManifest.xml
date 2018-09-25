@@ -32,9 +32,9 @@
       android:value="a5f149222cca55fee6eb72b0c20f2347242e97a2"/>
 
     <!--<service android:name=".firebase.Firebase">-->
-      <!--<intent-filter>-->
-        <!--<action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>-->
-      <!--</intent-filter>-->
+    <!--<intent-filter>-->
+    <!--<action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>-->
+    <!--</intent-filter>-->
     <!--</service>-->
 
     <!--Firebase Messaging Service-->
@@ -57,9 +57,9 @@
     </activity>
 
     <!--<receiver android:name=".notification.KimlicReceiver">-->
-      <!--<intent-filter>-->
-        <!--<action android:name="mock"/>-->
-      <!--</intent-filter>-->
+    <!--<intent-filter>-->
+    <!--<action android:name="mock"/>-->
+    <!--</intent-filter>-->
     <!--</receiver>-->
 
     <activity
@@ -166,6 +166,10 @@
     <activity
       android:label="DocumentDetails"
       android:name=".documents.DocumentDetails"/>
+
+    <activity
+      android:label="Account Details"
+      android:name=".account.AccountDetails"/>
 
   </application>
 
