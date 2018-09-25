@@ -7,6 +7,9 @@ import android.os.Bundle
 import android.support.v4.app.FragmentTransaction
 import android.util.Log
 import android.view.View
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.zxing.integration.android.IntentIntegrator
 import com.kimlic.BaseActivity
 import com.kimlic.R
@@ -71,6 +74,11 @@ class StageActivity : BaseActivity() {
 
     private fun setupUI() {
         Log.d("TAGACCOUNT", "account address - ${Prefs.currentAccountAddress}")
+        Log.d("TAGACCOUNT", "account address - ${FirebaseInstanceId.getInstance().token!!}")
+        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
+            Log.d("TAGACCOUNT", "accountToken = ${it.token}")
+        }
+        Log.d("TAGACCOUNT", "account address - ${FirebaseInstanceId.getInstance().token!!}")
         initFragments()
         lifecycle.addObserver(model)
         lifecycle.addObserver(userStageFragment)
