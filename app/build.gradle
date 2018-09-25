@@ -53,11 +53,13 @@ android {
             buildConfigField("boolean", "RECOVERY_FOLDER", "false")
             buildConfigField("String", "QUORUM_URL", "\"http://23.96.119.190:22000\"")// quorum
             buildConfigField("String", "API_CORE_URL", "\"http://23.96.41.254:4000\"")//elixir
+            buildConfigField("String", "KIMLIC_EXPLORER_URI", "\"http://rp-dashboard-stage.eastus.cloudapp.azure.com\"")
         }
         stage {
             buildConfigField("String", "API_CORE_URL", "\"https://mobile-api-test.kimlic.com\"")// elixir
             buildConfigField("String", "QUORUM_URL", "\"https://mobile-api-test.kimlic.com/api/quorum\"")// quorum
             buildConfigField("boolean", "RECOVERY_FOLDER", "false")
+            buildConfigField("String", "KIMLIC_EXPLORER_URI", "\"http://rp-dashboard-stage.eastus.cloudapp.azure.com\"")
         }
         prod {
             buildConfigField("String", "BASE_URL", "\"https://mobile-api-test.kimlic.com\"")
