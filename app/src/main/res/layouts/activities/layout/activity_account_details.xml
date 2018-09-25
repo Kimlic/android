@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@drawable/background_fingerprint_texture">
+
+  <FrameLayout
+    android:id="@+id/rpFl"
+    android:layout_width="260dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="8dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <ImageView
+      android:layout_width="172dp"
+      android:layout_height="164dp"
+      android:layout_gravity="center"
+      android:background="@drawable/ic_account_detail_white_hexagon"
+      android:contentDescription="@string/hexagon_background"/>
+
+    <ImageView
+      android:layout_width="80dp"
+      android:layout_height="80dp"
+      android:layout_gravity="center"
+      android:background="@drawable/updating_blockchain_illustration"
+      android:contentDescription="@string/photo_camera_image"
+      android:focusableInTouchMode="false"/>
+
+  </FrameLayout>
+
+  <LinearLayout
+    android:id="@+id/rootLl"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/rpFl">
+
+    <TextView
+      android:id="@+id/titleTv"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/kimlic_rp"
+      android:textColor="@android:color/white"
+      android:textSize="@dimen/title_text_size"
+      tools:text="Kimlic RP"/>
+
+    <TextView
+      android:id="@+id/subtitle1Tv"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:text="@string/identity_verification_by_veriff"
+      android:textColor="@android:color/white"
+      android:textSize="@dimen/subtitle_text_size"
+      />
+
+    <TextView
+      android:id="@+id/subtitle2Tv"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:text="@string/your_following_details_to_be_shared"
+      android:textColor="@android:color/white"
+      android:textSize="@dimen/subtitle_text_size"
+      />
+  </LinearLayout>
+
+  <ScrollView
+    android:id="@+id/scrollView"
+    android:layout_width="310dp"
+    android:layout_height="200dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginBottom="16dp"
+    android:orientation="vertical"
+    android:overScrollMode="never"
+    android:scrollbars="none"
+    app:layout_constraintBottom_toTopOf="@id/acceptBt"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/rootLl">
+
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/contactRecycler"
+      android:layout_width="@dimen/content_width"
+      android:layout_height="200dp"
+      android:overScrollMode="never"
+      />
+  </ScrollView>
+
+  <Button
+    android:id="@+id/acceptBt"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="@dimen/button_height"
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/button_rounded_grey_no_duration"
+    android:text="@string/accept"
+    android:textAllCaps="false"
+    android:textColor="@android:color/darker_gray"
+    android:textSize="@dimen/button_text_size"
+    app:layout_constraintBottom_toTopOf="@id/cancelTv"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"/>
+
+  <TextView
+    android:id="@+id/cancelTv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:gravity="center"
+    android:text="@string/cancel"
+    android:textColor="@android:color/white"
+    android:textSize="@dimen/button_text_size"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>
+
