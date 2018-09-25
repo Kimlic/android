@@ -182,6 +182,7 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
         userPhoto.layoutParams = layoutParams
         userPhotoLl.removeAllViews()
         userPhotoLl.addView(userPhoto)
+        userPhoto.setOnClickListener{PresentationManager.portraitPhoto(activity!!)}
     }
 
     private fun passcodeForResult() {
