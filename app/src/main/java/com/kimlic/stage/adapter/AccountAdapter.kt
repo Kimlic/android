@@ -5,13 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kimlic.R
+import com.kimlic.db.entity.Account
 import kotlinx.android.synthetic.main.item_account_rp.view.*
 
 class AccountAdapter : RecyclerView.Adapter<AccountAdapter.AccountHolder>() {
 
     // Variables
 
-    private var accounts: List<String> = emptyList()
+    private var accounts: List<Account> = emptyList()
     private lateinit var onAccountItemClick: OnAccountItemClick
 
     // Live
@@ -30,7 +31,7 @@ class AccountAdapter : RecyclerView.Adapter<AccountAdapter.AccountHolder>() {
 
     // Public
 
-    fun setAccountsList(accounts: List<String>) {
+    fun setAccountsList(accounts: List<Account>) {
         this.accounts = accounts
         notifyDataSetChanged()
     }
@@ -58,13 +59,13 @@ class AccountAdapter : RecyclerView.Adapter<AccountAdapter.AccountHolder>() {
 
         // Public
 
-        fun bind(account: String, position: Int) {
+        fun bind(account: Account, position: Int) {
             this.mPosition = position
 
             with(accountView) {
                 rootRl.setBackgroundResource(R.drawable.background_gradient_white)
-                rpTitleTv.text = account
-                rpSubtitleTv.text = account
+                rpTitleTv.text = account.name
+                rpSubtitleTv.text = account.name
                 setOnClickListener(this@AccountHolder)
             }
         }
