@@ -2,11 +2,9 @@ package com.kimlic.stage
 
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.Observer
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.text.Editable
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -16,14 +14,11 @@ import com.kimlic.BaseFragment
 import com.kimlic.R
 import com.kimlic.db.entity.*
 import com.kimlic.managers.PresentationManager
-import com.kimlic.passcode.PasscodeActivity
 import com.kimlic.preferences.Prefs
-import com.kimlic.stage.adapter.ContactsAdapter
-import com.kimlic.stage.adapter.DocumentAdapter
-import com.kimlic.stage.adapter.Icons_
-import com.kimlic.stage.adapter.OnStageItemClick
+import com.kimlic.stage.adapter.OnUserItemClick
+import com.kimlic.stage.adapter.UserStageAccountAdapter
+import com.kimlic.utils.AppDoc
 import kotlinx.android.synthetic.main.fragment_stage_user.*
-import kotlinx.android.synthetic.main.item_stage.view.*
 import java.io.File
 
 class UserStageFragment : BaseFragment(), LifecycleObserver {
@@ -31,7 +26,7 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
     // Companion
 
     companion object {
-        private const val SECURITY_REQUEST_CODE = 151
+
 
         val FRAGMENT_KEY = this::class.java.simpleName!!
 
@@ -45,8 +40,17 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
     // Variables
 
     private lateinit var divider: DividerItemDecoration
-    private lateinit var contactsAdapter: ContactsAdapter
-    private lateinit var documentsAdapter: DocumentAdapter
+    private lateinit var adapter: UserStageAccountAdapter
+
+    private var nameItem = NameItem(name = "")
+    private var risksItem: RisksItem = RisksItem(false)
+    private var kimItem = KimItem(quantity = 0)
+    private var contactList = emptyList<ContactItem>()
+    private var documentList = emptyList<DocumentItem>()
+    private var addressItem = AddressItem(Address(value = ""))
+
+
+    private val MAX_DOCUMENTS_COUNT = 1
 
     // Life
 
@@ -73,7 +77,11 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
 
     private fun setupUI() {
         initDivider()
-        setupRisks()
+        adapter = UserStageAccountAdapter()
+        userStageRecycler.layoutManager = LinearLayoutManager(activity, LinearLayout.VERTICAL, false)
+        userStageRecycler.addItemDecoration(divider)
+        userStageRecycler.adapter = adapter
+
         setupUser()
         setupContacts()
         setupAddress()
@@ -81,25 +89,25 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
         setupListeners()
     }
 
-    // Private Helpers
-
-    private fun setupRisks() {
-        risksTv.setOnClickListener {
-            (getActivity() as StageActivity).risks()
-        }
+    private fun refreshList() {
+        if (risksItem.present)
+            adapter.setContacts(listOf(nameItem) + listOf(risksItem) + listOf(kimItem) + contactList + documentList + listOf(addressItem))
+        else adapter.setContacts(listOf(nameItem) + listOf(kimItem) + contactList + documentList + listOf(addressItem))
     }
 
-    private fun manageRisks() = (activity).let { risksTv?.visibility = if (Prefs.isPasscodeEnabled && Prefs.isRecoveryEnabled) View.GONE else View.VISIBLE }
+    // Private Helpers
+
+    private fun manageRisks() {
+        risksItem = if (Prefs.isPasscodeEnabled && Prefs.isRecoveryEnabled) RisksItem(false) else RisksItem(true)
+    }
 
     private fun setupUser() {
         model.userLive().observe(this@UserStageFragment, Observer<User> { user ->
             user?.let {
-                setupNameField(
-                        if (it.firstName.isNotEmpty()) {
-                            "${it.firstName} ${it.lastName}"
-                        } else ""
-                )
-                setupKimField(it.kimQuantity)
+                nameItem = if (it.firstName.isNotEmpty()) NameItem(name = "${it.firstName} ${it.lastName}") else NameItem(name = "")
+                nameItem.isClicable = !model.hasDocumentInProgress()
+                kimItem = KimItem(quantity = it.kimQuantity)
+                refreshList()
             }
         })
         model.userPortraitPhotos().observe(this, Observer<List<Photo>> { list ->
@@ -110,60 +118,73 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
     }
 
     private fun setupContacts() {
-        contactsAdapter = ContactsAdapter()
+        //contactsAdapter = ContactsAdapter()
 
-        with(contactsRecycler) {
-            layoutManager = LinearLayoutManager(activity, LinearLayout.VERTICAL, false)
-            adapter = contactsAdapter
-            addItemDecoration(divider)
-        }
+        model.userContactsLive().observe(this, Observer<List<Contact>> { contacts ->
+            val tempList = mutableListOf(ContactItem(Contact(type = "phone")), ContactItem(Contact(type = "email")))
 
-        contactsAdapter.setOnStageItemClick(object : OnStageItemClick {
-            override fun onClick(view: View, position: Int, type: String, approved: Boolean, state: String) {
-                when (type) {
-                    "email" -> if (!approved) PresentationManager.email(activity!!)
-                    "phone" -> if (!approved) PresentationManager.phoneNumber(activity!!)
-                }
+            contacts!!.forEach {
+                if (it.type.equals("phone")) tempList[0] = ContactItem(it)
+                if (it.type.equals("email")) tempList[1] = ContactItem(it)
             }
+            contactList = tempList
+            refreshList()
         })
-
-        model.userContactsLive().observe(this, Observer<List<Contact>> { contacts -> contactsAdapter.setContactsList(contacts = contacts!!) })
     }
 
     private fun setupAddress() {
-        model.userAddressLive().observe(this, Observer<Address> { address -> setupAddressField(address?.value ?: "") })
+        model.userAddressLive().observe(this, Observer<Address> { address ->
+            addressItem = AddressItem(address ?: Address(value = ""))
+            refreshList()
+        })
     }
 
     private fun setupDocuments() {
-        documentsAdapter = DocumentAdapter()
+        model.userDocumentsLive().observe(this@UserStageFragment, Observer<List<Document>> { documents ->
+            val docs = documents.orEmpty()
+            val tempList = mutableListOf<DocumentItem>()
+            val docTypes = AppDoc.values().map { it.type }
 
-        with(documentRecycler) {
-            layoutManager = object : LinearLayoutManager(activity) {
-                override fun canScrollVertically(): Boolean {
-                    return false
+            docs.forEach {
+                if (docTypes.contains(it.type)) {
+                    tempList.add(DocumentItem(it))
                 }
             }
-            adapter = documentsAdapter
-            addItemDecoration(divider)
-        }
 
-        documentsAdapter.setOnStageItemClick(object : OnStageItemClick {
-            override fun onClick(view: View, position: Int, type: String, approved: Boolean, state: String) {
-
-                if (type == "add") PresentationManager.documentChoiseVerify(activity!!)
-                else PresentationManager.detailsDocument(activity!!, type)
-            }
+            if (docs.size < MAX_DOCUMENTS_COUNT) tempList.add(DocumentItem(Document(type = "add")))
+            documentList = tempList
+            refreshList()
         })
-
-        model.userDocumentsLive().observe(this@UserStageFragment, Observer<List<Document>> { documents -> documentsAdapter.setDocumentsList(documents!!) })
     }
 
     private fun setupListeners() {
-        addressItem.setOnClickListener { PresentationManager.address(activity!!) }
-        nameItem.setOnClickListener { if (!model.hasDocumentInProgress()) PresentationManager.name(activity!!) }
         settingsBt.setOnClickListener { PresentationManager.settings(activity!!) }
         takePhotoLl.setOnClickListener { PresentationManager.portraitPhoto(activity!!) }
-        kimItem.setOnClickListener { model.tokensBalance() }
+
+        adapter.setOnUserItemClick(object : OnUserItemClick {
+            override fun onItemClick(view: View, position: Int, type: String, value: String) {
+                when (type) {
+                    "USER_NAME" -> {
+                        if (!model.hasDocumentInProgress()) PresentationManager.name(activity!!)
+                    }
+                    "phone" -> {
+                        if (value == "") PresentationManager.phoneNumber(activity!!)
+                    }
+                    "email" -> {
+                        if (value == "") PresentationManager.email(activity!!)
+                    }
+                    "address" -> {
+                        PresentationManager.address(activity!!)
+                    }
+                    "risks" -> (getActivity() as StageActivity).risks()
+
+                    "add" -> PresentationManager.documentChoiseVerify(activity!!)
+                    "kim" -> {
+                    }
+                    else -> PresentationManager.detailsDocument(activity!!, type)
+                }
+            }
+        })
     }
 
     private fun initDivider() {
@@ -182,34 +203,56 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
         userPhoto.layoutParams = layoutParams
         userPhotoLl.removeAllViews()
         userPhotoLl.addView(userPhoto)
-        userPhoto.setOnClickListener{PresentationManager.portraitPhoto(activity!!)}
+        userPhoto.setOnClickListener { PresentationManager.portraitPhoto(activity!!) }
     }
+}
 
-    private fun passcodeForResult() {
-        val intent = Intent(activity, PasscodeActivity::class.java)
-        intent.putExtra("action", "set")
-        getActivity()!!.startActivityForResult(intent, SECURITY_REQUEST_CODE)
-    }
 
-    // Setup profile Fields
+interface UserItem {
+    val type: String
+    val value: String
+    val tag: String
+}
 
-    private fun setupKimField(kim: Int = 0) {
-        kimItem.iconIv.background = resources.getDrawable(if (kim == 0) Icons_.KIM_BLUE.icon else Icons_.KIM_WHITE.icon, null)
-        kimItem.arrowIv.background = resources.getDrawable(if (kim == 0) Icons_.ARROW_BLUE.icon else Icons_.ARROW_WHITE.icon, null)
-        kimItem.contentTv.text = Editable.Factory.getInstance().newEditable(getString(R.string.you_have_kim, kim))
-        kimItem.contentTv.setTextColor(if (kim == 0) resources.getColor(R.color.lightBlue, null) else resources.getColor(android.R.color.white, null))
-    }
+class NameItem(val name: String = "") : UserItem {
+    override val tag: String get() = "name"
+    override val type: String get() = "USER_NAME"
+    override val value: String get() = name
+    override fun toString(): String = this::class.java.simpleName
+    var isClicable: Boolean = false
+}
 
-    private fun setupNameField(name: String = "") {
-        nameArrow.background = resources.getDrawable(if (name == "") Icons_.ARROW_BLUE.icon else Icons_.ARROW_WHITE.icon, null)
-        nameTv.text = if (name == "") getString(R.string.add_your_full_name) else name
-        nameTv.setTextColor(if (name == "") resources.getColor(R.color.lightBlue, null) else resources.getColor(android.R.color.white, null))
-    }
+class RisksItem(val present: Boolean) : UserItem {
+    override val tag: String get() = "risks"
+    override val type: String get() = "risks"
+    override val value: String get() = if (present) "1" else "0"
+    override fun toString(): String = present.toString()
+}
 
-    private fun setupAddressField(address: String = "") {
-        addressItem.iconIv.background = resources.getDrawable(if (address == "") Icons_.LOCATION_BLUE.icon else Icons_.LOCATION_WHITE.icon, null)
-        addressItem.arrowIv.background = resources.getDrawable(if (address == "") Icons_.ARROW_BLUE.icon else Icons_.ARROW_WHITE.icon, null)
-        addressItem.contentTv.text = if (address == "") getString(R.string.add_your_address) else address
-        addressItem.contentTv.setTextColor(if (address == "") resources.getColor(R.color.lightBlue, null) else resources.getColor(android.R.color.white, null))
-    }
+class KimItem(val quantity: Int = 0) : UserItem {
+    override val tag: String get() = "kim"
+    override val type: String get() = "kim"
+    override val value: String get() = quantity.toString()
+    override fun toString(): String = this::class.java.simpleName
+}
+
+class ContactItem(val contact: Contact) : UserItem {
+    override val tag: String get() = contact.type
+    override val type: String get() = contact.type
+    override val value: String get() = contact.value
+    override fun toString(): String = this::class.java.simpleName
+}
+
+class DocumentItem(val document: Document) : UserItem {
+    override val tag: String get() = document.type
+    override val type: String get() = document.type
+    override val value: String get() = document.country
+    override fun toString(): String = document.toString()
+}
+
+class AddressItem(val address: Address) : UserItem {
+    override val tag: String get() = "address"
+    override val type: String get() = "address"
+    override val value: String get() = address.value
+    override fun toString(): String = address.toString()
 }
