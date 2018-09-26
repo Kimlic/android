@@ -167,7 +167,7 @@
   <string name="change_number_">Change Number</string>
   <string name="number_is_not_verified">555 458 39 40 is not verified</string>
   <string name="send_verification_code">Send Verification Code</string>
-  <string name="you_have_kim">You have %1$d KIM</string>
+  <string name="balance">Balance %1$d KIM</string>
   <string name="add_your_email">Add your email</string>
   <string name="add_your_full_name">Add your full name</string>
   <string name="add_your_phone">Add your phone</string>
