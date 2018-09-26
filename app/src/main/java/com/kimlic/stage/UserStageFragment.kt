@@ -28,7 +28,7 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
     companion object {
         val FRAGMENT_KEY = this::class.java.simpleName!!
 
-        private const val MAX_DOCUMENTS_COUNT = 2
+        private const val MAX_DOCUMENTS_COUNT = 6
 
         fun newInstance(bundle: Bundle = Bundle()): UserStageFragment {
             val fragment = UserStageFragment()
@@ -116,7 +116,6 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
     private fun setupContacts() {
         model.userContactsLive().observe(this, Observer<List<Contact>> { contacts ->
             val tempList = mutableListOf(ContactItem(Contact(type = "phone")), ContactItem(Contact(type = "email")))
-
             contacts!!.forEach {
                 if (it.type == "phone") tempList[0] = ContactItem(it)
                 if (it.type == "email") tempList[1] = ContactItem(it)
