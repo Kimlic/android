@@ -1,12 +1,12 @@
 package com.kimlic.vendors
 
-import android.arch.lifecycle.*
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleObserver
+import android.arch.lifecycle.OnLifecycleEvent
+import android.arch.lifecycle.ViewModel
 import android.os.Handler
-import com.kimlic.db.entity.Document
-import com.kimlic.model.ProfileRepository
 import com.kimlic.model.SingleLiveEvent
 import com.kimlic.preferences.Prefs
-import com.kimlic.utils.AppDoc
 import java.util.*
 
 class VendorsViewModel : ViewModel(), LifecycleObserver {
@@ -31,7 +31,9 @@ class VendorsViewModel : ViewModel(), LifecycleObserver {
 
     fun rpDocuments(url: String) = vendorsRepository.rpDocumentsRequest(Prefs.currentAccountAddress, url, onError = { retryRpRequest(url) })
 
-    fun vendorsDocumentsToVerify() = vendorsRepository.vendorDocumentsLive()
+    fun vendorsDocumentsLive() = vendorsRepository.vendorDocumentsLive()
+
+    fun vendorsDocuments() = vendorsRepository.vendorDocuments()
 
     fun vendorRequestStatus() = vendorRequestStatus
 
