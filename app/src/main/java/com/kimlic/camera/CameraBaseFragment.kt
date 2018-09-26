@@ -98,6 +98,7 @@ abstract class CameraBaseFragment : BaseFragment() {
                 .build()
 
         captureBt.setOnClickListener {
+            captureBt.isClickable = false
             mediaPlayer.start()
             fotoapparat.focus()
             val results = fotoapparat.takePicture()
@@ -146,6 +147,7 @@ abstract class CameraBaseFragment : BaseFragment() {
             auxilaryContourIv.visibility = View.VISIBLE
             captureBt.visibility = View.VISIBLE
             confirmLl.visibility = View.GONE
+            captureBt.isClickable = true
         }
     }
 }
