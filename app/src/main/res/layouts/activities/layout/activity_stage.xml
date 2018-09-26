@@ -105,6 +105,7 @@
     android:layout_marginBottom="32dp"
     android:layout_marginEnd="32dp"
     android:background="@drawable/button_shape_circle_red"
+    android:visibility="gone"
     android:clickable="false"
     android:elevation="@dimen/button_elevation"
     android:focusable="false"
