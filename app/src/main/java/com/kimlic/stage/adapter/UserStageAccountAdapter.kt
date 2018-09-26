@@ -3,6 +3,7 @@ package com.kimlic.stage.adapter
 import android.content.Context
 import android.graphics.Color
 import android.support.v7.widget.RecyclerView
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -76,6 +77,7 @@ class UserStageAccountAdapter : RecyclerView.Adapter<UserStageAccountAdapter.Con
 
                 if (item.value != "") {
                     contentTv.setTextColor(Color.WHITE)
+                    arrowIv.background = resources.getDrawable(R.drawable.ic_white_menu_arrow, null)
                 } else {
                     contentTv.setTextColor(resources.getColor(R.color.lightBlue, null))
                     arrowIv.background = resources.getDrawable(R.drawable.ic_blue_menu_arrow, null)
@@ -85,7 +87,7 @@ class UserStageAccountAdapter : RecyclerView.Adapter<UserStageAccountAdapter.Con
 
                 when (item.type) {
                     "USER_NAME" -> {
-                        contentTv.textSize = 18f
+                        contentTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
 
                         if (item.value == "") {
                             iconIv.background = icon(Icons_.NAME_BLUE.icon);contentTv.text = context.getString(R.string.add_your_name)
@@ -94,10 +96,10 @@ class UserStageAccountAdapter : RecyclerView.Adapter<UserStageAccountAdapter.Con
                             arrowIv.background = resources.getDrawable(R.drawable.ic_white_menu_arrow, null)
                         }
 
-                        arrowIv.visibility = if ((item as NameItem).isClicable) View.VISIBLE else View.INVISIBLE
+                        arrowIv.visibility = if ((item as NameItem).isClickable) View.VISIBLE else View.INVISIBLE
                     }
                     "risks" -> {
-                        if (item.value == "1") {// Риски присутсвтуют
+                        if (item.value == "1") {
                             iconIv.background = resources.getDrawable(R.drawable.ic_blue_warning_icon, null); contentTv.text = context.getString(R.string.you_have_security_risks)
                             arrowIv.visibility = View.GONE
                         }
@@ -106,6 +108,7 @@ class UserStageAccountAdapter : RecyclerView.Adapter<UserStageAccountAdapter.Con
                         if (item.value == "0") {
                             iconIv.background = icon(Icons_.KIM_BLUE.icon);contentTv.text = resources.getString(R.string.balance, 0)
                             arrowIv.visibility = View.GONE
+                            contentTv.setTextColor(resources.getColor(R.color.lightBlue, null))
                         } else {
                             iconIv.background = icon(Icons_.KIM_WHITE.icon); contentTv.text = resources.getString(R.string.balance, item.value.toInt())
                             arrowIv.visibility = View.GONE
@@ -121,25 +124,25 @@ class UserStageAccountAdapter : RecyclerView.Adapter<UserStageAccountAdapter.Con
                     }
                     "phone" -> {
                         if (item.value == "") {
-                            iconIv.background = icon(Icons_.LOCATION_BLUE.icon); contentTv.text = context.getString(R.string.add_your_phone)
+                            iconIv.background = icon(Icons_.PHONE_BLUE.icon); contentTv.text = context.getString(R.string.add_your_phone)
                         } else {
-                            contentTv.text = item.value; iconIv.background = icon(Icons_.LOCATION_WHITE.icon)
+                            contentTv.text = item.value; iconIv.background = icon(Icons_.PHONE_WHITE.icon)
                             arrowIv.visibility = View.GONE
                         }
                     }
                     "address" -> {
                         if (item.value == "") {
-                            iconIv.background = icon(Icons_.PHONE_BLUE.icon); contentTv.text = context.getString(R.string.add_your_address)
+                            iconIv.background = icon(Icons_.LOCATION_BLUE.icon); contentTv.text = context.getString(R.string.add_your_address)
                         } else {
-                            contentTv.text = item.value; iconIv.background = icon(Icons_.PHONE_WHITE.icon)
+                            contentTv.text = item.value; iconIv.background = icon(Icons_.LOCATION_WHITE.icon)
                         }
                     }
-
                     AppDoc.PASSPORT.type -> {
                         if (item.value == "") {
                             iconIv.background = icon(Icons_.ID_BLUE.icon); contentTv.text = context.getString(R.string.add_your_passport)
                         } else {
-                            contentTv.text = context.getString(R.string.passport); iconIv.background = icon(Icons_.ID_WHITE.icon)
+                            contentTv.text = context.getString(R.string.passport)
+                            iconIv.background = icon(Icons_.ID_WHITE.icon)
                         }
                     }
                     AppDoc.ID_CARD.type -> {
@@ -178,12 +181,9 @@ class UserStageAccountAdapter : RecyclerView.Adapter<UserStageAccountAdapter.Con
                         }
                     }
                     "add" -> {
-                        iconIv.background = icon(Icons_.ID_BLUE.icon);
+                        iconIv.background = icon(Icons_.ID_BLUE.icon)
                         contentTv.text = context.getString(R.string.add_new_document)
-
                     }
-
-
                 }
             }
         }
