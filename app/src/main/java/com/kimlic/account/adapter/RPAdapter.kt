@@ -3,7 +3,6 @@ package com.kimlic.account.adapter
 import android.content.Context
 import android.graphics.Color
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -150,10 +149,8 @@ class RPAdapter : RecyclerView.Adapter<RPAdapter.ContactViewHolder>() {
                     }
                     "addDocument" -> {
                         iconIv.background = icon(Icons_.ID_BLUE.icon);
-                        contentTv.text = "Add Your Document"
+                        contentTv.text = context.getString(R.string.add_your_document)
                     }
-
-
                 }
             }
         }
