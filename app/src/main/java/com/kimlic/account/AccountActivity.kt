@@ -8,7 +8,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
@@ -87,13 +86,9 @@ class AccountActivity : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == DOCUMENT_VERIFY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            Log.d("TAGSELECTEDDOCUMENT", "on activity result")
-
             val acceptedDocumet = data?.getStringExtra(AppConstants.DOCUMENT_TYPE.key)
-            Log.d("TAGSELECTEDDOCUMENT", "on activity result $acceptedDocumet")
             acceptedDocumet?.let {
                 val document = model.userDocument(it)!!
-                Log.d("TAGSELECTEDDOCUMENT", "in accepted - document = $document")
                 documentList = listOf(DocumentItem(document))
                 missedDocuments = false
                 setupAdapterList()
@@ -203,7 +198,7 @@ class AccountActivity : BaseActivity() {
             setupDocuments()
             setupContacts()
             setupAdapterList()
-           // Handler().postDelayed({ missingInfo(missedName || missedContacts || missedDocuments) }, 200)
+            // Handler().postDelayed({ missingInfo(missedName || missedContacts || missedDocuments) }, 200)
         })
     }
 
@@ -231,8 +226,6 @@ class AccountActivity : BaseActivity() {
             val userContact = it?.orEmpty()
             val tempList = mutableListOf(ContactItem(Contact(type = "phone")))//, ContactItem(Contact(type = "email")))
 
-            var count = 0
-
             userContact!!.forEach { contact ->
                 if (contact.type == "phone") tempList[0] = ContactItem(contact)
 //                if (contact.type == "email") {
@@ -248,8 +241,6 @@ class AccountActivity : BaseActivity() {
     }
 
     private fun setupDocuments() {
-
-
         model.userDocumentsLive().observe(this, Observer<List<Document>> { userDocumentsList ->
             val newList = mutableListOf<DocumentItem>()
             val userDocumentsMap = userDocumentsList?.map { it.type to it }?.toMap().orEmpty()
@@ -272,7 +263,6 @@ class AccountActivity : BaseActivity() {
 //                    }
 //                }
 //            }
-
 //            newList.add(DocumentItem(Document(type = "addDocument")))
 //            documentList = newList
 //            missedDocuments = count != 0
