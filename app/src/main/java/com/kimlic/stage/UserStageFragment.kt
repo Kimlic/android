@@ -165,8 +165,7 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
                     "address" -> PresentationManager.address(activity!!)
                     "risks" -> (getActivity() as StageActivity).risks()
                     "add" -> PresentationManager.documentChoiseVerify(activity!!)
-                    "kim" -> {
-                    }
+                    "kim" -> model.tokensBalance()
                     else -> PresentationManager.detailsDocument(activity!!, type)
                 }
             }
