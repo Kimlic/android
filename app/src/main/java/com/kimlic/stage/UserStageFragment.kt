@@ -26,9 +26,9 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
     // Companion
 
     companion object {
-
-
         val FRAGMENT_KEY = this::class.java.simpleName!!
+
+        private const val MAX_DOCUMENTS_COUNT = 2
 
         fun newInstance(bundle: Bundle = Bundle()): UserStageFragment {
             val fragment = UserStageFragment()
@@ -41,16 +41,12 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
 
     private lateinit var divider: DividerItemDecoration
     private lateinit var adapter: UserStageAccountAdapter
-
     private var nameItem = NameItem(name = "")
     private var risksItem: RisksItem = RisksItem(false)
     private var kimItem = KimItem(quantity = 0)
     private var contactList = emptyList<ContactItem>()
     private var documentList = emptyList<DocumentItem>()
     private var addressItem = AddressItem(Address(value = ""))
-
-
-    private val MAX_DOCUMENTS_COUNT = 1
 
     // Life
 
@@ -105,7 +101,7 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
         model.userLive().observe(this@UserStageFragment, Observer<User> { user ->
             user?.let {
                 nameItem = if (it.firstName.isNotEmpty()) NameItem(name = "${it.firstName} ${it.lastName}") else NameItem(name = "")
-                nameItem.isClicable = !model.hasDocumentInProgress()
+                nameItem.isClickable = !model.hasDocumentInProgress()
                 kimItem = KimItem(quantity = it.kimQuantity)
                 refreshList()
             }
@@ -118,14 +114,12 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
     }
 
     private fun setupContacts() {
-        //contactsAdapter = ContactsAdapter()
-
         model.userContactsLive().observe(this, Observer<List<Contact>> { contacts ->
             val tempList = mutableListOf(ContactItem(Contact(type = "phone")), ContactItem(Contact(type = "email")))
 
             contacts!!.forEach {
-                if (it.type.equals("phone")) tempList[0] = ContactItem(it)
-                if (it.type.equals("email")) tempList[1] = ContactItem(it)
+                if (it.type == "phone") tempList[0] = ContactItem(it)
+                if (it.type == "email") tempList[1] = ContactItem(it)
             }
             contactList = tempList
             refreshList()
@@ -152,6 +146,7 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
             }
 
             if (docs.size < MAX_DOCUMENTS_COUNT) tempList.add(DocumentItem(Document(type = "add")))
+
             documentList = tempList
             refreshList()
         })
@@ -164,20 +159,11 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
         adapter.setOnUserItemClick(object : OnUserItemClick {
             override fun onItemClick(view: View, position: Int, type: String, value: String) {
                 when (type) {
-                    "USER_NAME" -> {
-                        if (!model.hasDocumentInProgress()) PresentationManager.name(activity!!)
-                    }
-                    "phone" -> {
-                        if (value == "") PresentationManager.phoneNumber(activity!!)
-                    }
-                    "email" -> {
-                        if (value == "") PresentationManager.email(activity!!)
-                    }
-                    "address" -> {
-                        PresentationManager.address(activity!!)
-                    }
+                    "USER_NAME" -> if (!model.hasDocumentInProgress()) PresentationManager.name(activity!!)
+                    "phone" -> if (value == "") PresentationManager.phoneNumber(activity!!)
+                    "email" -> if (value == "") PresentationManager.email(activity!!)
+                    "address" -> PresentationManager.address(activity!!)
                     "risks" -> (getActivity() as StageActivity).risks()
-
                     "add" -> PresentationManager.documentChoiseVerify(activity!!)
                     "kim" -> {
                     }
@@ -207,7 +193,6 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
     }
 }
 
-
 interface UserItem {
     val type: String
     val value: String
@@ -219,7 +204,7 @@ class NameItem(val name: String = "") : UserItem {
     override val type: String get() = "USER_NAME"
     override val value: String get() = name
     override fun toString(): String = this::class.java.simpleName
-    var isClicable: Boolean = false
+    var isClickable: Boolean = false
 }
 
 class RisksItem(val present: Boolean) : UserItem {
