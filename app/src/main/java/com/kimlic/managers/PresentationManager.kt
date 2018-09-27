@@ -153,6 +153,13 @@ object PresentationManager {
         present(presenter = presenter, className = DocumentDetails::class.java, isStarting = false, params = params)
     }
 
+    fun detailsDocumentChoose(presenter: BaseActivity, documentType: String, requestCode: Int) {
+        val params = HashMap<String, String>()
+        params[AppConstants.DOCUMENT_TYPE.key] = documentType
+        params["action"] = "choose"
+        present(presenter = presenter, className = DocumentDetails::class.java, isStarting = false, params = params, requestCode = requestCode)
+    }
+
     fun detailsDocumentSave(presenter: BaseActivity, documentType: String, country: String, requestCode: Int) {
         val params = HashMap<String, String>()
         params[AppConstants.DOCUMENT_TYPE.key] = documentType
