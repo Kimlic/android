@@ -22,9 +22,4 @@
     android:gravity="center"
     tools:text="Item description"/>
 
-  <ImageView
-    android:id="@+id/arrowIv"
-    style="@style/DetailsItemShevron"
-    android:contentDescription="@string/arrow"/>
-
 </RelativeLayout>
