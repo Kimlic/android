@@ -82,7 +82,7 @@ class AccountsStageFragment : BaseFragment() {
             //adapter.setAccountsList(mockList)
         })
 
-        //adapter.setAccountsList(mockList)
+        adapter.setAccountsList(mockList)
 
     }
 }
