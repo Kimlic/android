@@ -69,7 +69,7 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="8dp"
       android:gravity="center"
-      android:text="Your identity have been verifed"
+      android:text="@string/your_identity_information_is_sent_to_be_verified"
       android:textColor="@android:color/white"
       android:textSize="@dimen/subtitle_text_size"/>
 
