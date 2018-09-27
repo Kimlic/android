@@ -42,6 +42,7 @@ import java.io.File
 import java.io.IOException
 import java.io.OutputStreamWriter
 import java.nio.charset.Charset
+import java.nio.file.Files.delete
 import java.util.*
 import java.util.concurrent.ExecutionException
 
@@ -255,7 +256,8 @@ class ProfileRepository private constructor() {
     private fun deleteFile(fileName: String) {
         val rootFilesDir = File(context.filesDir.toString())
         val files = rootFilesDir.listFiles()
-        files?.first { it.name == fileName }?.let{ it.delete()}
+        val f = files?.filter { it.name == fileName }
+        f?.forEach { it.delete() }
     }
     // New User
 
