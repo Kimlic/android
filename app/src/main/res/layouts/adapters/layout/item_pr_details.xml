@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/phoneItem"
+  android:layout_width="match_parent"
+  android:layout_height="48dp"
+  android:focusableInTouchMode="false">
+
+  <ImageView
+    android:id="@+id/iconIv"
+    style="@style/DetailsItemTextView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:contentDescription="@string/icon"
+    tools:background="@drawable/ic_phone_in_talk_dark_24dp"/>
+
+  <TextView
+    android:id="@+id/contentTv"
+    style="@style/DetailsItemTextView"
+    android:layout_marginStart="32dp"
+    android:gravity="center"
+    tools:text="Item description"/>
+
+  <ImageView
+    android:id="@+id/arrowIv"
+    style="@style/DetailsItemShevron"
+    android:contentDescription="@string/arrow"/>
+
+</RelativeLayout>
