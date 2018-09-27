@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import com.kimlic.R
-import com.kimlic.account.fragment.SelectAccountDocumentFragment_
+import com.kimlic.account.fragment.SelectDocumentValidFragment
 import com.kimlic.utils.AppDoc
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_document_small_valid.view.*
@@ -15,7 +15,7 @@ class DocumentValidAdapter : BaseAdapter() {
 
     // Variables
 
-    private var documents: List<SelectAccountDocumentFragment_.ValidDocument> = emptyList()
+    private var documents: List<SelectDocumentValidFragment.ValidDocument> = emptyList()
     private lateinit var context: Context
 
     // Life
@@ -59,7 +59,7 @@ class DocumentValidAdapter : BaseAdapter() {
 
     // Public
 
-    fun setDocuments(documents: List<SelectAccountDocumentFragment_.ValidDocument>?) {
+    fun setDocuments(documents: List<SelectDocumentValidFragment.ValidDocument>?) {
         this.documents = documents!!
         notifyDataSetChanged()
     }
