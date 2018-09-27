@@ -23,5 +23,8 @@ enum class Icons_(val icon: Int) {
     LOCATION_WHITE(R.drawable.ic_profile_white_location_icon),
 
     ARROW_BLUE(R.drawable.ic_blue_menu_arrow),
-    ARROW_WHITE(R.drawable.ic_white_menu_arrow)
+    ARROW_WHITE(R.drawable.ic_white_menu_arrow),
+
+    DATE_WHITE(R.drawable.ic_date_icon_white),
+    DATE_BLUE(R.drawable.ic_date_icon_white)
 }
