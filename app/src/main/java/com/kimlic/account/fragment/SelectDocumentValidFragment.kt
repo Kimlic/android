@@ -15,7 +15,7 @@ import com.kimlic.db.entity.VendorDocument
 import com.kimlic.documents.DocumentViewModel
 import com.kimlic.managers.PresentationManager
 import com.kimlic.vendors.VendorsViewModel
-import kotlinx.android.synthetic.main.fragment_select_document_.*
+import kotlinx.android.synthetic.main.fragment_select_document_valid.*
 
 class SelectDocumentValidFragment : BasePopupFragment() {
 
@@ -45,7 +45,7 @@ class SelectDocumentValidFragment : BasePopupFragment() {
 
     // Life
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.fragment_select_document_, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.fragment_select_document_valid, container, false)
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
