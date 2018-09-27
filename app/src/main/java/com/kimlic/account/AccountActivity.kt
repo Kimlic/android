@@ -9,7 +9,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import com.kimlic.BaseActivity
@@ -19,6 +18,7 @@ import com.kimlic.account.adapter.RPAdapter
 import com.kimlic.account.fragment.IdentitySentSuccessfulFragment
 import com.kimlic.account.fragment.MissingInformationFragment
 import com.kimlic.account.fragment.SelectAccountDocumentFragment
+import com.kimlic.account.fragment.SelectDocumentValidFragment
 import com.kimlic.db.entity.Contact
 import com.kimlic.db.entity.Document
 import com.kimlic.db.entity.User
@@ -36,6 +36,13 @@ import java.util.*
 
 class AccountActivity : BaseActivity() {
 
+    // Constants
+
+    companion object {
+        private const val DOCUMENT_VERIFY_REQUEST_CODE = 4444
+        const val DOCUMENT_DETAILS_CHOOSE_CODE = 4411
+    }
+
     // Variables
 
     private lateinit var model: ProfileViewModel
@@ -48,11 +55,11 @@ class AccountActivity : BaseActivity() {
     private var blockchainUpdatingFragment: BlockchainUpdatingFragment? = null
     private var missingFragment: MissingInformationFragment? = null
 
-    private lateinit var chosenCountry: String
-
     private var missedName: Boolean = true
     private var missedContacts: Boolean = true
     private var missedDocuments: Boolean = true
+
+    private var chosenCountry = "Ukraine"
 
     private lateinit var documentQueue: LinkedList<DocumentItem>
     private lateinit var vendorDocumentsList: List<VendorDocument>
@@ -61,11 +68,8 @@ class AccountActivity : BaseActivity() {
     private lateinit var vendorsDocs: MutableMap<String, VendorDocument>
 
     private lateinit var selectCountryFragment: SelectCountryFragment
+    private lateinit var selectAccountDocumentFragment_: SelectDocumentValidFragment
     private lateinit var selectAccountDocumentFragment: SelectAccountDocumentFragment
-
-    companion object {
-        private const val DOCUMENT_VERIFY_REQUEST_CODE = 4444
-    }
 
     // Life
 
@@ -85,6 +89,8 @@ class AccountActivity : BaseActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
         if (requestCode == DOCUMENT_VERIFY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             val acceptedDocumet = data?.getStringExtra(AppConstants.DOCUMENT_TYPE.key)
             acceptedDocumet?.let {
@@ -94,6 +100,17 @@ class AccountActivity : BaseActivity() {
                 setupAdapterList()
                 setupNextButton()
             }
+        }
+
+        if (requestCode == DOCUMENT_DETAILS_CHOOSE_CODE && resultCode == Activity.RESULT_OK) {
+            val documentType = data?.getStringExtra(AppConstants.DOCUMENT_TYPE.key)!!
+            val documentToVerify = model.userDocument(documentType = documentType)!!
+            selectAccountDocumentFragment_.dismiss()
+            documentList = listOf(DocumentItem(documentToVerify))
+
+            missedDocuments = false
+            setupAdapterList()
+            setupNextButton()
         }
     }
 
@@ -112,9 +129,7 @@ class AccountActivity : BaseActivity() {
         selectCountryFragment.setCallback(object : DocumentCallback {
             override fun callback(bundle: Bundle) {
                 chosenCountry = bundle.getString(AppConstants.COUNTRY.key)
-
                 showSelectDocumentFragment(chosenCountry = chosenCountry)
-                Log.d("TAGDOCUMENT", "chosen country = $chosenCountry")
             }
         })
 
@@ -147,16 +162,21 @@ class AccountActivity : BaseActivity() {
             override fun onItemClick(view: View, position: Int, type: String) {
 
                 when (position) {
-                    0 -> PresentationManager.name(this@AccountActivity)
+                    0 -> if (model.user().firstName != "") PresentationManager.name(this@AccountActivity)
                     1 -> PresentationManager.phoneNumber(this@AccountActivity)
                     //2 -> PresentationManager.email(this@AccountActivity)
-//                    3, 4, 5, 6 -> PresentationManager.documentChoiseVerify(this@AccountActivity)
                     2 -> {
-                        selectCountryFragment.show(supportFragmentManager, SelectCountryFragment.FRAGMENT_KEY)
+//                        selectCountryFragment.show(supportFragmentManager, SelectCountryFragment.FRAGMENT_KEY)
+                        showSelectValidDocumentFragment()
                     }
                 }
             }
         })
+    }
+
+    private fun showSelectValidDocumentFragment() {
+        selectAccountDocumentFragment_ = SelectDocumentValidFragment.getInstance()//(bundle)
+        selectAccountDocumentFragment_.show(supportFragmentManager, "aaa")
     }
 
     private fun showSelectDocumentFragment(chosenCountry: String) {
@@ -183,15 +203,13 @@ class AccountActivity : BaseActivity() {
                         PresentationManager.verifyDocument(this@AccountActivity, documentType = documentToVerify, country = chosenCountry, requestCode = DOCUMENT_VERIFY_REQUEST_CODE)
                     }
                 }
-
-                Log.d("TAGSELECTEDDOCUMENT", "selected document = ${documentToVerify}")
             }
         })
         selectAccountDocumentFragment.show(supportFragmentManager, SelectDocumentFragment.FRAGMENT_KEY)
     }
 
     private fun fetchVendorDocs() {
-        vendorsModel.vendorsDocumentsToVerify().observe(this, Observer<List<VendorDocument>> { it ->
+        vendorsModel.vendorsDocumentsLive().observe(this, Observer<List<VendorDocument>> { it ->
             vendorsDocs = it!!.map { it.type to it }.toMap().toMutableMap()
             vendorDocumentsList = it
             setupName()
@@ -302,10 +320,7 @@ class AccountActivity : BaseActivity() {
             val country = model.userDocuments().filter { it.type == docItem.type }.first().country
 
             val vendorDocument = vendorDocumentsList.filter { it.type == docItem.type }.first()
-
-            // val urlHardcoded = "http://13.68.143.152/api/medias"
             model.senDoc(docItem.type, country, url, vendorDocument = vendorDocument,
-//            model.senDoc(docItem.type, country, urlHardcoded, vendorDocument = vendorDocument,
                     onSuccess = {
                         sendFromQueue({ onSuccess() }, { onError() })
                     },
