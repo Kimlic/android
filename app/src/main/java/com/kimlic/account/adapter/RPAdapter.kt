@@ -83,6 +83,7 @@ class RPAdapter : RecyclerView.Adapter<RPAdapter.ContactViewHolder>() {
                     arrowIv.background = resources.getDrawable(R.drawable.ic_blue_menu_arrow, null)
                     setOnClickListener(this@ContactViewHolder)
                 }
+
                 when (item.type) {
                     "USER_NAME" -> {
                         if (item.value == "") {
@@ -106,6 +107,7 @@ class RPAdapter : RecyclerView.Adapter<RPAdapter.ContactViewHolder>() {
                         }
                     }
                     AppDoc.PASSPORT.type -> {
+                        setOnClickListener(this@ContactViewHolder)
                         if (item.value == "") {
                             iconIv.background = icon(Icons_.ID_BLUE.icon); contentTv.text = context.getString(R.string.add_your_passport)
                         } else {
@@ -113,6 +115,7 @@ class RPAdapter : RecyclerView.Adapter<RPAdapter.ContactViewHolder>() {
                         }
                     }
                     AppDoc.ID_CARD.type -> {
+                        setOnClickListener(this@ContactViewHolder)
                         if (item.value == "") {
                             iconIv.background = icon(Icons_.ID_BLUE.icon); contentTv.text = context.getString(R.string.add_your_id_card)
                         } else {
@@ -120,6 +123,7 @@ class RPAdapter : RecyclerView.Adapter<RPAdapter.ContactViewHolder>() {
                         }
                     }
                     AppDoc.DRIVERS_LICENSE.type -> {
+                        setOnClickListener(this@ContactViewHolder)
                         if (item.value == "") {
                             iconIv.background = icon(Icons_.ID_BLUE.icon); contentTv.text = context.getString(R.string.add_your_drivers_license)
                         } else {
@@ -127,6 +131,7 @@ class RPAdapter : RecyclerView.Adapter<RPAdapter.ContactViewHolder>() {
                         }
                     }
                     AppDoc.RESIDENCE_PERMIT_CARD.type -> {
+                        setOnClickListener(this@ContactViewHolder)
                         if (item.value == "") {
                             iconIv.background = icon(Icons_.ID_BLUE.icon); contentTv.text = context.getString(R.string.add_your_residence_permit)
                         } else {
@@ -134,6 +139,7 @@ class RPAdapter : RecyclerView.Adapter<RPAdapter.ContactViewHolder>() {
                         }
                     }
                     AppDoc.SOCIAL_SECURITY_CARD.type -> {
+                        setOnClickListener(this@ContactViewHolder)
                         if (item.value == "") {
                             iconIv.background = icon(Icons_.ID_BLUE.icon); contentTv.text = context.getString(R.string.add_your_social_security_card)
                         } else {
@@ -141,6 +147,7 @@ class RPAdapter : RecyclerView.Adapter<RPAdapter.ContactViewHolder>() {
                         }
                     }
                     AppDoc.BIRTH_CERTIFICATE.type -> {
+                        setOnClickListener(this@ContactViewHolder)
                         if (item.value == "") {
                             iconIv.background = icon(Icons_.ID_BLUE.icon); contentTv.text = context.getString(R.string.add_your_birth_certificate)
                         } else {
