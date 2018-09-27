@@ -64,6 +64,7 @@ class DocumentDetails : BaseActivity() {
         when (action) {
             "preview" -> setupPreview()
             "previewAndSave" -> setupPreviewAndSave()
+            "choose" -> setupChoose()
         }
     }
 
@@ -83,6 +84,19 @@ class DocumentDetails : BaseActivity() {
 
         saveBt.text = getString(R.string.ok)
         saveBt.setOnClickListener { finish() }
+        backBt.setOnClickListener { finish() }
+    }
+
+    private fun setupChoose() {
+        setupPreview()
+
+        saveBt.text = getString(R.string.select_this_document)
+        saveBt.setOnClickListener {
+            val data = Intent()
+            data.putExtra(AppConstants.DOCUMENT_TYPE.key, currentDocument.type)
+            setResult(Activity.RESULT_OK, data)
+            finish()
+        }
         backBt.setOnClickListener { finish() }
     }
 
