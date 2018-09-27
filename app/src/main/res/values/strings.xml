@@ -285,4 +285,5 @@
   <string name="view_kimlic_explorer">View Kimlic Explorer</string>
   <string name="add_your_document">Add Your Document</string>
   <string name="please_select_your_identification_document">Please Select Your Identification Document</string>
+  <string name="select_this_document">Select This Document</string>
 </resources>
