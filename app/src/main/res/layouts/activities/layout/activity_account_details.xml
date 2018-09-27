@@ -93,7 +93,7 @@
   <ScrollView
     android:id="@+id/scrollView"
     android:layout_width="310dp"
-    android:layout_height="200dp"
+    android:layout_height="192dp"
     android:layout_marginTop="16dp"
     android:layout_marginBottom="16dp"
     android:orientation="vertical"
@@ -109,9 +109,10 @@
       android:layout_height="wrap_content">
 
       <android.support.v7.widget.RecyclerView
-        android:id="@+id/accountRecycler"
+        android:id="@+id/accountDetailsRecycler"
         android:layout_width="@dimen/content_width"
-        android:layout_height="200dp"
+        android:layout_height="192dp"
+        android:layout_alignParentTop="true"
         android:overScrollMode="never"/>
     </RelativeLayout>
 
@@ -146,4 +147,3 @@
     app:layout_constraintStart_toStartOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>
-
