@@ -34,7 +34,7 @@
     android:layout_height="@dimen/button_height"
     android:layout_margin="24dp"
     android:background="@drawable/button_rounded_green"
-    android:text="Add New Document"
+    android:text="@string/add_new_document"
     android:textAllCaps="false"
     android:textColor="@android:color/white"
     android:textSize="@dimen/button_text_size"
