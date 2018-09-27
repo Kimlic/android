@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import com.kimlic.BaseActivity
 import com.kimlic.account.AccountActivity
-import com.kimlic.account.AccountDetails
 import com.kimlic.address.AddressActivity
 import com.kimlic.auth.TouchIdActivity
 import com.kimlic.documents.DocumentChoiceActivity
@@ -22,6 +21,7 @@ import com.kimlic.phone.PhoneVerifyActivity
 import com.kimlic.recovery.AccountRecoveryActivity
 import com.kimlic.recovery.SignUpRecoveryActivity
 import com.kimlic.settings.SettingsActivity
+import com.kimlic.stage.AccountDetails
 import com.kimlic.stage.StageActivity
 import com.kimlic.terms.TermsActivity
 import com.kimlic.tutorial.TutorialActivity
