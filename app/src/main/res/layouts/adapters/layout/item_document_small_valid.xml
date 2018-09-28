@@ -29,6 +29,8 @@
     tools:ignore="RelativeOverlap"
     tools:text="Country"/>
 
+  <!--to remove-->
+
   <ImageView
     android:id="@+id/choisIv"
     android:layout_width="wrap_content"
