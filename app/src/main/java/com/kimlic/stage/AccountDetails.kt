@@ -73,8 +73,9 @@ class AccountDetails : BaseActivity() {
         }
 
         unlinkBt.setOnClickListener {
-            showToast("Unlick Account")
+            showToast("Unlink Account")
         }
+        backBt.setOnClickListener { finish() }
     }
 
     // Private
