@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import com.kimlic.BaseActivity
@@ -30,6 +31,7 @@ import com.kimlic.documents.fragments.SelectDocumentFragment
 import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.utils.AppConstants
+import com.kimlic.utils.AppDoc
 import com.kimlic.utils.BaseCallback
 import com.kimlic.vendors.VendorsViewModel
 import kotlinx.android.synthetic.main.activity_account.*
@@ -86,7 +88,7 @@ class AccountActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         setupAdapterList()
-        Handler().postDelayed({ missingInfo(missedName || missedContacts || missedDocuments) }, 1500)
+        //Handler().postDelayed({ missingInfo(missedName || missedContacts || missedDocuments) }, 1500)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -115,6 +117,16 @@ class AccountActivity : BaseActivity() {
         }
     }
 
+    // Public
+
+    fun setChosenDocument(documentType: String) {
+        val document = model.userDocument(documentType)!!
+        documentList = listOf(DocumentItem(document))
+        missedDocuments = false
+        setupNextButton()
+        setupAdapterList()
+    }
+
     // Private
 
     private fun setupUI() {
@@ -125,7 +137,6 @@ class AccountActivity : BaseActivity() {
         val urlNew = urlToParce[0] + "//" + urlToParce[1] + urlToParce[2]
 
         selectCountryFragment = SelectCountryFragment.getInstance()
-
 
         selectCountryFragment.setCallback(object : DocumentCallback {
             override fun callback(bundle: Bundle) {
@@ -163,7 +174,7 @@ class AccountActivity : BaseActivity() {
             override fun onItemClick(view: View, position: Int, type: String) {
 
                 when (position) {
-                    0 -> if (model.user().firstName != "") PresentationManager.name(this@AccountActivity)
+                    0 -> if (model.user().firstName == "") PresentationManager.name(this@AccountActivity)
                     1 -> PresentationManager.phoneNumber(this@AccountActivity)
                     //2 -> PresentationManager.email(this@AccountActivity)
                     2 -> {
@@ -235,16 +246,8 @@ class AccountActivity : BaseActivity() {
 
     private fun missingInfo(missedDocs: Boolean) {
         if (missedDocs && missingFragment == null) {
-//            val bundle = Bundle()
-//            val missingList = mutableListOf<String>()
-//            when {
-//                missedDocuments -> missingList.add("ID Document")
-//                missedName -> missingList.add("Full Name")
-//            }
-//            bundle.putStringArrayList("missed", missingList)
-//
-//            missingFragment = MissingInformationFragment.getInstance(bundle)
-//            missingFragment!!.show(supportFragmentManager, MissingInformationFragment.FRAGMENT_KEY)
+            missingFragment = MissingInformationFragment.getInstance()
+            missingFragment!!.show(supportFragmentManager, MissingInformationFragment.FRAGMENT_KEY)
         }
     }
 
@@ -269,13 +272,38 @@ class AccountActivity : BaseActivity() {
 
     private fun setupDocuments() {
         model.userDocumentsLive().observe(this, Observer<List<Document>> { userDocumentsList ->
-            val newList = mutableListOf<DocumentItem>()
             val userDocumentsMap = userDocumentsList?.map { it.type to it }?.toMap().orEmpty()
+            val userDocumentsPresentTypes = userDocumentsList?.map { it.type }!!.toList()
+            val sortedDocTypes = AppDoc.values().map { it.type }.toList()
+            val vendorTypes = vendorDocumentsList.map { it.type }
+            val vendorTypeContries = vendorDocumentsList.map { it.type to it.countries }.toMap()
+
+            documentList = emptyList()
+
+            sortedDocTypes.forEach {
+                if (it in userDocumentsPresentTypes) {
+                    if (userDocumentsMap[it]!!.type in vendorTypes) {
+                        if (model.userDocument(it)!!.countryIso.toUpperCase() in vendorTypeContries[it]!!) {
+                            if (documentList.isEmpty()) {
+                                documentList = listOf(DocumentItem(userDocumentsMap[it]!!))
+                                missedDocuments = false
+                                setupAdapterList()
+                                setupNextButton()
+
+                            }
+                        }
+                    }
+                }
+            }
+
+//            if (documentList.size == 0) {
+//                mutableListOf<DocumentItem>(DocumentItem(Document(type = "addDocument")))
+//            }
             //vendorsDocs.remove("PASSPORT")
             //vendorsDocs.remove("ID_CARD")
             //vendorsDocs.remove("DRIVERS_LICENSE")
             //vendorsDocs.remove("RESIDENCE_PERMIT_CARD")
-            var count = 0
+            //var count = 0
             // Добавить проверку по странам???
 //            vendorsDocs.forEach {
 //                if (it.key in userDocumentsMap) {
@@ -295,11 +323,14 @@ class AccountActivity : BaseActivity() {
 //            missedDocuments = count != 0
 //            setupAdapterList()
 //            setupNextButton()
+
+
+            if (documentList.size == 0) {
+                documentList = listOf(DocumentItem(Document(type = "addDocument")))
+                setupAdapterList()
+                setupNextButton()
+            }
         })
-        documentList = mutableListOf<DocumentItem>(DocumentItem(Document(type = "addDocument")))
-        missedDocuments = true
-        setupAdapterList()
-        setupNextButton()
     }
 
     private fun setupNextButton() {
