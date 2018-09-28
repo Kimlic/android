@@ -44,7 +44,7 @@ class DocumentValidAdapter : BaseAdapter() {
                 choisIv.visibility = View.VISIBLE
                 documentTv.setTextColor(context.getColor(android.R.color.white))
             }
-
+            choisIv.visibility = View.GONE// TODO remove
             Picasso.get().load(path).noFade().into(flagIv)
         }
 
