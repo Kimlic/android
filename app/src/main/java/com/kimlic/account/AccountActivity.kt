@@ -8,6 +8,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.LinearLayout
@@ -85,7 +86,7 @@ class AccountActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         setupAdapterList()
-//        Handler().postDelayed({ missingInfo(missedName || missedContacts || missedDocuments) }, 1500)
+        Handler().postDelayed({ missingInfo(missedName || missedContacts || missedDocuments) }, 1500)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -234,8 +235,16 @@ class AccountActivity : BaseActivity() {
 
     private fun missingInfo(missedDocs: Boolean) {
         if (missedDocs && missingFragment == null) {
-            missingFragment = MissingInformationFragment.getInstance()
-            missingFragment!!.show(supportFragmentManager, MissingInformationFragment.FRAGMENT_KEY)
+//            val bundle = Bundle()
+//            val missingList = mutableListOf<String>()
+//            when {
+//                missedDocuments -> missingList.add("ID Document")
+//                missedName -> missingList.add("Full Name")
+//            }
+//            bundle.putStringArrayList("missed", missingList)
+//
+//            missingFragment = MissingInformationFragment.getInstance(bundle)
+//            missingFragment!!.show(supportFragmentManager, MissingInformationFragment.FRAGMENT_KEY)
         }
     }
 
