@@ -5,6 +5,7 @@ import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
 import android.arch.lifecycle.ViewModel
 import android.os.Handler
+import android.util.Log
 import com.kimlic.model.SingleLiveEvent
 import com.kimlic.preferences.Prefs
 import java.util.*
@@ -34,6 +35,14 @@ class VendorsViewModel : ViewModel(), LifecycleObserver {
     fun vendorsDocumentsLive() = vendorsRepository.vendorDocumentsLive()
 
     fun vendorsDocuments() = vendorsRepository.vendorDocuments()
+
+    fun companyDetailsRequest(url: String) = vendorsRepository.companyDetailsRequest(Prefs.currentAccountAddress, url,
+
+            onSuccess = { company ->
+                Log.d("TAGCOMPANY", "company in viewModel $company")
+            },
+
+            onError = {})
 
     fun vendorRequestStatus() = vendorRequestStatus
 
