@@ -21,7 +21,7 @@ import com.kimlic.phone.PhoneVerifyActivity
 import com.kimlic.recovery.AccountRecoveryActivity
 import com.kimlic.recovery.SignUpRecoveryActivity
 import com.kimlic.settings.SettingsActivity
-import com.kimlic.stage.AccountDetails
+import com.kimlic.stage.CompanyDetails
 import com.kimlic.stage.StageActivity
 import com.kimlic.terms.TermsActivity
 import com.kimlic.tutorial.TutorialActivity
@@ -220,7 +220,7 @@ object PresentationManager {
     fun accountDetails(presenter: BaseActivity, accountId: String) {
         val params = HashMap<String, String>()
         params["accountId"] = accountId
-        present(presenter = presenter, className = AccountDetails::class.java, params = params)
+        present(presenter = presenter, className = CompanyDetails::class.java, params = params)
     }
 
     // Private
