@@ -4,15 +4,14 @@ import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 import com.kimlic.db.entity.Company
 
-
 @Dao
 interface CompanyDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(account: Company)
+    fun insert(company: Company)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun update(account: Company)
+    fun update(company: Company)
 
     @Query("SELECT * FROM company WHERE id =:id")
     fun account(id: String): Company
@@ -24,5 +23,5 @@ interface CompanyDao {
     fun accountsLive(accountAddress: String): LiveData<List<Company>>
 
     @Delete
-    fun delete(account: Company)
+    fun delete(company: Company)
 }
