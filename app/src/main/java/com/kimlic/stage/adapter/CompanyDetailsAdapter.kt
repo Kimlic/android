@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.item_account_document.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AccountDetailsAdapter : RecyclerView.Adapter<AccountDetailsAdapter.ContactViewHolder>() {
+class CompanyDetailsAdapter : RecyclerView.Adapter<CompanyDetailsAdapter.ContactViewHolder>() {
 
     // Variables
 
@@ -52,13 +52,13 @@ class AccountDetailsAdapter : RecyclerView.Adapter<AccountDetailsAdapter.Contact
 
     // ViewHolder class
 
-    class ContactViewHolder(private val contactView: View, val context: Context) : RecyclerView.ViewHolder(contactView) {
+    class ContactViewHolder(private val companyView: View, val context: Context) : RecyclerView.ViewHolder(companyView) {
 
         // Variables
 
         fun bind(item: DetailsItem) {
 
-            with(contactView) {
+            with(companyView) {
                 contentTv.setTextColor(Color.WHITE); isClickable = false; isFocusableInTouchMode = false; isFocusable = false
 
                 when (item.type) {
