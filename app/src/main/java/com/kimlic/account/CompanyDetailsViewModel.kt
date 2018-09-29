@@ -12,7 +12,7 @@ class CompanyDetailsViewModel(application: Application) : AndroidViewModel(appli
 
     // Public
 
-    fun accountsLive() = companyRepository.accountsLive(Prefs.currentAccountAddress)
+    fun companiesLive() = companyRepository.companiesLive(Prefs.currentAccountAddress)
 
-    fun account(companyId: String) = companyRepository.company(companyId)
+    fun company(companyId: String) = companyRepository.company(companyId)
 }
