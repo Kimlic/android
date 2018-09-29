@@ -8,9 +8,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import com.kimlic.BaseActivity
@@ -148,6 +146,7 @@ class AccountActivity : BaseActivity() {
 
         url = urlNew
         vendorsModel.rpDocuments(url)// Request for RP documentsLive.
+        vendorsModel.companyDetailsRequest(url)
 
         setupAdapter()
         setupAdapterList()
