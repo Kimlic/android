@@ -5,34 +5,34 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kimlic.R
-import com.kimlic.db.entity.Account
+import com.kimlic.db.entity.Company
 import kotlinx.android.synthetic.main.item_account_rp.view.*
 
-class AccountAdapter : RecyclerView.Adapter<AccountAdapter.AccountHolder>() {
+class CompanyAdapter : RecyclerView.Adapter<CompanyAdapter.CompanyHolder>() {
 
     // Variables
 
-    private var accounts: List<Account> = emptyList()
+    private var companies: List<Company> = emptyList()
     private lateinit var onAccountItemClick: OnAccountItemClick
 
     // Live
 
-    override fun getItemCount() = accounts.size
+    override fun getItemCount() = companies.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CompanyHolder {
         val accountView = LayoutInflater.from(parent.context).inflate(R.layout.item_account_rp, parent, false)
-        return AccountHolder(accountView)
+        return CompanyHolder(accountView)
     }
 
-    override fun onBindViewHolder(holder: AccountHolder, position: Int) {
+    override fun onBindViewHolder(holder: CompanyHolder, position: Int) {
         holder.setOnAccountItemClick(onAccountItemClick)
-        holder.bind(accounts[position], position)
+        holder.bind(companies[position], position)
     }
 
     // Public
 
-    fun setAccountsList(accounts: List<Account>) {
-        this.accounts = accounts
+    fun setAccountsList(accounts: List<Company>) {
+        this.companies = accounts
         notifyDataSetChanged()
     }
 
@@ -42,7 +42,7 @@ class AccountAdapter : RecyclerView.Adapter<AccountAdapter.AccountHolder>() {
 
     // View Holder class
 
-    class AccountHolder(private val accountView: View) : RecyclerView.ViewHolder(accountView), View.OnClickListener {
+    class CompanyHolder(private val accountView: View) : RecyclerView.ViewHolder(accountView), View.OnClickListener {
 
         // Variables
 
@@ -59,14 +59,14 @@ class AccountAdapter : RecyclerView.Adapter<AccountAdapter.AccountHolder>() {
 
         // Public
 
-        fun bind(account: Account, position: Int) {
+        fun bind(company: Company, position: Int) {
             this.mPosition = position
 
             with(accountView) {
                 rootRl.setBackgroundResource(R.drawable.background_gradient_white)
-                rpTitleTv.text = account.name
-                rpSubtitleTv.text = account.name
-                setOnClickListener(this@AccountHolder)
+                rpTitleTv.text = company.name
+                rpSubtitleTv.text = company.name
+                setOnClickListener(this@CompanyHolder)
             }
         }
     }
