@@ -31,7 +31,7 @@ class CompanyRepository {
 
     // Public
 
-    fun accountsLive(accountAddress: String) = companyDao.companiesLive(accountAddress)
+    fun companiesLive(accountAddress: String) = companyDao.companiesLive(accountAddress)
 
     fun company(id: String) = companyDao.company(id)
 
