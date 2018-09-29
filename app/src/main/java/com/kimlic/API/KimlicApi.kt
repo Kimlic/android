@@ -14,6 +14,7 @@ enum class KimlicApi(val path: String) {
     PHONE_APPROVE("/api/verifications/phone/approve"),
 
     VENDORS("/api/vendors"),
+    COMPANY("/api/company"),
 
     MEDIAS("/api/medias")
 }
