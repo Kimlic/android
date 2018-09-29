@@ -9,6 +9,7 @@ import android.arch.persistence.room.ForeignKey.CASCADE
         foreignKeys = [ForeignKey(entity = User::class, parentColumns = arrayOf("id"), childColumns = arrayOf("user_id"), onDelete = CASCADE, onUpdate = CASCADE)])
 
 data class Company(
+        @PrimaryKey
         @ColumnInfo(name = "id") var id: String = "",
         @ColumnInfo(name = "address") var address: String = "",
         @ColumnInfo(name = "details") var details: String = "",
