@@ -9,18 +9,18 @@ import android.support.v7.widget.LinearLayoutManager
 import com.kimlic.BaseActivity
 import com.kimlic.BuildConfig
 import com.kimlic.R
-import com.kimlic.account.AccountDetailsViewModel
-import com.kimlic.db.entity.Account
-import com.kimlic.stage.adapter.AccountDetailsAdapter
+import com.kimlic.account.CompanyDetailsViewModel
+import com.kimlic.db.entity.Company
+import com.kimlic.stage.adapter.CompanyDetailsAdapter
 import kotlinx.android.synthetic.main.activity_account_details.*
 
-class AccountDetails : BaseActivity() {
+class CompanyDetails : BaseActivity() {
 
     // Variables
 
-    private lateinit var accountDetailModel: AccountDetailsViewModel
-    private lateinit var rpAccount: Account
-    private lateinit var adapter: AccountDetailsAdapter
+    private lateinit var companyDetailModel: CompanyDetailsViewModel
+    private lateinit var rpCompany: Company
+    private lateinit var adapter: CompanyDetailsAdapter
     private lateinit var divider: DividerItemDecoration
 
     private val uriKimlicExplorer = BuildConfig.KIMLIC_EXPLORER_URI
@@ -31,7 +31,7 @@ class AccountDetails : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account_details)
 
-        accountDetailModel = ViewModelProviders.of(this).get(AccountDetailsViewModel::class.java)
+        companyDetailModel = ViewModelProviders.of(this).get(CompanyDetailsViewModel::class.java)
         setupUI()
     }
 
@@ -43,11 +43,11 @@ class AccountDetails : BaseActivity() {
         initDivider()
         accountDetailsRecycler.addItemDecoration(divider)
         accountDetailsRecycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        adapter = AccountDetailsAdapter()
+        adapter = CompanyDetailsAdapter()
         accountDetailsRecycler.adapter = adapter
 
 
-//        rpAccount = accountDetailModel.account(accountId = accountId.toLong())
+//        rpAccount = accountDetailModel.company(accountId = accountId.toLong())
 //
 //        with(rpAccount) {
 //            titleTv.text = "KimlickRp"
