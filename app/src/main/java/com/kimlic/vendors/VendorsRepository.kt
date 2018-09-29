@@ -15,9 +15,12 @@ import com.kimlic.API.VolleySingleton
 import com.kimlic.KimlicApp
 import com.kimlic.db.KimlicDB
 import com.kimlic.db.SyncService
+import com.kimlic.db.entity.Company
 import com.kimlic.db.entity.VendorDocument
 import com.kimlic.preferences.Prefs
+import com.kimlic.utils.mappers.CompanyMapper
 import com.kimlic.utils.mappers.JsonToVenDocMapper
+import com.kimlic.vendors.entity.Company_
 import com.kimlic.vendors.entity.Vendors
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -35,7 +38,7 @@ class VendorsRepository private constructor() {
     // New request to Vendors - saves RP docs to database. database provides this docs by LiveData
 
     fun rpDocumentsRequest(accountAddress: String, url: String, onError: () -> Unit) {
-        val headers = mapOf(Pair("account-address", accountAddress), Pair("accept", "application/vnd.mobile-api.v1+json"), Pair("Content-Type", "application/json"))
+        val headers = mapOf(Pair("company-address", accountAddress), Pair("accept", "application/vnd.mobile-api.v1+json"), Pair("Content-Type", "application/json"))
         val vendorsRequest = KimlicJSONRequest(GET, url + KimlicApi.VENDORS.path, headers, JSONObject(),
                 Response.Listener { it ->
                     if (!it.getJSONObject("meta").optString("code").toString().startsWith("2")) {
@@ -58,6 +61,25 @@ class VendorsRepository private constructor() {
 
         DoAsync().execute(Runnable { VolleySingleton.getInstance(KimlicApp.applicationContext()).requestQueue.add(vendorsRequest) })
 
+    }
+
+    fun companyDetailsRequest(accountAddress: String, url: String, onSuccess: (company: Company) -> Unit, onError: () -> Unit) {
+        val headers = mapOf(Pair("account-address", accountAddress), Pair("accept", "application/vnd.mobile-api.v1+json"), Pair("Content-Type", "application/json"))
+        val companyDetailsRequest = KimlicJSONRequest(GET, url + KimlicApi.COMPANY.path, headers, JSONObject(),
+                Response.Listener {
+                    val companyJson = it.getJSONObject("data").getJSONObject("company").toString()
+
+                    val type = object : TypeToken<Company_>() {}.type
+                    val company_: Company_ = Gson().fromJson(companyJson, type)
+                    val company = CompanyMapper().transform(company_)
+                    onSuccess(company)
+
+                },
+                Response.ErrorListener { error ->
+                    onError()
+                }
+        )
+        VolleySingleton.getInstance(KimlicApp.applicationContext()).requestQueue.add(companyDetailsRequest)
     }
 
     // Clear all vendors from db on start of activity
