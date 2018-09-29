@@ -217,9 +217,9 @@ object PresentationManager {
         present(presenter = presenter, className = AccountActivity::class.java, params = params, isStarting = false)
     }
 
-    fun accountDetails(presenter: BaseActivity, accountId: String) {
+    fun companyDetails(presenter: BaseActivity, companyId: String) {
         val params = HashMap<String, String>()
-        params["accountId"] = accountId
+        params["companyId"] = companyId
         present(presenter = presenter, className = CompanyDetails::class.java, params = params)
     }
 
