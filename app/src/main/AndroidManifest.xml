@@ -169,7 +169,7 @@
 
     <activity
       android:label="Account Details"
-      android:name=".stage.AccountDetails"/>
+      android:name=".stage.CompanyDetails"/>
 
   </application>
 
