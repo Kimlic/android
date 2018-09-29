@@ -7,7 +7,7 @@ import com.kimlic.KimlicApp
 import com.kimlic.db.dao.*
 import com.kimlic.db.entity.*
 
-@Database(entities = [User::class, Account::class, Contact::class, Document::class, Address::class, Photo::class, VendorDocument::class], version = 1, exportSchema = false)
+@Database(entities = [User::class, Company::class, Contact::class, Document::class, Address::class, Photo::class, VendorDocument::class], version = 1, exportSchema = false)
 
 abstract class KimlicDB : RoomDatabase() {
 
@@ -39,5 +39,5 @@ abstract class KimlicDB : RoomDatabase() {
     abstract fun documentDao(): DocumentDao
     abstract fun photoDao(): PhotoDao
     abstract fun vendorDao(): VendorDao
-    abstract fun accountDao(): AccountDao
+    abstract fun companyDao(): CompanyDao
 }
