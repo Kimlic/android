@@ -25,6 +25,7 @@
       android:contentDescription="@string/hexagon_background"/>
 
     <ImageView
+      android:id="@+id/rpLogoIv"
       android:layout_width="80dp"
       android:layout_height="80dp"
       android:layout_gravity="center"
