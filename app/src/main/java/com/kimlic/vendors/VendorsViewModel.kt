@@ -1,11 +1,9 @@
 package com.kimlic.vendors
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleObserver
-import android.arch.lifecycle.OnLifecycleEvent
-import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.*
 import android.os.Handler
-import android.util.Log
+import com.kimlic.db.entity.Company
+import com.kimlic.model.ProfileRepository
 import com.kimlic.model.SingleLiveEvent
 import com.kimlic.preferences.Prefs
 import java.util.*
@@ -15,8 +13,11 @@ class VendorsViewModel : ViewModel(), LifecycleObserver {
     // Variables
 
     private val vendorsRepository = VendorsRepository.instance
+    private val profileRepository = ProfileRepository.instance
     private var vendorRequestStatus: SingleLiveEvent<String> = SingleLiveEvent()
-    private val timeQueue = ArrayDeque<Long>(listOf(1500L, 2000L, 2000L))
+    private var companyDetails = MutableLiveData<Company>()
+    private val timeQueueVendors = ArrayDeque<Long>(listOf(1500L, 2000L, 2000L))
+    private val timeQueueCompanyDetails = ArrayDeque<Long>(listOf(1000L, 1000L, 1000L))
 
     // Public
 
@@ -30,27 +31,42 @@ class VendorsViewModel : ViewModel(), LifecycleObserver {
     * Request to RP. Url gets from QR code. Repository saves Data to DB
     * */
 
-    fun rpDocuments(url: String) = vendorsRepository.rpDocumentsRequest(Prefs.currentAccountAddress, url, onError = { retryRpRequest(url) })
+    fun rpDocumentsRequest(url: String) = vendorsRepository.rpDocumentsRequest(Prefs.currentAccountAddress, url, onError = { retryVendorsRequest(url) })
 
     fun vendorsDocumentsLive() = vendorsRepository.vendorDocumentsLive()
 
     fun vendorsDocuments() = vendorsRepository.vendorDocuments()
 
-    fun companyDetailsRequest(url: String) = vendorsRepository.companyDetailsRequest(Prefs.currentAccountAddress, url,
+    /*
+    * Company information request
+    * */
 
-            onSuccess = { company ->
-                Log.d("TAGCOMPANY", "company in viewModel $company")
-            },
+    fun rpDetailsRequest(url: String) {
+        vendorsRepository.companyDetailsRequest(Prefs.currentAccountAddress, url,
+                onSuccess = { company ->
+                    companyDetails.postValue(company)
+                }, onError = { retryCompanyRequest(url) })
+    }
 
-            onError = {})
+    fun rpDetailsLive() = companyDetails
 
-    fun vendorRequestStatus() = vendorRequestStatus
+    fun commonRequestStatus() = vendorRequestStatus
+
+    fun saveCompany(company: Company) {
+        val userId = profileRepository.getUser(Prefs.currentAccountAddress).id
+        company.userId = userId
+        vendorsRepository.saveCompany(company)
+    }
 
     fun countries() = vendorsRepository.countries()
 
     // Private
 
-    private fun retryRpRequest(url: String) {
-        timeQueue.poll()?.let { Handler().postDelayed({ rpDocuments(url) }, it) } ?: vendorRequestStatus.postValue("server error")
+    private fun retryVendorsRequest(url: String) {
+        timeQueueVendors.poll()?.let { Handler().postDelayed({ rpDocumentsRequest(url) }, it) } ?: vendorRequestStatus.postValue("server error")
+    }
+
+    private fun retryCompanyRequest(url: String) {
+        timeQueueCompanyDetails.poll()?.let { Handler().postDelayed({ rpDocumentsRequest(url) }, it) } ?: vendorRequestStatus.postValue("server error")
     }
 }
