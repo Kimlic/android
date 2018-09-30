@@ -4,13 +4,16 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
+import com.bumptech.glide.Glide
 import com.kimlic.BaseActivity
 import com.kimlic.BlockchainUpdatingFragment
 import com.kimlic.R
@@ -19,10 +22,7 @@ import com.kimlic.account.fragment.IdentitySentSuccessfulFragment
 import com.kimlic.account.fragment.MissingInformationFragment
 import com.kimlic.account.fragment.SelectAccountDocumentFragment
 import com.kimlic.account.fragment.SelectDocumentValidFragment
-import com.kimlic.db.entity.Contact
-import com.kimlic.db.entity.Document
-import com.kimlic.db.entity.User
-import com.kimlic.db.entity.VendorDocument
+import com.kimlic.db.entity.*
 import com.kimlic.documents.DocumentCallback
 import com.kimlic.documents.fragments.SelectCountryFragment
 import com.kimlic.documents.fragments.SelectDocumentFragment
@@ -67,6 +67,7 @@ class AccountActivity : BaseActivity() {
     private lateinit var url: String
     private lateinit var adapter: RPAdapter
     private lateinit var vendorsDocs: MutableMap<String, VendorDocument>
+    private var currentCompany: Company? = null
 
     private lateinit var selectCountryFragment: SelectCountryFragment
     private lateinit var selectAccountDocumentFragment_: SelectDocumentValidFragment
@@ -132,10 +133,15 @@ class AccountActivity : BaseActivity() {
         url = intent.extras.getString("path", "")
 
         val urlToParce = url.split("/")
+
+        Log.d("TAGSIZE", "url size = ${urlToParce.size}")
+
+        if (urlToParce.size < 3) finish()
+
         val urlNew = urlToParce[0] + "//" + urlToParce[1] + urlToParce[2]
+        url = urlNew
 
         selectCountryFragment = SelectCountryFragment.getInstance()
-
         selectCountryFragment.setCallback(object : DocumentCallback {
             override fun callback(bundle: Bundle) {
                 chosenCountry = bundle.getString(AppConstants.COUNTRY.key)
@@ -143,16 +149,16 @@ class AccountActivity : BaseActivity() {
             }
         })
 
-
-        url = urlNew
-        vendorsModel.rpDocuments(url)// Request for RP documentsLive.
-        vendorsModel.companyDetailsRequest(url)
+        vendorsModel.rpDocumentsRequest(url)// Request for RP documentsLive.
+        vendorsModel.rpDetailsRequest(url)
 
         setupAdapter()
         setupAdapterList()
         setupAdapterListener()
 
         fetchVendorDocs()
+        fetchCompanyDetails()
+        requestStatusMonitoring()
 
         setupNextButton()
         cancelTv.setOnClickListener { finish() }
@@ -231,6 +237,27 @@ class AccountActivity : BaseActivity() {
         })
     }
 
+    /*
+    * Fill text fields information
+    * */
+
+    private fun fetchCompanyDetails() {
+        vendorsModel.rpDetailsLive().observe(this, Observer<Company> { company ->
+            currentCompany = company
+            currentCompany?.let {
+                Log.d("TAG", "company info - $company")
+                Glide
+                        .with(this)
+                        .asBitmap()
+                        .load(it.logo)
+                        .into(rpLogoIv)
+                titleTv.text = it.name
+
+            }
+        })
+
+    }
+
     private fun setupName() {
         model.userLive().observe(this, Observer<User> { user ->
             nameItem = if (user?.firstName == "") {
@@ -298,12 +325,12 @@ class AccountActivity : BaseActivity() {
 //            if (documentList.size == 0) {
 //                mutableListOf<DocumentItem>(DocumentItem(Document(type = "addDocument")))
 //            }
-            //vendorsDocs.remove("PASSPORT")
-            //vendorsDocs.remove("ID_CARD")
-            //vendorsDocs.remove("DRIVERS_LICENSE")
-            //vendorsDocs.remove("RESIDENCE_PERMIT_CARD")
-            //var count = 0
-            // Добавить проверку по странам???
+//            vendorsDocs.remove("PASSPORT")
+//            vendorsDocs.remove("ID_CARD")
+//            vendorsDocs.remove("DRIVERS_LICENSE")
+//            vendorsDocs.remove("RESIDENCE_PERMIT_CARD")
+//            var count = 0
+//             Добавить проверку по странам???
 //            vendorsDocs.forEach {
 //                if (it.key in userDocumentsMap) {
 //                    newList.add(DocumentItem(userDocumentsMap[it.key]!!))
@@ -321,7 +348,7 @@ class AccountActivity : BaseActivity() {
 //            documentList = newList
 //            missedDocuments = count != 0
 //            setupAdapterList()
-//            setupNextButton()
+            setupNextButton()
 
 
             if (documentList.size == 0) {
@@ -347,7 +374,7 @@ class AccountActivity : BaseActivity() {
                     documentQueue = LinkedList(documentList)
 
                     sendFromQueue(
-                            onSuccess = { hideProgress(); successful() },
+                            onSuccess = { vendorsModel.saveCompany(currentCompany!!); hideProgress(); successful() },
                             onError = { hideProgress(); errorShow() })
                 }
             }
@@ -397,6 +424,23 @@ class AccountActivity : BaseActivity() {
             }
         })
         fragment.show(supportFragmentManager, IdentitySentSuccessfulFragment.FRAGMENT_KEY)
+    }
+
+    private fun requestStatusMonitoring() {
+        vendorsModel.commonRequestStatus().observe(this, Observer {
+            val builder = AlertDialog.Builder(this)
+
+            builder
+                    .setTitle("Error")
+                    .setMessage("Relying Party is no available")
+                    .setCancelable(true)
+                    .setPositiveButton(getString(R.string.ok), object : DialogInterface.OnClickListener {
+                        override fun onClick(dialog: DialogInterface?, which: Int) {
+                            dialog?.dismiss(); finish()
+                        }
+                    })
+                    .setOnDismissListener { finish() }
+        })
     }
 }
 
