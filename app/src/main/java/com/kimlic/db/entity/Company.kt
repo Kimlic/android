@@ -5,7 +5,7 @@ import android.arch.persistence.room.ForeignKey.CASCADE
 
 
 @Entity(tableName = "company",
-        indices = [Index(value = arrayOf("user_id"))],
+        indices = [Index(value = arrayOf("user_id")), Index(value = arrayOf("id"), unique = true)],
         foreignKeys = [ForeignKey(entity = User::class, parentColumns = arrayOf("id"), childColumns = arrayOf("user_id"), onDelete = CASCADE, onUpdate = CASCADE)])
 
 data class Company(
