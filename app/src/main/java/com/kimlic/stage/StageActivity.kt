@@ -54,6 +54,10 @@ class StageActivity : BaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             SCAN_REQUEST_CODE -> {
+                if(resultCode!= Activity.RESULT_OK){
+                    return
+                }
+
                 val result = IntentIntegrator.parseActivityResult(resultCode, data)
                 if (result.contents != null) {
                     val urlSplitted = result.contents.split("?").first()
