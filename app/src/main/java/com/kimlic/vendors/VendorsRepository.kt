@@ -1,7 +1,6 @@
 package com.kimlic.vendors
 
 import android.os.Handler
-import android.util.Log
 import com.android.volley.Request.Method.GET
 import com.android.volley.Response
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -38,7 +37,7 @@ class VendorsRepository private constructor() {
     // New request to Vendors - saves RP docs to database. database provides this docs by LiveData
 
     fun rpDocumentsRequest(accountAddress: String, url: String, onError: () -> Unit) {
-        val headers = mapOf(Pair("company-address", accountAddress), Pair("accept", "application/vnd.mobile-api.v1+json"), Pair("Content-Type", "application/json"))
+        val headers = mapOf(Pair("account-address", accountAddress), Pair("accept", "application/vnd.mobile-api.v1+json"), Pair("Content-Type", "application/json"))
         val vendorsRequest = KimlicJSONRequest(GET, url + KimlicApi.VENDORS.path, headers, JSONObject(),
                 Response.Listener { it ->
                     if (!it.getJSONObject("meta").optString("code").toString().startsWith("2")) {
@@ -68,12 +67,10 @@ class VendorsRepository private constructor() {
         val companyDetailsRequest = KimlicJSONRequest(GET, url + KimlicApi.COMPANY.path, headers, JSONObject(),
                 Response.Listener {
                     val companyJson = it.getJSONObject("data").getJSONObject("company").toString()
-
                     val type = object : TypeToken<Company_>() {}.type
                     val company_: Company_ = Gson().fromJson(companyJson, type)
                     val company = CompanyMapper().transform(company_)
                     onSuccess(company)
-
                 },
                 Response.ErrorListener { error ->
                     onError()
@@ -84,7 +81,6 @@ class VendorsRepository private constructor() {
 
     // Clear all vendors from db on start of activity
     fun clearVendorsDocs() {
-        Log.d("TAGVENDOR", "in remover vendors info from db")
         vendorDao.deleteAll()
     }
 
@@ -109,6 +105,8 @@ class VendorsRepository private constructor() {
         return countries
     }
 
+
+    // Vendor Documents
 
     fun vendorDocumentsLive() = vendorDao.selectLive()
 
