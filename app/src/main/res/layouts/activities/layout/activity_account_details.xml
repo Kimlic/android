@@ -128,22 +128,22 @@
     android:textAllCaps="false"
     android:textColor="@android:color/white"
     android:textSize="@dimen/button_text_size"
-    app:layout_constraintBottom_toTopOf="@id/unlinkBt"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"/>
-
-  <Button
-    android:id="@+id/unlinkBt"
-    android:layout_width="@dimen/content_width"
-    android:layout_height="@dimen/button_height"
-    android:layout_marginBottom="16dp"
-    android:background="@drawable/button_rounded_red"
-    android:text="@string/unlink_account"
-    android:textAllCaps="false"
-    android:textColor="@android:color/white"
-    android:textSize="@dimen/button_text_size"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"/>
+
+  <!--<Button-->
+  <!--android:id="@+id/unlinkBt"-->
+  <!--android:layout_width="@dimen/content_width"-->
+  <!--android:layout_height="@dimen/button_height"-->
+  <!--android:layout_marginBottom="16dp"-->
+  <!--android:background="@drawable/button_rounded_red"-->
+  <!--android:text="@string/unlink_account"-->
+  <!--android:textAllCaps="false"-->
+  <!--android:textColor="@android:color/white"-->
+  <!--android:textSize="@dimen/button_text_size"-->
+  <!--app:layout_constraintBottom_toBottomOf="parent"-->
+  <!--app:layout_constraintEnd_toEndOf="parent"-->
+  <!--app:layout_constraintStart_toStartOf="parent"/>-->
 
 </android.support.constraint.ConstraintLayout>
