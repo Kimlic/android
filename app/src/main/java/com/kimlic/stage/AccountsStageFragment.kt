@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.kimlic.BaseFragment
 import com.kimlic.R
-import com.kimlic.account.CompanyDetailsViewModel
 import com.kimlic.db.entity.Company
 import com.kimlic.managers.PresentationManager
 import com.kimlic.stage.adapter.CompanyAdapter
