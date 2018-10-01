@@ -26,12 +26,13 @@
 
     <ImageView
       android:id="@+id/rpLogoIv"
-      android:layout_width="80dp"
-      android:layout_height="80dp"
+      android:layout_width="96dp"
+      android:layout_height="96dp"
       android:layout_gravity="center"
-      android:background="@drawable/updating_blockchain_illustration"
       android:contentDescription="@string/photo_camera_image"
-      android:focusableInTouchMode="false"/>
+      android:focusableInTouchMode="false"
+      android:layerType="hardware"
+      android:scaleType="fitCenter"/>
 
   </FrameLayout>
 
