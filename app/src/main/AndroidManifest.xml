@@ -44,6 +44,12 @@
       </intent-filter>
     </service>
 
+    <service
+      android:enabled="true"
+      android:exported="false"
+      android:label="CompanyDetailsService"
+      android:name=".service.CompanyDetailsSyncService"/>
+
     <activity android:name=".MainActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
