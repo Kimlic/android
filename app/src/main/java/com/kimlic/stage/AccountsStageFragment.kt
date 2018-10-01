@@ -14,6 +14,7 @@ import com.kimlic.db.entity.Company
 import com.kimlic.managers.PresentationManager
 import com.kimlic.stage.adapter.CompanyAdapter
 import com.kimlic.stage.adapter.OnAccountItemClick
+import com.kimlic.utils.AppConstants
 import kotlinx.android.synthetic.main.fragment_stage_accounts.*
 
 class AccountsStageFragment : BaseFragment() {
@@ -56,6 +57,7 @@ class AccountsStageFragment : BaseFragment() {
         adapter.setOnAccountItemClick(object : OnAccountItemClick {
             override fun onClick(position: Int) {
 //                PresentationManager.companyDetails(activity!!, accountsList[position].id.toString())
+//                if(companiesList[position].status== AppConstants.VERIFIED.key)
                 PresentationManager.companyDetails(activity!!, companiesList[position].id)
             }
         })
