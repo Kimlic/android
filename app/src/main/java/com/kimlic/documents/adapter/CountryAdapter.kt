@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import com.bumptech.glide.Glide
 import com.kimlic.R
-//import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_country.view.*
 
 class CountryAdapter : BaseAdapter() {
