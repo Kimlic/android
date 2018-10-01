@@ -13,7 +13,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
-import com.bumptech.glide.Glide
 import com.kimlic.BaseActivity
 import com.kimlic.BlockchainUpdatingFragment
 import com.kimlic.R
@@ -31,6 +30,7 @@ import com.kimlic.model.ProfileViewModel
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.AppDoc
 import com.kimlic.utils.BaseCallback
+import com.kimlic.utils.svg.Utils
 import com.kimlic.vendors.VendorsViewModel
 import kotlinx.android.synthetic.main.activity_account.*
 import java.util.*
@@ -94,8 +94,8 @@ class AccountActivity : BaseActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == DOCUMENT_VERIFY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            val acceptedDocumet = data?.getStringExtra(AppConstants.DOCUMENT_TYPE.key)
-            acceptedDocumet?.let {
+            val acceptedDocument = data?.getStringExtra(AppConstants.DOCUMENT_TYPE.key)
+            acceptedDocument?.let {
                 val document = model.userDocument(it)!!
                 documentList = listOf(DocumentItem(document))
                 missedDocuments = false
@@ -246,13 +246,7 @@ class AccountActivity : BaseActivity() {
             currentCompany = company
             currentCompany?.let {
                 Log.d("TAG", "company info - $company")
-                Glide
-                        .with(this)
-                        .asBitmap()
-                        .load(it.logo)
-                        .into(rpLogoIv)
-                titleTv.text = it.name
-
+                Utils.fetchSvg(this, company!!.logo, rpLogoIv)
             }
         })
 
