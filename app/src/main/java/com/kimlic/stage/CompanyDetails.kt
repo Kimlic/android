@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.kimlic.BaseActivity
 import com.kimlic.BuildConfig
 import com.kimlic.R
@@ -52,11 +53,9 @@ class CompanyDetails : BaseActivity() {
         adapter = CompanyDetailsAdapter()
         accountDetailsRecycler.adapter = adapter
 
-
         company = companyDetailModel.company(companyId)
 
         setupDetails(company)
-
 
         viewExplorerBt.setOnClickListener {
             val kimlicPage = Uri.parse(uriKimlicExplorer)
@@ -65,7 +64,6 @@ class CompanyDetails : BaseActivity() {
                 startActivity(intent)
             }
         }
-
 //        unlinkBt.setOnClickListener {
 //            showToast("Unlink Account")
 //        }
@@ -85,15 +83,14 @@ class CompanyDetails : BaseActivity() {
         val detailsList: List<DetailsItem> = listOf(DateDetails(1538038182L), NameDetails("Mickle Sanders"), PhoneDetails("+38 (050)866-83-70"))
         adapter.setDetails(detailsList)
 
-        val requestBuilder = GlideApp.with(this)
+        GlideApp.with(this)
                 .`as`(PictureDrawable::class.java)
-                //  .placeholder(R.drawable.image_loading)
+                //.placeholder(R.drawable.image_loading)
                 //.error(R.drawable.image_error)
-            //    .transition(withCrossFade())
+                .transition(withCrossFade())
                 .listener(SvgSoftwareLayerSetter())
-        requestBuilder.load(company.logo).into(rpLogoIv);
-
-
+                .load(company.logo)
+                .into(rpLogoIv)
     }
 
     private fun fillSubtitleBold() {
