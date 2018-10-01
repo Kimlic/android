@@ -259,6 +259,7 @@ class AccountActivity : BaseActivity() {
     * Fill text fields information
     * */
 
+    // TODO Add a verification that such a КЗ already exists
     private fun fetchCompanyDetails() {
         vendorsModel.rpDetailsLive().observe(this, Observer<Company> { company ->
             currentCompany = company
@@ -392,9 +393,8 @@ class AccountActivity : BaseActivity() {
                     acceptBt.isClickable = false
                     showProgress()
                     documentQueue = LinkedList(documentList)
-
                     sendFromQueue(
-                            onSuccess = { vendorsModel.saveCompany(currentCompany!!); hideProgress(); successful() },
+                            onSuccess = { currentCompany!!.status = AppConstants.UNVERIFIED.key; vendorsModel.saveCompany(currentCompany!!); hideProgress(); successful() },
                             onError = { hideProgress(); errorShow() })
                 }
             }
