@@ -15,6 +15,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: "kotlin-kapt"
 apply plugin: 'io.fabric'
+apply plugin: 'com.google.gms.google-services'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
@@ -99,6 +100,11 @@ dependencies {
     implementation 'com.jakewharton:butterknife:8.8.1'
     kapt 'com.jakewharton:butterknife-compiler:8.8.1'
 
+    // Glide
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    kapt 'com.github.bumptech.glide:compiler:4.8.0'
+    implementation 'com.caverock:androidsvg:1.2.1'
+
     // Multidex
     implementation 'com.android.support:multidex:1.0.3'
 
@@ -114,9 +120,6 @@ dependencies {
     // Google play services
     implementation "com.google.android.gms:play-services-gcm:15.0.1"
     implementation "com.google.android.gms:play-services-places:15.0.1"
-
-    // Picasso
-    implementation 'com.squareup.picasso:picasso:2.71828'
 
     // Circle imageView
     implementation 'de.hdodenhof:circleimageview:2.2.0'
@@ -156,5 +159,3 @@ dependencies {
     implementation 'io.fotoapparat:fotoapparat:2.4.0'
 
 }
-
-apply plugin: 'com.google.gms.google-services'
