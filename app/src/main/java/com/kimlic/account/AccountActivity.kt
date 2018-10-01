@@ -7,10 +7,14 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Typeface
 import android.graphics.drawable.PictureDrawable
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.support.v7.widget.LinearLayoutManager
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.StyleSpan
 import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
@@ -155,6 +159,7 @@ class AccountActivity : BaseActivity() {
         vendorsModel.rpDocumentsRequest(url)// Request for RP documentsLive.
         vendorsModel.rpDetailsRequest(url)
 
+        fillSubtitleBold()
         setupAdapter()
         setupAdapterList()
         setupAdapterListener()
@@ -165,6 +170,16 @@ class AccountActivity : BaseActivity() {
 
         setupNextButton()
         cancelTv.setOnClickListener { finish() }
+    }
+
+    private fun fillSubtitleBold() {
+        val spanText = getString(R.string.identity_verification_by_veriff)
+        val words = spanText.split(" ")
+        val spanStart = words[0].length + words[1].length + words[2].length + 3
+        val spannableBuilder = SpannableStringBuilder(spanText)
+        val boldStyle = StyleSpan(Typeface.BOLD)
+        spannableBuilder.setSpan(boldStyle, spanStart, spanText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+        subtitle1Tv.text = spannableBuilder
     }
 
     private fun setupAdapter() {
@@ -248,6 +263,8 @@ class AccountActivity : BaseActivity() {
         vendorsModel.rpDetailsLive().observe(this, Observer<Company> { company ->
             currentCompany = company
             currentCompany?.let {
+
+                titleTv.text = it.name
 
                 GlideApp.with(this)
                         .`as`(PictureDrawable::class.java)
