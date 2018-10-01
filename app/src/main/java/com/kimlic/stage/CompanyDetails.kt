@@ -3,6 +3,7 @@ package com.kimlic.stage
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.Typeface
+import android.graphics.drawable.PictureDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
@@ -15,6 +16,8 @@ import com.kimlic.BuildConfig
 import com.kimlic.R
 import com.kimlic.db.entity.Company
 import com.kimlic.stage.adapter.CompanyDetailsAdapter
+import com.kimlic.utils.svg.GlideApp
+import com.kimlic.utils.svg.SvgSoftwareLayerSetter
 import kotlinx.android.synthetic.main.activity_account_details.*
 
 class CompanyDetails : BaseActivity() {
@@ -73,23 +76,34 @@ class CompanyDetails : BaseActivity() {
 
     private fun setupDetails(company: Company) {
         titleTv.text = company.name
-
-        val spanText = getString(R.string.identity_verification_by_veriff)
-        val words = spanText.split(" ")
-        val spanStart = words[0].length + words[1].length + 2
-        val spannableBuilder = SpannableStringBuilder(spanText)
-        val boldStyle = StyleSpan(Typeface.BOLD)
-
-        spannableBuilder.setSpan(boldStyle, spanStart, spanText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-        subtitle1Tv.text = spannableBuilder
-
+        fillSubtitleBold()
         subtitle2Tv.text = getString(R.string.your_following_details_to_be_shared)
 
+        //Utils.fetchSvg(this, company.logo, rpLogoIv)
         // Mock
+
         val detailsList: List<DetailsItem> = listOf(DateDetails(1538038182L), NameDetails("Mickle Sanders"), PhoneDetails("+38 (050)866-83-70"))
         adapter.setDetails(detailsList)
 
+        val requestBuilder = GlideApp.with(this)
+                .`as`(PictureDrawable::class.java)
+                //  .placeholder(R.drawable.image_loading)
+                //.error(R.drawable.image_error)
+            //    .transition(withCrossFade())
+                .listener(SvgSoftwareLayerSetter())
+        requestBuilder.load(company.logo).into(rpLogoIv);
 
+
+    }
+
+    private fun fillSubtitleBold() {
+        val spanText = getString(R.string.identity_verification_by_veriff)
+        val words = spanText.split(" ")
+        val spanStart = words[0].length + words[1].length + words[2].length + 3
+        val spannableBuilder = SpannableStringBuilder(spanText)
+        val boldStyle = StyleSpan(Typeface.BOLD)
+        spannableBuilder.setSpan(boldStyle, spanStart, spanText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+        subtitle1Tv.text = spannableBuilder
     }
 
     private fun initDivider() {
