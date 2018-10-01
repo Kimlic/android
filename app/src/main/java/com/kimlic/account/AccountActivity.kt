@@ -7,12 +7,14 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.PictureDrawable
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.kimlic.BaseActivity
 import com.kimlic.BlockchainUpdatingFragment
 import com.kimlic.R
@@ -30,7 +32,8 @@ import com.kimlic.model.ProfileViewModel
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.AppDoc
 import com.kimlic.utils.BaseCallback
-import com.kimlic.utils.svg.Utils
+import com.kimlic.utils.svg.GlideApp
+import com.kimlic.utils.svg.SvgSoftwareLayerSetter
 import com.kimlic.vendors.VendorsViewModel
 import kotlinx.android.synthetic.main.activity_account.*
 import java.util.*
@@ -245,8 +248,14 @@ class AccountActivity : BaseActivity() {
         vendorsModel.rpDetailsLive().observe(this, Observer<Company> { company ->
             currentCompany = company
             currentCompany?.let {
-                Log.d("TAG", "company info - $company")
-                Utils.fetchSvg(this, company!!.logo, rpLogoIv)
+
+                GlideApp.with(this)
+                        .`as`(PictureDrawable::class.java)
+                        //.placeholder(R.drawable.image_loading)
+                        //.error(R.drawable.image_error)
+                        .transition(withCrossFade())
+                        .listener(SvgSoftwareLayerSetter())
+                        .load(it.logo).into(rpLogoIv)
             }
         })
 
