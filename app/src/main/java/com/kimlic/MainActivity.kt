@@ -1,11 +1,13 @@
 package com.kimlic
 
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.preferences.Prefs
+import com.kimlic.service.CompanyDetailsSyncService
 import com.kimlic.splash.SplashScreenFragment
 
 class MainActivity : BaseActivity() {
@@ -33,6 +35,7 @@ class MainActivity : BaseActivity() {
         splashScreenShow()
 
         if (Prefs.authenticated) {
+            //wwwcompanySyncService()
             syncProfile()
             quorumRequest()
         } else signUpRecovery()
@@ -47,6 +50,11 @@ class MainActivity : BaseActivity() {
     private fun splashScreenShow() = splashFragment.show(supportFragmentManager, SplashScreenFragment.FRAGMENT_KEY)
 
     private fun syncProfile() = model.syncProfile()
+
+    private fun companySyncService() {
+        val syncIntent = Intent(this, CompanyDetailsSyncService::class.java)
+        startService(syncIntent )
+    }
 
     private fun quorumRequest() {
         model.quorumRequest(
