@@ -5,8 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import com.bumptech.glide.Glide
 import com.kimlic.R
-import com.squareup.picasso.Picasso
+//import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_country.view.*
 
 class CountryAdapter : BaseAdapter() {
@@ -39,10 +40,7 @@ class CountryAdapter : BaseAdapter() {
                 countryTv.setTextColor(Color.WHITE)
             }
 
-            Picasso.get()
-                    .load(path)
-                    .noFade()
-                    .into(flagIv)
+            Glide.with(view).load(path).into(flagIv)
         }
         return view
     }
