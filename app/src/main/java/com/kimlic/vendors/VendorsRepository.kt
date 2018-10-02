@@ -33,7 +33,6 @@ class VendorsRepository private constructor() {
     private var googleSignInAccount: GoogleSignInAccount? = null
     private var db: KimlicDB = KimlicDB.getInstance()!!
     private var vendorDao = db.vendorDao()
-    private var companyDao = db.companyDao()
 
     // New request to Vendors - saves RP docs to database. database provides this docs by LiveData
 
@@ -79,8 +78,6 @@ class VendorsRepository private constructor() {
         )
         VolleySingleton.getInstance(KimlicApp.applicationContext()).requestQueue.add(companyDetailsRequest)
     }
-
-    fun saveCompany(company: Company) = companyDao.insert(company)
 
     // Clear all vendors from db on start of activity
     fun clearVendorsDocs() {
