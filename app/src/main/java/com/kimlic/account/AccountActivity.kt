@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
@@ -15,7 +14,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
-import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
@@ -33,6 +31,7 @@ import com.kimlic.documents.fragments.SelectCountryFragment
 import com.kimlic.documents.fragments.SelectDocumentFragment
 import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
+import com.kimlic.stage.CompanyDetailsViewModel
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.AppDoc
 import com.kimlic.utils.BaseCallback
@@ -55,6 +54,7 @@ class AccountActivity : BaseActivity() {
 
     private lateinit var model: ProfileViewModel
     private lateinit var vendorsModel: VendorsViewModel
+    private lateinit var companyModel: CompanyDetailsViewModel
 
     private var nameItem: NameItem = NameItem("")
     private var contactList: MutableList<ContactItem> = mutableListOf()
@@ -72,7 +72,7 @@ class AccountActivity : BaseActivity() {
     private lateinit var documentQueue: LinkedList<DocumentItem>
     private lateinit var vendorDocumentsList: List<VendorDocument>
     private lateinit var url: String
-    private lateinit var adapter: RPAdapter
+    private var adapter: RPAdapter? = null
     private lateinit var vendorsDocs: MutableMap<String, VendorDocument>
     private var currentCompany: Company? = null
 
@@ -88,12 +88,13 @@ class AccountActivity : BaseActivity() {
 
         model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         vendorsModel = ViewModelProviders.of(this).get(VendorsViewModel::class.java)
+        companyModel = ViewModelProviders.of(this).get(CompanyDetailsViewModel::class.java)
         setupUI()
     }
 
     override fun onResume() {
         super.onResume()
-        setupAdapterList()
+        //setupAdapterList()
         //Handler().postDelayed({ missingInfo(missedName || missedContacts || missedDocuments) }, 1500)
     }
 
@@ -141,35 +142,38 @@ class AccountActivity : BaseActivity() {
 
         val urlToParce = url.split("/")
 
-        Log.d("TAGSIZE", "url size = ${urlToParce.size}")
+        if (urlToParce.size < 3) {
+            showErrorPopup()
+        } else {
+            val urlNew = urlToParce[0] + "//" + urlToParce[1] + urlToParce[2]
+            url = urlNew
 
-        if (urlToParce.size < 3) finish()
+            selectCountryFragment = SelectCountryFragment.getInstance()
+            selectCountryFragment.setCallback(object : DocumentCallback {
+                override fun callback(bundle: Bundle) {
+                    chosenCountry = bundle.getString(AppConstants.COUNTRY.key)
+                    showSelectDocumentFragment(chosenCountry = chosenCountry)
+                }
+            })
 
-        val urlNew = urlToParce[0] + "//" + urlToParce[1] + urlToParce[2]
-        url = urlNew
+            // TODO add check if user is already registred
 
-        selectCountryFragment = SelectCountryFragment.getInstance()
-        selectCountryFragment.setCallback(object : DocumentCallback {
-            override fun callback(bundle: Bundle) {
-                chosenCountry = bundle.getString(AppConstants.COUNTRY.key)
-                showSelectDocumentFragment(chosenCountry = chosenCountry)
-            }
-        })
+            vendorsModel.rpDocumentsRequest(url)// Request for RP documentsLive.
+            vendorsModel.rpDetailsRequest(url)
 
-        vendorsModel.rpDocumentsRequest(url)// Request for RP documentsLive.
-        vendorsModel.rpDetailsRequest(url)
+            fillSubtitleBold()
+            setupAdapter()
+            setupAdapterList()
+            setupAdapterListener()
 
-        fillSubtitleBold()
-        setupAdapter()
-        setupAdapterList()
-        setupAdapterListener()
+            fetchVendorDocs()
+            fetchCompanyDetails()
+            requestStatusMonitoring()
 
-        fetchVendorDocs()
-        fetchCompanyDetails()
-        requestStatusMonitoring()
+            setupNextButton()
+            cancelTv.setOnClickListener { finish() }
+        }
 
-        setupNextButton()
-        cancelTv.setOnClickListener { finish() }
     }
 
     private fun fillSubtitleBold() {
@@ -189,11 +193,11 @@ class AccountActivity : BaseActivity() {
     }
 
     private fun setupAdapterList() {
-        adapter.setContacts(listOf(nameItem) + contactList + documentList)
+        adapter!!.setContacts(listOf(nameItem) + contactList + documentList)
     }
 
     private fun setupAdapterListener() {
-        adapter.setOnStageItemClick(object : OnDocumentItemClick {
+        adapter!!.setOnStageItemClick(object : OnDocumentItemClick {
             override fun onItemClick(view: View, position: Int, type: String) {
 
                 when (position) {
@@ -274,6 +278,13 @@ class AccountActivity : BaseActivity() {
                         .transition(withCrossFade())
                         .listener(SvgSoftwareLayerSetter())
                         .load(it.logo).into(rpLogoIv)
+
+                val companyIds = companyModel.companyIds()
+
+                if (company!!.id in companyIds) {
+                    finish()
+                    PresentationManager.companyDetails(this, company.id)
+                }
             }
         })
 
@@ -393,8 +404,14 @@ class AccountActivity : BaseActivity() {
                     acceptBt.isClickable = false
                     showProgress()
                     documentQueue = LinkedList(documentList)
+
                     sendFromQueue(
-                            onSuccess = { currentCompany!!.status = AppConstants.UNVERIFIED.key; vendorsModel.saveCompany(currentCompany!!); hideProgress(); successful() },
+                            onSuccess = {
+                                currentCompany!!.status = AppConstants.UNVERIFIED.key
+                                companyModel.saveCompany(currentCompany!!)
+                                hideProgress()
+                                successful()
+                            },
                             onError = { hideProgress(); errorShow() })
                 }
             }
@@ -448,19 +465,20 @@ class AccountActivity : BaseActivity() {
 
     private fun requestStatusMonitoring() {
         vendorsModel.commonRequestStatus().observe(this, Observer {
-            val builder = AlertDialog.Builder(this)
-
-            builder
-                    .setTitle("Error")
-                    .setMessage("Relying Party is no available")
-                    .setCancelable(true)
-                    .setPositiveButton(getString(R.string.ok), object : DialogInterface.OnClickListener {
-                        override fun onClick(dialog: DialogInterface?, which: Int) {
-                            dialog?.dismiss(); finish()
-                        }
-                    })
-                    .setOnDismissListener { finish() }
+            showErrorPopup()
         })
+    }
+
+    private fun showErrorPopup() {
+        val builder = AlertDialog.Builder(this)
+
+        builder
+                .setTitle("Error")
+                .setMessage("Relying Party is not available")
+                .setCancelable(true)
+                .setPositiveButton(getString(R.string.ok)) { dialog, _ -> dialog?.dismiss(); finish() }
+                .setOnDismissListener { finish() }
+        builder.show()
     }
 }
 
