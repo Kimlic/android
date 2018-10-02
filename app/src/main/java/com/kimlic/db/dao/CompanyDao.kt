@@ -22,6 +22,9 @@ interface CompanyDao {
     @Query("SELECT C.id, C.user_id, C.address, C.details, C.email, C.logo, C. name, C.phone, C.website, C.status, C.inserted_at  FROM company as C INNER JOIN user as U ON user_id = U.id WHERE u.account_address=:accountAddress")
     fun companies(accountAddress: String): List<Company>
 
+    @Query("SELECT C.id  FROM company as C INNER JOIN user as U ON user_id = U.id WHERE u.account_address=:accountAddress")
+    fun companyIds(accountAddress: String): List<String>
+
     @Query("SELECT C.id, C.user_id, C.address, C.details, C.email, C.logo, C. name, C.phone, C.website, C.status, C.inserted_at FROM company as C INNER JOIN user as U ON user_id = U.id WHERE u.account_address=:accountAddress")
     fun companiesLive(accountAddress: String): LiveData<List<Company>>
 
