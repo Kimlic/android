@@ -25,7 +25,7 @@ class CompanyDetails : BaseActivity() {
 
     // Variables
 
-    private lateinit var companyDetailModel: CompanyDetailsViewModel
+    private lateinit var companyModel: CompanyDetailsViewModel
     private lateinit var adapter: CompanyDetailsAdapter
     private lateinit var divider: DividerItemDecoration
     private lateinit var company: Company
@@ -38,7 +38,7 @@ class CompanyDetails : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account_details)
 
-        companyDetailModel = ViewModelProviders.of(this).get(CompanyDetailsViewModel::class.java)
+        companyModel = ViewModelProviders.of(this).get(CompanyDetailsViewModel::class.java)
         setupUI()
     }
 
@@ -53,7 +53,7 @@ class CompanyDetails : BaseActivity() {
         adapter = CompanyDetailsAdapter()
         accountDetailsRecycler.adapter = adapter
 
-        company = companyDetailModel.company(companyId)
+        company = companyModel.company(companyId)
 
         setupDetails(company)
 
@@ -77,10 +77,14 @@ class CompanyDetails : BaseActivity() {
         fillSubtitleBold()
         subtitle2Tv.text = getString(R.string.your_following_details_to_be_shared)
 
-        //Utils.fetchSvg(this, company.logo, rpLogoIv)
-        // Mock
+        // TODO parce details
 
-        val detailsList: List<DetailsItem> = listOf(DateDetails(1538038182L), NameDetails("Mickle Sanders"), PhoneDetails("+38 (050)866-83-70"))
+
+        val dateDetails = DateDetails(date = company.verifiedAt)
+//        val nameDatails = NameDetails(name = if(company.))
+
+        val detailsList: List<DetailsItem> = listOf(DateDetails(1538038182L), NameDetails("Michael Sanders"), PhoneDetails("+38 (050)866-83-70"))
+
         adapter.setDetails(detailsList)
 
         GlideApp.with(this)
