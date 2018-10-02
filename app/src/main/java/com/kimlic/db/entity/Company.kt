@@ -18,10 +18,12 @@ data class Company(
         @ColumnInfo(name = "name") var name: String = "",
         @ColumnInfo(name = "phone") var phone: String = "",
         @ColumnInfo(name = "website") var website: String = "",
+        @ColumnInfo(name = "application_at") var applicationAt: Long = 0,
 
         @ColumnInfo(name = "user_id") var userId: Long = 0,
         @ColumnInfo(name = "status") var status: String = "",
         @ColumnInfo(name = "inserted_at") var insertedAd: Long = System.currentTimeMillis()
+
 ) {
     @Ignore constructor() : this(id = "")
 }
