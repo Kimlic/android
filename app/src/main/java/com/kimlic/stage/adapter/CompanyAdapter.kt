@@ -1,11 +1,15 @@
 package com.kimlic.stage.adapter
 
+import android.graphics.drawable.PictureDrawable
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.kimlic.R
 import com.kimlic.db.entity.Company
+import com.kimlic.utils.svg.GlideApp
+import com.kimlic.utils.svg.SvgSoftwareLayerSetter
 import kotlinx.android.synthetic.main.item_account_rp.view.*
 
 class CompanyAdapter : RecyclerView.Adapter<CompanyAdapter.CompanyHolder>() {
@@ -68,6 +72,15 @@ class CompanyAdapter : RecyclerView.Adapter<CompanyAdapter.CompanyHolder>() {
                 rpSubtitleTv.text = company.name
                 setOnClickListener(this@CompanyHolder)
             }
+
+            GlideApp.with(accountView.context)
+                    .`as`(PictureDrawable::class.java)
+                    //.placeholder(R.drawable.image_loading)
+                    //.error(R.drawable.image_error)
+                    .transition(withCrossFade())
+                    .listener(SvgSoftwareLayerSetter())
+                    .load(company.logo)
+                    .into(accountView.rpLogoIv)
         }
     }
 }
