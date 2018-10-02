@@ -281,10 +281,10 @@ class AccountActivity : BaseActivity() {
 
                 val companyIds = companyModel.companyIds()
 
-                if (company!!.id in companyIds) {
-                    finish()
-                    PresentationManager.companyDetails(this, company.id)
-                }
+//                if (company!!.id in companyIds) {
+//                    finish()
+//                    PresentationManager.companyDetails(this, company.id)
+//                }
             }
         })
 
