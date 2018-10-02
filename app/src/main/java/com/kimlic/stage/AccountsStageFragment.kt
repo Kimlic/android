@@ -56,26 +56,13 @@ class AccountsStageFragment : BaseFragment() {
         adapter = CompanyAdapter()
         adapter.setOnAccountItemClick(object : OnAccountItemClick {
             override fun onClick(position: Int) {
-//                PresentationManager.companyDetails(activity!!, accountsList[position].id.toString())
-//                if(companiesList[position].status== AppConstants.VERIFIED.key)
-                PresentationManager.companyDetails(activity!!, companiesList[position].id)
+                if (companiesList[position].status == AppConstants.VERIFIED.key)
+                    PresentationManager.companyDetails(activity!!, companiesList[position].id)
             }
         })
 
         recycler.layoutManager = LinearLayoutManager(activity, LinearLayout.VERTICAL, false)
         recycler.adapter = adapter
-
-//        val mockList = listOf(
-//                Company(id = "1", name = "Kimlic"),
-//                Company(id = "2", name = "Ebay"),
-//                Company(id = "3", name = "Amazon"),
-//                Company(id = "4", name = "EXMO"),
-//                Company(id = "5", name = "Apple"),
-//                Company(id = "6", name = "Samsung"),
-//                Company(id = "7", name = "AWS"),
-//                Company(id = "8", name = "Xiaomi"),
-//                Company(id = "9", name = "Yobit"))
-//                adapter.setAccountsList(mockList)
 
         companyModel.companiesLive().observe(this, Observer<List<Company>> { companyList ->
             companiesList = companyList.orEmpty()
