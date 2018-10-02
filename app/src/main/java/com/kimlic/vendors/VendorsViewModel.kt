@@ -3,7 +3,6 @@ package com.kimlic.vendors
 import android.arch.lifecycle.*
 import android.os.Handler
 import com.kimlic.db.entity.Company
-import com.kimlic.model.ProfileRepository
 import com.kimlic.model.SingleLiveEvent
 import com.kimlic.preferences.Prefs
 import java.util.*
@@ -13,7 +12,6 @@ class VendorsViewModel : ViewModel(), LifecycleObserver {
     // Variables
 
     private val vendorsRepository = VendorsRepository.instance
-    private val profileRepository = ProfileRepository.instance
     private var vendorRequestStatus: SingleLiveEvent<String> = SingleLiveEvent()
     private var companyDetails = MutableLiveData<Company>()
     private val timeQueueVendors = ArrayDeque<Long>(listOf(1500L, 2000L, 2000L))
@@ -51,12 +49,6 @@ class VendorsViewModel : ViewModel(), LifecycleObserver {
     fun rpDetailsLive() = companyDetails
 
     fun commonRequestStatus() = vendorRequestStatus
-
-    fun saveCompany(company: Company) {
-        val userId = profileRepository.getUser(Prefs.currentAccountAddress).id
-        company.userId = userId
-        vendorsRepository.saveCompany(company)
-    }
 
     fun countries() = vendorsRepository.countries()
 
