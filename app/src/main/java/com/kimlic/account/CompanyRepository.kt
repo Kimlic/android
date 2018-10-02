@@ -3,6 +3,7 @@ package com.kimlic.account
 import android.annotation.SuppressLint
 import com.kimlic.db.KimlicDB
 import com.kimlic.db.dao.CompanyDao
+import com.kimlic.db.entity.Company
 
 class CompanyRepository {
 
@@ -31,7 +32,11 @@ class CompanyRepository {
 
     // Public
 
+    fun saveCompany(company: Company) = companyDao.insert(company)
+
     fun companiesLive(accountAddress: String) = companyDao.companiesLive(accountAddress)
+
+    fun companyIds(accountAddress: String) = companyDao.companyIds(accountAddress)
 
     fun company(id: String) = companyDao.company(id)
 
