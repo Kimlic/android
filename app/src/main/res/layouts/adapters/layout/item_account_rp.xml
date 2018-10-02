@@ -33,11 +33,10 @@
         android:contentDescription="@string/background"/>
 
       <ImageView
-        android:id="@+id/prLogoIv"
+        android:id="@+id/rpLogoIv"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_gravity="center"
-        android:background="@drawable/ic_kimlic_logo_with_text"
         android:contentDescription="@string/background"/>
 
     </FrameLayout>
