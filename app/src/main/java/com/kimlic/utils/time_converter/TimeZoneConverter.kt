@@ -7,15 +7,15 @@ class TimeZoneConverter {
 
     // Public
 
-    fun covertToMillis(timeZone: String): Long {
+    fun convertToMillis(timeDate: String): Long {
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
-        val date = sdf.parse(timeZone)
+        val date = sdf.parse(timeDate)
         return date.time
     }
 
-    fun covertToSeconds(timeZone: String): Long {
+    fun convertToSeconds(timeDate: String): Long {
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
-        val date = sdf.parse(timeZone)
+        val date = sdf.parse(timeDate)
         return date.time / 1000
     }
 }
