@@ -19,6 +19,7 @@ data class Company(
         @ColumnInfo(name = "phone") var phone: String = "",
         @ColumnInfo(name = "website") var website: String = "",
         @ColumnInfo(name = "verified_at") var verifiedAt: Long = 0,
+        @ColumnInfo(name = "url") var url: String = "",
 
         @ColumnInfo(name = "user_id") var userId: Long = 0,
         @ColumnInfo(name = "status") var status: String = "",
