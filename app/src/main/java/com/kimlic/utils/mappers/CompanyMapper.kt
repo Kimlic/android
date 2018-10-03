@@ -16,7 +16,7 @@ class CompanyMapper : BaseMapper<Company_, Company> {
             id = input.id
             logo = input.logo
             name = input.name
-            phone = input.name
+            phone = input.phone
             website = input.website
         }
         return company
