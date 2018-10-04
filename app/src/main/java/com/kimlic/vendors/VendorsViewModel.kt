@@ -14,7 +14,7 @@ class VendorsViewModel : ViewModel(), LifecycleObserver {
     private val vendorsRepository = VendorsRepository.instance
     private var vendorRequestStatus: SingleLiveEvent<String> = SingleLiveEvent()
     private var companyDetails = MutableLiveData<Company>()
-    private val timeQueueVendors = ArrayDeque<Long>(listOf(1500L, 2000L, 2000L))
+    private val timeQueueVendors = ArrayDeque<Long>(listOf(1000L, 1000L, 1000L))
     private val timeQueueCompanyDetails = ArrayDeque<Long>(listOf(1000L, 1000L, 1000L))
 
     // Public
