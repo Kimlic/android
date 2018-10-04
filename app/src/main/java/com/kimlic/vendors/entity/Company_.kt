@@ -3,7 +3,7 @@ package com.kimlic.vendors.entity
 import com.google.gson.annotations.SerializedName
 
 data class Company_(
-        @SerializedName("address") var address: String = "",
+        @SerializedName("address") var address: String? = "",
         @SerializedName("details") var details: String = "",
         @SerializedName("email") var email: String = "",
         @SerializedName("id") var id: String = "",
