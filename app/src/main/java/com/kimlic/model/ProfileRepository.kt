@@ -42,7 +42,6 @@ import java.io.File
 import java.io.IOException
 import java.io.OutputStreamWriter
 import java.nio.charset.Charset
-import java.nio.file.Files.delete
 import java.util.*
 import java.util.concurrent.ExecutionException
 
@@ -276,8 +275,12 @@ class ProfileRepository private constructor() {
 
         val addressRequest = KimlicJSONRequest(GET, url, headers, JSONObject(),
                 Response.Listener {
-                    if (!it.getJSONObject("meta").optString("code").startsWith("2")) {
-                        onError(); return@Listener
+//                    if (!it.getJSONObject("meta").optString("code").startsWith("2")) {
+//                        onError(); return@Listener
+//                    }
+                    if (!it.getJSONObject("headers").optString("statusCode").toString().startsWith("2")) {
+                        onError()
+                        return@Listener
                     }
                     Log.d("TAGRESPONSE", "response = $it")
                     val contextContractAddress = it.getJSONObject("data").optString("context_contract")
@@ -315,8 +318,12 @@ class ProfileRepository private constructor() {
         val headers = mapOf(Pair("account-address", walletAddress))
 
         val addressRequest = KimlicJSONRequest(GET, url, headers, JSONObject(), Response.Listener {
-            if (!it.getJSONObject("meta").optString("code").startsWith("2")) {
-                onError(); return@Listener
+//            if (!it.getJSONObject("meta").optString("code").startsWith("2")) {
+//                onError(); return@Listener
+//            }
+            if (!it.getJSONObject("headers").optString("statusCode").toString().startsWith("2")) {
+                onError()
+                return@Listener
             }
 
             Log.d("TYAGCONFIG", "responce = $it")
@@ -355,7 +362,11 @@ class ProfileRepository private constructor() {
         val headers = mapOf(Pair("account-address", accountAddress))
 
         val syncRequest = KimlicJSONRequest(GET, url, headers, JSONObject(), Response.Listener { it ->
-            if (!it.getJSONObject("meta").optString("code").startsWith("2")) return@Listener
+            //if (!it.getJSONObject("meta").optString("code").startsWith("2")) return@Listener
+
+            if (!it.getJSONObject("headers").optString("statusCode").toString().startsWith("2")) {
+                return@Listener
+            }
 
             val jsonToParse = it.getJSONObject("data").getJSONArray("data_fields").toString()
             val type = object : TypeToken<List<SyncObject>>() {}.type
@@ -406,8 +417,12 @@ class ProfileRepository private constructor() {
                         }
 
                 val verifyRequest = KimlicJSONRequest(POST, url, headers, params, Response.Listener {
-                    if (!it.getJSONObject("meta").optString("code").startsWith("2")) {
-                        onError(); return@Listener
+//                    if (!it.getJSONObject("meta").optString("code").startsWith("2")) {
+//                        onError(); return@Listener
+//                    }
+                    if (!it.getJSONObject("headers").optString("statusCode").toString().startsWith("2")) {
+                        onError()
+                        return@Listener
                     }
                     onSuccess()
 
@@ -433,11 +448,16 @@ class ProfileRepository private constructor() {
             val params = JSONObject().put("code", code)
 
             val approveRequest = KimlicJSONRequest(POST, url, headers, params, Response.Listener {
-                val responseSuccess = it.getJSONObject("meta").optString("code").startsWith("2")
-                val statusOk = it.getJSONObject("data").optString("status").toString() == "ok"
+//                val responseSuccess = it.getJSONObject("meta").optString("code").startsWith("2")
+//                val statusOk = it.getJSONObject("data").optString("status").toString() == "ok"
 
-                if (!responseSuccess && !statusOk) {
-                    onError("400"); return@Listener
+//                if (!responseSuccess && !statusOk) {
+//                    onError("400"); return@Listener
+//                }
+
+                if (!it.getJSONObject("headers").optString("statusCode").toString().startsWith("2")) {
+                    onError("400")
+                    return@Listener
                 }
                 onSuccess()
 
@@ -621,6 +641,7 @@ class ProfileRepository private constructor() {
         return params
     }
 
+    // TODO use KimlicJsonRequest
     private fun docRequest(method: Int, url: String, params: JSONObject, listener: Response.Listener<JSONObject>, error: Response.ErrorListener): JsonObjectRequest {
         val request = object : JsonObjectRequest(method, url, params, listener, error) {init {
             retryPolicy = DefaultRetryPolicy(30000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
