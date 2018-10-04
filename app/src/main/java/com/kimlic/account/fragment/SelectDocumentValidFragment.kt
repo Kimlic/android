@@ -108,6 +108,7 @@ class SelectDocumentValidFragment : BasePopupFragment() {
                             adaptersList.add(ValidDocument(model.userDocument(it)!!, true))
                         } else adaptersList.add(ValidDocument(model.userDocument(it)!!, false))
                     }
+                    // TODO make documents visible to user
                 }
             }
             documentAccountAdapter.setDocuments(adaptersList)
