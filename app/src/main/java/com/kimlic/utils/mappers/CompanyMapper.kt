@@ -10,7 +10,7 @@ class CompanyMapper : BaseMapper<Company_, Company> {
     override fun transform(input: Company_): Company {
         val company = Company()
         with(company) {
-            address = input.address
+            address = input.address?:""
             details = input.details
             email = input.email
             id = input.id
