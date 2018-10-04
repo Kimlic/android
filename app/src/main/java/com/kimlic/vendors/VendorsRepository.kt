@@ -38,12 +38,14 @@ class VendorsRepository private constructor() {
 
     fun rpDocumentsRequest(accountAddress: String, url: String, onError: () -> Unit) {
         val headers = mapOf(Pair("account-address", accountAddress), Pair("accept", "application/vnd.mobile-api.v1+json"), Pair("Content-Type", "application/json"))
+
         val vendorsRequest = KimlicJSONRequest(GET, url + KimlicApi.VENDORS.path, headers, JSONObject(),
                 Response.Listener { it ->
-                    if (!it.getJSONObject("meta").optString("code").toString().startsWith("2")) {
+                    if (!it.getJSONObject("headers").optString("statusCode").toString().startsWith("2")) {
                         onError()
                         return@Listener
                     }
+
                     val type = object : TypeToken<Vendors>() {}.type
                     val data = it.getJSONObject("data").toString()
 
@@ -66,6 +68,11 @@ class VendorsRepository private constructor() {
         val headers = mapOf(Pair("account-address", accountAddress), Pair("accept", "application/vnd.mobile-api.v1+json"), Pair("Content-Type", "application/json"))
         val companyDetailsRequest = KimlicJSONRequest(GET, url + KimlicApi.COMPANY.path, headers, JSONObject(),
                 Response.Listener {
+                    if (!it.getJSONObject("headers").optString("statusCode").toString().startsWith("2")) {
+                        onError()
+                        return@Listener
+                    }
+
                     val companyJson = it.getJSONObject("data").getJSONObject("company").toString()
                     val type = object : TypeToken<Company_>() {}.type
                     val company_: Company_ = Gson().fromJson(companyJson, type)
