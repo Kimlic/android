@@ -5,12 +5,15 @@ import android.content.Intent
 import android.util.Log
 import com.android.volley.Request.Method.GET
 import com.android.volley.Response
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.kimlic.API.DoAsync
 import com.kimlic.API.KimlicApi
 import com.kimlic.API.KimlicJSONRequest
 import com.kimlic.API.VolleySingleton
 import com.kimlic.db.KimlicDB
+import com.kimlic.db.SyncService
 import com.kimlic.db.dao.CompanyDao
 import com.kimlic.db.dao.CompanyDocumentDao
 import com.kimlic.db.dao.DocumentDao
@@ -33,6 +36,7 @@ class CompanyDetailsSyncService : IntentService(CompanyDetailsSyncService::class
     private lateinit var companyDocumentDao: CompanyDocumentDao
     private lateinit var unverifiedList: List<Company>
     private lateinit var unverifiedQueue: ArrayDeque<Company>
+
     // Live
 
     override fun onCreate() {
@@ -89,7 +93,7 @@ class CompanyDetailsSyncService : IntentService(CompanyDetailsSyncService::class
 
         val companyDocumentJoin = CompanyDocumentJoin(documentId = documentId, companyId = companyId, date = applicationDateSec)
         companyDocumentDao.insert(companyDocumentJoin)
-
+        syncDataBase()
     }
 
     private fun updateUserName(firstName: String, lastName: String) {
@@ -102,5 +106,12 @@ class CompanyDetailsSyncService : IntentService(CompanyDetailsSyncService::class
         user.lastName = lastName
         dataBase!!.userDao().select(Prefs.currentAccountAddress)
         dataBase!!.userDao().update(user)
+        syncDataBase()
+    }
+
+    private fun syncDataBase(onSuccess: () -> Unit = {}) {
+        val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(application.applicationContext) // right here
+        if (Prefs.isDriveActive && googleSignInAccount != null)
+            DoAsync().execute(Runnable { SyncService.getInstance().backupDatabase(Prefs.currentAccountAddress, "kimlic.db", onSuccess = onSuccess, onError = {}) })
     }
 }
