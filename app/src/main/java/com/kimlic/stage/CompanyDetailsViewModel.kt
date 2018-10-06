@@ -26,5 +26,9 @@ class CompanyDetailsViewModel(application: Application) : AndroidViewModel(appli
 
     fun company(companyId: String) = companyRepository.company(companyId)
 
+    fun companyLive(companyId: String) = companyRepository.companyLive(companyId)
+
     fun companyIds() = companyRepository.companyIds(Prefs.currentAccountAddress)
+
+    fun companyDocumentDetails(companyId: String) = companyRepository.companyVerifiedDocument(Prefs.currentAccountAddress, companyId)
 }
