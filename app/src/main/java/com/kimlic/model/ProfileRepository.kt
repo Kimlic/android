@@ -26,7 +26,7 @@ import com.kimlic.db.KimlicDB
 import com.kimlic.db.SyncService
 import com.kimlic.db.dao.*
 import com.kimlic.db.entity.*
-import com.kimlic.documents.DocState
+import com.kimlic.documents.Status
 import com.kimlic.preferences.Prefs
 import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.quorum.crypto.Sha
@@ -234,7 +234,7 @@ class ProfileRepository private constructor() {
     }
 
     /*
-    * Remove file from GoogleDrive by file neme from user folder
+    * Remove file from GoogleDrive by file name from user folder
     * */
     private fun removePhotoGDrive(accountAddress: String, fileName: String) {
         googleSignInAccount = GoogleSignIn.getLastSignedInAccount(context)
@@ -275,9 +275,6 @@ class ProfileRepository private constructor() {
 
         val addressRequest = KimlicJSONRequest(GET, url, headers, JSONObject(),
                 Response.Listener {
-//                    if (!it.getJSONObject("meta").optString("code").startsWith("2")) {
-//                        onError(); return@Listener
-//                    }
                     if (!it.getJSONObject("headers").optString("statusCode").toString().startsWith("2")) {
                         onError()
                         return@Listener
@@ -318,9 +315,6 @@ class ProfileRepository private constructor() {
         val headers = mapOf(Pair("account-address", walletAddress))
 
         val addressRequest = KimlicJSONRequest(GET, url, headers, JSONObject(), Response.Listener {
-//            if (!it.getJSONObject("meta").optString("code").startsWith("2")) {
-//                onError(); return@Listener
-//            }
             if (!it.getJSONObject("headers").optString("statusCode").toString().startsWith("2")) {
                 onError()
                 return@Listener
@@ -382,7 +376,6 @@ class ProfileRepository private constructor() {
 
             if (!approved.contains("phone")) contactDao.delete(Prefs.currentAccountAddress, "phone")
             if (!approved.contains("email")) contactDao.delete(Prefs.currentAccountAddress, "email")
-            Log.d("TAGSYNC", "json to parse = $jsonToParse")
             syncDataBase()
 
         }, Response.ErrorListener { })
@@ -417,9 +410,6 @@ class ProfileRepository private constructor() {
                         }
 
                 val verifyRequest = KimlicJSONRequest(POST, url, headers, params, Response.Listener {
-//                    if (!it.getJSONObject("meta").optString("code").startsWith("2")) {
-//                        onError(); return@Listener
-//                    }
                     if (!it.getJSONObject("headers").optString("statusCode").toString().startsWith("2")) {
                         onError()
                         return@Listener
@@ -447,23 +437,18 @@ class ProfileRepository private constructor() {
             val headers = mapOf(Pair("account-address", Prefs.currentAccountAddress))
             val params = JSONObject().put("code", code)
 
-            val approveRequest = KimlicJSONRequest(POST, url, headers, params, Response.Listener {
-//                val responseSuccess = it.getJSONObject("meta").optString("code").startsWith("2")
-//                val statusOk = it.getJSONObject("data").optString("status").toString() == "ok"
+            val approveRequest = KimlicJSONRequest(POST, url, headers, params,
+                    Response.Listener {
+                        if (!it.getJSONObject("headers").optString("statusCode").toString().startsWith("2")) {
+                            onError("400")
+                            return@Listener
+                        }
+                        onSuccess()
 
-//                if (!responseSuccess && !statusOk) {
-//                    onError("400"); return@Listener
-//                }
-
-                if (!it.getJSONObject("headers").optString("statusCode").toString().startsWith("2")) {
-                    onError("400")
-                    return@Listener
-                }
-                onSuccess()
-
-            }, Response.ErrorListener {
-                onError(it?.networkResponse?.statusCode.toString())
-            })
+                    },
+                    Response.ErrorListener {
+                        onError(it?.networkResponse?.statusCode.toString())
+                    })
 
             VolleySingleton.getInstance(context).addToRequestQueue(approveRequest)
         })
@@ -473,7 +458,7 @@ class ProfileRepository private constructor() {
 
     fun senDoc(documentType: String, url: String, countrySH: String, onSuccess: () -> Unit, onError: () -> Unit) {
         val urlFull = url + KimlicApi.MEDIAS.path
-        Log.d("TAGURL", "full url = ${urlFull}")
+        Log.d("TAGURL", "full url = $urlFull")
 
         val user = userDao.select(Prefs.currentAccountAddress)
         val doc: String
@@ -700,13 +685,13 @@ class ProfileRepository private constructor() {
         val document = documentDao.select(accountAddress, documentType)
         document?.let { it ->
             when (status) {
-                DocState.VERIFIED.state -> {
-                    it.state = DocState.VERIFIED.state; documentDao.update(it)
+                Status.VERIFIED.state -> {
+                    it.state = Status.VERIFIED.state; documentDao.update(it)
                 }
-                DocState.CREATED.state -> {
-                    it.state = DocState.CREATED.state; documentDao.update(it)
+                Status.CREATED.state -> {
+                    it.state = Status.CREATED.state; documentDao.update(it)
                 }
-                DocState.UNVERIFIED.state, "" -> {
+                Status.UNVERIFIED.state, "" -> {
                     val documentPhotos = photoDao.selectUserPhotosByDocument(accountAddress, documentType).map { it.file }
                     documentPhotos.forEach { photo -> deleteFile(photo) }
                     documentPhotos.forEach { photo -> removePhotoGDrive(accountAddress, photo) }
