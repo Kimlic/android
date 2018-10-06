@@ -83,17 +83,17 @@ class SyncService private constructor(val context: Context) {
         val rootFolder = getRootFolder()
         val backupFolderQuery = getBackupFolder(accountAddress)
 
-        rootFolder.continueWithTask {
+        rootFolder.continueWithTask { _ ->
             mDriveResourceClient!!
-                    .queryChildren(rootFolder.result, backupFolderQuery)
-                    .continueWithTask {
-                        if (it.result.count == 0) {
-                            createFolderInFolder(parent = rootFolder.result, folderName = accountAddress)
+                    .queryChildren(rootFolder.result!!, backupFolderQuery)
+                    .continueWithTask { it ->
+                        if (it.result!!.count == 0) {
+                            createFolderInFolder(parent = rootFolder.result!!, folderName = accountAddress)
                                     .addOnSuccessListener {
                                         backupFile(accountAddress = accountAddress, filePath = filePath, fileDescription = fileDescription, onSuccess = { onSuccess() }, onError = onError)
                                     }
                         }
-                        updateFile(filePath = filePath, driveFolder = it.result[0].driveId.asDriveFolder(), fileDescription = fileDescription)
+                        updateFile(filePath = filePath, driveFolder = it.result!![0].driveId.asDriveFolder(), fileDescription = fileDescription)
                     }.addOnSuccessListener {
                         onSuccess()
                     }.addOnFailureListener { onError() }
@@ -107,12 +107,12 @@ class SyncService private constructor(val context: Context) {
         val fileQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, MIME_TYPE_DATABASE)).addFilter(Filters.eq(SearchableField.TITLE, fileName)).build()
 
         rootFolder.continueWithTask { _ ->
-            mDriveResourceClient!!.queryChildren(rootFolder.result, backupFolderQuery)
+            mDriveResourceClient!!.queryChildren(rootFolder.result!!, backupFolderQuery)
                     .continueWithTask {
-                        mDriveResourceClient!!.queryChildren(it.result[0].driveId.asDriveFolder(), fileQuery)
+                        mDriveResourceClient!!.queryChildren(it.result!![0].driveId.asDriveFolder(), fileQuery)
                     }.continueWithTask {
-                        val n = it.result[0].title
-                        saveFileToDisc(it.result[0].title, it.result[0].driveId.asDriveFile())
+                        val n = it.result!![0].title
+                        saveFileToDisc(it.result!![0].title, it.result!![0].driveId.asDriveFile())
                     }
                     .addOnSuccessListener {
                         onSuccess()
@@ -127,13 +127,13 @@ class SyncService private constructor(val context: Context) {
         val backupFolderQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, accountAddress)).build()
         val fileQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, MIME_TYPE_DATABASE)).addFilter(Filters.eq(SearchableField.TITLE, dataBaseName)).build()
 
-        rootFolder.continueWithTask {
+        rootFolder.continueWithTask { _ ->
             mDriveResourceClient!!
-                    .queryChildren(rootFolder.result, backupFolderQuery)
+                    .queryChildren(rootFolder.result!!, backupFolderQuery)
                     .addOnFailureListener { onError() }
                     .continueWithTask {
-                        mDriveResourceClient!!.queryChildren(it.result[0].driveId.asDriveFolder(), fileQuery)
-                    }.addOnSuccessListener {
+                        mDriveResourceClient!!.queryChildren(it.result!![0].driveId.asDriveFolder(), fileQuery)
+                    }.addOnSuccessListener { it ->
 
                         if (it.count == 0) {
                             onError(); return@addOnSuccessListener
@@ -152,12 +152,12 @@ class SyncService private constructor(val context: Context) {
         val backupFolderQuery = getBackupFolder(rootFolderName)
         val fileQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, mimeType)).addFilter(Filters.eq(SearchableField.TITLE, fileName)).build()
 
-        rootFolder.continueWithTask {
-            mDriveResourceClient!!.queryChildren(rootFolder.result, backupFolderQuery)
+        rootFolder.continueWithTask { _ ->
+            mDriveResourceClient!!.queryChildren(rootFolder.result!!, backupFolderQuery)
                     .continueWithTask {
-                        mDriveResourceClient!!.queryChildren(it.result[0].driveId.asDriveFolder(), fileQuery)
+                        mDriveResourceClient!!.queryChildren(it.result!![0].driveId.asDriveFolder(), fileQuery)
                     }.continueWithTask {
-                        deleteFileByDriveId(it.result[0].driveId.asDriveFile())
+                        deleteFileByDriveId(it.result!![0].driveId.asDriveFile())
                     }
         }
     }
@@ -167,9 +167,9 @@ class SyncService private constructor(val context: Context) {
         val removeFolderQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, accountAddress)).build()
 
         rootFolder.continueWithTask {
-            mDriveResourceClient!!.queryChildren(rootFolder.result, removeFolderQuery)
+            mDriveResourceClient!!.queryChildren(rootFolder.result!!, removeFolderQuery)
         }.continueWithTask {
-            deleteFolderAsDriveResource(it.result[0].driveId.asDriveResource())
+            deleteFolderAsDriveResource(it.result!![0].driveId.asDriveResource())
         }
                 .addOnSuccessListener { onSuccess() }
     }
@@ -224,7 +224,7 @@ class SyncService private constructor(val context: Context) {
                 .continueWithTask {
                     val driveContents = createContentTasks.result
                     try {
-                        IOUtils.copyStream(FileInputStream(File(filePath)), driveContents.outputStream)
+                        IOUtils.copyStream(FileInputStream(File(filePath)), driveContents!!.outputStream)
                     } catch (e: IOException) {
                         Log.e(TAG, "Error!!!" + e.toString())
                     }
@@ -242,11 +242,11 @@ class SyncService private constructor(val context: Context) {
                 .continueWithTask {
                     val driveContents = it.result
                     try {
-                        IOUtils.copyStream(FileInputStream(File(filePath)), driveContents.outputStream)
+                        IOUtils.copyStream(FileInputStream(File(filePath)), driveContents!!.outputStream)
                     } catch (e: IOException) {
                         Log.e("TAGBACLUP", "rewrite exception" + e.toString())
                     }
-                    mDriveResourceClient!!.commitContents(driveContents, null)
+                    mDriveResourceClient!!.commitContents(driveContents!!, null)
                 }
                 .addOnSuccessListener { Log.d("TAGBACLUP", "File is rewrited") }
                 .addOnFailureListener { }
