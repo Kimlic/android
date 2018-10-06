@@ -7,7 +7,7 @@ import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
 import android.os.Handler
 import com.kimlic.db.entity.*
-import com.kimlic.documents.DocState
+import com.kimlic.documents.Status
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.Cache
 import com.kimlic.vendors.VendorsRepository
@@ -107,7 +107,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
 
     fun hasDocumentInProgress(): Boolean {
         val states = repository.documentStates(Prefs.currentAccountAddress)
-        return states.contains(DocState.CREATED.state) || states.contains(DocState.VERIFIED.state)
+        return states.contains(Status.CREATED.state) || states.contains(Status.VERIFIED.state)
     }
 
     // Contact
@@ -137,7 +137,6 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     fun senDoc(docType: String, country: String, url: String, vendorDocument: VendorDocument, onSuccess: () -> Unit, onError: () -> Unit) {
         val countrySH = vendorsRepository.countries().first { it.country == country }.sh.toUpperCase()
         repository.senDoc_(documentType = docType, countrySH = countrySH, vendorDocument = vendorDocument, onSuccess = onSuccess, onError = onError, url = url)
-//        repository.senDoc(documentType = docType, countrySH = countrySH, onSuccess = onSuccess, onError = onError, url = url)
     }
 
     // Backup
