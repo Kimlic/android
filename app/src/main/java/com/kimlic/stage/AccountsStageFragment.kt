@@ -11,10 +11,10 @@ import android.widget.LinearLayout
 import com.kimlic.BaseFragment
 import com.kimlic.R
 import com.kimlic.db.entity.Company
+import com.kimlic.documents.Status
 import com.kimlic.managers.PresentationManager
 import com.kimlic.stage.adapter.CompanyAdapter
 import com.kimlic.stage.adapter.OnAccountItemClick
-import com.kimlic.utils.AppConstants
 import kotlinx.android.synthetic.main.fragment_stage_accounts.*
 
 class AccountsStageFragment : BaseFragment() {
@@ -56,7 +56,7 @@ class AccountsStageFragment : BaseFragment() {
         adapter = CompanyAdapter()
         adapter.setOnAccountItemClick(object : OnAccountItemClick {
             override fun onClick(position: Int) {
-                if (companiesList[position].status == AppConstants.VERIFIED.key)
+                if (companiesList[position].status == Status.VERIFIED.state)
                     PresentationManager.companyDetails(activity!!, companiesList[position].id)
             }
         })
@@ -68,6 +68,5 @@ class AccountsStageFragment : BaseFragment() {
             companiesList = companyList.orEmpty()
             adapter.setAccountsList(companiesList)
         })
-
     }
 }
