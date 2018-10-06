@@ -26,6 +26,7 @@ import com.kimlic.account.fragment.MissingInformationFragment
 import com.kimlic.account.fragment.SelectAccountDocumentFragment
 import com.kimlic.account.fragment.SelectDocumentValidFragment
 import com.kimlic.db.entity.*
+import com.kimlic.documents.Status
 import com.kimlic.documents.DocumentCallback
 import com.kimlic.documents.fragments.SelectCountryFragment
 import com.kimlic.documents.fragments.SelectDocumentFragment
@@ -140,12 +141,12 @@ class AccountActivity : BaseActivity() {
         lifecycle.addObserver(vendorsModel)
         url = intent.extras.getString("path", "")
 
-        val urlToParce = url.split("/")
+        val urlToParse = url.split("/")
 
-        if (urlToParce.size < 3) {
+        if (urlToParse.size < 3) {
             showErrorPopup()
         } else {
-            val urlNew = urlToParce[0] + "//" + urlToParce[1] + urlToParce[2]
+            val urlNew = urlToParse[0] + "//" + urlToParse[1] + urlToParse[2]
             url = urlNew
 
             selectCountryFragment = SelectCountryFragment.getInstance()
@@ -155,8 +156,6 @@ class AccountActivity : BaseActivity() {
                     showSelectDocumentFragment(chosenCountry = chosenCountry)
                 }
             })
-
-            // TODO add check if user is already registred
 
             vendorsModel.rpDocumentsRequest(url)// Request for RP documentsLive.
             vendorsModel.rpDetailsRequest(url)
@@ -281,10 +280,10 @@ class AccountActivity : BaseActivity() {
 
                 val companyIds = companyModel.companyIds()
 
-//                if (company!!.id in companyIds) {
-//                    finish()
-//                    PresentationManager.companyDetails(this, company.id)
-//                }
+                if (company!!.id in companyIds) {
+                    finish()
+                    PresentationManager.companyDetails(this, company.id)
+                }
             }
         })
 
@@ -334,14 +333,14 @@ class AccountActivity : BaseActivity() {
             val userDocumentsPresentTypes = userDocumentsList?.map { it.type }!!.toList()
             val sortedDocTypes = AppDoc.values().map { it.type }.toList()
             val vendorTypes = vendorDocumentsList.map { it.type }
-            val vendorTypeContries = vendorDocumentsList.map { it.type to it.countries }.toMap()
+            val vendorTypeCountries = vendorDocumentsList.map { it.type to it.countries }.toMap()
 
             documentList = emptyList()
 
             sortedDocTypes.forEach {
                 if (it in userDocumentsPresentTypes) {
                     if (userDocumentsMap[it]!!.type in vendorTypes) {
-                        if (model.userDocument(it)!!.countryIso.toUpperCase() in vendorTypeContries[it]!!) {
+                        if (model.userDocument(it)!!.countryIso.toUpperCase() in vendorTypeCountries[it]!!) {
                             if (documentList.isEmpty()) {
                                 documentList = listOf(DocumentItem(userDocumentsMap[it]!!))
                                 missedDocuments = false
@@ -382,7 +381,6 @@ class AccountActivity : BaseActivity() {
 //            setupAdapterList()
             setupNextButton()
 
-
             if (documentList.size == 0) {
                 documentList = listOf(DocumentItem(Document(type = "addDocument")))
                 setupAdapterList()
@@ -407,7 +405,8 @@ class AccountActivity : BaseActivity() {
 
                     sendFromQueue(
                             onSuccess = {
-                                currentCompany!!.status = AppConstants.UNVERIFIED.key
+                                currentCompany!!.status = Status.UNVERIFIED.state
+                                currentCompany!!.url = url
                                 companyModel.saveCompany(currentCompany!!)
                                 hideProgress()
                                 successful()
