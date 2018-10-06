@@ -1,5 +1,6 @@
 package com.kimlic.stage
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.Typeface
@@ -15,7 +16,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withC
 import com.kimlic.BaseActivity
 import com.kimlic.BuildConfig
 import com.kimlic.R
-import com.kimlic.db.entity.Company
+import com.kimlic.model.ProfileViewModel
 import com.kimlic.stage.adapter.CompanyDetailsAdapter
 import com.kimlic.utils.svg.GlideApp
 import com.kimlic.utils.svg.SvgSoftwareLayerSetter
@@ -26,9 +27,13 @@ class CompanyDetails : BaseActivity() {
     // Variables
 
     private lateinit var companyModel: CompanyDetailsViewModel
+    private lateinit var profileModel: ProfileViewModel
     private lateinit var adapter: CompanyDetailsAdapter
     private lateinit var divider: DividerItemDecoration
-    private lateinit var company: Company
+
+    private var dateDetails = DateDetails()
+    private var nameDetails = NameDetails()
+    private var phoneDetails = PhoneDetails()
 
     private val uriKimlicExplorer = BuildConfig.KIMLIC_EXPLORER_URI
 
@@ -39,6 +44,7 @@ class CompanyDetails : BaseActivity() {
         setContentView(R.layout.activity_account_details)
 
         companyModel = ViewModelProviders.of(this).get(CompanyDetailsViewModel::class.java)
+        profileModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         setupUI()
     }
 
@@ -53,9 +59,12 @@ class CompanyDetails : BaseActivity() {
         adapter = CompanyDetailsAdapter()
         accountDetailsRecycler.adapter = adapter
 
-        company = companyModel.company(companyId)
+        fetchCompanyDetails(companyId)
+        fetchCompanyDocumentDetails(companyId)
+        fetchNameDetails()
+        fetchPhoneDetails()
 
-        setupDetails(company)
+        backBt.setOnClickListener { finish() }
 
         viewExplorerBt.setOnClickListener {
             val kimlicPage = Uri.parse(uriKimlicExplorer)
@@ -64,37 +73,50 @@ class CompanyDetails : BaseActivity() {
                 startActivity(intent)
             }
         }
-//        unlinkBt.setOnClickListener {
-//            showToast("Unlink Account")
-//        }
-        backBt.setOnClickListener { finish() }
     }
 
-    // Private
+    private fun fetchNameDetails() {
+        profileModel.userLive().observe(this, Observer {
+            nameDetails = NameDetails("${it!!.firstName}  ${it.lastName}")
+            setupAdapterList()
+        })
+    }
 
-    private fun setupDetails(company: Company) {
-        titleTv.text = company.name
-        fillSubtitleBold()
-        subtitle2Tv.text = getString(R.string.your_following_details_to_be_shared)
+    private fun fetchPhoneDetails() {
+        profileModel.userContactsLive().observe(this, Observer {
+            val phone = it!!.filter { it.type == "phone" }.first().value
+            phoneDetails = PhoneDetails(phone = phone)
+            setupAdapterList()
+        })
+    }
 
-        // TODO parce details
+    private fun fetchCompanyDocumentDetails(companyId: String) {
+        companyModel.companyDocumentDetails(companyId).observe(this, Observer { companyDocumentJoin ->
+            dateDetails = DateDetails(companyDocumentJoin!!.date)
+            setupAdapterList()
+        })
+    }
 
+    private fun fetchCompanyDetails(companId: String) {
+        companyModel.companyLive(companId).observe(this, Observer { company ->
+            titleTv.text = company!!.name
+            fillSubtitleBold()
+            subtitle2Tv.text = getString(R.string.your_following_details_to_be_shared)
 
-        val dateDetails = DateDetails(date = company.verifiedAt)
-//        val nameDatails = NameDetails(name = if(company.))
+            GlideApp.with(this)
+                    .`as`(PictureDrawable::class.java)
+                    //.placeholder(R.drawable.image_loading)
+                    //.error(R.drawable.image_error)
+                    .transition(withCrossFade())
+                    .listener(SvgSoftwareLayerSetter())
+                    .load(company.logo)
+                    .into(rpLogoIv)
+        })
+    }
 
-        val detailsList: List<DetailsItem> = listOf(DateDetails(1538038182L), NameDetails("Michael Sanders"), PhoneDetails("+38 (050)866-83-70"))
-
+    private fun setupAdapterList() {
+        val detailsList: List<DetailsItem> = listOf(dateDetails, nameDetails, phoneDetails)
         adapter.setDetails(detailsList)
-
-        GlideApp.with(this)
-                .`as`(PictureDrawable::class.java)
-                //.placeholder(R.drawable.image_loading)
-                //.error(R.drawable.image_error)
-                .transition(withCrossFade())
-                .listener(SvgSoftwareLayerSetter())
-                .load(company.logo)
-                .into(rpLogoIv)
     }
 
     private fun fillSubtitleBold() {
@@ -118,12 +140,12 @@ interface DetailsItem {
     val value: String
 }
 
-class DateDetails(val date: Long) : DetailsItem {
+class DateDetails(val date: Long = 0) : DetailsItem {
     override val type: String get() = "date"
     override val value: String get() = date.toString()
 }
 
-class NameDetails(val name: String) : DetailsItem {
+class NameDetails(val name: String = "") : DetailsItem {
     override val type: String get() = "name"
     override val value: String get() = name
 }
