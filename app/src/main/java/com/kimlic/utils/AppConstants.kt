@@ -37,11 +37,6 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
     DOCUMENT_TO_VERIFY("DOCUMENT_TO_VERIFY"),
     DOCUMENT_BYTE_ARRAY("DOCUMENT_BYTE_ARRAY"),
 
-    // Document status
-    VERIFIED("verified"),
-    UNVERIFIED("unverified"),
-    // Photo type
-
     PHOTO_FACE_TYPE("face"),
     PHOTO_FRONT_TYPE("document-front"),
     PHOTO_BACK_TYPE("document-back"),
