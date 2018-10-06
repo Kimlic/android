@@ -35,6 +35,7 @@
       <ImageView
         android:id="@+id/rpLogoIv"
         android:layout_width="56dp"
+        android:paddingEnd="8dp"
         android:layout_height="56dp"
         android:layout_gravity="center"
         android:contentDescription="@string/background"/>
