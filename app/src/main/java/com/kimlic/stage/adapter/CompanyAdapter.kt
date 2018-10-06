@@ -69,7 +69,7 @@ class CompanyAdapter : RecyclerView.Adapter<CompanyAdapter.CompanyHolder>() {
             with(accountView) {
                 rootRl.setBackgroundResource(R.drawable.background_gradient_white)
                 rpTitleTv.text = company.name
-                rpSubtitleTv.text = company.name
+                rpSubtitleTv.text = company.details
                 setOnClickListener(this@CompanyHolder)
             }
 
