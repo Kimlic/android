@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
+import com.kimlic.db.KimlicDB
 import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.preferences.Prefs
@@ -29,6 +30,7 @@ class MainActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
+        initDatabaseFile()
         initFragment()
 //        val intent = Intent(this, DocumentVerifyActivity_test::class.java)
 //        startActivity(intent)
@@ -53,7 +55,11 @@ class MainActivity : BaseActivity() {
 
     private fun companySyncService() {
         val syncIntent = Intent(this, CompanyDetailsSyncService::class.java)
-        startService(syncIntent )
+        startService(syncIntent)
+    }
+
+    private fun initDatabaseFile() {
+        KimlicDB.getInstance()!!.userDao().select("kimlic")
     }
 
     private fun quorumRequest() {
