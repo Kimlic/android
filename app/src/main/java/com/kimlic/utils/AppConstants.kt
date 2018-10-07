@@ -64,5 +64,9 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
 
     // Help constants
 
-    ERROR_DESCRIPTION("ERROR")
+    ERROR_DESCRIPTION("ERROR"),
+
+    // Firebase token
+
+    FIREBASE_TOKEN("FIREBASE_TOKEN")
 }
