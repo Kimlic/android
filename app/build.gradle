@@ -65,7 +65,7 @@ android {
         prod {
             buildConfigField("String", "BASE_URL", "\"https://mobile-api-test.kimlic.com\"")
             buildConfigField("String", "VENDORS_URL", "\"http://demo.kimlic.com\"")
-            buildConfigField("boolean", "RECOVERY_FOLDER", "true")
+            buildConfigField("boolean", "RECOVERY_FOLDER", "false")
         }
     }
 
