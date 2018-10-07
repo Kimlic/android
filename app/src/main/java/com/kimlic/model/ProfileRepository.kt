@@ -285,6 +285,7 @@ class ProfileRepository private constructor() {
                     val accountStorageAdapterAddress = QuorumKimlic.getInstance().accountStorageAdapter
 
                     QuorumKimlic.getInstance().setAccountStorageAdapterAddress(accountStorageAdapterAddress)
+                    userDao.deleteAll()
                     userDao.insert(user); syncDataBase();
                     Prefs.currentAccountAddress = walletAddress
 
@@ -365,12 +366,12 @@ class ProfileRepository private constructor() {
             val approvedObjects: List<SyncObject> = Gson().fromJson(jsonToParse, type)
             val approved = approvedObjects.map { its -> its.name }
 
-            val approvedMap = approvedObjects.map { it.name to it.status }.toMap()
+            val approvedMap = approvedObjects.map { it.name to it }.toMap()
 
-            approvedMap["documents.id_card"]?.let { status -> updateDocument(accountAddress, AppDoc.ID_CARD.type, status) }
-            approvedMap["documents.driver_license"]?.let { status -> updateDocument(accountAddress, AppDoc.DRIVERS_LICENSE.type, status) }
-            approvedMap["documents.passport"]?.let { status -> updateDocument(accountAddress, AppDoc.PASSPORT.type, status) }
-            approvedMap["documents.residence_permit_card"]?.let { status -> updateDocument(accountAddress, AppDoc.RESIDENCE_PERMIT_CARD.type, status) }
+            approvedMap["documents.id_card"]?.let { syncObject -> updateDocument(accountAddress, AppDoc.ID_CARD.type, syncObject.status, syncObject.verifiedOn) }
+            approvedMap["documents.driver_license"]?.let { syncObject -> updateDocument(accountAddress, AppDoc.DRIVERS_LICENSE.type, syncObject.status, syncObject.verifiedOn) }
+            approvedMap["documents.passport"]?.let { syncObject -> updateDocument(accountAddress, AppDoc.PASSPORT.type, syncObject.status, syncObject.verifiedOn) }
+            approvedMap["documents.residence_permit_card"]?.let { syncObject -> updateDocument(accountAddress, AppDoc.RESIDENCE_PERMIT_CARD.type, syncObject.status, syncObject.verifiedOn) }
 
             if (!approved.contains("phone")) contactDao.delete(Prefs.currentAccountAddress, "phone")
             if (!approved.contains("email")) contactDao.delete(Prefs.currentAccountAddress, "email")
@@ -676,12 +677,12 @@ class ProfileRepository private constructor() {
 
     // UpdateUtils
 
-    private fun updateDocument(accountAddress: String, documentType: String, status: String?) {
+    private fun updateDocument(accountAddress: String, documentType: String, status: String?, verifiedOn: Long) {
         val document = documentDao.select(accountAddress, documentType)
         document?.let { it ->
             when (status) {
                 Status.VERIFIED.state -> {
-                    it.state = Status.VERIFIED.state; documentDao.update(it)
+                    it.state = Status.VERIFIED.state; it.insertedAt = verifiedOn; documentDao.update(it)
                 }
                 Status.CREATED.state -> {
                     it.state = Status.CREATED.state; documentDao.update(it)
