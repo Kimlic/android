@@ -78,9 +78,8 @@ class RecoveryViewModel(application: Application) : AndroidViewModel(application
         files.filter { !it.isDirectory }.forEach { photoQueue.add(it) }
         Log.d("TAGBACKUPPHOTOS", "photos = $photoQueue")
         recoveryRepository.backupDatabase(Prefs.currentAccountAddress, onSuccess = {
-            Log.d("TAGBACKUPPHOTOS", "photos = onSuccess backupDatabase")
             backupPhotos(Prefs.currentAccountAddress, onSuccess, onError)
-        }, onError = { onError })
+        }, onError = { onError() })
     }
 
     private fun backupPhotos(accountAddress: String, onSuccess: () -> Unit, onError: () -> Unit) {
