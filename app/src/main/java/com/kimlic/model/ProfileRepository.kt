@@ -356,8 +356,6 @@ class ProfileRepository private constructor() {
         val headers = mapOf(Pair("account-address", accountAddress))
 
         val syncRequest = KimlicJSONRequest(GET, url, headers, JSONObject(), Response.Listener { it ->
-            //if (!it.getJSONObject("meta").optString("code").startsWith("2")) return@Listener
-
             if (!it.getJSONObject("headers").optString("statusCode").toString().startsWith("2")) {
                 return@Listener
             }
@@ -595,10 +593,7 @@ class ProfileRepository private constructor() {
 
         dataValue = "{" + shas.joinToString(",") + "}"
 
-        Log.d("TAGSEND", "data value = $dataValue")
-
         val receipt = QuorumKimlic.getInstance().setFieldMainData(dataValue, dataType)
-        Log.d("TAGSEND", "data value = $receipt")
         if (receipt.status == "0x0") {
             Log.e("RECEIPT ERROR", receipt.toString())
             onError()
