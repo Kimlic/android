@@ -40,7 +40,7 @@
   <string name="or">or</string>
   <string name="please_enter_the_missing_words_from_your_mnemonic_passphrase">Please enter the missing words from your mnemonic passphrase</string>
   <string name="cancel_and_return">Cancel and return</string>
-  <string name="virify">Virify</string>
+  <string name="verify">Verify</string>
   <string name="mnemonic_passphrase">Mnemonic Passphrase</string>
   <string name="write_down_these_words_stroe_them_in_a_safe_place">Write down these words, stroe them \n in a safe place. They can\'t be recovered.</string>
   <string name="phone_number">Phone Number</string>
@@ -70,7 +70,6 @@
   <string name="your_phone_number_have_been_verified">Your Phone Number have \n been verified</string>
   <string name="lock">Lock</string>
   <string name="vetify">Vetify</string>
-  <string name="verify">Verify</string>
   <string name="verification_code">Verification Code</string>
   <string name="your_id_secured">Your ID Secured !</string>
   <string name="your_account_passcode_is_created">Your account Passcode is created.</string>
