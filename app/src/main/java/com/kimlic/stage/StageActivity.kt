@@ -54,7 +54,7 @@ class StageActivity : BaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             SCAN_REQUEST_CODE -> {
-                if(resultCode!= Activity.RESULT_OK){
+                if (resultCode != Activity.RESULT_OK) {
                     return
                 }
 
@@ -76,11 +76,7 @@ class StageActivity : BaseActivity() {
 
     private fun setupUI() {
         Log.d("TAGACCOUNT", "account address - ${Prefs.currentAccountAddress}")
-        Log.d("TAGACCOUNT", "account address - ${FirebaseInstanceId.getInstance().token!!}")
-        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
-            Log.d("TAGACCOUNT", "accountToken = ${it.token}")
-        }
-        Log.d("TAGACCOUNT", "account address - ${FirebaseInstanceId.getInstance().token!!}")
+        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener { Log.d("TAGACCOUNT", "accountToken = ${it.token}") }
         initFragments()
         lifecycle.addObserver(model)
         lifecycle.addObserver(userStageFragment)
