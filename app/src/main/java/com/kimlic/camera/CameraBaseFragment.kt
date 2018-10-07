@@ -124,6 +124,7 @@ abstract class CameraBaseFragment : BaseFragment() {
 
     private fun showResultPhoto(bitmap: Bitmap, angle: Float) {
         captureBt.visibility = View.GONE
+        previewIv.visibility = View.VISIBLE
         auxilaryContourIv.visibility = View.INVISIBLE
         documenTitleTv.visibility = View.GONE
         documentTypeIv.visibility = View.GONE
