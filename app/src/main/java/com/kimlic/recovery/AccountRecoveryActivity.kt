@@ -76,6 +76,7 @@ class AccountRecoveryActivity : BaseActivity() {
                     successful()
                 },
                 onError = { errorMessage ->
+                    hideProgress()
                     errorPopup(errorMessage); return@recoveryProfile
                 })
     }
