@@ -82,5 +82,5 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
 
     var firebaseToken: String
         get() = getString(AppConstants.FIREBASE_TOKEN.key)
-        set(value) = setString(AppConstants.FIREBASE_TOKEN.key, "")
+        set(value) = setString(AppConstants.FIREBASE_TOKEN.key, value)
 }
