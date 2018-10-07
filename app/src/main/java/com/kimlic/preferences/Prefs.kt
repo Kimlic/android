@@ -10,6 +10,7 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
     fun clear() {
         authenticated = false
         passcode = ""
+        firebaseToken = ""
         useFingerprint = false
         isPasscodeEnabled = false
         isTouchEnabled = false
@@ -78,4 +79,8 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
     var isDriveActive: Boolean
         get() = getBoolean(AppConstants.IS_DRIVE_ACTIVE.key)
         set(value) = setBoolean(AppConstants.IS_DRIVE_ACTIVE.key, value)
+
+    var firebaseToken: String
+        get() = getString(AppConstants.FIREBASE_TOKEN.key)
+        set(value) = setString(AppConstants.FIREBASE_TOKEN.key, "")
 }
