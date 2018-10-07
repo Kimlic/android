@@ -27,8 +27,8 @@ android {
         applicationId 'com.kimlic'
         minSdkVersion 24
         targetSdkVersion 27
-        versionCode 18
-        versionName "1.0.18"
+        versionCode 19
+        versionName "1.0.19"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
