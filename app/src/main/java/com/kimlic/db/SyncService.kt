@@ -126,7 +126,6 @@ class SyncService private constructor(val context: Context) {
         val rootFolder = getRootFolder()
         val backupFolderQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, DriveFolder.MIME_TYPE)).addFilter(Filters.eq(SearchableField.TITLE, accountAddress)).build()
         val fileQuery = Query.Builder().addFilter(Filters.eq(SearchableField.MIME_TYPE, MIME_TYPE_DATABASE)).addFilter(Filters.eq(SearchableField.TITLE, dataBaseName)).build()
-
         rootFolder.continueWithTask { _ ->
             mDriveResourceClient!!
                     .queryChildren(rootFolder.result!!, backupFolderQuery)
@@ -134,13 +133,14 @@ class SyncService private constructor(val context: Context) {
                     .continueWithTask {
                         mDriveResourceClient!!.queryChildren(it.result!![0].driveId.asDriveFolder(), fileQuery)
                     }.addOnSuccessListener { it ->
-
                         if (it.count == 0) {
                             onError(); return@addOnSuccessListener
                         }
                         it.forEach {
                             if (it.description == DATABASE_DESCRIPTION) saveDataBaseToDisc(it.title, it.driveId.asDriveFile(), onSuccess)
                         }
+                    }.addOnFailureListener {
+                        onError()
                     }
         }
     }
@@ -184,7 +184,7 @@ class SyncService private constructor(val context: Context) {
                     val file = File(dataBasePath)
                     file.outputStream().write(byteArray)
                 }
-                .addOnSuccessListener { Log.d(TAG, "Database is restored successfully"); onSuccess() }
+                .addOnSuccessListener { Log.d("TAGRECOVERY", "Database is restored successfully"); onSuccess() }
                 .addOnFailureListener {}
     }
 
