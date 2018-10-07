@@ -288,7 +288,7 @@ class ProfileRepository private constructor() {
                     userDao.deleteAll()
                     userDao.insert(user); syncDataBase();
                     Prefs.currentAccountAddress = walletAddress
-
+                    FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener { it -> Prefs.firebaseToken = it.token }
                     onSuccess()
                 },
                 Response.ErrorListener { onError() })
@@ -464,7 +464,7 @@ class ProfileRepository private constructor() {
         val dataType: String
         val firstName = user.firstName
         val lastName = user.lastName
-        val udid = FirebaseInstanceId.getInstance().token!!
+        val udid = Prefs.firebaseToken
 
         //@formatter:off
         when (documentType) {
@@ -547,7 +547,7 @@ class ProfileRepository private constructor() {
         val user = userDao.select(accountAddress = Prefs.currentAccountAddress)
         val firstName = user.firstName
         val lastName = user.lastName
-        val udid = FirebaseInstanceId.getInstance().token!!
+        val udid = Prefs.firebaseToken
 
         //@formatter:off
         when (documentType) {
