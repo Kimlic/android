@@ -5,10 +5,13 @@ import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
+import android.content.Intent
 import android.os.Handler
+import com.kimlic.KimlicApp
 import com.kimlic.db.entity.*
 import com.kimlic.documents.Status
 import com.kimlic.preferences.Prefs
+import com.kimlic.service.CompanyDetailsSyncService
 import com.kimlic.utils.Cache
 import com.kimlic.vendors.VendorsRepository
 import java.io.File
@@ -69,6 +72,12 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun tokensBalance() = repository.tokenBalanceRequest(Prefs.currentAccountAddress)
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun companyStatusRequestService() {
+        val syncIntent = Intent(getApplication(), CompanyDetailsSyncService::class.java)
+        getApplication<KimlicApp>().startService(syncIntent)
+    }
 
     // Address
 
