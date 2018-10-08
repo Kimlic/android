@@ -50,7 +50,7 @@ class CompanyDetailsSyncService : IntentService(CompanyDetailsSyncService::class
     }
 
     override fun onHandleIntent(intent: Intent?) {
-        unverifiedList = companyDao.companyByStatus(Prefs.currentAccountAddress, Status.UNVERIFIED.state)
+        unverifiedList = companyDao.companysByStatus(Prefs.currentAccountAddress, Status.UNVERIFIED.state)
         unverifiedQueue.addAll(unverifiedList)
         recursiveRequest()
     }
