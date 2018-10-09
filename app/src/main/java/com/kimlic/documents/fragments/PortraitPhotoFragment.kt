@@ -68,6 +68,7 @@ class PortraitPhotoFragment : CameraBaseFragment() {
 
     private fun setDocumentBackground() {
         auxilaryContourIv.setBackgroundResource(R.drawable.ic_id_validation_white_contour_and_mask_bakcground)
+        documentTypeIv.visibility = View.GONE
         val layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT)
         auxilaryContourIv.layoutParams = layoutParams
     }
