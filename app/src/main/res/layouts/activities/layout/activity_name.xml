@@ -34,7 +34,7 @@
     android:layout_height="wrap_content"
     android:text="@string/your_full_name"
     android:textColor="@android:color/white"
-    android:textSize="@dimen/title_text_size"
+    android:textSize="@dimen/text_size_large_26"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintHorizontal_bias="0.502"
     app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +68,7 @@
         android:inputType="textNoSuggestions|textCapWords"
         android:maxLength="30"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/subtitle_text_size"
+        android:textSize="@dimen/text_size_medium_18"
         android:theme="@style/WhiteUnderlineTheme"/>
 
     </android.support.design.widget.TextInputLayout>
@@ -91,7 +91,7 @@
         android:inputType="textNoSuggestions|textCapWords"
         android:maxLength="30"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/subtitle_text_size"
+        android:textSize="@dimen/text_size_medium_18"
         android:theme="@style/WhiteUnderlineTheme"/>
 
     </android.support.design.widget.TextInputLayout>

@@ -26,7 +26,7 @@
       android:gravity="center"
       android:text="@string/place_your_finger"
       android:textColor="@android:color/white"
-      android:textSize="@dimen/title_text_size"/>
+      android:textSize="@dimen/text_size_large_26"/>
 
     <TextView
       android:id="@+id/subtitleTv"
@@ -36,7 +36,7 @@
       android:gravity="center"
       android:text="@string/lift_and_rest_the_edge_of_your_finger_on_the_home_button_repeatedly"
       android:textColor="@android:color/white"
-      android:textSize="@dimen/subtitle_text_size"/>
+      android:textSize="@dimen/text_size_medium_18"/>
 
   </LinearLayout>
 

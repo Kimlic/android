@@ -54,7 +54,7 @@
       android:gravity="center"
       android:text="@string/driver_license"
       android:textColor="@android:color/white"
-      android:textSize="@dimen/title_text_size"
+      android:textSize="@dimen/text_size_large_26"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/logoIv"/>
@@ -85,7 +85,7 @@
           android:inputType="textNoSuggestions|textCapWords"
           android:maxLength="30"
           android:textColor="@android:color/white"
-          android:textSize="@dimen/subtitle_text_size"
+          android:textSize="@dimen/text_size_medium_18"
           android:theme="@style/WhiteUnderlineTheme"
           tools:ignore="LabelFor,TextFields"/>
       </android.support.design.widget.TextInputLayout>
@@ -108,7 +108,7 @@
           android:inputType="none"
           android:maxLength="30"
           android:textColor="@android:color/white"
-          android:textSize="@dimen/subtitle_text_size"
+          android:textSize="@dimen/text_size_medium_18"
           android:theme="@style/WhiteUnderlineTheme"
           tools:ignore="LabelFor,TextFields"/>
       </android.support.design.widget.TextInputLayout>
@@ -135,7 +135,7 @@
           android:inputType="textCapWords"
           android:maxLength="30"
           android:textColor="@android:color/white"
-          android:textSize="@dimen/subtitle_text_size"
+          android:textSize="@dimen/text_size_medium_18"
           android:theme="@style/WhiteUnderlineTheme"
           tools:ignore="LabelFor"/>
       </android.support.design.widget.TextInputLayout>
@@ -157,7 +157,7 @@
         android:gravity="start"
         android:text="@string/portrait"
         android:textColor="@color/lightBlue"
-        android:textSize="@dimen/subtitle_text_size"/>
+        android:textSize="@dimen/text_size_medium_18"/>
 
       <FrameLayout
         android:layout_width="@dimen/content_width"
@@ -181,7 +181,7 @@
         android:gravity="start"
         android:text="@string/front_side_of_the_document"
         android:textColor="@color/lightBlue"
-        android:textSize="@dimen/subtitle_text_size"/>
+        android:textSize="@dimen/text_size_medium_18"/>
 
       <FrameLayout
         android:layout_width="@dimen/content_width"
@@ -207,7 +207,7 @@
         android:gravity="start"
         android:text="@string/back_side_of_the_document"
         android:textColor="@color/lightBlue"
-        android:textSize="@dimen/subtitle_text_size"/>
+        android:textSize="@dimen/text_size_medium_18"/>
 
       <FrameLayout
         android:id="@+id/backFl"

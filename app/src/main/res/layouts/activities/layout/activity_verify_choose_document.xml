@@ -44,7 +44,7 @@
     android:layout_marginBottom="24dp"
     android:text="@string/choose_your_document_type"
     android:textColor="@android:color/white"
-    android:textSize="@dimen/subtitle_text_size"
+    android:textSize="@dimen/text_size_medium_18"
     app:layout_constraintBottom_toTopOf="@+id/rootLl"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"/>

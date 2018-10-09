@@ -57,7 +57,7 @@
       android:gravity="center"
       android:text="@string/code_sent_to_email"
       android:textColor="@android:color/white"
-      android:textSize="@dimen/subtitle_text_size"/>
+      android:textSize="@dimen/text_size_medium_18"/>
 
     <TextView
       android:id="@+id/changeTv"
@@ -68,7 +68,7 @@
       android:gravity="center"
       android:text="@string/change_email_address"
       android:textColor="@color/lightBlue"
-      android:textSize="@dimen/subtitle_text_size"
+      android:textSize="@dimen/text_size_medium_18"
       />
 
     <LinearLayout
