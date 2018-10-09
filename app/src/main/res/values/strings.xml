@@ -128,7 +128,7 @@
   <string name="delete_identity">Delete Identity</string>
   <string name="user_photo">User photo</string>
   <string name="secureid">SecureID</string>
-  <string name="secure_your_id">Secure your ID</string>
+  <string name="secure_your_identity">Secure your Identity</string>
   <string name="you_have_main_risks">Your have %1$d main security risks</string>
   <string name="enable_account_recovery">Enable Account Recovery</string>
   <string name="create_passcode">Create Passcode</string>
