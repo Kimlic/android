@@ -12,13 +12,13 @@
 
   <!--Themes for textSwitcher Passcode-->
   <style name="TitleStyle">
-    <item name="android:textSize">@dimen/title_text_size</item>
+    <item name="android:textSize">@dimen/text_size_large_26</item>
     <item name="android:textColor">@android:color/white</item>
     <item name="android:gravity">center_horizontal</item>
   </style>
 
   <style name="SubtitleStyle" parent="TitleStyle">
-    <item name="android:textSize">@dimen/subtitle_text_size</item>
+    <item name="android:textSize">@dimen/text_size_medium_18</item>
   </style>
 
   <!--Date picker theme-->
