@@ -12,7 +12,7 @@
     android:gravity="center"
     android:text="@string/please_select_your_identification_document"
     android:textColor="@android:color/white"
-    android:textSize="@dimen/title_text_size"
+    android:textSize="@dimen/text_size_large_26"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"

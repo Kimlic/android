@@ -62,7 +62,7 @@
       android:gravity="center"
       android:text="@string/your_identity_is_secured"
       android:textColor="@android:color/white"
-      android:textSize="@dimen/title_text_size"/>
+      android:textSize="@dimen/text_size_large_26"/>
 
     <TextView
       android:layout_width="match_parent"
@@ -71,7 +71,7 @@
       android:gravity="center"
       android:text="@string/your_account_passcode_is_created"
       android:textColor="@android:color/white"
-      android:textSize="@dimen/subtitle_text_size"/>
+      android:textSize="@dimen/text_size_medium_18"/>
 
   </LinearLayout>
 

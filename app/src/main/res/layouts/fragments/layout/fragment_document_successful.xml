@@ -62,7 +62,7 @@
       android:gravity="center"
       android:text="@string/congratulations_"
       android:textColor="@android:color/white"
-      android:textSize="@dimen/title_text_size"/>
+      android:textSize="@dimen/text_size_large_26"/>
 
     <TextView
       android:layout_width="match_parent"
@@ -71,7 +71,7 @@
       android:gravity="center"
       android:text="@string/your_document_is_prepared_for_verification"
       android:textColor="@android:color/white"
-      android:textSize="@dimen/subtitle_text_size"/>
+      android:textSize="@dimen/text_size_medium_18"/>
 
   </LinearLayout>
 
