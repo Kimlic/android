@@ -34,8 +34,8 @@
 
   <Button
     android:id="@+id/backBt"
-    android:layout_width="@dimen/menu_element_square_size"
-    android:layout_height="@dimen/menu_element_square_size"
+    android:layout_width="@dimen/back_bt_square"
+    android:layout_height="@dimen/back_bt_square"
     android:layout_marginTop="24dp"
     android:layout_marginBottom="16dp"
     android:layout_marginStart="24dp"
