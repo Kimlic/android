@@ -30,7 +30,7 @@
     android:background="@android:color/transparent"
     android:gravity="center"
     android:textColor="@android:color/white"
-    android:textSize="@dimen/subtitle_text_size"
+    android:textSize="@dimen/text_size_medium_18"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toEndOf="@+id/imageView"
     app:layout_constraintTop_toTopOf="parent"

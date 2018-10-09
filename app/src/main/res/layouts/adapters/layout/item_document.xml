@@ -25,7 +25,7 @@
     android:layout_centerVertical="true"
     android:gravity="center"
     android:textColor="@color/lightBlue"
-    android:textSize="@dimen/subtitle_text_size"
+    android:textSize="@dimen/text_size_medium_18"
     tools:ignore="RelativeOverlap"
     tools:text="Country"/>
 
