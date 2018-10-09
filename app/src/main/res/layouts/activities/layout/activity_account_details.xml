@@ -68,7 +68,7 @@
       android:layout_height="wrap_content"
       android:text="@string/kimlic_rp"
       android:textColor="@android:color/white"
-      android:textSize="@dimen/title_text_size"
+      android:textSize="@dimen/text_size_large_26"
       tools:text="Kimlic RP"/>
 
     <TextView
@@ -78,7 +78,7 @@
       android:layout_marginTop="8dp"
       android:text="@string/identity_verification_by_veriff"
       android:textColor="@android:color/white"
-      android:textSize="@dimen/subtitle_text_size"
+      android:textSize="@dimen/text_size_medium_18"
       />
 
     <TextView
@@ -88,7 +88,7 @@
       android:layout_marginTop="8dp"
       android:text="@string/your_following_details_to_be_shared"
       android:textColor="@android:color/white"
-      android:textSize="@dimen/subtitle_text_size"
+      android:textSize="@dimen/text_size_medium_18"
       />
   </LinearLayout>
 

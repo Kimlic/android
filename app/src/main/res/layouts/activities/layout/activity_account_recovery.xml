@@ -25,7 +25,7 @@
       android:gravity="center"
       android:text="@string/account_recovery"
       android:textColor="@android:color/white"
-      android:textSize="@dimen/title_text_size"/>
+      android:textSize="@dimen/text_size_large_26"/>
 
     <TextView
       android:layout_width="match_parent"
@@ -34,7 +34,7 @@
       android:gravity="center"
       android:text="@string/please_paste_type_your_mnemonic_passphrase_to_recover_your_identity"
       android:textColor="@android:color/white"
-      android:textSize="@dimen/subtitle_text_size"/>
+      android:textSize="@dimen/text_size_medium_18"/>
 
     <EditText
       android:id="@+id/phraseEt"
@@ -59,7 +59,7 @@
     android:gravity="center"
     android:text="@string/cancel_and_return"
     android:textColor="@android:color/white"
-    android:textSize="@dimen/subtitle_text_size"
+    android:textSize="@dimen/text_size_medium_18"
     app:layout_constraintBottom_toTopOf="@+id/verifyBt"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"/>
