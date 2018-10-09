@@ -3,25 +3,25 @@
 
   <item>
     <layer-list>
-      <item android:gravity="top" android:height="@dimen/circle_one_medium" android:width="@dimen/circle_one_medium">
+      <item android:gravity="top" android:height="@dimen/circle_one_large" android:width="@dimen/circle_one_large">
         <shape android:shape="oval">
           <solid android:color="@color/grayLightRounded"/>
         </shape>
       </item>
 
-      <item android:gravity="center" android:height="@dimen/circle_two_medium" android:width="@dimen/circle_two_medium">
+      <item android:gravity="center" android:height="@dimen/circle_two_large" android:width="@dimen/circle_two_large">
         <shape android:shape="oval">
           <solid android:color="@color/grayLightRounded"/>
         </shape>
       </item>
 
-      <item android:gravity="center" android:height="@dimen/circle_three_medium" android:width="@dimen/circle_three_medium">
+      <item android:gravity="center" android:height="@dimen/circle_three_large" android:width="@dimen/circle_three_large">
         <shape android:shape="oval">
           <solid android:color="@color/grayLightRounded"/>
         </shape>
       </item>
 
-      <item android:gravity="center" android:height="@dimen/circle_four_medium" android:width="@dimen/circle_four_medium">
+      <item android:gravity="center" android:height="@dimen/circle_four_large" android:width="@dimen/circle_four_large">
         <shape android:shape="oval">
           <solid android:color="@color/grayLightRounded"/>
         </shape>
@@ -30,8 +30,8 @@
       <item
         android:drawable="@drawable/ic_warning_shield"
         android:gravity="center"
-        android:height="@dimen/logo_size_large"
-        android:width="78dp">
+        android:height="124dp"
+        android:width="104dp">
       </item>
 
     </layer-list>
