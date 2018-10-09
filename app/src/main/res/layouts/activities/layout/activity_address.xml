@@ -36,7 +36,7 @@
     android:layout_height="wrap_content"
     android:text="@string/your_address"
     android:textColor="@android:color/white"
-    android:textSize="@dimen/title_text_size"
+    android:textSize="@dimen/text_size_large_26"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/logoIv"/>
@@ -88,7 +88,7 @@
     android:layout_height="wrap_content"
     android:text="@string/address_document"
     android:textColor="@color/lightBlue"
-    android:textSize="@dimen/subtitle_text_size"
+    android:textSize="@dimen/text_size_medium_18"
     app:layout_constraintStart_toStartOf="@id/rootMiddle"
     app:layout_constraintTop_toBottomOf="@id/rootMiddle"/>
 
@@ -158,7 +158,7 @@
     android:gravity="center"
     android:text="@string/cancel"
     android:textColor="@android:color/white"
-    android:textSize="@dimen/subtitle_text_size"
+    android:textSize="@dimen/text_size_medium_18"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"/>
