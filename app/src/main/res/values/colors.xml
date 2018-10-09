@@ -12,6 +12,8 @@
   <color name="redLight">#ff5252</color>
 
   <color name="lightBlue">#9bb5de</color>
+  <color name="lightBlueM">#53A6F8</color>
+
   <color name="lightBlueDocIcon">#9bb5de</color>
 
   <color name="transparent">#00ffffff</color>
