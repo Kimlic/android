@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
@@ -13,7 +15,8 @@ import android.widget.Toast
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.ErrorPopupFragment
 
-abstract class BaseActivity : AppCompatActivity() {
+
+abstract class BaseActivity : AppCompatActivity(), View.OnSystemUiVisibilityChangeListener {
 
     // Life
 
@@ -30,9 +33,56 @@ abstract class BaseActivity : AppCompatActivity() {
             super.onBackPressed()
     }
 
+    override fun onStart() {
+        super.onStart()
+        hideSystemUI()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hideSystemUI()
+    }
+
     override fun onPause() {
         hideKeyboard()
         super.onPause()
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+
+        Log.d("TAGREQUESTFO", "+1+1+1!!!")
+
+        if (hasFocus) {
+            hideSystemUI()
+        }
+    }
+
+    override fun onSystemUiVisibilityChange(visibility: Int) {
+        hideSystemUI()
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        return super.onTouchEvent(event)
+    }
+
+
+    fun hideSystemUI() {
+        // Enables regular immersive mode.
+        // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
+        // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        window.decorView.systemUiVisibility = (
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY//
+                        or View.SYSTEM_UI_FLAG_LOW_PROFILE
+                        // Set the content to appear under the system bars so that the
+                        // content doesn't resize when the system bars hide and show.
+                        or View.SYSTEM_UI_FLAG_LAYOUT_STABLE//
+                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION//
+                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN//
+                        // Hide the nav bar and status bar
+                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION//
+                        or View.SYSTEM_UI_FLAG_FULLSCREEN//
+                )
     }
 
     // Public
@@ -40,6 +90,7 @@ abstract class BaseActivity : AppCompatActivity() {
     fun showToast(text: String) {
         if (text.isNotEmpty()) Toast.makeText(applicationContext, text, Toast.LENGTH_SHORT).show()
     }
+
 
     fun showSoftKeyboard(view: View) {
         view.requestFocus()
@@ -81,12 +132,34 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     open fun showPopup(title: String = "", message: String) {
-        val builder = AlertDialog.Builder(this)
+        val builder = object : AlertDialog.Builder(this) {
+
+            // Live
+
+            override fun create(): AlertDialog {
+                val d = super.create()
+                d.window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
+                d.window.decorView.systemUiVisibility = (
+                        View.SYSTEM_UI_FLAG_IMMERSIVE
+                                or View.SYSTEM_UI_FLAG_LOW_PROFILE
+                                // Set the content to appear under the system bars so that the
+                                // content doesn't resize when the system bars hide and show.
+                                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                // Hide the nav bar and status bar
+                                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                or View.SYSTEM_UI_FLAG_FULLSCREEN
+                        )
+                return d
+            }
+        }
+        
         builder.setTitle(title)
                 .setMessage(message)
                 .setPositiveButton(getString(R.string.OK)) { dialog, _ -> dialog?.dismiss() }.setCancelable(true)
-
         val dialog = builder.create()
         dialog.show()
+        dialog.window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
     }
 }
