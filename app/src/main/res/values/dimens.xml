@@ -72,4 +72,8 @@
   <dimen name="frame_height">112dp</dimen>
   <dimen name="image_button_padding">20dp</dimen>
 
+
+  <dimen name="document_guideline_width">340dp</dimen>
+  <dimen name="document_guideline_height">220dp</dimen>
+
 </resources>
