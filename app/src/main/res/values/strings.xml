@@ -42,7 +42,7 @@
   <string name="cancel_and_return">Cancel and return</string>
   <string name="verify">Verify</string>
   <string name="mnemonic_passphrase">Mnemonic Passphrase</string>
-  <string name="write_down_these_words_stroe_them_in_a_safe_place">Write down these words, stroe them \n in a safe place. They can\'t be recovered.</string>
+  <string name="write_down_these_words_store_them_in_a_safe_place">Write down these words, store them \n in a safe place. They can\'t be recovered.</string>
   <string name="phone_number">Phone Number</string>
   <string name="upper_arc">Upper arc</string>
   <string name="face_contour">Face contour</string>
@@ -53,7 +53,7 @@
   <string name="show_the_front_side_your_id_card">Show the Front side your ID-Card</string>
   <string name="id_front_side">ID front side</string>
   <string name="front_view">Front View</string>
-  <string name="take_your_portrait_photo">Take your Portrait Photo</string>
+  <string name="take_your_portrait">Take your Portrait</string>
   <string name="id_card_contour">ID card contour</string>
   <string name="you_cant_use_camera_without_permissions">You can\'t use camera without permission</string>
   <string name="picture">Picture</string>
