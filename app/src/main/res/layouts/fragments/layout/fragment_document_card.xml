@@ -21,16 +21,15 @@
 
   <ImageView
     android:id="@+id/auxilaryContourIv"
-    android:layout_width="296dp"
-    android:layout_height="186dp"
+    android:layout_width="@dimen/document_guideline_width"
+    android:layout_height="@dimen/document_guideline_height"
     android:layout_marginBottom="8dp"
     android:background="@drawable/white_horizontal_card_frame"
     android:contentDescription="@string/id_card"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0.35"/>
+    app:layout_constraintTop_toTopOf="parent"/>
 
   <Button
     android:id="@+id/backBt"
