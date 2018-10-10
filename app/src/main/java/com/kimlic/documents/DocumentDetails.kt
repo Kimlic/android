@@ -8,6 +8,7 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.text.Editable
 import android.view.View
+import android.view.WindowManager
 import android.widget.EditText
 import butterknife.BindViews
 import butterknife.ButterKnife
@@ -191,7 +192,7 @@ class DocumentDetails : BaseActivity() {
         val originalBitmap = BitmapUtils.rotateBitmap(bitmap!!, 0f)//-90f Previous value with old camera
         val width = originalBitmap.width
         val height = originalBitmap.height
-        return Bitmap.createBitmap(originalBitmap, (0.15 * width).toInt(), (0.22 * height).toInt(), (0.7 * width).toInt(), (0.35 * height).toInt())
+        return Bitmap.createBitmap(originalBitmap, (0.12 * width).toInt(), (0.3 * height).toInt(), (0.76 * width).toInt(), (0.37 * height).toInt())
     }
 
     private fun datePicker() {
@@ -204,6 +205,7 @@ class DocumentDetails : BaseActivity() {
             expireDateEt.text = Editable.Factory.getInstance().newEditable("$dayOfMonth - $monthOfYear - $year_")
         }, year, month, day)
         dialog.datePicker.minDate = Date().time
+        dialog.window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
         dialog.show()
     }
 
