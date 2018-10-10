@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.LinearLayout
 import butterknife.ButterKnife
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -104,7 +105,7 @@ class SettingsActivity : BaseActivity() {
                     }
                     "drive" -> {
                         when (Prefs.isDriveActive) {
-                            true -> gDriveWarningPopup()
+                            true -> gDriveWarningPopupImmersive()
                             false -> {
                                 if (GoogleSignIn.getLastSignedInAccount(this@SettingsActivity) == null) SyncService.signIn(this@SettingsActivity, GOOGLE_SIGNE_IN_REQUEST_CODE)
                                 else
@@ -200,8 +201,26 @@ class SettingsActivity : BaseActivity() {
         if (backupUpdatingFragment != null) backupUpdatingFragment?.dismiss(); timer?.cancel()
     }
 
-    private fun gDriveWarningPopup() {
-        val builder = AlertDialog.Builder(this)
+    private fun gDriveWarningPopupImmersive() {
+        val builder = object: AlertDialog.Builder(this){
+            override fun create(): AlertDialog {
+                val d = super.create()
+                d.window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
+                d.window.decorView.systemUiVisibility = (
+                        View.SYSTEM_UI_FLAG_IMMERSIVE
+                                or View.SYSTEM_UI_FLAG_LOW_PROFILE
+                                // Set the content to appear under the system bars so that the
+                                // content doesn't resize when the system bars hide and show.
+                                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                // Hide the nav bar and status bar
+                                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                or View.SYSTEM_UI_FLAG_FULLSCREEN
+                        )
+                return d
+            }
+        }
         builder
                 .setTitle(getString(R.string.warning_))
                 .setMessage(getString(R.string.if_you_disable_google_drive_sync))
@@ -227,5 +246,6 @@ class SettingsActivity : BaseActivity() {
 
         val dialog = builder.create()
         dialog.show()
+        dialog.window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
     }
 }
