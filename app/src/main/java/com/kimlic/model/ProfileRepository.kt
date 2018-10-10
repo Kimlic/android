@@ -85,6 +85,11 @@ class ProfileRepository private constructor() {
         googleSignInAccount = GoogleSignIn.getLastSignedInAccount(context)
     }
 
+
+    // Quorum instance
+
+    private fun quorumInstance() = QuorumKimlic.getInstance(Prefs.currentMnemonic, context)
+
     // Public
 
     // User
@@ -266,8 +271,8 @@ class ProfileRepository private constructor() {
         QuorumKimlic.destroyInstance()
         QuorumKimlic.createInstance(null, context) // moved to QUORUM request
 
-        val mnemonic = QuorumKimlic.getInstance().mnemonic
-        val walletAddress = QuorumKimlic.getInstance().walletAddress
+        val mnemonic = quorumInstance().mnemonic
+        val walletAddress = quorumInstance().walletAddress
         // Init new user
         val user = User(accountAddress = walletAddress, mnemonic = mnemonic)
         // 2. Get entry point of the Quorum
@@ -281,13 +286,14 @@ class ProfileRepository private constructor() {
                     }
                     Log.d("TAGRESPONSE", "response = $it")
                     val contextContractAddress = it.getJSONObject("data").optString("context_contract")
-                    QuorumKimlic.getInstance().setKimlicContractsContextAddress(contextContractAddress)
-                    val accountStorageAdapterAddress = QuorumKimlic.getInstance().accountStorageAdapter
+                    quorumInstance().setKimlicContractsContextAddress(contextContractAddress)
+                    val accountStorageAdapterAddress = quorumInstance().accountStorageAdapter
 
-                    QuorumKimlic.getInstance().setAccountStorageAdapterAddress(accountStorageAdapterAddress)
+                    quorumInstance().setAccountStorageAdapterAddress(accountStorageAdapterAddress)
                     userDao.deleteAll()
                     userDao.insert(user); syncDataBase();
                     Prefs.currentAccountAddress = walletAddress
+                    Prefs.currentMnemonic = mnemonic
                     FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener { it -> Prefs.firebaseToken = it.token }
                     onSuccess()
                 },
@@ -324,10 +330,10 @@ class ProfileRepository private constructor() {
             Log.d("TYAGCONFIG", "responce = $it")
 
             val contextContractAddress = it.getJSONObject("data").optString("context_contract")
-            QuorumKimlic.getInstance().setKimlicContractsContextAddress(contextContractAddress)
+            quorumInstance().setKimlicContractsContextAddress(contextContractAddress)
 
-            val accountStorageAdapterAddress = QuorumKimlic.getInstance().accountStorageAdapter
-            QuorumKimlic.getInstance().setAccountStorageAdapterAddress(accountStorageAdapterAddress)
+            val accountStorageAdapterAddress = quorumInstance().accountStorageAdapter
+            quorumInstance().setAccountStorageAdapterAddress(accountStorageAdapterAddress)
             onSuccess()
 
         }, Response.ErrorListener {
@@ -343,11 +349,15 @@ class ProfileRepository private constructor() {
     *   The function receives the number of Be on the input and converts them into tokens
     * */
     fun tokenBalanceRequest(accountAddress: String) {
-        val kimlicTokenContractAddress = QuorumKimlic.getInstance().kimlicTokenAddress
-        QuorumKimlic.getInstance().setKimlicToken(kimlicTokenContractAddress)
-        val wei = QuorumKimlic.getInstance().getTokenBalance(accountAddress)
-        val token = Convert.fromWei(wei.toString(), Convert.Unit.ETHER)
-        userDao.updateKimToken(accountAddress, token.toInt())
+        try {
+            val kimlicTokenContractAddress = quorumInstance().kimlicTokenAddress
+            quorumInstance().setKimlicToken(kimlicTokenContractAddress)
+            val wei = quorumInstance().getTokenBalance(accountAddress)
+            val token = Convert.fromWei(wei.toString(), Convert.Unit.ETHER)
+            userDao.updateKimToken(accountAddress, token.toInt())
+        } catch (e: Exception) {
+            Log.d("TAGKIMBALANCE", "crashe!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        }
     }
 
     // Sync user
@@ -386,7 +396,7 @@ class ProfileRepository private constructor() {
 
     fun contactVerify(contactType: String, source: String, onSuccess: () -> Unit, onError: () -> Unit) {
         DoAsync().execute(Runnable {
-            val quorumKimlic = QuorumKimlic.getInstance()
+            val quorumKimlic = quorumInstance()
             var receiptPhone: TransactionReceipt? = null
 
             try {
@@ -485,7 +495,7 @@ class ProfileRepository private constructor() {
         val shaBack = Sha.sha256(backString)
 
         DoAsync().execute(Runnable {
-            val receipt = QuorumKimlic.getInstance().setFieldMainData("{\"face\":${shaFace},\"document-front\":${shaFront},\"document-back\":${shaBack}}", dataType)
+            val receipt = quorumInstance().setFieldMainData("{\"face\":${shaFace},\"document-front\":${shaFront},\"document-back\":${shaBack}}", dataType)
             if (receipt == null || receipt.status == "0x0") {
                 onError()
             }
@@ -594,7 +604,7 @@ class ProfileRepository private constructor() {
 
         dataValue = "{" + shas.joinToString(",") + "}"
 
-        val receipt = QuorumKimlic.getInstance().setFieldMainData(dataValue, dataType)
+        val receipt = quorumInstance().setFieldMainData(dataValue, dataType)
         if (receipt.status == "0x0") {
             Log.e("RECEIPT ERROR", receipt.toString())
             onError()
@@ -647,7 +657,7 @@ class ProfileRepository private constructor() {
         val originalBitmap = BitmapFactory.decodeByteArray(data, 0, data.size)
         val width = originalBitmap.width
         val height = originalBitmap.height
-        val croppedBitmap = Bitmap.createBitmap(originalBitmap, (0.15 * width).toInt(), (0.12 * height).toInt(), (0.70 * width).toInt(), (0.72 * height).toInt())
+        val croppedBitmap = Bitmap.createBitmap(originalBitmap, (0.12 * width).toInt(), (0.12 * height).toInt(), (0.74 * width).toInt(), (0.74 * height).toInt())
         return BitmapToByteArrayMapper().transform(croppedBitmap)
     }
 
