@@ -24,6 +24,7 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
         isDriveActive = false
 
         currentAccountAddress = ""
+        currentMnemonic = ""
     }
 
     // Preferences
@@ -75,6 +76,10 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
     var currentAccountAddress: String
         get() = getString(AppConstants.ACCOUNT_ADDRESS.key)
         set(value) = setString(AppConstants.ACCOUNT_ADDRESS.key, value)
+
+    var currentMnemonic: String
+        get() = getString(AppConstants.MNEMONIC.key)
+        set(value) = setString(AppConstants.MNEMONIC.key, value)
 
     var isDriveActive: Boolean
         get() = getBoolean(AppConstants.IS_DRIVE_ACTIVE.key)
