@@ -34,7 +34,7 @@
       android:layout_marginStart="32dp"
       android:layout_marginEnd="32dp"
       android:gravity="center"
-      android:text="@string/write_down_these_words_stroe_them_in_a_safe_place"
+      android:text="@string/write_down_these_words_store_them_in_a_safe_place"
       android:textColor="@android:color/white"
       android:textSize="@dimen/text_size_medium_18"/>
 
