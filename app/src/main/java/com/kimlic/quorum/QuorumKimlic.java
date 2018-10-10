@@ -86,9 +86,11 @@ public class QuorumKimlic {
 
   // Accessors
 
-  public static QuorumKimlic getInstance() throws Exception {
+  public static QuorumKimlic getInstance(String mnemonic, Context context) { //  throws Exception
     if (sInstance == null) {
-      throw new Exception("Call createInstance to generate instance");
+      Log.d("TAGQUORUM", "quorun create new instance");
+      sInstance = new QuorumKimlic(mnemonic, context);
+//      throw new Exception("Call createInstance to generate instance");
     }
 
     return sInstance;
