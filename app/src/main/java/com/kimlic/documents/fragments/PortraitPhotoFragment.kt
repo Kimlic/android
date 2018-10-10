@@ -56,7 +56,7 @@ class PortraitPhotoFragment : CameraBaseFragment() {
     }
 
     private fun setupTitle() {
-        val spanText = getString(R.string.take_your_portrait_photo)
+        val spanText = getString(R.string.take_your_portrait)
         val words = spanText.split(" ")
         val spanStart = words[0].length + words[1].length + 2
         val spannableBuilder = SpannableStringBuilder(spanText)
