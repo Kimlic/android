@@ -1,7 +1,6 @@
 package com.kimlic.account
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
@@ -10,11 +9,13 @@ import android.graphics.Typeface
 import android.graphics.drawable.PictureDrawable
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
 import android.view.View
+import android.view.WindowManager
 import android.widget.LinearLayout
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.kimlic.BaseActivity
@@ -26,8 +27,8 @@ import com.kimlic.account.fragment.MissingInformationFragment
 import com.kimlic.account.fragment.SelectAccountDocumentFragment
 import com.kimlic.account.fragment.SelectDocumentValidFragment
 import com.kimlic.db.entity.*
-import com.kimlic.documents.Status
 import com.kimlic.documents.DocumentCallback
+import com.kimlic.documents.Status
 import com.kimlic.documents.fragments.SelectCountryFragment
 import com.kimlic.documents.fragments.SelectDocumentFragment
 import com.kimlic.managers.PresentationManager
@@ -411,7 +412,9 @@ class AccountActivity : BaseActivity() {
                                 hideProgress()
                                 successful()
                             },
-                            onError = { hideProgress(); errorShow() })
+                            onError = {
+                                hideProgress(); errorShowPopupImmersive(getString(R.string.error), getString(R.string.documents_sending_error))
+                            })
                 }
             }
         }
@@ -442,14 +445,36 @@ class AccountActivity : BaseActivity() {
         timer?.cancel()
     }
 
-    private fun errorShow() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(getString(R.string.error))
-                .setMessage(getString(R.string.documents_sending_error))
+    private fun errorShowPopupImmersive(title: String, message: String) {
+        val builder = object : AlertDialog.Builder(this) {
+
+            // Live
+
+            override fun create(): android.support.v7.app.AlertDialog {
+                val d = super.create()
+                d.window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
+                d.window.decorView.systemUiVisibility = (
+                        View.SYSTEM_UI_FLAG_IMMERSIVE
+                                or View.SYSTEM_UI_FLAG_LOW_PROFILE
+                                // Set the content to appear under the system bars so that the
+                                // content doesn't resize when the system bars hide and show.
+                                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                // Hide the nav bar and status bar
+                                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                or View.SYSTEM_UI_FLAG_FULLSCREEN
+                        )
+                return d
+            }
+        }
+        builder.setTitle(title)
+                .setMessage(message)
                 .setPositiveButton(getString(R.string.OK)) { dialog, _ -> dialog?.dismiss(); finish() }.setCancelable(true)
                 .setOnDismissListener { finish() }
         val dialog = builder.create()
         dialog.show()
+        dialog.window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
     }
 
     private fun successful() {
