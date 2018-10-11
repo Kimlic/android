@@ -6,6 +6,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
 import butterknife.BindViews
@@ -66,8 +67,8 @@ class PhoneVerifyActivity : BaseActivity() {
         showSoftKeyboard(digit1Et)
         setupDigitListener()
 
-        digitsList[3].setOnEditorActionListener(TextView.OnEditorActionListener { _, _, event ->
-            if (event!!.keyCode == KeyEvent.KEYCODE_ENTER) {
+        digitsList[3].setOnEditorActionListener(TextView.OnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
                 hideKeyboard(); return@OnEditorActionListener true
             }
             false
