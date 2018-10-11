@@ -102,6 +102,7 @@ abstract class BaseActivity : AppCompatActivity(), View.OnSystemUiVisibilityChan
         val view = currentFocus ?: return
         val imm = applicationContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view.windowToken, 0)
+        hideSystemUI()
     }
 
     fun getStringValue(resId: Int): String = KimlicApp.applicationContext().getString(resId)
