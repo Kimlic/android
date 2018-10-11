@@ -4,12 +4,16 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
 
     APP_PREFERENCES("KIMLIC_PREFERENCES"),
 
+    // User
+
     AUTH("AUTH"),
     USER_ID("USERID"),
     ACCOUNT_ADDRESS("ACCOUNT_ADDRESS"),
     MNEMONIC("MNEMONIC"),
 
-    PASSCODE("PASSCODE"),
+    // Company
+
+    NEW_COMPANY_ACCEPTED("NEW_COMPANY_ACCEPTED"),
 
     IS_PASSCODE_ENABLED("IS_PASSCODE_ENABLED"),
     IS_PASSCODE_OFFERED("IS_PASSCODE_OFFERED"),
@@ -23,8 +27,11 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
     TERMS("TERMS"),
     PRIVACY("PRIVACY"),
 
+    //Preferences
+
     TUTORIALS("TUTORIALS"),
     FINGERPRINT("FINGERPRINT"),
+    PASSCODE("PASSCODE"),
 
     // Camera
 
