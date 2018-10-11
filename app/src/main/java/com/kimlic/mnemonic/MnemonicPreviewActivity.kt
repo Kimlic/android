@@ -37,7 +37,7 @@ class MnemonicPreviewActivity : BaseActivity() {
                     setPhrases(mnemonicList())
                     phraseBt.tag = "copy"
                     phraseBt.text = getString(R.string.copy_to_buffer)
-                    showPopup(message = getString(R.string.write_down_these_words_store_them_in_a_safe_place))
+                    showPopupImmersive(message = getString(R.string.write_down_these_words_store_them_in_a_safe_place))
                 }
                 "copy" -> {
                     copyToBuffer(mnemonicList())
