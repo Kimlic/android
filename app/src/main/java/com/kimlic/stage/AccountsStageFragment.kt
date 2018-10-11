@@ -50,6 +50,10 @@ class AccountsStageFragment : BaseFragment() {
         setupUI()
     }
 
+    override fun onPause() {
+        super.onPause()
+        (activity as StageActivity).hideRedButton()
+    }
     // Private
 
     private fun setupUI() {
