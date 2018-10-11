@@ -25,6 +25,7 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
 
         currentAccountAddress = ""
         currentMnemonic = ""
+        newCompanyAccepted = false
     }
 
     // Preferences
@@ -88,4 +89,8 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
     var firebaseToken: String
         get() = getString(AppConstants.FIREBASE_TOKEN.key)
         set(value) = setString(AppConstants.FIREBASE_TOKEN.key, value)
+
+    var newCompanyAccepted: Boolean
+        get() = getBoolean(AppConstants.NEW_COMPANY_ACCEPTED.key)
+        set(value) = setBoolean(AppConstants.NEW_COMPANY_ACCEPTED.key, value)
 }
