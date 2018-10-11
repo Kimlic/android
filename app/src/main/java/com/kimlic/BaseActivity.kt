@@ -132,7 +132,18 @@ abstract class BaseActivity : AppCompatActivity(), View.OnSystemUiVisibilityChan
     }
 
     open fun showPopup(title: String = "", message: String) {
-        val builder = object : AlertDialog.Builder(this) {
+        val builder = getImmersivePopupBuilder()
+
+        builder.setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(getString(R.string.OK)) { dialog, _ -> dialog?.dismiss() }.setCancelable(true)
+        val dialog = builder.create()
+        dialog.show()
+        dialog.window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
+    }
+
+    private fun getImmersivePopupBuilder(): AlertDialog.Builder {
+        return object : AlertDialog.Builder(this) {
 
             // Live
 
@@ -154,12 +165,5 @@ abstract class BaseActivity : AppCompatActivity(), View.OnSystemUiVisibilityChan
                 return d
             }
         }
-        
-        builder.setTitle(title)
-                .setMessage(message)
-                .setPositiveButton(getString(R.string.OK)) { dialog, _ -> dialog?.dismiss() }.setCancelable(true)
-        val dialog = builder.create()
-        dialog.show()
-        dialog.window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
     }
 }
