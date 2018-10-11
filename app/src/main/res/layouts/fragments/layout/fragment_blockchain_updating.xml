@@ -35,7 +35,7 @@
     android:layout_marginBottom="16dp"
     android:gravity="center"
     android:text="@string/your_information_updating_on_kimlic_blockchin"
-    android:textColor="@color/grayLight"
+    android:textColor="@color/grayDark"
     android:textSize="@dimen/text_size_medium_18"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
