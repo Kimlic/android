@@ -96,6 +96,6 @@ class EmailActivity : BaseActivity() {
 
     private fun unableToProceed() {
         hideProgress()
-        runOnUiThread { nextBt.isClickable = true; showPopup(message = getString(R.string.unable_to_proceed_with_werification)) }
+        runOnUiThread { nextBt.isClickable = true; showPopupImmersive(message = getString(R.string.unable_to_proceed_with_werification)) }
     }
 }
