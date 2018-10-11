@@ -272,7 +272,7 @@
   <string name="backup">Backup</string>
   <string name="backup_profile_to_google_drive">Backup profile to Google Drive</string>
   <string name="google_drive_sync">Google Drive sync</string>
-  <string name="backup_profile_to_goggle_drive">Backup profile to Google Drive</string>
+  <string name="your_information_is_synchronizing_with_google_drive">Your information is synchronizing with Google Drive</string>
   <string name="disable">Disable</string>
   <string name="warning_">Warning!</string>
 
