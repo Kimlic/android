@@ -3,7 +3,9 @@ package com.kimlic.mnemonic
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.TextInputLayout
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.TextView
 import butterknife.BindViews
 import butterknife.ButterKnife
 import com.kimlic.BaseActivity
@@ -56,6 +58,15 @@ class MnemonicVerifyActivity : BaseActivity() {
 
         backTv.setOnClickListener { PresentationManager.stage(this) }
         setupHints(hintList)
+
+        editTextList.forEach {
+            it.setOnEditorActionListener(TextView.OnEditorActionListener { _, actionId, event ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    hideKeyboard(); return@OnEditorActionListener true
+                }
+                false
+            })
+        }
     }
 
     private fun setupHints(hintList: List<Int>) {
