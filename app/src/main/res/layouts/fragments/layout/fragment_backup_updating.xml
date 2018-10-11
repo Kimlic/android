@@ -17,12 +17,13 @@
 
   <TextView
     android:id="@+id/titleTv"
-    android:layout_width="wrap_content"
+    android:layout_width="@dimen/popup_fragment_width"
     android:layout_height="wrap_content"
     android:layout_marginTop="16dp"
     android:text="@string/updating"
+    android:gravity="center"
     android:textColor="@color/grayDark"
-    android:textSize="@dimen/text_size_medium_18"
+    android:textSize="@dimen/text_size_large_26"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/blockchainIv"/>
@@ -34,9 +35,9 @@
     android:layout_marginTop="8dp"
     android:layout_marginBottom="16dp"
     android:gravity="center"
-    android:text="@string/information_is_saving_on_blockchain_wait_for_a_while"
-    android:textColor="@color/grayLight"
-    android:textSize="@dimen/small_text_size"
+    android:text="@string/your_information_is_synchronizing_with_google_drive"
+    android:textColor="@color/grayDark"
+    android:textSize="@dimen/text_size_medium_18"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
