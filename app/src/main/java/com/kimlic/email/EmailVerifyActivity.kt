@@ -122,7 +122,7 @@ class EmailVerifyActivity : BaseActivity() {
     private fun unableToProceed() {
         progressBar.visibility = View.GONE
         verifyBt.isClickable = true
-        showPopup(message = getString(R.string.unable_to_proceed_with_verification))
+        showPopupImmersive(message = getString(R.string.unable_to_proceed_with_verification))
     }
 
     private fun unableVerifyCode() {
@@ -130,7 +130,7 @@ class EmailVerifyActivity : BaseActivity() {
         progressBar.visibility - View.GONE
         verifyBt.isClickable = true
         digitsList.forEach { it.text.clear() }
-        showPopup(message = getString(R.string.unable_to_verify_the_code))
+        showPopupImmersive(message = getString(R.string.unable_to_verify_the_code))
     }
 
     private fun setupDigitListener() {
