@@ -22,6 +22,7 @@ import com.kimlic.db.entity.CompanyDocumentJoin
 import com.kimlic.documents.Status
 import com.kimlic.preferences.Prefs
 import com.kimlic.service.entity.CompanyDocumentsEntity
+import com.kimlic.utils.AppConstants
 import com.kimlic.utils.time_converter.TimeZoneConverter
 import org.json.JSONObject
 import java.util.*
@@ -53,6 +54,7 @@ class CompanyDetailsSyncService : IntentService(CompanyDetailsSyncService::class
         unverifiedList = companyDao.companysByStatus(Prefs.currentAccountAddress, Status.UNVERIFIED.state)
         unverifiedQueue.addAll(unverifiedList)
         recursiveRequest()
+        sendRedDotBroadcast()
     }
 
     // Private
@@ -69,6 +71,7 @@ class CompanyDetailsSyncService : IntentService(CompanyDetailsSyncService::class
                         docList.docs.forEach {
                             updateUserName(it.document.firstName, it.document.lastName)
                             updateApplicationDate(Prefs.currentAccountAddress, company, it.document.type, it.document.verifiedAt)
+                            Prefs.newCompanyAccepted = true
                         }
                         recursiveRequest()
                     },
@@ -113,5 +116,10 @@ class CompanyDetailsSyncService : IntentService(CompanyDetailsSyncService::class
         val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(application.applicationContext) // right here
         if (Prefs.isDriveActive && googleSignInAccount != null)
             DoAsync().execute(Runnable { SyncService.getInstance().backupDatabase(Prefs.currentAccountAddress, "kimlic.db", onSuccess = onSuccess, onError = {}) })
+    }
+
+    private fun sendRedDotBroadcast() {
+        val intent = Intent(AppConstants.DETAILS_BROADCAST_ACTION.key)
+        sendBroadcast(intent)
     }
 }
