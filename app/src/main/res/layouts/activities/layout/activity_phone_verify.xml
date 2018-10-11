@@ -91,6 +91,7 @@
       <EditText
         android:id="@+id/digit4Et"
         style="@style/DigitHolderStyle"
+        android:imeOptions="actionDone"
         android:tag="@string/_3"/>
 
     </LinearLayout>
