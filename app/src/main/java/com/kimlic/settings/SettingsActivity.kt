@@ -132,7 +132,7 @@ class SettingsActivity : BaseActivity() {
         settingsList = mutableListOf(
                 SwitchSetting(getString(R.string.passcode), getString(R.string.protect_my_id), "passcode", Prefs.isPasscodeEnabled),
                 SwitchSetting(getString(R.string.enable_touch_id), getString(R.string.use_my_touch_id), "touch", Prefs.isTouchEnabled),
-                SwitchSetting(getString(R.string.google_drive_sync), getString(R.string.backup_profile_to_goggle_drive), "drive", Prefs.isDriveActive),
+                SwitchSetting(getString(R.string.google_drive_sync), getString(R.string.backup_profile_to_google_drive), "drive", Prefs.isDriveActive),
                 IntentSetting(getString(R.string.account_recovery), getString(R.string.back_up_your_credentials), "recovery"),
                 IntentSetting(getString(R.string.terms_and_conditions), getString(R.string.last_modified_23_july_2017), "terms"),
                 IntentSetting(getString(R.string.about_kimlic), "", "about"))
