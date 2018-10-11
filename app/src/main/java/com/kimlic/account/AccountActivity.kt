@@ -9,7 +9,6 @@ import android.graphics.Typeface
 import android.graphics.drawable.PictureDrawable
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -446,28 +445,7 @@ class AccountActivity : BaseActivity() {
     }
 
     private fun errorShowPopupImmersive(title: String, message: String) {
-        val builder = object : AlertDialog.Builder(this) {
-
-            // Live
-
-            override fun create(): android.support.v7.app.AlertDialog {
-                val d = super.create()
-                d.window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
-                d.window.decorView.systemUiVisibility = (
-                        View.SYSTEM_UI_FLAG_IMMERSIVE
-                                or View.SYSTEM_UI_FLAG_LOW_PROFILE
-                                // Set the content to appear under the system bars so that the
-                                // content doesn't resize when the system bars hide and show.
-                                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                                // Hide the nav bar and status bar
-                                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                                or View.SYSTEM_UI_FLAG_FULLSCREEN
-                        )
-                return d
-            }
-        }
+        val builder = getImmersivePopupBuilder()
         builder.setTitle(title)
                 .setMessage(message)
                 .setPositiveButton(getString(R.string.OK)) { dialog, _ -> dialog?.dismiss(); finish() }.setCancelable(true)
@@ -494,15 +472,16 @@ class AccountActivity : BaseActivity() {
     }
 
     private fun showErrorPopup() {
-        val builder = AlertDialog.Builder(this)
-
+        val builder = getImmersivePopupBuilder()
         builder
                 .setTitle("Error")
                 .setMessage("Relying Party is not available")
                 .setCancelable(true)
                 .setPositiveButton(getString(R.string.ok)) { dialog, _ -> dialog?.dismiss(); finish() }
                 .setOnDismissListener { finish() }
-        builder.show()
+        val dialog = builder.create()
+        dialog.show()
+        dialog.window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
     }
 }
 
