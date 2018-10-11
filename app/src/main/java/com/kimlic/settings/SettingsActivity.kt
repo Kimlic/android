@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
@@ -154,12 +153,12 @@ class SettingsActivity : BaseActivity() {
                     hideProgress()
                     Prefs.isDriveActive = true
                     refreshSettingsList()
-                    showPopup(getString(R.string.success_), getString(R.string.your_profile_synchronization_is_active))
+                    showPopupImmersive(getString(R.string.success_), getString(R.string.your_profile_synchronization_is_active))
                 },
                 onError = {
                     hideProgress()
                     refreshSettingsList()
-                    showPopup(getString(R.string.error_), getString(R.string.synchronizing_error))
+                    showPopupImmersive(getString(R.string.error_), getString(R.string.synchronizing_error))
                 }
         )
     }
@@ -202,25 +201,7 @@ class SettingsActivity : BaseActivity() {
     }
 
     private fun gDriveWarningPopupImmersive() {
-        val builder = object: AlertDialog.Builder(this){
-            override fun create(): AlertDialog {
-                val d = super.create()
-                d.window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
-                d.window.decorView.systemUiVisibility = (
-                        View.SYSTEM_UI_FLAG_IMMERSIVE
-                                or View.SYSTEM_UI_FLAG_LOW_PROFILE
-                                // Set the content to appear under the system bars so that the
-                                // content doesn't resize when the system bars hide and show.
-                                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                                // Hide the nav bar and status bar
-                                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                                or View.SYSTEM_UI_FLAG_FULLSCREEN
-                        )
-                return d
-            }
-        }
+        val builder = getImmersivePopupBuilder()
         builder
                 .setTitle(getString(R.string.warning_))
                 .setMessage(getString(R.string.if_you_disable_google_drive_sync))

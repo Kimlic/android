@@ -57,7 +57,7 @@ class AccountRecoveryActivity : BaseActivity() {
             val mnemonic = phraseEt.text.toString().trim()
 
             if (!mnemonicValid(mnemonic)) {
-                showPopup(title = getString(R.string.error), message = getString(R.string.missing_mnemonic_phrases)); return@setOnClickListener
+                showPopupImmersive(title = getString(R.string.error), message = getString(R.string.missing_mnemonic_phrases)); return@setOnClickListener
             }
 
             GoogleSignIn.getLastSignedInAccount(this)?.let {

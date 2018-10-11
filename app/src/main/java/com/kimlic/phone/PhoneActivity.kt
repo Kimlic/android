@@ -84,6 +84,7 @@ class PhoneActivity : BaseActivity() {
         phoneEt.setOnEditorActionListener(TextView.OnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 hideKeyboard()
+                hideSystemUI()
                 return@OnEditorActionListener true
             }
             false
@@ -127,7 +128,7 @@ class PhoneActivity : BaseActivity() {
 
     private fun unableToProceed() {
         hideProgress()
-        nextBt.isClickable = true; showPopup(message = getString(R.string.unable_to_proceed_with_verification))
+        nextBt.isClickable = true; showPopupImmersive(message = getString(R.string.unable_to_proceed_with_verification))
     }
 
     private fun showProgress() {
