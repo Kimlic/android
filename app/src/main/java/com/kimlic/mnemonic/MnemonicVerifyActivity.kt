@@ -51,7 +51,7 @@ class MnemonicVerifyActivity : BaseActivity() {
                 if (phrasesMatch()) {
                     Prefs.isRecoveryEnabled = true
                     successful()
-                } else showPopup(getString(R.string.error), getString(R.string.mnemonic_phrases_do_not_match))
+                } else showPopupImmersive(getString(R.string.error), getString(R.string.mnemonic_phrases_do_not_match))
         }
 
         backTv.setOnClickListener { PresentationManager.stage(this) }
