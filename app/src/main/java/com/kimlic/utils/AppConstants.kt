@@ -27,6 +27,10 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
     TERMS("TERMS"),
     PRIVACY("PRIVACY"),
 
+    // Action
+
+    DETAILS_BROADCAST_ACTION("kimlic.details.service.action"),
+
     //Preferences
 
     TUTORIALS("TUTORIALS"),
