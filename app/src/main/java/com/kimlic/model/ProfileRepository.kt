@@ -174,9 +174,13 @@ class ProfileRepository private constructor() {
 
     fun document(accountAddress: String, documentType: String) = documentDao.select(accountAddress, documentType)
 
-    fun documentDelete(documentId: Long) = { documentDao.delete(id = documentId); syncDataBase() }
+    fun documentDelete(documentId: Long) {
+        documentDao.delete(id = documentId); syncDataBase()
+    }
 
-    fun documentDelete(document: Document) = { documentDao.delete(document = document); syncDataBase() }
+    fun documentDelete(document: Document) {
+        documentDao.delete(document = document); syncDataBase()
+    }
 
     // previous - with big files
     fun addDocument_(accountAddress: String, documentType: String, country: String, countryIso: String, documentNumber: String, expireDate: String, portraitName: String, portraitData: ByteArray, frontName: String, frontData: ByteArray, backName: String, backData: ByteArray) {
@@ -364,6 +368,7 @@ class ProfileRepository private constructor() {
     }
 
     // Sync user
+
 
     fun syncProfile(accountAddress: String) {
         val url = API_URL + KimlicApi.PROFILE_SYNC.path
