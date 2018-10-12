@@ -94,21 +94,22 @@ class DocumentDetails : BaseActivity() {
         backBt.setOnClickListener { finish() }
 
         when (currentDocument.state) {
-            "" -> {
+            "" -> {// status added in create new document
                 spannedStatus(getString(R.string.verification, "Created"))
             }
-            Status.CREATED.state -> {
+            Status.CREATED.state -> {// status from quorum verification
                 spannedStatus(getString(R.string.verification, "Pending"))
             }
             Status.VERIFIED.state -> {
                 spannedStatus(getString(R.string.verification, "Verified"))
             }
             Status.UNVERIFIED.state -> {
-//            "" -> {
                 statusIv.visibility = View.VISIBLE;
                 spannedStatus(getString(R.string.verification, "Unverified"))
                 saveBt.text = getString(R.string.add_new_id)
                 saveBt.setOnClickListener {
+                    model.deleteDocument(documentId = currentDocument.id)
+                    finish()
                     PresentationManager.documentChoiseVerify(this)
                 }
             }
