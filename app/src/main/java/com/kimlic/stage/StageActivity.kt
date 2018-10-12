@@ -146,7 +146,7 @@ class StageActivity : BaseActivity() {
         receiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 Prefs.newCompanyAccepted = true
-                manageRedDot(Prefs.newCompanyAccepted)
+                manageRedDot(Prefs.newCompanyAccepted)// TODO manage redDot!!!
             }
         }
         registerReceiver(receiver, intentFilter)
