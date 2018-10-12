@@ -280,7 +280,9 @@ class AccountActivity : BaseActivity() {
 
                 val companyIds = companyModel.companyIds()
 
-                if (company!!.id in companyIds) {
+                val d = companyModel.companyDocumentDetails(currentCompany!!.id)
+
+                if (company!!.id in companyIds && d != null) {
                     finish()
                     PresentationManager.companyDetails(this, company.id)
                 }
