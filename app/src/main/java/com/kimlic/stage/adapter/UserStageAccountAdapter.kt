@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kimlic.R
+import com.kimlic.documents.Status
 import com.kimlic.stage.NameItem
 import com.kimlic.stage.UserItem
 import com.kimlic.utils.AppDoc
@@ -74,6 +75,7 @@ class UserStageAccountAdapter : RecyclerView.Adapter<UserStageAccountAdapter.Con
             type = item.type
             value = item.value
             with(contactView) {
+                warningIv.visibility = if (item.status == Status.UNVERIFIED.state) View.VISIBLE else View.GONE
 
                 if (item.value != "") {
                     contentTv.setTextColor(Color.WHITE)
@@ -90,7 +92,8 @@ class UserStageAccountAdapter : RecyclerView.Adapter<UserStageAccountAdapter.Con
                         contentTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
 
                         if (item.value == "") {
-                            iconIv.background = icon(Icons_.NAME_BLUE.icon);contentTv.text = context.getString(R.string.add_your_name)
+                            iconIv.background = icon(Icons_.NAME_BLUE.icon)
+                            contentTv.text = context.getString(R.string.add_your_name)
                         } else {
                             contentTv.text = item.value; iconIv.background = icon(Icons_.NAME_WHITE.icon)
                             arrowIv.background = resources.getDrawable(R.drawable.ic_white_menu_arrow, null)
