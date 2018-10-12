@@ -5,8 +5,12 @@ import android.app.DatePickerDialog
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Editable
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.StyleSpan
 import android.view.View
 import android.view.WindowManager
 import android.widget.EditText
@@ -16,6 +20,7 @@ import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.db.entity.Document
 import com.kimlic.db.entity.User
+import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.AppDoc
@@ -65,7 +70,7 @@ class DocumentDetails : BaseActivity() {
         when (action) {
             "preview" -> setupPreview()
             "previewAndSave" -> setupPreviewAndSave()
-            "choose" -> setupChoose()
+            //"choose" -> setupChoose()
         }
     }
 
@@ -83,27 +88,37 @@ class DocumentDetails : BaseActivity() {
         expireDateEt.text = Editable.Factory.getInstance().newEditable(currentDocument.expireDate)
         countryEt.text = Editable.Factory.getInstance().newEditable(currentDocument.country)
 
+        statusIv.visibility = View.GONE
         saveBt.text = getString(R.string.ok)
         saveBt.setOnClickListener { finish() }
         backBt.setOnClickListener { finish() }
-    }
 
-    private fun setupChoose() {
-        setupPreview()
-
-        saveBt.text = getString(R.string.select_this_document)
-        saveBt.setOnClickListener {
-            val data = Intent()
-            data.putExtra(AppConstants.DOCUMENT_TYPE.key, currentDocument.type)
-            setResult(Activity.RESULT_OK, data)
-            finish()
+        when (currentDocument.state) {
+            "" -> {
+                spannedStatus(getString(R.string.verification, "Created"))
+            }
+            Status.CREATED.state -> {
+                spannedStatus(getString(R.string.verification, "Pending"))
+            }
+            Status.VERIFIED.state -> {
+                spannedStatus(getString(R.string.verification, "Verified"))
+            }
+            Status.UNVERIFIED.state -> {
+//            "" -> {
+                statusIv.visibility = View.VISIBLE;
+                spannedStatus(getString(R.string.verification, "Unverified"))
+                saveBt.text = getString(R.string.add_new_id)
+                saveBt.setOnClickListener {
+                    PresentationManager.documentChoiseVerify(this)
+                }
+            }
         }
-        backBt.setOnClickListener { finish() }
     }
 
     private fun setupPreviewAndSave() {
         setupTitle(documentType)
         fillPhotoFramesFromCache()
+        statusLl.visibility = View.GONE
 
         saveBt.setOnClickListener {
             if (validFields()) {
@@ -185,6 +200,16 @@ class DocumentDetails : BaseActivity() {
             }
         }.contains(false)
         return !error
+    }
+
+    private fun spannedStatus(text: String) {
+        val words = text.split(" ")
+        val spanStart = words[0].length + 1
+        val spannableBuilder = SpannableStringBuilder(text)
+        val boldStyle = StyleSpan(Typeface.BOLD)
+
+        spannableBuilder.setSpan(boldStyle, spanStart, text.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+        statusTv.text = spannableBuilder
     }
 
     private fun cropped(fileName: String): Bitmap {
