@@ -36,6 +36,8 @@ class CompanyDetailsViewModel(application: Application) : AndroidViewModel(appli
 
     fun companyIds() = companyRepository.companyIds(Prefs.currentAccountAddress)
 
+    fun companyDocumentDetailsLive(companyId: String) = companyRepository.companyVerifiedDocumentLive(Prefs.currentAccountAddress, companyId)
+
     fun companyDocumentDetails(companyId: String) = companyRepository.companyVerifiedDocument(Prefs.currentAccountAddress, companyId)
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
