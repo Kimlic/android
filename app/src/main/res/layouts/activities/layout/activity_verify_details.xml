@@ -60,6 +60,34 @@
       app:layout_constraintTop_toBottomOf="@+id/logoIv"/>
 
     <LinearLayout
+      android:id="@+id/statusLl"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="4dp"
+      android:orientation="horizontal"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/titleTv">
+
+      <ImageView
+        android:id="@+id/statusIv"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/ic_profile_warning_red_white_icon"
+        android:contentDescription="@string/document_status"/>
+
+      <TextView
+        android:id="@+id/statusTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_size_medium_18"
+        tools:text="Verification"/>
+      `
+    </LinearLayout>
+
+    <LinearLayout
       android:id="@+id/rootMiddleLl"
       android:layout_width="@dimen/content_width"
       android:layout_height="wrap_content"
@@ -67,7 +95,7 @@
       android:orientation="vertical"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/titleTv">
+      app:layout_constraintTop_toBottomOf="@id/statusLl">
 
       <android.support.design.widget.TextInputLayout
         android:id="@+id/documentTil"
