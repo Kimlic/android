@@ -54,7 +54,7 @@ class CompanyDetailsSyncService : IntentService(CompanyDetailsSyncService::class
         unverifiedList = companyDao.companysByStatus(Prefs.currentAccountAddress, Status.UNVERIFIED.state)
         unverifiedQueue.addAll(unverifiedList)
         recursiveRequest()
-        sendRedDotBroadcast()
+//        sendRedDotBroadcast()
     }
 
     // Private
@@ -69,9 +69,8 @@ class CompanyDetailsSyncService : IntentService(CompanyDetailsSyncService::class
                         val docList = Gson().fromJson<CompanyDocumentsEntity>(JSONObject.toString(), type)
 
                         docList.docs.forEach {
-                            updateUserName(it.document.firstName, it.document.lastName)
-                            updateApplicationDate(Prefs.currentAccountAddress, company, it.document.type, it.document.verifiedAt)
-                            Prefs.newCompanyAccepted = true
+                            updateUserName(it.document.firstName!!, it.document.lastName!!)
+                            updateCompanyDocumentDetails(Prefs.currentAccountAddress, company, it.document.type!!, it.document.status!!, it.document.verifiedAt!!)
                         }
                         recursiveRequest()
                     },
@@ -85,13 +84,27 @@ class CompanyDetailsSyncService : IntentService(CompanyDetailsSyncService::class
 
     // Private
 
-    private fun updateApplicationDate(accountAddress: String, company: Company, documentType: String, applicationDate: String) {
+    private fun updateCompanyDocumentDetails(accountAddress: String, company: Company, documentType: String, status: String, applicationDate: String) {
         val document = documentDao.select(accountAddress, documentType)
         val documentId = document?.id!!
         val companyId = company.id
         val applicationDateSec = TimeZoneConverter().convertToSeconds(timeDate = applicationDate)
 
-        company.status = Status.VERIFIED.state
+        when (status) {
+            "declined" -> {
+                document.state = Status.UNVERIFIED.state
+            }
+            "approved" -> {
+                document.state = Status.VERIFIED.state
+                sendRedDotBroadcast()
+            }
+            "resubmission_requested" -> {
+
+            }
+
+        }
+
+        //company.status = Status.VERIFIED.state
         companyDao.update(company)
 
         val companyDocumentJoin = CompanyDocumentJoin(documentId = documentId, companyId = companyId, date = applicationDateSec)
@@ -107,7 +120,6 @@ class CompanyDetailsSyncService : IntentService(CompanyDetailsSyncService::class
         val user = dataBase!!.userDao().select(Prefs.currentAccountAddress)
         user.firstName = firstName
         user.lastName = lastName
-        dataBase!!.userDao().select(Prefs.currentAccountAddress)
         dataBase!!.userDao().update(user)
         syncDataBase()
     }
