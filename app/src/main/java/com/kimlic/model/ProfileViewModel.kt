@@ -6,6 +6,7 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
 import android.os.Handler
+import android.util.Log
 import com.kimlic.db.entity.*
 import com.kimlic.documents.Status
 import com.kimlic.preferences.Prefs
@@ -101,7 +102,10 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
 
     fun updateDocument(document: Document) = repository.updateDocument(document)
 
-    fun deleteDocument(documentId: Long) = repository.documentDelete(documentId = documentId)
+    fun deleteDocument(documentId: Long) {
+        Log.d("TAGDELETEI", "in viewModel")
+        repository.documentDelete(documentId = documentId)
+    }
 
     fun deleteDocument(document: Document) = repository.documentDelete(document = document)
 
