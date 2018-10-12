@@ -6,6 +6,7 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
 import android.os.Handler
+import android.util.Log
 import com.kimlic.db.entity.*
 import com.kimlic.documents.Status
 import com.kimlic.preferences.Prefs
@@ -120,7 +121,11 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
 
     //Sync request
 
-    fun syncProfile() = repository.syncProfile(Prefs.currentAccountAddress)
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    fun syncProfile() {
+        Log.d("TAGSYNC", "sync on Pause")
+        repository.syncProfile(Prefs.currentAccountAddress)
+    }
 
     // Quorum request
 
