@@ -287,6 +287,6 @@
   <string name="select_this_document">Select This Document</string>
   <string name="your_identity_information_is_sent_to_be_verified">Your Identity Information is sent \n to be verified.</string>
   <string name="application">Application %1$s</string>
-  <string name="verification">Verification %1$s</string>
+  <string name="verification">Verification: %1$s</string>
   <string name="document_status">document status</string>
 </resources>
