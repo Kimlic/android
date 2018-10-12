@@ -18,6 +18,9 @@ interface CompanyDocumentDao {
     * */
 
     @Query("SELECT CDJ.company_id, CDJ.document_id, CDJ.verified_at FROM company_document_join AS CDJ INNER JOIN company AS C ON C.id IN (SELECT COM.id FROM company as COM JOIN user as US ON US.id = COM.user_id  WHERE US.account_address =:accountAddress) JOIN document as D ON D.user_id in (SELECT US.id FROM user AS US WHERE US.account_address =:accountAddress) AND C.id=:companyId LIMIT 1")
-    fun selectCompanyDocumentJoin(accountAddress: String, companyId: String): LiveData<CompanyDocumentJoin>
+    fun selectCompanyDocumentJoinLive(accountAddress: String, companyId: String): LiveData<CompanyDocumentJoin>
+
+    @Query("SELECT CDJ.company_id, CDJ.document_id, CDJ.verified_at FROM company_document_join AS CDJ INNER JOIN company AS C ON C.id IN (SELECT COM.id FROM company as COM JOIN user as US ON US.id = COM.user_id  WHERE US.account_address =:accountAddress) JOIN document as D ON D.user_id in (SELECT US.id FROM user AS US WHERE US.account_address =:accountAddress) AND C.id=:companyId LIMIT 1")
+    fun selectCompanyDocumentJoin(accountAddress: String, companyId: String): CompanyDocumentJoin
 
 }
