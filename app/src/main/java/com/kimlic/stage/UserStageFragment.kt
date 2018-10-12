@@ -195,6 +195,7 @@ interface UserItem {
     val type: String
     val value: String
     val tag: String
+    val status: String
 }
 
 class NameItem(val name: String = "") : UserItem {
@@ -202,6 +203,7 @@ class NameItem(val name: String = "") : UserItem {
     override val type: String get() = "USER_NAME"
     override val value: String get() = name
     override fun toString(): String = this::class.java.simpleName
+    override val status = ""
     var isClickable: Boolean = false
 }
 
@@ -210,6 +212,7 @@ class RisksItem(val present: Boolean) : UserItem {
     override val type: String get() = "risks"
     override val value: String get() = if (present) "1" else "0"
     override fun toString(): String = present.toString()
+    override val status = ""
 }
 
 class KimItem(val quantity: Int = 0) : UserItem {
@@ -217,6 +220,7 @@ class KimItem(val quantity: Int = 0) : UserItem {
     override val type: String get() = "kim"
     override val value: String get() = quantity.toString()
     override fun toString(): String = this::class.java.simpleName
+    override val status = ""
 }
 
 class ContactItem(val contact: Contact) : UserItem {
@@ -224,6 +228,7 @@ class ContactItem(val contact: Contact) : UserItem {
     override val type: String get() = contact.type
     override val value: String get() = contact.value
     override fun toString(): String = this::class.java.simpleName
+    override val status = ""
 }
 
 class DocumentItem(val document: Document) : UserItem {
@@ -231,6 +236,7 @@ class DocumentItem(val document: Document) : UserItem {
     override val type: String get() = document.type
     override val value: String get() = document.country
     override fun toString(): String = document.toString()
+    override val status = document.state
 }
 
 class AddressItem(val address: Address) : UserItem {
@@ -238,4 +244,5 @@ class AddressItem(val address: Address) : UserItem {
     override val type: String get() = "address"
     override val value: String get() = address.value
     override fun toString(): String = address.toString()
+    override val status = ""
 }
