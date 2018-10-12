@@ -70,7 +70,7 @@ class CompanyDetailsSyncService : IntentService(CompanyDetailsSyncService::class
 
                         docList.docs.forEach {
                             updateUserName(it.document.firstName!!, it.document.lastName!!)
-                            updateCompanyDocumentDetails(Prefs.currentAccountAddress, company, it.document.type!!, it.document.status!!, it.document.verifiedAt!!)
+                            updateCompanyDocumentDetails(accountAddress = Prefs.currentAccountAddress,company = company,documentType =  it.document.type!!,status = it.document.status,applicationDate =  it.document.verifiedAt)
                         }
                         recursiveRequest()
                     },
@@ -84,22 +84,24 @@ class CompanyDetailsSyncService : IntentService(CompanyDetailsSyncService::class
 
     // Private
 
-    private fun updateCompanyDocumentDetails(accountAddress: String, company: Company, documentType: String, status: String, applicationDate: String) {
+    private fun updateCompanyDocumentDetails(accountAddress: String, company: Company, documentType: String, status: String? = "", applicationDate: String? = "1") {
         val document = documentDao.select(accountAddress, documentType)
         val documentId = document?.id!!
         val companyId = company.id
-        val applicationDateSec = TimeZoneConverter().convertToSeconds(timeDate = applicationDate)
+        val applicationDateSec = TimeZoneConverter().convertToSeconds(timeDate = "2018-10-12T11:11:18.776127Z")//applicationDate!!)
 
         when (status) {
             "declined" -> {
-                document.state = Status.UNVERIFIED.state
+
             }
             "approved" -> {
-                document.state = Status.VERIFIED.state
+                //document.state = Status.VERIFIED.state
+                val companyDocumentJoin = CompanyDocumentJoin(documentId = documentId, companyId = companyId, date = applicationDateSec)
+                companyDocumentDao.insert(companyDocumentJoin)
+                company.status = Status.VERIFIED.state
                 sendRedDotBroadcast()
             }
             "resubmission_requested" -> {
-
             }
 
         }
@@ -107,8 +109,8 @@ class CompanyDetailsSyncService : IntentService(CompanyDetailsSyncService::class
         //company.status = Status.VERIFIED.state
         companyDao.update(company)
 
-        val companyDocumentJoin = CompanyDocumentJoin(documentId = documentId, companyId = companyId, date = applicationDateSec)
-        companyDocumentDao.insert(companyDocumentJoin)
+        //val companyDocumentJoin = CompanyDocumentJoin(documentId = documentId, companyId = companyId, date = applicationDateSec)
+        //companyDocumentDao.insert(companyDocumentJoin)
         syncDataBase()
     }
 
