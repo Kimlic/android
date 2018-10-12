@@ -90,8 +90,8 @@
 
   <Button
     android:id="@+id/scanBt"
-    android:layout_width="100dp"
-    android:layout_height="92dp"
+    android:layout_width="124dp"
+    android:layout_height="112dp"
     android:layout_marginBottom="8dp"
     android:background="@drawable/ic_scan_button"
     app:layout_constraintBottom_toBottomOf="parent"
