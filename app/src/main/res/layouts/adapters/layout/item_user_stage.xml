@@ -4,7 +4,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/phoneItem"
   android:layout_width="match_parent"
-  android:layout_height="40dp"
+  android:layout_height="48dp"
   android:focusableInTouchMode="false">
 
   <ImageView
@@ -15,10 +15,23 @@
     android:contentDescription="@string/icon"
     tools:background="@drawable/ic_phone_in_talk_dark_24dp"/>
 
+  <ImageView
+    android:id="@+id/warningIv"
+    style="@style/DetailsItemTextView"
+    android:layout_width="16dp"
+    android:layout_height="16dp"
+    android:layout_marginStart="20dp"
+    android:layout_marginBottom="8dp"
+    android:layout_alignParentBottom="true"
+    android:background="@drawable/ic_profile_warning_red_white_icon"
+    android:contentDescription="@string/warning"
+    android:gravity="center"
+    tools:text="Item description"/>
+
   <TextView
     android:id="@+id/contentTv"
     style="@style/DetailsItemTextView"
-    android:layout_marginStart="32dp"
+    android:layout_marginStart="48dp"
     android:gravity="center"
     tools:text="Item description"/>
 
