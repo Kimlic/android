@@ -103,6 +103,8 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
 
     fun deleteDocument(documentId: Long) = repository.documentDelete(documentId = documentId)
 
+    fun deleteDocument(document: Document) = repository.documentDelete(document = document)
+
     //fun states() = repository.documentStates(Prefs.currentAccountAddress)
 
     fun hasDocumentInProgress(): Boolean {
