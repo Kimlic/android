@@ -175,6 +175,9 @@ class ProfileRepository private constructor() {
     fun document(accountAddress: String, documentType: String) = documentDao.select(accountAddress, documentType)
 
     fun documentDelete(documentId: Long) = { documentDao.delete(id = documentId); syncDataBase() }
+
+    fun documentDelete(document: Document) = { documentDao.delete(document = document); syncDataBase() }
+
     // previous - with big files
     fun addDocument_(accountAddress: String, documentType: String, country: String, countryIso: String, documentNumber: String, expireDate: String, portraitName: String, portraitData: ByteArray, frontName: String, frontData: ByteArray, backName: String, backData: ByteArray) {
         val userId = userDao.select(accountAddress).id
@@ -698,10 +701,11 @@ class ProfileRepository private constructor() {
                     it.state = Status.CREATED.state; documentDao.update(it)
                 }
                 Status.UNVERIFIED.state, "" -> {
-                    val documentPhotos = photoDao.selectUserPhotosByDocument(accountAddress, documentType).map { it.file }
-                    documentPhotos.forEach { photo -> deleteFile(photo) }
-                    documentPhotos.forEach { photo -> removePhotoGDrive(accountAddress, photo) }
-                    documentDao.delete(it)
+                    //val documentPhotos = photoDao.selectUserPhotosByDocument(accountAddress, documentType).map { it.file }
+                    //documentPhotos.forEach { photo -> deleteFile(photo) }
+                    //documentPhotos.forEach { photo -> removePhotoGDrive(accountAddress, photo) }
+                    it.state = Status.UNVERIFIED.state
+                    documentDao.update(it)
                 }
             }
         }
