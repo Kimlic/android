@@ -47,6 +47,8 @@ class CompanyRepository {
 
     // Company verified document
 
+    fun companyVerifiedDocumentLive(accountAddress: String, companyId: String) = companyDocumentDao.selectCompanyDocumentJoinLive(accountAddress, companyId)
+
     fun companyVerifiedDocument(accountAddress: String, companyId: String) = companyDocumentDao.selectCompanyDocumentJoin(accountAddress, companyId)
 
 }
