@@ -26,7 +26,7 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
         currentAccountAddress = ""
         currentMnemonic = ""
         newCompanyAccepted = false
-        needCompanySync = false
+        needCompanySyncCount = 0
     }
 
     // Preferences
@@ -95,7 +95,7 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
         get() = getBoolean(AppConstants.NEW_COMPANY_ACCEPTED.key)
         set(value) = setBoolean(AppConstants.NEW_COMPANY_ACCEPTED.key, value)
 
-    var needCompanySync: Boolean
-        get() = getBoolean(AppConstants.NEED_COMPANY_SYNC.key)
-        set(value) = setBoolean(AppConstants.NEED_COMPANY_SYNC.key, value)
+    var needCompanySyncCount: Int
+        get() = getInt(AppConstants.NEED_COMPANY_SYNC.key)
+        set(value) = setInt(AppConstants.NEED_COMPANY_SYNC.key, value)
 }
