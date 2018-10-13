@@ -33,11 +33,19 @@ class AccountsStageFragment : BaseFragment() {
 
     // Variables
 
+    private lateinit var companySyncModel: SyncViewModel
     private lateinit var adapter: CompanyAdapter
     private var companiesList: List<Company> = emptyList()
     private lateinit var companyModel: CompanyDetailsViewModel
 
     // Life
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        companySyncModel = ViewModelProviders.of(this).get(SyncViewModel::class.java)
+        lifecycle.addObserver(companySyncModel)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_stage_accounts, container, false)
