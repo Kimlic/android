@@ -32,6 +32,7 @@ import com.kimlic.documents.fragments.SelectCountryFragment
 import com.kimlic.documents.fragments.SelectDocumentFragment
 import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
+import com.kimlic.preferences.Prefs
 import com.kimlic.stage.CompanyDetailsViewModel
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.AppDoc
@@ -410,6 +411,7 @@ class AccountActivity : BaseActivity() {
                                 currentCompany!!.status = Status.UNVERIFIED.state
                                 currentCompany!!.url = url
                                 companyModel.saveCompany(currentCompany!!)
+                                Prefs.needCompanySync = true
                                 hideProgress()
                                 successful()
                             },
