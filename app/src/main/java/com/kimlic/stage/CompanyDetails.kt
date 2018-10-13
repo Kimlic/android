@@ -91,7 +91,7 @@ class CompanyDetails : BaseActivity() {
     }
 
     private fun fetchCompanyDocumentDetails(companyId: String) {
-        companyModel.companyDocumentDetails(companyId).observe(this, Observer { companyDocumentJoin ->
+        companyModel.companyDocumentDetailsLive(companyId).observe(this, Observer { companyDocumentJoin ->
             dateDetails = DateDetails(companyDocumentJoin!!.date)
             setupAdapterList()
         })
