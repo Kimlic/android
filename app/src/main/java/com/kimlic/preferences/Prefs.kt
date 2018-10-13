@@ -98,4 +98,8 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
     var needCompanySyncCount: Int
         get() = getInt(AppConstants.NEED_COMPANY_SYNC.key)
         set(value) = setInt(AppConstants.NEED_COMPANY_SYNC.key, value)
+
+    var needDocumentSyncCount: Int
+        get() = getInt(AppConstants.NEED_DOCUMENT_SYNC.key)
+        set(value) = setInt(AppConstants.NEED_DOCUMENT_SYNC.key, value)
 }
