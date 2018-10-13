@@ -37,6 +37,7 @@ class StageActivity : BaseActivity() {
     private lateinit var accountsStageFragment: AccountsStageFragment
     private lateinit var model: ProfileViewModel
     private lateinit var companyModel: CompanyDetailsViewModel
+    private lateinit var syncModel: SyncViewModel
     private lateinit var receiver: BroadcastReceiver
 
     // Life
@@ -48,6 +49,7 @@ class StageActivity : BaseActivity() {
 
         model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         companyModel = ViewModelProviders.of(this).get(CompanyDetailsViewModel::class.java)
+        syncModel = ViewModelProviders.of(this).get(SyncViewModel::class.java)
         setupUI()
     }
 
@@ -102,6 +104,7 @@ class StageActivity : BaseActivity() {
         initFragments()
         lifecycle.addObserver(model)
         lifecycle.addObserver(userStageFragment)
+        lifecycle.addObserver(syncModel)
         setupListeners()
         profileBt.isSelected = true
         replaceStageFragment()
