@@ -411,7 +411,7 @@ class AccountActivity : BaseActivity() {
                                 currentCompany!!.status = Status.UNVERIFIED.state
                                 currentCompany!!.url = url
                                 companyModel.saveCompany(currentCompany!!)
-                                Prefs.needCompanySyncCount += 1
+                                Prefs.needCompanySyncCount = Prefs.needCompanySyncCount + 1
                                 hideProgress()
                                 successful()
                             },
