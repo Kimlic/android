@@ -77,6 +77,7 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
     // Help constants
 
     ERROR_DESCRIPTION("ERROR"),
+    NEED_COMPANY_SYNC("NEED_COMPANY_SYNC"),
 
     // Firebase token
 
