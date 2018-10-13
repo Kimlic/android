@@ -6,6 +6,7 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
 import android.content.Intent
+import android.util.Log
 import com.kimlic.KimlicApp
 import com.kimlic.preferences.Prefs
 import com.kimlic.service.CompanyDetailsSyncService
@@ -17,9 +18,15 @@ class SyncViewModel(application: Application) : AndroidViewModel(application), L
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun runCompanySyncService() {
+        Log.d("TAGSYNCSERVICE", "in on resume in service")
         if (!ServiceUtil.isMyServiceRunning(getApplication(), CompanyDetailsSyncService::class.java.simpleName) && Prefs.needCompanySyncCount > 0) {
             val syncIntent = Intent(getApplication(), CompanyDetailsSyncService::class.java)
             getApplication<KimlicApp>().startService(syncIntent)
         }
+    }
+
+
+    fun runDocumentStatusSyncRequest(){
+
     }
 }
