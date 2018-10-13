@@ -13,7 +13,7 @@ import com.kimlic.model.ProfileRepository
 import com.kimlic.preferences.Prefs
 import com.kimlic.service.CompanyDetailsSyncService
 
-class CompanyDetailsViewModel(application: Application) : AndroidViewModel(application), LifecycleObserver {
+class CompanyDetailsViewModel(application: Application) : AndroidViewModel(application){
 
     // Variables
 
@@ -40,9 +40,4 @@ class CompanyDetailsViewModel(application: Application) : AndroidViewModel(appli
 
     fun companyDocumentDetails(companyId: String) = companyRepository.companyVerifiedDocument(Prefs.currentAccountAddress, companyId)
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    fun companyStatusRequestService() {
-        val syncIntent = Intent(getApplication(), CompanyDetailsSyncService::class.java)
-        getApplication<KimlicApp>().startService(syncIntent)
-    }
 }
