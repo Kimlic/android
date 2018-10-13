@@ -156,6 +156,7 @@ class StageActivity : BaseActivity() {
         val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
         ft.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
         ft.replace(R.id.container, userStageFragment, UserStageFragment.FRAGMENT_KEY).commit()
+        ft.addToBackStack(null)
         return true
     }
 
@@ -163,6 +164,7 @@ class StageActivity : BaseActivity() {
         val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
         ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
         ft.replace(R.id.container, accountsStageFragment, AccountsStageFragment.FRAGMENT_KEY).commit()
+        ft.addToBackStack(null)
         return true
     }
 
