@@ -22,6 +22,7 @@ import com.kimlic.db.entity.CompanyDocumentJoin
 import com.kimlic.documents.Status
 import com.kimlic.preferences.Prefs
 import com.kimlic.service.entity.CompanyDocumentsEntity
+import com.kimlic.service.entity.DocumentWrapperEntity
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.time_converter.TimeZoneConverter
 import org.json.JSONObject
@@ -36,6 +37,8 @@ class CompanyDetailsSyncService : IntentService(CompanyDetailsSyncService::class
     private lateinit var documentDao: DocumentDao
     private lateinit var companyDocumentDao: CompanyDocumentDao
     private lateinit var unverifiedList: List<Company>
+    private lateinit var pendingList: List<Company>
+
     private lateinit var unverifiedQueue: ArrayDeque<Company>
 
     // Live
@@ -52,9 +55,9 @@ class CompanyDetailsSyncService : IntentService(CompanyDetailsSyncService::class
 
     override fun onHandleIntent(intent: Intent?) {
         unverifiedList = companyDao.companysByStatus(Prefs.currentAccountAddress, Status.UNVERIFIED.state)
-        unverifiedQueue.addAll(unverifiedList)
+        pendingList = companyDao.companysByStatus(Prefs.currentAccountAddress, Status.PENDING.state)
+        unverifiedQueue.addAll(unverifiedList + pendingList)
         recursiveRequest()
-//        sendRedDotBroadcast()
     }
 
     // Private
@@ -68,10 +71,7 @@ class CompanyDetailsSyncService : IntentService(CompanyDetailsSyncService::class
                         val type = object : TypeToken<CompanyDocumentsEntity>() {}.type
                         val docList = Gson().fromJson<CompanyDocumentsEntity>(JSONObject.toString(), type)
 
-                        docList.docs.forEach {
-                            updateUserName(it.document.firstName!!, it.document.lastName!!)
-                            updateCompanyDocumentDetails(accountAddress = Prefs.currentAccountAddress,company = company,documentType =  it.document.type!!,status = it.document.status,applicationDate =  it.document.verifiedAt)
-                        }
+                        docList.docs.forEach { updateCompanyDocumentDetails(Prefs.currentAccountAddress, company, it) }
                         recursiveRequest()
                     },
                     Response.ErrorListener {
@@ -84,33 +84,44 @@ class CompanyDetailsSyncService : IntentService(CompanyDetailsSyncService::class
 
     // Private
 
-    private fun updateCompanyDocumentDetails(accountAddress: String, company: Company, documentType: String, status: String? = "", applicationDate: String? = "1") {
-        val document = documentDao.select(accountAddress, documentType)
+    private fun updateCompanyDocumentDetails(accountAddress: String, company: Company, companyWrapperEntity: DocumentWrapperEntity) {
+        val documentEntityType = companyWrapperEntity.document.type!!
+        val document = documentDao.select(accountAddress, documentEntityType)
         val documentId = document?.id!!
         val companyId = company.id
-        val applicationDateSec = TimeZoneConverter().convertToSeconds(timeDate = "2018-10-12T11:11:18.776127Z")//applicationDate!!)
 
-        when (status) {
-            "declined" -> {
+        companyWrapperEntity.let {
+            when (it.document.status) {
+                // Pending status
+                "" -> {
+                    val verifiedAt = 0L
+                    val companyDocumentJoin = CompanyDocumentJoin(documentId = documentId, companyId = companyId, date = verifiedAt)
 
-            }
-            "approved" -> {
-                //document.state = Status.VERIFIED.state
-                val companyDocumentJoin = CompanyDocumentJoin(documentId = documentId, companyId = companyId, date = applicationDateSec)
-                companyDocumentDao.insert(companyDocumentJoin)
-                company.status = Status.VERIFIED.state
-                sendRedDotBroadcast()
-            }
-            "resubmission_requested" -> {
-            }
+                    company.status = Status.PENDING.state
+                    companyDao.update(company)
+                    companyDocumentDao.insert(companyDocumentJoin)
+                }
+                "declined" -> {
+                }
+                "approved" -> {
+                    val verifiedAt = if (it.document.verifiedAt != "") TimeZoneConverter().convertToSeconds(timeDate = it.document.verifiedAt!!) else 0
+                    val companyDocumentJoin = CompanyDocumentJoin(documentId = documentId, companyId = companyId, date = verifiedAt)
 
+                    updateUserName(it.document.firstName!!, it.document.lastName!!)
+                    company.status = Status.VERIFIED.state
+                    Prefs.needCompanySyncCount = Prefs.needCompanySyncCount - 1
+                    companyDocumentDao.insert(companyDocumentJoin)
+                    companyDao.update(company)
+
+                    sendRedDotBroadcast()
+                }
+                "resubmission_requested" -> {
+                }
+                else -> {
+                }
+            }
         }
 
-        //company.status = Status.VERIFIED.state
-        companyDao.update(company)
-
-        //val companyDocumentJoin = CompanyDocumentJoin(documentId = documentId, companyId = companyId, date = applicationDateSec)
-        //companyDocumentDao.insert(companyDocumentJoin)
         syncDataBase()
     }
 
