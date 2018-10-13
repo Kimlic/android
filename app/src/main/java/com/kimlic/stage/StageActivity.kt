@@ -101,7 +101,6 @@ class StageActivity : BaseActivity() {
         FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener { Log.d("TAGACCOUNT", "accountToken = ${it.token}") }
         initFragments()
         lifecycle.addObserver(model)
-        lifecycle.addObserver(companyModel)
         lifecycle.addObserver(userStageFragment)
         setupListeners()
         profileBt.isSelected = true
@@ -146,7 +145,7 @@ class StageActivity : BaseActivity() {
         receiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 Prefs.newCompanyAccepted = true
-                manageRedDot(Prefs.newCompanyAccepted)// TODO manage redDot!!!
+                manageRedDot(Prefs.newCompanyAccepted)
             }
         }
         registerReceiver(receiver, intentFilter)
