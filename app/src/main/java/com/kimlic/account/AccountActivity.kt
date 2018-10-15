@@ -9,6 +9,7 @@ import android.graphics.Typeface
 import android.graphics.drawable.PictureDrawable
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -81,6 +82,7 @@ class AccountActivity : BaseActivity() {
     private lateinit var selectCountryFragment: SelectCountryFragment
     private lateinit var selectAccountDocumentFragment_: SelectDocumentValidFragment
     private lateinit var selectAccountDocumentFragment: SelectAccountDocumentFragment
+    private lateinit var divider: DividerItemDecoration
 
     // Life
 
@@ -187,9 +189,12 @@ class AccountActivity : BaseActivity() {
     }
 
     private fun setupAdapter() {
+        divider = DividerItemDecoration(this, LinearLayoutManager.VERTICAL)
+        divider.setDrawable(resources.getDrawable(R.drawable.item_divider_blue, null))
         adapter = RPAdapter()
         contactRecycler.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
         contactRecycler.adapter = adapter
+        contactRecycler.addItemDecoration(divider)
     }
 
     private fun setupAdapterList() {
