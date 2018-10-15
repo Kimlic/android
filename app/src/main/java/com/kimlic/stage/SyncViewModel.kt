@@ -12,6 +12,11 @@ import com.kimlic.preferences.Prefs
 import com.kimlic.service.CompanyDetailsSyncService
 import com.kimlic.service.ServiceUtil
 
+/*
+* View model class is used to synchronize company status information.
+* Implementing LifecycleObserver interface. This class applied as observer to StageActivity, AccountsStageFragment
+* */
+
 class SyncViewModel(application: Application) : AndroidViewModel(application), LifecycleObserver {
 
     // Life
