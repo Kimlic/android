@@ -16,6 +16,8 @@
 
   <dimen name="item_user_stage_height">48dp</dimen>
   <dimen name="item_setting_height">56dp</dimen>
+  <dimen name="item_account_document_height">56dp</dimen>
+  <dimen name="details_item_text_view_text_size">16dp</dimen>
 
 
   <!--SettingsProfile text sizes-->
