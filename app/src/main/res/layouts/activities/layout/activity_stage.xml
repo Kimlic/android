@@ -18,7 +18,7 @@
 
   <ImageView
     android:layout_width="wrap_content"
-    android:layout_height="64dp"
+    android:layout_height="@dimen/stage_lower_buttons_height"
     android:background="@drawable/ic_buttom_menu_background"
     android:contentDescription="@string/bottom_menu_background"
     app:layout_constraintBottom_toBottomOf="@+id/bottomLl"/>
@@ -90,8 +90,8 @@
 
   <Button
     android:id="@+id/scanBt"
-    android:layout_width="124dp"
-    android:layout_height="112dp"
+    android:layout_width="@dimen/button_scan_width"
+    android:layout_height="@dimen/button_scan_height"
     android:layout_marginBottom="8dp"
     android:background="@drawable/ic_scan_button"
     app:layout_constraintBottom_toBottomOf="parent"
