@@ -8,6 +8,16 @@
 
   <dimen name="back_bt_square">36dp</dimen>
 
+  <dimen name="button_scan_width">108dp</dimen>
+  <dimen name="button_scan_height">96dp</dimen>
+  <dimen name="stage_lower_buttons_height">64dp</dimen>
+
+  <!--Adapter items-->
+
+  <dimen name="item_user_stage_height">48dp</dimen>
+  <dimen name="item_setting_height">56dp</dimen>
+
+
   <!--SettingsProfile text sizes-->
   <dimen name="settings_text_size_large">19sp</dimen>
   <dimen name="settings_text_size_medium">13sp</dimen>
@@ -22,10 +32,12 @@
   <dimen name="content_width">310dp</dimen>
   <dimen name="button_height">56dp</dimen>
 
+  <dimen name="user_portrait_width">260dp</dimen>
+
   <!--popup fragments, camera exit button size-->
   <dimen name="menu_element_square_size">24dp</dimen>
 
-  <dimen name="popup_fragment_width">296dp</dimen>
+  <dimen name="popup_fragment_width">288dp</dimen>
   <dimen name="image_elevation">8dp</dimen>
 
   <!--Rounded logo dimens-->
