@@ -3,7 +3,6 @@ package com.kimlic.stage
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -39,7 +38,7 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
 
     // Variables
 
-    private lateinit var divider: DividerItemDecoration
+    private lateinit var divider: com.kimlic.utils.DividerItemDecoration
     private lateinit var adapter: UserStageAccountAdapter
     private var nameItem = NameItem(name = "")
     private var risksItem: RisksItem = RisksItem(false)
@@ -172,8 +171,7 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
     }
 
     private fun initDivider() {
-        divider = DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
-        divider.setDrawable(resources.getDrawable(R.drawable.divider_line, null))
+        divider = com.kimlic.utils.DividerItemDecoration(resources.getDrawable(R.drawable.item_divider_blue, null), false, false)
     }
 
     private fun manageCameraIcon(fileName: String) {
