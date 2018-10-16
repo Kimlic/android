@@ -189,11 +189,11 @@ object PresentationManager {
         present(presenter = presenter, className = TermsActivity::class.java, isStarting = false, params = params)
     }
 
-    fun termsAccept(presenter: BaseActivity) {
+    fun termsAccept(presenter: BaseActivity, requestCode: Int) {
         val params = HashMap<String, String>()
         params["action"] = "accept"
         params["content"] = AppConstants.TERMS.key
-        present(presenter = presenter, className = TermsActivity::class.java, isStarting = true, params = params)
+        present(presenter = presenter, className = TermsActivity::class.java, isStarting = false, params = params, requestCode = requestCode)
     }
 
     fun privacyReview(presenter: BaseActivity) {
@@ -201,6 +201,13 @@ object PresentationManager {
         params["action"] = "review"
         params["content"] = AppConstants.PRIVACY.key
         present(presenter = presenter, className = TermsActivity::class.java, isStarting = false, params = params)
+    }
+
+    fun privacyAccept(presenter: BaseActivity, requestCode: Int) {
+        val params = HashMap<String, String>()
+        params["action"] = "accept"
+        params["content"] = AppConstants.PRIVACY.key
+        present(presenter = presenter, className = TermsActivity::class.java, isStarting = false, params = params, requestCode = requestCode)
     }
 
     fun about(presenter: BaseActivity) {
