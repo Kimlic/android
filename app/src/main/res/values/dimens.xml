@@ -20,10 +20,10 @@
   <dimen name="details_item_text_view_text_size">16dp</dimen>
 
   <!--Company Logo-->
-  <dimen name="company_logo_background_width">172dp</dimen>
-  <dimen name="company_logo_background_height">164dp</dimen>
-  <dimen name="company_logo_height">96dp</dimen>
-  <dimen name="company_logo_width">96dp</dimen>
+  <dimen name="company_logo_background_width">188dp</dimen>
+  <dimen name="company_logo_background_height">172dp</dimen>
+  <dimen name="company_logo_height">104dp</dimen>
+  <dimen name="company_logo_width">104dp</dimen>
 
   <!--SettingsProfile text sizes-->
   <dimen name="settings_text_size_large">19sp</dimen>
