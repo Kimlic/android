@@ -8,8 +8,6 @@ import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
-import com.kimlic.terms.TermsActivity
-import com.kimlic.utils.AppConstants
 import kotlinx.android.synthetic.main.activity_signup_recovery.*
 
 class SignUpRecoveryActivity : BaseActivity() {
@@ -62,14 +60,7 @@ class SignUpRecoveryActivity : BaseActivity() {
             )
         }
         recoverBt.setOnClickListener {
-            termsToAccept(TERMS_ACCEPT_RECOVERY_REQUEST_CODE)
+            PresentationManager.termsAccept(this, TERMS_ACCEPT_RECOVERY_REQUEST_CODE)
         }
-    }
-
-    private fun termsToAccept(requestCode: Int) {
-        val intent = Intent(this, TermsActivity::class.java)
-        intent.putExtra("action", "accept")
-        intent.putExtra("content", AppConstants.TERMS.key)
-        startActivityForResult(intent, requestCode)
     }
 }
