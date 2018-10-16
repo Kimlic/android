@@ -7,6 +7,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RelativeLayout
 import com.kimlic.R
 import com.kimlic.documents.Status
 import com.kimlic.stage.NameItem
@@ -89,13 +90,16 @@ class UserStageAccountAdapter : RecyclerView.Adapter<UserStageAccountAdapter.Con
 
                 when (item.type) {
                     "USER_NAME" -> {
-                        contentTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f)
+                        val typedValue = TypedValue()
+                        resources.getValue(R.dimen.text_size_large_name_float, typedValue, true)
+                        contentTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, typedValue.float)
+
+                        val params = contentTv.layoutParams as RelativeLayout.LayoutParams; params.marginStart = 0
 
                         if (item.value == "") {
-                            iconIv.background = icon(Icons_.NAME_BLUE.icon)
                             contentTv.text = context.getString(R.string.add_your_name)
                         } else {
-                            contentTv.text = item.value; iconIv.background = icon(Icons_.NAME_WHITE.icon)
+                            contentTv.text = item.value
                             arrowIv.background = resources.getDrawable(R.drawable.ic_white_menu_arrow, null)
                         }
 
