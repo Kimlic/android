@@ -8,13 +8,13 @@
 
   <dimen name="back_bt_square">36dp</dimen>
 
-  <dimen name="button_scan_width">108dp</dimen>
-  <dimen name="button_scan_height">96dp</dimen>
+  <dimen name="button_scan_width">124dp</dimen>
+  <dimen name="button_scan_height">108dp</dimen>
   <dimen name="stage_lower_buttons_height">64dp</dimen>
 
   <!--Adapter items-->
 
-  <dimen name="item_user_stage_height">48dp</dimen>
+  <dimen name="item_user_stage_height">56dp</dimen>
   <dimen name="item_setting_height">56dp</dimen>
   <dimen name="item_account_document_height">56dp</dimen>
   <dimen name="details_item_text_view_text_size">16dp</dimen>
