@@ -2,12 +2,10 @@ package com.kimlic.stage
 
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.Observer
+import android.graphics.Rect
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.LinearLayout
 import com.kimlic.BaseFragment
 import com.kimlic.R
@@ -19,6 +17,7 @@ import com.kimlic.stage.adapter.UserStageAccountAdapter
 import com.kimlic.utils.AppDoc
 import kotlinx.android.synthetic.main.fragment_stage_user.*
 import java.io.File
+
 
 class UserStageFragment : BaseFragment(), LifecycleObserver {
 
@@ -151,7 +150,18 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
     }
 
     private fun setupListeners() {
-        clickV.setOnClickListener { PresentationManager.settings(activity!!) }
+        settingsBt.setOnClickListener { PresentationManager.settings(activity!!) }
+        val parent = settingsBt.parent as View
+        parent.post {
+            val rect = Rect()
+            settingsBt.getHitRect(rect)
+            rect.top -= 50  // increase top hit area
+            rect.left -= 50   // increase left hit area
+            rect.bottom += 50 // increase bottom hit area
+            rect.right += 50  // increase right hit area
+            parent.touchDelegate = TouchDelegate(rect, settingsBt)
+        }
+
         takePhotoLl.setOnClickListener { PresentationManager.portraitPhoto(activity!!) }
 
         adapter.setOnUserItemClick(object : OnUserItemClick {
