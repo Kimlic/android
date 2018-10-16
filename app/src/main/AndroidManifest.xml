@@ -50,8 +50,6 @@
       android:label="CompanyDetailsService"
       android:name=".service.CompanyDetailsSyncService"/>
 
-    <service android:name=".service.DocumentStatusSyncService"/>
-
     <activity android:name=".MainActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
