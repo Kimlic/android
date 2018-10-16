@@ -9,7 +9,6 @@ import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
-import com.kimlic.terms.TermsActivity
 import kotlinx.android.synthetic.main.activity_tutorial.*
 
 class TutorialActivity : BaseActivity() {
@@ -18,6 +17,7 @@ class TutorialActivity : BaseActivity() {
 
     companion object {
         private const val TERMS_ACCEPT_REQUEST_CODE = 101
+        private const val PRIVACY_ACCEPT_REQUEST_CODE = 102
     }
 
     // Variables
@@ -39,6 +39,13 @@ class TutorialActivity : BaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             TERMS_ACCEPT_REQUEST_CODE -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    PresentationManager.privacyAccept(this, PRIVACY_ACCEPT_REQUEST_CODE)
+                } else
+                    PresentationManager.signUpRecovery(this@TutorialActivity)
+            }
+
+            PRIVACY_ACCEPT_REQUEST_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
                     Prefs.termsAccepted = true
                     PresentationManager.phoneNumber(this@TutorialActivity)
@@ -67,7 +74,7 @@ class TutorialActivity : BaseActivity() {
         tabLayout.setupWithViewPager(pager, true)
         setupPageChangeListener(pager)
 
-        skipTv.setOnClickListener { termsToAccept(TERMS_ACCEPT_REQUEST_CODE) }
+        skipTv.setOnClickListener { PresentationManager.termsAccept(this, TERMS_ACCEPT_REQUEST_CODE) }
     }
 
     private fun setupPageChangeListener(pager: ViewPager) {
@@ -83,7 +90,7 @@ class TutorialActivity : BaseActivity() {
                         isLastPageSwiped = true
                         //Go next activity
                         Prefs.isTutorialShown = true
-                        termsToAccept(TERMS_ACCEPT_REQUEST_CODE)
+                        PresentationManager.termsAccept(this@TutorialActivity, TERMS_ACCEPT_REQUEST_CODE)
                     }
                     counterPageScroll++
                 } else
@@ -99,12 +106,5 @@ class TutorialActivity : BaseActivity() {
                     counterPageScrollL = 0
             }
         })
-    }
-
-    private fun termsToAccept(requestCode: Int) {
-        val intent = Intent(this, TermsActivity::class.java)
-        intent.putExtra("action", "accept")
-        intent.putExtra("content", "TERMS")
-        startActivityForResult(intent, requestCode)
     }
 }
