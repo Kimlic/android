@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <dimen name="circle_button_digit">10sp</dimen>
+  <dimen name="circle_button_digit">30sp</dimen>
 
   <dimen name="text_size_large_26">26sp</dimen>
   <item format="float" name="text_size_large_name_float" type="dimen">32.0</item>
