@@ -19,6 +19,13 @@
   <dimen name="item_account_document_height">64dp</dimen>
   <dimen name="details_item_text_view_text_size">18dp</dimen>
 
+
+  <!--Company Logo-->
+  <dimen name="company_logo_background_width">200dp</dimen>
+  <dimen name="company_logo_background_height">188dp</dimen>
+  <dimen name="company_logo_height">110dp</dimen>
+  <dimen name="company_logo_width">110dp</dimen>
+
   <!--SettingsProfile text sizes-->
   <dimen name="settings_text_size_large">22sp</dimen>
   <dimen name="settings_text_size_medium">15sp</dimen>
