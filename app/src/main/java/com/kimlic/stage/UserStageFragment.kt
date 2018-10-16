@@ -151,7 +151,7 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
     }
 
     private fun setupListeners() {
-        settingsBt.setOnClickListener { PresentationManager.settings(activity!!) }
+        clickV.setOnClickListener { PresentationManager.settings(activity!!) }
         takePhotoLl.setOnClickListener { PresentationManager.portraitPhoto(activity!!) }
 
         adapter.setOnUserItemClick(object : OnUserItemClick {
