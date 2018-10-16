@@ -9,7 +9,6 @@ import android.graphics.Typeface
 import android.graphics.drawable.PictureDrawable
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -38,6 +37,7 @@ import com.kimlic.stage.CompanyDetailsViewModel
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.AppDoc
 import com.kimlic.utils.BaseCallback
+import com.kimlic.utils.DividerItemDecoration
 import com.kimlic.utils.svg.GlideApp
 import com.kimlic.utils.svg.SvgSoftwareLayerSetter
 import com.kimlic.vendors.VendorsViewModel
@@ -94,12 +94,6 @@ class AccountActivity : BaseActivity() {
         vendorsModel = ViewModelProviders.of(this).get(VendorsViewModel::class.java)
         companyModel = ViewModelProviders.of(this).get(CompanyDetailsViewModel::class.java)
         setupUI()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        //setupAdapterList()
-        //Handler().postDelayed({ missingInfo(missedName || missedContacts || missedDocuments) }, 1500)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -189,8 +183,7 @@ class AccountActivity : BaseActivity() {
     }
 
     private fun setupAdapter() {
-        divider = DividerItemDecoration(this, LinearLayoutManager.VERTICAL)
-        divider.setDrawable(resources.getDrawable(R.drawable.item_divider_blue, null))
+        divider = DividerItemDecoration(resources.getDrawable(R.drawable.item_divider_blue, null), false, false)
         adapter = RPAdapter()
         contactRecycler.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
         contactRecycler.adapter = adapter
@@ -268,7 +261,6 @@ class AccountActivity : BaseActivity() {
     * Fill text fields information
     * */
 
-    // TODO Add a verification that such a КЗ already exists
     private fun fetchCompanyDetails() {
         vendorsModel.rpDetailsLive().observe(this, Observer<Company> { company ->
             currentCompany = company
