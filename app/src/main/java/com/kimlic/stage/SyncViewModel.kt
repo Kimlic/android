@@ -24,7 +24,7 @@ class SyncViewModel(application: Application) : AndroidViewModel(application), L
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun runCompanySyncService() {
         Log.d("TAGSYNCSERVICE", "in on resume in service")
-        if (!ServiceUtil.isMyServiceRunning(getApplication(), CompanyDetailsSyncService::class.java.simpleName) && Prefs.needCompanySyncCount > 0) {
+        if (!ServiceUtil.isMyServiceRunning(getApplication(), CompanyDetailsSyncService::class.java.simpleName) ) {//&& Prefs.needCompanySyncCount > 0
             val syncIntent = Intent(getApplication(), CompanyDetailsSyncService::class.java)
             getApplication<KimlicApp>().startService(syncIntent)
         }
