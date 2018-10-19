@@ -16,6 +16,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withC
 import com.kimlic.BaseActivity
 import com.kimlic.BuildConfig
 import com.kimlic.R
+import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.stage.adapter.CompanyDetailsAdapter
 import com.kimlic.utils.svg.GlideApp
@@ -48,6 +49,11 @@ class CompanyDetails : BaseActivity() {
         setupUI()
     }
 
+    override fun onBackPressed() {
+        PresentationManager.stage(this)
+        //super.onBackPressed()
+    }
+
     // Private
 
     private fun setupUI() {
@@ -64,7 +70,10 @@ class CompanyDetails : BaseActivity() {
         fetchNameDetails()
         fetchPhoneDetails()
 
-        backBt.setOnClickListener { finish() }
+        backBt.setOnClickListener {
+            PresentationManager.stage(this)
+            // finish()
+        }
 
         viewExplorerBt.setOnClickListener {
             val kimlicPage = Uri.parse(uriKimlicExplorer)
