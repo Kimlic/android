@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.LinearLayout
@@ -50,6 +51,7 @@ class AccountActivity : BaseActivity() {
 
     companion object {
         private const val DOCUMENT_VERIFY_REQUEST_CODE = 4444
+        private const val ACTION_VIEW = "android.intent.action.VIEW"
         const val DOCUMENT_DETAILS_CHOOSE_CODE = 4411
     }
 
@@ -83,6 +85,8 @@ class AccountActivity : BaseActivity() {
     private lateinit var selectAccountDocumentFragment_: SelectDocumentValidFragment
     private lateinit var selectAccountDocumentFragment: SelectAccountDocumentFragment
     private lateinit var divider: DividerItemDecoration
+
+    private var action = ""
 
     // Life
 
@@ -135,41 +139,65 @@ class AccountActivity : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        lifecycle.addObserver(vendorsModel)
-        url = intent.extras.getString("path", "")
+        lifecycle.addObserver(vendorsModel) // remove from database previous information
 
-        val urlToParse = url.split("/")
-
-        if (urlToParse.size < 3) {
-            showErrorPopup()
-        } else {
-            val urlNew = urlToParse[0] + "//" + urlToParse[1] + urlToParse[2]
-            url = urlNew
-
-            selectCountryFragment = SelectCountryFragment.getInstance()
-            selectCountryFragment.setCallback(object : DocumentCallback {
-                override fun callback(bundle: Bundle) {
-                    chosenCountry = bundle.getString(AppConstants.COUNTRY.key)
-                    showSelectDocumentFragment(chosenCountry = chosenCountry)
-                }
-            })
-
-            vendorsModel.rpDocumentsRequest(url)// Request for RP documentsLive.
-            vendorsModel.rpDetailsRequest(url)
-
-            fillSubtitleBold()
-            setupAdapter()
-            setupAdapterList()
-            setupAdapterListener()
-
-            fetchVendorDocs()
-            fetchCompanyDetails()
-            requestStatusMonitoring()
-
-            setupNextButton()
-            cancelTv.setOnClickListener { finish() }
+        if (intent.action != null && intent.action == ACTION_VIEW) {
+            action = intent.action
         }
 
+        when (action) {
+            "" -> {
+                url = intent.extras.getString("path", "")
+                val urlToParse = url.split("/")
+                if (urlToParse.size < 3) {
+                    showErrorPopup(getString(R.string.relying_party_is_no_available))
+                } else {
+                    val urlNew = urlToParse[0] + "//" + urlToParse[1] + urlToParse[2]
+                    url = urlNew
+                    continueActivity()
+                }
+
+            }
+            ACTION_VIEW -> {
+                val data = intent.data.toString()
+                val parsedData = data.split("?")
+                val urlNew = parsedData[1].substring(4, parsedData[1].length)
+                url = urlNew
+                Log.d("TAGURLNEW", "url new = $urlNew")
+
+                if (!Prefs.authenticated) {
+                    finishAffinity(); PresentationManager.signUpRecovery(this)
+                } else {
+                    model.quorumRequest(
+                            onSuccess = { continueActivity() }
+                            ,onError = { showErrorPopup(getString(R.string.server_error)) })
+                }
+            }
+        }
+    }
+
+    private fun continueActivity() {
+        selectCountryFragment = SelectCountryFragment.getInstance()
+        selectCountryFragment.setCallback(object : DocumentCallback {
+            override fun callback(bundle: Bundle) {
+                chosenCountry = bundle.getString(AppConstants.COUNTRY.key)
+                showSelectDocumentFragment(chosenCountry = chosenCountry)
+            }
+        })
+        vendorsModel.rpDocumentsRequest(url)
+        vendorsModel.rpDetailsRequest(url)
+
+        fillSubtitleBold()
+        setupAdapter()
+        setupAdapterList()
+        setupAdapterListener()
+
+        fetchVendorDocs()
+        fetchCompanyDetails()
+        requestStatusMonitoring()
+
+        setupNextButton()
+        cancelTv.setOnClickListener { finish() }
     }
 
     private fun fillSubtitleBold() {
@@ -458,9 +486,13 @@ class AccountActivity : BaseActivity() {
 
     private fun successful() {
         val fragment = IdentitySentSuccessfulFragment.newInstance()
+
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
-                finish()
+                when (action) {
+                    "" -> finish()
+                    ACTION_VIEW -> PresentationManager.stage(this@AccountActivity)
+                }
             }
         })
         fragment.show(supportFragmentManager, IdentitySentSuccessfulFragment.FRAGMENT_KEY)
@@ -468,18 +500,30 @@ class AccountActivity : BaseActivity() {
 
     private fun requestStatusMonitoring() {
         vendorsModel.commonRequestStatus().observe(this, Observer {
-            showErrorPopup()
+            showErrorPopup(getString(R.string.relying_party_is_no_available))
         })
     }
 
-    private fun showErrorPopup() {
+    private fun showErrorPopup(message: String) {
         val builder = getImmersivePopupBuilder()
         builder
-                .setTitle("Error")
-                .setMessage("Relying Party is not available")
+                .setTitle(getString(R.string.error_))
+                .setMessage(message)
                 .setCancelable(true)
-                .setPositiveButton(getString(R.string.ok)) { dialog, _ -> dialog?.dismiss(); finish() }
-                .setOnDismissListener { finish() }
+                .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                    dialog?.dismiss()
+
+                    when (action) {
+                        "" -> finish()
+                        ACTION_VIEW -> PresentationManager.stage(this)
+                    }
+                }
+                .setOnDismissListener {
+                    when (action) {
+                        "" -> finish()
+                        ACTION_VIEW -> PresentationManager.stage(this)
+                    }
+                }
         val dialog = builder.create()
         dialog.show()
         dialog.window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
