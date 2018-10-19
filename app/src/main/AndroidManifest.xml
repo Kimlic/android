@@ -168,8 +168,19 @@
       android:name=".scanner.ScannerActivity"/>
 
     <activity
-      android:label="Account"
-      android:name=".account.AccountActivity"/>
+      android:label="Kimlic"
+      android:name=".account.AccountActivity">
+      <intent-filter android:autoVerify="true">
+        <action android:name="android.intent.action.VIEW"/>
+
+        <category android:name="android.intent.category.DEFAULT"/>
+        <category android:name="android.intent.category.BROWSABLE"/>
+
+        <data android:scheme="kimlic"/>
+      </intent-filter>
+    </activity>
+
+    <!--android:host="demo-rp2.kimlic.com"-->
 
     <activity
       android:label="DocumentDetails"
