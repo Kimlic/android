@@ -126,6 +126,12 @@ class AccountActivity : BaseActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        PresentationManager.stage(this)
+
+        //super.onBackPressed()
+    }
+
     // Public
 
     fun setChosenDocument(documentType: String) {
@@ -170,7 +176,7 @@ class AccountActivity : BaseActivity() {
                 } else {
                     model.quorumRequest(
                             onSuccess = { continueActivity() }
-                            ,onError = { showErrorPopup(getString(R.string.server_error)) })
+                            , onError = { showErrorPopup(getString(R.string.server_error)) })
                 }
             }
         }
@@ -197,7 +203,10 @@ class AccountActivity : BaseActivity() {
         requestStatusMonitoring()
 
         setupNextButton()
-        cancelTv.setOnClickListener { finish() }
+        cancelTv.setOnClickListener {
+            PresentationManager.stage(this)
+            finish()
+        }
     }
 
     private fun fillSubtitleBold() {
