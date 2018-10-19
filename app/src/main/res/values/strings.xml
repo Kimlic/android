@@ -289,4 +289,5 @@
   <string name="application">Application %1$s</string>
   <string name="verification">Verification: %1$s</string>
   <string name="document_status">document status</string>
+  <string name="relying_party_is_no_available">Relying Party is not available</string>
 </resources>
