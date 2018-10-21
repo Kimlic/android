@@ -73,7 +73,9 @@
       android:layout_height="wrap_content"
       android:layout_alignParentEnd="true"
       android:layout_alignParentStart="true"
-      android:overScrollMode="never"/>
+      android:overScrollMode="never"
+      android:fadingEdgeLength="100dp"
+      android:requiresFadingEdge="vertical"/>
 
   </RelativeLayout>
 
