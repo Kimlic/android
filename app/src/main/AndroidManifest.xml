@@ -24,8 +24,6 @@
     <meta-data
       android:name="com.google.android.geo.API_KEY"
       android:value="AIzaSyBi8PrsY8bz4wiiLbLZInUVW-RceZtDKgk"/>
-    <!--New release key-->
-    <!--android:value="AIzaSyDSjiySTrfkIkTwZhim9aroVIb7r5_CUlU"/>-->
     <meta-data
       android:name="com.google.android.gms.version"
       android:value="@integer/google_play_services_version"/>
