@@ -3,10 +3,10 @@
 
   <item android:drawable="@drawable/toggle_background_off"/>
   <item
-    android:bottom="1.5dp"
+    android:bottom="@dimen/toggle_button_off_bottom"
     android:drawable="@drawable/white_toggle_icon"
-    android:left="2dp"
-    android:right="17.5dp"
+    android:left="@dimen/toggle_button_off_left"
+    android:right="@dimen/toggle_button_off_right"
 
-    android:top="1.5dp"/>
+    android:top="@dimen/toggle_button_off_top"/>
 </layer-list>
