@@ -96,4 +96,16 @@
   <dimen name="document_guideline_width">340dp</dimen>
   <dimen name="document_guideline_height">220dp</dimen>
 
+
+  <!--settings switch-->
+  <dimen name="toggle_button_on_bottom">1.5dp</dimen>
+  <dimen name="toggle_button_on_left">17.5dp</dimen>
+  <dimen name="toggle_button_on_right">2dp</dimen>
+  <dimen name="toggle_button_on_top">1.5dp</dimen>
+
+  <dimen name="toggle_button_off_bottom">1.5dp</dimen>
+  <dimen name="toggle_button_off_left">2dp</dimen>
+  <dimen name="toggle_button_off_right">17.5dp</dimen>
+  <dimen name="toggle_button_off_top">1.5dp</dimen>
+
 </resources>
