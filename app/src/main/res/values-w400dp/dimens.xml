@@ -3,7 +3,7 @@
 
   <dimen name="circle_button_digit">30sp</dimen>
 
-  <dimen name="text_size_large_26">26sp</dimen>
+  <dimen name="text_size_large_26">30sp</dimen>
   <item format="float" name="text_size_large_name_float" type="dimen">32.0</item>
   <dimen name="text_size_large_24">24sp</dimen>
 
@@ -16,7 +16,7 @@
   <!--Adapter items-->
 
   <dimen name="item_user_stage_height">72dp</dimen>
-  <dimen name="item_setting_height">72dp</dimen>
+  <dimen name="item_setting_height">60dp</dimen>
   <dimen name="item_account_document_height">64dp</dimen>
   <dimen name="details_item_text_view_text_size">18dp</dimen>
 
