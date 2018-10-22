@@ -114,6 +114,7 @@ class SettingsActivity : BaseActivity() {
                     }
                     "recovery" -> PresentationManager.recoveryEnable(this@SettingsActivity)
                     "terms" -> PresentationManager.termsReview(this@SettingsActivity)
+                    "privacy" -> PresentationManager.privacyReview(this@SettingsActivity)
                     "about" -> PresentationManager.about(this@SettingsActivity)
                     "change" -> PresentationManager.passcodeChange(this@SettingsActivity)
                 }
@@ -135,6 +136,7 @@ class SettingsActivity : BaseActivity() {
                 SwitchSetting(getString(R.string.google_drive_sync), getString(R.string.backup_profile_to_google_drive), "drive", Prefs.isDriveActive),
                 IntentSetting(getString(R.string.account_recovery), getString(R.string.back_up_your_credentials), "recovery"),
                 IntentSetting(getString(R.string.terms_and_conditions), getString(R.string.last_modified_23_july_2017), "terms"),
+                IntentSetting(getString(R.string.privacy_policy), getString(R.string.last_modified_23_july_2017), "privacy"),
                 IntentSetting(getString(R.string.about_kimlic), "", "about"))
 
         val passcodeChange = IntentSetting(getStringValue(R.string.change_passcode), "", "change")
