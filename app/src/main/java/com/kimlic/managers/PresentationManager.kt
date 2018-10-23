@@ -49,6 +49,13 @@ object PresentationManager {
         present(presenter = presenter, className = PasscodeActivity::class.java, isStarting = true, params = params)
     }
 
+    fun passcodeFinish(presenter: BaseActivity) {
+        val params = HashMap<String, String>()
+        params["action"] = "unlock"
+        params["mode"] = "finish"
+        present(presenter = presenter, className = PasscodeActivity::class.java, isStarting = false, params = params)
+    }
+
     fun passcodeDisable(presenter: BaseActivity) {
         val params = HashMap<String, String>()
         params["action"] = "disable"
@@ -81,6 +88,11 @@ object PresentationManager {
         present(presenter = presenter, className = TouchIdActivity::class.java, isStarting = false, params = params)
     }
 
+    fun touchFinish(presenter: BaseActivity) {
+        val params = HashMap<String, String>()
+        params["action"] = "unlock_finish"
+        present(presenter = presenter, className = TouchIdActivity::class.java, isStarting = false, params = params)
+    }
 
     fun phraseVerify(presenter: BaseActivity) {
         present(presenter = presenter, className = MnemonicVerifyActivity::class.java)
