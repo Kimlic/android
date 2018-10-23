@@ -3,6 +3,7 @@ package com.kimlic.mnemonic
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.TextInputLayout
+import android.text.InputFilter
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
@@ -66,6 +67,8 @@ class MnemonicVerifyActivity : BaseActivity() {
                 }
                 false
             })
+
+            it.filters = arrayOf(filter())
         }
     }
 
@@ -103,5 +106,14 @@ class MnemonicVerifyActivity : BaseActivity() {
             }
         }
         return noError
+    }
+
+    // Private helpers
+
+    private fun filter(): InputFilter {
+        return InputFilter { src, _, _, _, _, _ ->
+            if (src == "") return@InputFilter src
+            if (Character.isLetter(src.last()) && !Character.isWhitespace(src.last())) return@InputFilter src else ""
+        }
     }
 }
