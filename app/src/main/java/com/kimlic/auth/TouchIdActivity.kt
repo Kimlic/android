@@ -5,6 +5,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.kimlic.BaseActivity
+import com.kimlic.KimlicApp
 import com.kimlic.R
 import com.kimlic.managers.FingerprintService
 import com.kimlic.managers.PresentationManager
@@ -18,6 +19,7 @@ class TouchIdActivity : BaseActivity() {
     // Variables
 
     private var fingerprintService: FingerprintService? = null
+    private lateinit var action: String
 
     // Life
 
@@ -28,12 +30,18 @@ class TouchIdActivity : BaseActivity() {
         setupUI()
     }
 
+    override fun onBackPressed() {
+        finish()
+        //super.onBackPressed()
+    }
+
     // Private
 
     private fun setupUI() {
         animation()
-        val action = intent.extras.getString("action", "unlock")
+        action = intent.extras.getString("action", "unlock")
 
+        cancelTv.setOnClickListener { finish() }
         when (action) {
             "create" -> {
                 fingerprintService = FingerprintService(this, { create() }, { showToast(it); finish() })
@@ -45,10 +53,17 @@ class TouchIdActivity : BaseActivity() {
                 propouseTouch()
                 fingerprintService = FingerprintService(this, { unlock() }, { fingerprintService = null; showToast(it); passcodeUnlock() })
             }
+            "unlock_finish" -> {
+                propouseTouch()
+                fingerprintService = FingerprintService(this
+                        , onSuccess = { (application as KimlicApp).wasInBackground = false; finish() }
+                        , onFail = { fingerprintService = null; showToast(it); passcodeFinish() })
+
+                cancelTv.setOnClickListener { fingerprintService = null; finish();passcodeFinish() }
+            }
             else -> throw RuntimeException("Invalid action")
         }
 
-        changeTv.setOnClickListener { finish() }
     }
 
     private fun create() {
@@ -69,7 +84,11 @@ class TouchIdActivity : BaseActivity() {
         val touchFragment = TouchIDFragment.newInstance()
         touchFragment.setCallback(object : BaseCallback {
             override fun callback() {
-                passcodeUnlock()
+                if (action == "unlock_finish") {
+
+                    passcodeFinish()
+                } else
+                    passcodeUnlock()
             }
         })
         touchFragment.show(supportFragmentManager, TouchIDFragment.FRAGMENT_KEY)
@@ -78,6 +97,12 @@ class TouchIdActivity : BaseActivity() {
     private fun passcodeUnlock() {
         fingerprintService = null
         PresentationManager.passcodeUnlock(this)
+    }
+
+    private fun passcodeFinish() {
+        fingerprintService = null
+        PresentationManager.passcodeFinish(this)
+        finish()
     }
 
     private fun animation() {
