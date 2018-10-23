@@ -5,8 +5,16 @@ import android.content.Context
 import android.os.Build
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
+import java.util.*
 
 class KimlicApp : Application() {
+
+    // Variables
+
+    private var activityTransitionTimer: Timer? = null
+    private var activityTransitionTimeTask: TimerTask? = null
+    private val MAX_ACTIVITY_TRANSITION_TIME_MS = 30000L // App background delay
+    var wasInBackground = false
 
     // Companion
 
@@ -31,5 +39,27 @@ class KimlicApp : Application() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //            val intentFilter = IntentFilter()
         }
+    }
+
+    // Public
+
+    fun startActivityTransitionTimer() {
+        activityTransitionTimer = Timer()
+        activityTransitionTimeTask = object : TimerTask() {
+            override fun run() {
+                wasInBackground = true
+            }
+        }
+        activityTransitionTimer!!.schedule(activityTransitionTimeTask!!, MAX_ACTIVITY_TRANSITION_TIME_MS)
+    }
+
+    fun stopActivityTransitionTimer() {
+        if (activityTransitionTimeTask != null) {
+            activityTransitionTimer!!.cancel(); activityTransitionTimeTask = null
+        }
+        if (activityTransitionTimer != null) {
+            activityTransitionTimer!!.cancel(); activityTransitionTimer = null
+        }
+        wasInBackground = false
     }
 }
