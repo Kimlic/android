@@ -76,6 +76,7 @@
     <activity
       android:label="Passcode"
       android:name=".passcode.PasscodeActivity"
+      android:launchMode="singleTask"
       android:screenOrientation="portrait"/>
 
     <activity
