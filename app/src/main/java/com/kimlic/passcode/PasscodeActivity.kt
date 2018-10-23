@@ -5,6 +5,7 @@ import android.graphics.drawable.Animatable
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
+import android.util.Log
 import android.view.ContextThemeWrapper
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -13,11 +14,13 @@ import android.widget.TextView
 import butterknife.BindViews
 import butterknife.ButterKnife
 import com.kimlic.BaseActivity
+import com.kimlic.KimlicApp
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.BaseCallback
 import kotlinx.android.synthetic.main.activity_passcode.*
+
 
 class PasscodeActivity : BaseActivity(), View.OnClickListener {
 
@@ -33,6 +36,7 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
 
     private var passcode: String
     private lateinit var passcodeConfirm: String
+    private var mode = ""
     private lateinit var action: String
     private var firstInput: Boolean
 
@@ -55,7 +59,14 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun onBackPressed() {
-        if (passcode.isNotEmpty()) deletePasscode() else super.onBackPressed()
+//        if (passcode.isNotEmpty()) deletePasscode()
+//        else
+//            if (mode == "finish") {
+//                moveTaskToBack(true)
+//            } else
+//                super.onBackPressed()
+
+        moveTaskToBack(true)
     }
 
     // OnClick
@@ -76,6 +87,8 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
 
         action = intent.extras.getString("action")
 
+        if (intent.extras.containsKey("mode")) mode = intent.extras.getString("mode", "finish")
+
         when (action) {
             "unlock" -> setupUIUnlock()
             "set" -> setupUIPasscode()
@@ -84,7 +97,17 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
         }
 
         passcodeDeleteBt.setOnClickListener { deletePasscode() }
-        cancelTv.setOnClickListener { finish() }
+        cancelTv.setOnClickListener {
+//            if (mode == "finish") {
+//                Log.d("TAGWAS", "in passcode cancelTV with finish,  mode = $mode")
+//                moveTaskToBack(true)
+//            } else {
+//                Log.d("TAGWAS", "in passcode cancelTV with NONONONONONONONONONONONONONONONO finish,  mode = $mode")
+//                finish()
+//
+//            }
+            moveTaskToBack(true)
+        }
         //passcodeOkBt.setOnClickListener { usePasscode(action) }
     }
 
@@ -152,7 +175,14 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
 
     private fun unlock() {
         if (Prefs.passcode == passcode) {
-            PresentationManager.stage(this@PasscodeActivity)
+            if (mode == "finish") {
+                (application as KimlicApp).wasInBackground = false
+                Log.d("TAGWAS", "in passcode unlock with finish")
+                finish()
+            } else {
+                Log.d("TAGWAS", "in passcode unlock no NONONONONONO finish")
+                PresentationManager.stage(this@PasscodeActivity)
+            }
         } else
             setupUIUnlock()
     }
