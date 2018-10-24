@@ -1,7 +1,10 @@
 package com.kimlic.mnemonic
 
+import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.support.design.widget.TextInputLayout
 import android.text.InputFilter
 import android.view.inputmethod.EditorInfo
@@ -9,16 +12,24 @@ import android.widget.EditText
 import android.widget.TextView
 import butterknife.BindViews
 import butterknife.ButterKnife
+import com.kimlic.BackupUpdatingFragment
 import com.kimlic.BaseActivity
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.preferences.Prefs
 import com.kimlic.recovery.RecoveryViewModel
+import com.kimlic.utils.AppConstants
 import com.kimlic.utils.BaseCallback
 import kotlinx.android.synthetic.main.activity_verify_passphrase.*
 
 class MnemonicVerifyActivity : BaseActivity() {
+
+    // Constants
+
+    companion object {
+        private const val GOOGLE_SIGNE_IN_REQUEST_CODE = 109
+    }
 
     // Binding
 
@@ -34,6 +45,9 @@ class MnemonicVerifyActivity : BaseActivity() {
     private lateinit var model: ProfileViewModel
     private lateinit var recoveryModel: RecoveryViewModel
 
+    private var timer: CountDownTimer? = null
+    private var backupUpdatingFragment: BackupUpdatingFragment? = null
+
     // Life
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +60,16 @@ class MnemonicVerifyActivity : BaseActivity() {
         setupUI()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            GOOGLE_SIGNE_IN_REQUEST_CODE -> {
+                if (resultCode != Activity.RESULT_OK) return
+
+                backupProfile()
+            }
+        }
+    }
+
     // Private
 
     private fun setupUI() {
@@ -53,6 +77,7 @@ class MnemonicVerifyActivity : BaseActivity() {
             if (validEmptyFields())
                 if (phrasesMatch()) {
                     Prefs.isRecoveryEnabled = true
+
                     successful()
                 } else showPopupImmersive(getString(R.string.error), getString(R.string.mnemonic_phrases_do_not_match))
         }
@@ -106,6 +131,39 @@ class MnemonicVerifyActivity : BaseActivity() {
             }
         }
         return noError
+    }
+
+    private fun backupProfile() {
+        showProgress()
+        recoveryModel.backupProfile(
+                onSuccess = {
+                    hideProgress()
+                    Prefs.isDriveActive = true
+                    showPopupImmersive(getString(R.string.success_), getString(R.string.your_profile_synchronization_is_active))
+                },
+                onError = {
+                    hideProgress()
+                    showPopupImmersive(getString(R.string.error_), getString(R.string.synchronizing_error))
+                }
+        )
+    }
+
+    private fun showProgress() {
+        timer = object : CountDownTimer(0, 0) {
+            override fun onFinish() {
+                val bundle = Bundle()
+                bundle.putString(AppConstants.TITLE.key, getString(R.string.backup))
+                bundle.putString(AppConstants.SUBTITLE.key, getString(R.string.backup_profile_to_google_drive))
+                backupUpdatingFragment = BackupUpdatingFragment.newInstance(bundle)
+                backupUpdatingFragment?.show(supportFragmentManager, BackupUpdatingFragment.FRAGMENT_KEY)
+            }
+
+            override fun onTick(millisUntilFinished: Long) {}
+        }.start()
+    }
+
+    private fun hideProgress() = runOnUiThread {
+        if (backupUpdatingFragment != null) backupUpdatingFragment?.dismiss(); timer?.cancel()
     }
 
     // Private helpers

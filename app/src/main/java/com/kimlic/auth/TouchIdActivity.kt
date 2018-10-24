@@ -57,6 +57,7 @@ class TouchIdActivity : BaseActivity() {
                 propouseTouch()
                 fingerprintService = FingerprintService(this
                         , onSuccess = { (application as KimlicApp).wasInBackground = false; finish() }
+//                        , onSuccess = { (application as KimlicApp).wasInBackground = false; PresentationManager.stage(this) }
                         , onFail = { fingerprintService = null; showToast(it); passcodeFinish() })
 
                 cancelTv.setOnClickListener { fingerprintService = null; finish();passcodeFinish() }
