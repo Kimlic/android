@@ -19,7 +19,11 @@ class TouchIDFragment : BasePopupFragment() {
     companion object {
         val FRAGMENT_KEY = this::class.java.simpleName
 
-        fun newInstance() = TouchIDFragment()
+        fun newInstance(bundle: Bundle = Bundle()): TouchIDFragment {
+            val fragment = TouchIDFragment()
+            fragment.arguments = bundle
+            return fragment
+        }
     }
 
     // Live
@@ -49,6 +53,13 @@ class TouchIDFragment : BasePopupFragment() {
 
     private fun setupUI() {
         isCancelable = false
-        retakelBt.setOnClickListener { dismiss(); PresentationManager.passcodeUnlock(activity!!) }
+        val mode = arguments!!.get("flag") as String
+        retakelBt.setOnClickListener {
+            dismiss()
+            when (mode) {
+                "unlock" -> PresentationManager.passcodeUnlock(activity!!)
+                "unlock_finish" -> PresentationManager.passcodeFinish(activity!!)
+            }
+        }
     }
 }
