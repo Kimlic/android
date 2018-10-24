@@ -1,11 +1,11 @@
 package com.kimlic.auth
 
 import android.os.Bundle
+import android.util.Log
 import android.view.animation.AccelerateDecelerateInterpolator
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.kimlic.BaseActivity
-import com.kimlic.KimlicApp
 import com.kimlic.R
 import com.kimlic.managers.FingerprintService
 import com.kimlic.managers.PresentationManager
@@ -40,6 +40,7 @@ class TouchIdActivity : BaseActivity() {
     private fun setupUI() {
         animation()
         action = intent.extras.getString("action", "unlock")
+        Log.d("TAGWAS", "touchidActivity on create action = ${action}")
 
         cancelTv.setOnClickListener { finish() }
         when (action) {
@@ -57,7 +58,10 @@ class TouchIdActivity : BaseActivity() {
                 propouseTouch()
                 fingerprintService = FingerprintService(this
 //                        , onSuccess = { (application as KimlicApp).wasInBackground = false; finish() }
-                        , onSuccess = { (application as KimlicApp).wasInBackground = false; PresentationManager.stage(this) }
+                        , onSuccess = {
+                    //(application as KimlicApp).wasInBackground = false;
+                    PresentationManager.stage(this)
+                }
                         , onFail = { fingerprintService = null; showToast(it); passcodeFinish() })
 
                 cancelTv.setOnClickListener { fingerprintService = null; finish();passcodeFinish() }
@@ -82,7 +86,11 @@ class TouchIdActivity : BaseActivity() {
     }
 
     private fun propouseTouch() {
-        val touchFragment = TouchIDFragment.newInstance()
+        val bundle = Bundle()
+        if (action == "unlock") bundle.putString("flag", "unlock")
+        if (action == "unlock_finish") bundle.putString("flag", "unlock_finish")
+
+        val touchFragment = TouchIDFragment.newInstance(bundle)
         touchFragment.setCallback(object : BaseCallback {
             override fun callback() {
                 if (action.equals("unlock_finish")) {
