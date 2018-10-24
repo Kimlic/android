@@ -68,7 +68,7 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
         if (passcode.isNotEmpty()) deletePasscode()
         else
             if (mode.equals("finish")) {
-                moveTaskToBack(false)
+                moveTaskToBack(true)
             } else {
                 super.onBackPressed()
             }
@@ -185,10 +185,10 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
     private fun unlock() {
         if (Prefs.passcode == passcode) {
             if (mode == "finish") {
-                (application as KimlicApp).wasInBackground = false
+                //(application as KimlicApp).wasInBackground = false
                 Log.d("TAGWAS", "in passcode unlock with finish")
                 PresentationManager.stage(this@PasscodeActivity)
-                finish()
+                //finish()
             } else {
                 Log.d("TAGWAS", "in passcode unlock no NONONONONONO finish")
                 PresentationManager.stage(this@PasscodeActivity)
