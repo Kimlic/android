@@ -12,9 +12,11 @@ import android.widget.EditText
 import android.widget.TextView
 import butterknife.BindViews
 import butterknife.ButterKnife
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.kimlic.BackupUpdatingFragment
 import com.kimlic.BaseActivity
 import com.kimlic.R
+import com.kimlic.db.SyncService
 import com.kimlic.managers.PresentationManager
 import com.kimlic.model.ProfileViewModel
 import com.kimlic.preferences.Prefs
@@ -77,8 +79,10 @@ class MnemonicVerifyActivity : BaseActivity() {
             if (validEmptyFields())
                 if (phrasesMatch()) {
                     Prefs.isRecoveryEnabled = true
-
-                    successful()
+                    if (GoogleSignIn.getLastSignedInAccount(this) == null) {
+                        SyncService.signIn(this, GOOGLE_SIGNE_IN_REQUEST_CODE)
+                    } else backupProfile()
+                    //successful()
                 } else showPopupImmersive(getString(R.string.error), getString(R.string.mnemonic_phrases_do_not_match))
         }
 
@@ -86,7 +90,7 @@ class MnemonicVerifyActivity : BaseActivity() {
         setupHints(hintList)
 
         editTextList.forEach {
-            it.setOnEditorActionListener(TextView.OnEditorActionListener { _, actionId, event ->
+            it.setOnEditorActionListener(TextView.OnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     hideKeyboard(); return@OnEditorActionListener true
                 }
@@ -139,7 +143,8 @@ class MnemonicVerifyActivity : BaseActivity() {
                 onSuccess = {
                     hideProgress()
                     Prefs.isDriveActive = true
-                    showPopupImmersive(getString(R.string.success_), getString(R.string.your_profile_synchronization_is_active))
+                    successful()
+                    //showPopupImmersive(getString(R.string.success_), getString(R.string.your_profile_synchronization_is_active))// -> From here shows succsessful fragment
                 },
                 onError = {
                     hideProgress()
