@@ -14,6 +14,7 @@ import android.widget.TextView
 import butterknife.BindViews
 import butterknife.ButterKnife
 import com.kimlic.BaseActivity
+import com.kimlic.KimlicApp
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
@@ -57,11 +58,17 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
         setupUI()
     }
 
+    override fun onResume() {
+        //if (intent.extras.containsKey("mode")) mode = intent.extras.getString("mode", "finish")
+        super.onResume()
+    }
+
     override fun onBackPressed() {
+        Log.d("TAGWAS", "in passcode onBAckPressed mode = $mode")
         if (passcode.isNotEmpty()) deletePasscode()
         else
-            if (mode == "finish") {
-                moveTaskToBack(true)
+            if (mode.equals("finish")) {
+                moveTaskToBack(false)
             } else {
                 super.onBackPressed()
             }
@@ -87,7 +94,9 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
 
         action = intent.extras.getString("action")
 
+
         if (intent.extras.containsKey("mode")) mode = intent.extras.getString("mode", "finish")
+        Log.d("TAGWAS", "passcode activity oncreate mode = $mode")
 
         when (action) {
             "unlock" -> setupUIUnlock()
@@ -176,13 +185,14 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
     private fun unlock() {
         if (Prefs.passcode == passcode) {
             if (mode == "finish") {
-                //(application as KimlicApp).wasInBackground = false
+                (application as KimlicApp).wasInBackground = false
                 Log.d("TAGWAS", "in passcode unlock with finish")
+                PresentationManager.stage(this@PasscodeActivity)
                 finish()
             } else {
                 Log.d("TAGWAS", "in passcode unlock no NONONONONONO finish")
-                finish()
                 PresentationManager.stage(this@PasscodeActivity)
+                finish()
             }
         } else
             setupUIUnlock()
