@@ -56,8 +56,8 @@ class TouchIdActivity : BaseActivity() {
             "unlock_finish" -> {
                 propouseTouch()
                 fingerprintService = FingerprintService(this
-                        , onSuccess = { (application as KimlicApp).wasInBackground = false; finish() }
-//                        , onSuccess = { (application as KimlicApp).wasInBackground = false; PresentationManager.stage(this) }
+//                        , onSuccess = { (application as KimlicApp).wasInBackground = false; finish() }
+                        , onSuccess = { (application as KimlicApp).wasInBackground = false; PresentationManager.stage(this) }
                         , onFail = { fingerprintService = null; showToast(it); passcodeFinish() })
 
                 cancelTv.setOnClickListener { fingerprintService = null; finish();passcodeFinish() }
@@ -85,8 +85,8 @@ class TouchIdActivity : BaseActivity() {
         val touchFragment = TouchIDFragment.newInstance()
         touchFragment.setCallback(object : BaseCallback {
             override fun callback() {
-                if (action == "unlock_finish") {
-
+                if (action.equals("unlock_finish")) {
+                    //finish()
                     passcodeFinish()
                 } else
                     passcodeUnlock()
