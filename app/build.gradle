@@ -52,7 +52,7 @@ android {
     productFlavors {
         dev {
             buildConfigField("boolean", "RECOVERY_FOLDER", "false")
-            buildConfigField("String", "QUORUM_URL", "\"http://40.121.145.171:22000\"")// quorum// new ip 13.82.132.209
+            buildConfigField("String", "QUORUM_URL", "\"http://first-blockchain-kimcore-stage.eastus.cloudapp.azure.com:22000\"")// quorum// new ip 13.82.132.209
             buildConfigField("String", "API_CORE_URL", "\"http://first-kimcore-stage.eastus.cloudapp.azure.com:4000\"")//elixir
             buildConfigField("String", "KIMLIC_EXPLORER_URI", "\"http://rp-dashboard-stage.eastus.cloudapp.azure.com\"")
         }
