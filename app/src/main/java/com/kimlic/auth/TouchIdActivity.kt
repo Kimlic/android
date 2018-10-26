@@ -6,6 +6,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.kimlic.BaseActivity
+import com.kimlic.KimlicApp
 import com.kimlic.R
 import com.kimlic.managers.FingerprintService
 import com.kimlic.managers.PresentationManager
@@ -18,7 +19,7 @@ class TouchIdActivity : BaseActivity() {
 
     // Variables
 
-    private var fingerprintService: FingerprintService? = null
+    var fingerprintService: FingerprintService? = null
     private lateinit var action: String
 
     // Life
@@ -31,6 +32,7 @@ class TouchIdActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
+        fingerprintService = null
         finish()
         //super.onBackPressed()
     }
@@ -57,12 +59,16 @@ class TouchIdActivity : BaseActivity() {
             "unlock_finish" -> {
                 propouseTouch()
                 fingerprintService = FingerprintService(this
-//                        , onSuccess = { (application as KimlicApp).wasInBackground = false; finish() }
-                        , onSuccess = {
-                    //(application as KimlicApp).wasInBackground = false;
-                    PresentationManager.stage(this)
+                        , onSuccess = { (application as KimlicApp).wasInBackground = false; finish()
+                    finish()
+                    //PresentationManager.stage(this)
                 }
-                        , onFail = { fingerprintService = null; showToast(it); passcodeFinish() })
+                        , onFail = {
+                    Log.d("TAGWAS", "in touchId on FAIL!!!")
+                    fingerprintService = null; showToast(it); finish();
+
+                    //PresentationManager.passcodeFinish(this)
+                    })
 
                 cancelTv.setOnClickListener { fingerprintService = null; finish();passcodeFinish() }
             }
@@ -94,10 +100,13 @@ class TouchIdActivity : BaseActivity() {
         touchFragment.setCallback(object : BaseCallback {
             override fun callback() {
                 if (action.equals("unlock_finish")) {
-                    //finish()
+                    fingerprintService=null
+                    finish()
                     passcodeFinish()
-                } else
+                } else{
+                    fingerprintService = null
                     passcodeUnlock()
+                }
             }
         })
         touchFragment.show(supportFragmentManager, TouchIDFragment.FRAGMENT_KEY)
@@ -110,8 +119,8 @@ class TouchIdActivity : BaseActivity() {
 
     private fun passcodeFinish() {
         fingerprintService = null
-        PresentationManager.passcodeFinish(this)
         finish()
+//        PresentationManager.passcodeFinish(this)
     }
 
     private fun animation() {
