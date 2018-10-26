@@ -53,13 +53,13 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_passcode)
         ButterKnife.bind(this)
+        Log.d("TAGWAS", "passcode activity on create!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
         setupDefaults()
         setupUI()
     }
 
     override fun onResume() {
-        //if (intent.extras.containsKey("mode")) mode = intent.extras.getString("mode", "finish")
         super.onResume()
     }
 
@@ -67,11 +67,12 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
         Log.d("TAGWAS", "in passcode onBAckPressed mode = $mode")
         if (passcode.isNotEmpty()) deletePasscode()
         else
-            if (mode.equals("finish")) {
-                moveTaskToBack(true)
-            } else {
-                super.onBackPressed()
-            }
+            moveTaskToBack(true)
+//            if (mode.equals("finish")) {
+//                moveTaskToBack(true)
+//            } else {
+//                super.onBackPressed()
+//            }
 
         // moveTaskToBack(true)
     }
@@ -113,7 +114,8 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
                 //finish()
             } else {
                 Log.d("TAGWAS", "in passcode cancelTV with NONONONONONONONONONONONONONONONO finish,  mode = $mode")
-                finish()
+                moveTaskToBack(true)
+                //finish()
 
             }
         }
@@ -185,12 +187,13 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
     private fun unlock() {
         if (Prefs.passcode == passcode) {
             if (mode == "finish") {
-                //(application as KimlicApp).wasInBackground = false
+                (application as KimlicApp).wasInBackground = false
                 Log.d("TAGWAS", "in passcode unlock with finish")
-                PresentationManager.stage(this@PasscodeActivity)
-                //finish()
+//                PresentationManager.stage(this@PasscodeActivity)
+                finish()
             } else {
                 Log.d("TAGWAS", "in passcode unlock no NONONONONONO finish")
+                (application as KimlicApp).wasInBackground = false
                 PresentationManager.stage(this@PasscodeActivity)
                 finish()
             }
