@@ -15,13 +15,12 @@ class KimlicApp : Application() {
     private var activityTransitionTimer: Timer? = null
     private var activityTransitionTimeTask: TimerTask? = null
     private val MAX_ACTIVITY_TRANSITION_TIME_MS = 40000L // App background delay
-    var wasInBackground = false
+    @Volatile var wasInBackground = false
 
     // Companion
 
     companion object {
         private var instance: KimlicApp? = null
-
         fun applicationContext(): Context = instance!!.applicationContext
     }
 
