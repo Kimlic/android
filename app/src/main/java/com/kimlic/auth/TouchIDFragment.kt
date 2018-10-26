@@ -57,8 +57,12 @@ class TouchIDFragment : BasePopupFragment() {
         retakelBt.setOnClickListener {
             dismiss()
             when (mode) {
-                "unlock" -> PresentationManager.passcodeUnlock(activity!!)
-                "unlock_finish" -> PresentationManager.passcodeFinish(activity!!)
+                "unlock" -> {
+                    (activity!! as TouchIdActivity).fingerprintService == null; activity!!.finish(); PresentationManager.passcodeUnlock(activity!!)
+                }
+                "unlock_finish" -> {
+                    (activity!! as TouchIdActivity).fingerprintService == null; activity!!.finish(); PresentationManager.passcodeFinish(activity!!)
+                }
             }
         }
     }
