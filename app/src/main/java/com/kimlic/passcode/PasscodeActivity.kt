@@ -130,6 +130,7 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
                     "success" -> {
                         if (mode == "unlock_finish") {
                             (application as KimlicApp).wasInBackground = false
+                            (application as KimlicApp).isFirstTime = false
                             finish()
                         } else PresentationManager.stage(this@PasscodeActivity)
                     }
@@ -207,9 +208,11 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
         if (Prefs.passcode == passcode) {
             if (mode == "unlock_finish") {
                 (application as KimlicApp).wasInBackground = false
+                (application as KimlicApp).isFirstTime = false
                 finish()
             } else {
                 (application as KimlicApp).wasInBackground = false
+                (application as KimlicApp).isFirstTime = false
                 PresentationManager.stage(this@PasscodeActivity)
                 finish()
             }
