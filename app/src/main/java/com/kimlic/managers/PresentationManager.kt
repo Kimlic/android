@@ -52,7 +52,7 @@ object PresentationManager {
     fun passcodeFinish(presenter: BaseActivity) {
         val params = HashMap<String, String>()
         params["action"] = "unlock"
-        params["mode"] = "finish"
+        params["mode"] = "unlock_finish"
         present(presenter = presenter, className = PasscodeActivity::class.java, isStarting = false, params = params)
     }
 
@@ -67,7 +67,7 @@ object PresentationManager {
         params["action"] = "change"
         present(presenter = presenter, className = PasscodeActivity::class.java, isStarting = false, params = params)
     }
-
+    // unused
     fun login(presenter: BaseActivity) {
         val params = HashMap<String, String>()
         params["action"] = "unlock"
@@ -87,7 +87,7 @@ object PresentationManager {
         params["action"] = "disable"
         present(presenter = presenter, className = TouchIdActivity::class.java, isStarting = false, params = params)
     }
-
+    // unused
     fun touchFinish(presenter: BaseActivity) {
         val params = HashMap<String, String>()
         params["action"] = "unlock_finish"
