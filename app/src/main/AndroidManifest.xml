@@ -168,6 +168,7 @@
 
     <activity
       android:label="Kimlic"
+      android:launchMode="singleTask"
       android:name=".account.AccountActivity">
       <intent-filter android:autoVerify="true">
         <action android:name="android.intent.action.VIEW"/>
