@@ -31,7 +31,7 @@
   <string name="ok">Ok</string>
   <string name="OK">OK</string>
   <string name="place_your_finger">Place Your Finger</string>
-  <string name="lift_and_rest_the_edge_of_your_finger_on_the_home_button_repeatedly">Lift and rest the edge of your finger \n on the Home button repeatedly</string>
+  <string name="please_approve_fingerprint_authentication_by_your_fingerprint">Please approve fingerprint \n authentication by your fingerprint</string>
   <string name="fingerprint_logo">FingerPrint logo</string>
   <string name="cheking">Cheking…</string>
   <string name="skip">Skip</string>
