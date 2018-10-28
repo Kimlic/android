@@ -291,4 +291,8 @@
   <string name="verification">Verification: %1$s</string>
   <string name="document_status">document status</string>
   <string name="relying_party_is_no_available">Relying Party is not available</string>
+
+  <string name="use_fingerprint">Use Fingerprint</string>
+  <string name="to_securely_unlock_kimlic">to securely unlock Kimlic</string>
+  <string name="use_passcode_instead">Use passcode instead</string>
 </resources>
