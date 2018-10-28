@@ -53,17 +53,9 @@ class TouchIDFragment : BasePopupFragment() {
 
     private fun setupUI() {
         isCancelable = false
-        val mode = arguments!!.get("flag") as String
         retakelBt.setOnClickListener {
             dismiss()
-            when (mode) {
-                "unlock" -> {
-                    (activity!! as TouchIdActivity).fingerprintService == null; activity!!.finish(); PresentationManager.passcodeUnlock(activity!!)
-                }
-                "unlock_finish" -> {
-                    (activity!! as TouchIdActivity).fingerprintService == null; activity!!.finish(); PresentationManager.passcodeFinish(activity!!)
-                }
-            }
+            callback.callback()
         }
     }
 }
