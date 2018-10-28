@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="wrap_content"
   android:layout_height="wrap_content">
 
@@ -10,7 +9,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="16dp"
-    android:background="@drawable/rounded_logo_risks"
+    android:background="@drawable/rounded_logo_fingerprint"
     android:contentDescription="@string/secureid"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
@@ -31,7 +30,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="16dp"
-    android:text="@string/secure_your_identity"
+    android:text="@string/use_fingerprint"
     android:textColor="@color/grayDark"
     android:textSize="@dimen/text_size_large_26"
     app:layout_constraintEnd_toEndOf="parent"
@@ -44,12 +43,12 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
+    android:text="@string/to_securely_unlock_kimlic"
     android:textColor="@color/grayDark"
     android:textSize="@dimen/text_size_medium_18"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/titleTv"
-    tools:text="You have 2 main secutrity riscs"/>
+    app:layout_constraintTop_toBottomOf="@+id/titleTv"/>
 
   <LinearLayout
     android:id="@+id/rootLower"
@@ -60,43 +59,20 @@
     app:layout_constraintTop_toBottomOf="@id/subtitleTv">
 
     <LinearLayout
-      android:id="@+id/upperView"
-      android:layout_width="match_parent"
-      android:layout_height="48dp"
-      android:background="@color/lightBlue"
-      android:orientation="vertical"
-      android:visibility="gone">
-
-      <Button
-        android:id="@+id/upperBt"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/rounded_upper_gradient"
-        android:textAllCaps="false"
-        android:textSize="@dimen/text_size_medium_18"
-        android:textColor="@android:color/white"/>
-
-    </LinearLayout>
-
-    <View
-      android:layout_width="match_parent"
-      android:layout_height="1dp"
-      android:background="@color/lightBlue"/>
-
-    <LinearLayout
       android:id="@+id/lowerView"
       android:layout_width="@dimen/popup_fragment_width"
       android:layout_height="48dp"
       android:background="@drawable/rounded_lower_corners_gradient">
 
       <Button
-        android:id="@+id/lowerBt"
+        android:id="@+id/insteadBt"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
         android:textAllCaps="false"
-        android:textSize="@dimen/text_size_medium_18"
-        android:textColor="@android:color/white"/>
+        android:textColor="@android:color/white"
+        android:text="@string/use_passcode_instead"
+        android:textSize="@dimen/text_size_medium_18"/>
     </LinearLayout>
 
   </LinearLayout>
