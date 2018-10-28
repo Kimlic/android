@@ -6,12 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import com.kimlic.BasePopupFragment
 import com.kimlic.R
-import com.kimlic.utils.BaseCallback
-import kotlinx.android.synthetic.main.touch_id_fragment.*
+import com.kimlic.managers.FingerprintService
+import com.kimlic.utils.MessageCallback
+import kotlinx.android.synthetic.main.fragment_fingerprint_propose.*
 
 class FingerprintProposeFragment : BasePopupFragment() {
 
-    private lateinit var callback: BaseCallback
+    // Variables
+
+    private var fingerprintService: FingerprintService? = null
+    private lateinit var callback: MessageCallback
 
     // Companion
 
@@ -39,12 +43,12 @@ class FingerprintProposeFragment : BasePopupFragment() {
 
     override fun onResume() {
         super.onResume()
-        dialog.window.setBackgroundDrawableResource(R.drawable.rounded_background_fragment_tarnsparent)
+        dialog.window.setBackgroundDrawableResource(R.drawable.rounded_background_fragment)
     }
 
     // Public
 
-    fun setCallback(callback: BaseCallback) {
+    fun setCallback(callback: MessageCallback) {
         this.callback = callback
     }
 
@@ -52,9 +56,15 @@ class FingerprintProposeFragment : BasePopupFragment() {
 
     private fun setupUI() {
         isCancelable = false
-        retakelBt.setOnClickListener {
+
+        fingerprintService = FingerprintService(activity!!, onSuccess = {
+            callback.callback("success")
+        }, onFail = {
             dismiss()
-            callback.callback()
-        }
+            callback.callback("error")
+        })
+
+        insteadBt.setOnClickListener { fingerprintService = null; dismiss() }
+        dismissBt.setOnClickListener { fingerprintService = null; dismiss() }
     }
 }
