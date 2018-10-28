@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import android.os.Build
 import com.crashlytics.android.Crashlytics
-import com.kimlic.preferences.Prefs
 import io.fabric.sdk.android.Fabric
 import java.util.*
 
@@ -15,7 +14,10 @@ class KimlicApp : Application() {
     private var activityTransitionTimer: Timer? = null
     private var activityTransitionTimeTask: TimerTask? = null
     private val MAX_ACTIVITY_TRANSITION_TIME_MS = 5000L // App background delay
-    @Volatile var wasInBackground = false
+    @Volatile
+    var wasInBackground = false
+    @Volatile
+    var isFirstTime: Boolean = true
 
     // Companion
 
