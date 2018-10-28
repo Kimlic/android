@@ -19,6 +19,7 @@ import com.kimlic.R
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.BaseCallback
+import com.kimlic.utils.MessageCallback
 import kotlinx.android.synthetic.main.activity_passcode.*
 
 
@@ -64,7 +65,6 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun onBackPressed() {
-        Log.d("TAGWAS", "in passcode onBAckPressed mode = $mode")
         if (passcode.isNotEmpty()) deletePasscode()
         else
             moveTaskToBack(true)
@@ -97,10 +97,14 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
 
 
         if (intent.extras.containsKey("mode")) mode = intent.extras.getString("mode", "finish")
-        Log.d("TAGWAS", "passcode activity oncreate mode = $mode")
 
         when (action) {
-            "unlock" -> setupUIUnlock()
+            "unlock" -> {
+                if (Prefs.isTouchEnabled) {
+                    proposeFingerprintPopup()
+                }
+                setupUIUnlock()
+            }
             "set" -> setupUIPasscode()
             "change" -> setupUIChange()
             "disable" -> setupUIDisable()
@@ -109,15 +113,32 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
         passcodeDeleteBt.setOnClickListener { deletePasscode() }
         cancelTv.setOnClickListener {
             if (mode == "finish") {
-                Log.d("TAGWAS", "in passcode cancelTV with finish,  mode = $mode")
                 moveTaskToBack(true)
             } else {
-                Log.d("TAGWAS", "in passcode cancelTV with NONONONONONONONONONONONONONONONO finish,  mode = $mode")
                 moveTaskToBack(true)
 
             }
         }
         //passcodeOkBt.setOnClickListener { usePasscode(action) }
+    }
+
+    private fun proposeFingerprintPopup() {
+        val fragment = FingerprintProposeFragment.newInstance()
+        fragment.setCallback(object : MessageCallback {
+            override fun callback(message: String) {
+                when (message) {
+                    "success" -> {
+                        if (mode == "unlock_finish") {
+                            (application as KimlicApp).wasInBackground = false
+                            finish()
+                        } else PresentationManager.stage(this@PasscodeActivity)
+                    }
+                    "error" -> {
+                    }
+                }
+            }
+        })
+        fragment.show(supportFragmentManager, FingerprintProposeFragment.FRAGMENT_KEY)
     }
 
 
@@ -184,13 +205,10 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
 
     private fun unlock() {
         if (Prefs.passcode == passcode) {
-            if (mode == "finish") {
+            if (mode == "unlock_finish") {
                 (application as KimlicApp).wasInBackground = false
-                Log.d("TAGWAS", "in passcode unlock with finish")
-//                PresentationManager.stage(this@PasscodeActivity)
                 finish()
             } else {
-                Log.d("TAGWAS", "in passcode unlock no NONONONONONO finish")
                 (application as KimlicApp).wasInBackground = false
                 PresentationManager.stage(this@PasscodeActivity)
                 finish()
