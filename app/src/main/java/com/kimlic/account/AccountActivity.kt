@@ -20,6 +20,7 @@ import android.widget.LinearLayout
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.kimlic.BaseActivity
 import com.kimlic.BlockchainUpdatingFragment
+import com.kimlic.KimlicApp
 import com.kimlic.R
 import com.kimlic.account.adapter.RPAdapter
 import com.kimlic.account.fragment.IdentitySentSuccessfulFragment
@@ -130,6 +131,13 @@ class AccountActivity : BaseActivity() {
         PresentationManager.stage(this)
 
         //super.onBackPressed()
+    }
+
+    override fun onResume() {
+        if ((application as KimlicApp).isFirstTime) {
+            (application as KimlicApp).wasInBackground = true
+        }
+        super.onResume()
     }
 
     // Public
