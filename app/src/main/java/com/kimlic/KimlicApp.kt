@@ -14,7 +14,7 @@ class KimlicApp : Application() {
 
     private var activityTransitionTimer: Timer? = null
     private var activityTransitionTimeTask: TimerTask? = null
-    private val MAX_ACTIVITY_TRANSITION_TIME_MS = 40000L // App background delay
+    private val MAX_ACTIVITY_TRANSITION_TIME_MS = 5000L // App background delay
     @Volatile var wasInBackground = false
 
     // Companion
