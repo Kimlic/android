@@ -42,14 +42,10 @@ abstract class BaseActivity : AppCompatActivity(), View.OnSystemUiVisibilityChan
 
     override fun onResume() {
         super.onResume()
-        Log.d("TAGWAS", "baseactivity on create!!!!")
         if ((application as KimlicApp).wasInBackground) {
-            if (Prefs.isTouchEnabled) {
-                PresentationManager.touchFinish(this)
-            } else
-                if (Prefs.isPasscodeEnabled) {
-                    PresentationManager.passcodeFinish(this)
-                }
+            if (Prefs.isPasscodeEnabled) {
+                PresentationManager.passcodeFinish(this)
+            }
         }
         (application as KimlicApp).stopActivityTransitionTimer()
         hideSystemUI()
