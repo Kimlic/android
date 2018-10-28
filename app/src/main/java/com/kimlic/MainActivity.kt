@@ -73,9 +73,7 @@ class MainActivity : BaseActivity() {
         object : CountDownTimer(1500, 1500) {
             override fun onFinish() {
                 if (Prefs.isPasscodeEnabled) {
-                    if (Prefs.isTouchEnabled) {
-                        PresentationManager.login(this@MainActivity)
-                    } else PresentationManager.passcodeUnlock(this@MainActivity)
+                    PresentationManager.passcodeUnlock(this@MainActivity)
                 } else PresentationManager.stage(this@MainActivity)
             }
 
