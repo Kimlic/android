@@ -111,11 +111,9 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
             if (mode == "finish") {
                 Log.d("TAGWAS", "in passcode cancelTV with finish,  mode = $mode")
                 moveTaskToBack(true)
-                //finish()
             } else {
                 Log.d("TAGWAS", "in passcode cancelTV with NONONONONONONONONONONONONONONONO finish,  mode = $mode")
                 moveTaskToBack(true)
-                //finish()
 
             }
         }
@@ -293,7 +291,6 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
             override fun callback() {
                 setResult(Activity.RESULT_OK)
                 finish()
-                //PresentationManager.stage(this@PasscodeActivity)
             }
         })
         fragment.show(supportFragmentManager, PasscodeSuccessfulFragment.FRAGMENT_KEY)
