@@ -73,8 +73,12 @@ class MainActivity : BaseActivity() {
         object : CountDownTimer(1500, 1500) {
             override fun onFinish() {
                 if (Prefs.isPasscodeEnabled) {
+                    (application as KimlicApp).isFirstTime = false
                     PresentationManager.passcodeUnlock(this@MainActivity)
-                } else PresentationManager.stage(this@MainActivity)
+                } else {
+                    (application as KimlicApp).isFirstTime = false
+                    PresentationManager.stage(this@MainActivity)
+                }
             }
 
             override fun onTick(millisUntilFinished: Long) {}
