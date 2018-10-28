@@ -34,7 +34,7 @@
       android:layout_height="wrap_content"
       android:layout_marginBottom="16dp"
       android:gravity="center"
-      android:text="@string/lift_and_rest_the_edge_of_your_finger_on_the_home_button_repeatedly"
+      android:text="@string/please_approve_fingerprint_authentication_by_your_fingerprint"
       android:textColor="@android:color/white"
       android:textSize="@dimen/text_size_medium_18"/>
 
