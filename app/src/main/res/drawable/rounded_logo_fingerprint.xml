@@ -28,7 +28,7 @@
       </item>
 
       <item
-        android:drawable="@drawable/ic_warning_shield"
+        android:drawable="@drawable/ic_fingerprint_shield"
         android:gravity="center"
         android:height="124dp"
         android:width="104dp">
