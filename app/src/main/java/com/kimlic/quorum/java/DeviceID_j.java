@@ -1,11 +1,10 @@
-package com.kimlic.quorum;
+package com.kimlic.quorum.java;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import java.util.UUID;
 
-public class DeviceID {
+public class DeviceID_j {
 
     // Constants
 
