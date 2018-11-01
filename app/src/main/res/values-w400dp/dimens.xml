@@ -45,7 +45,7 @@
   <!--popup fragments, camera exit button size-->
   <dimen name="menu_element_square_size">24dp</dimen>
 
-  <dimen name="popup_fragment_width">296dp</dimen>
+  <dimen name="popup_fragment_width">316dp</dimen>
   <dimen name="image_elevation">8dp</dimen>
 
   <!--Rounded logo dimens-->
