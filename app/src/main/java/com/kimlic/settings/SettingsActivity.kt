@@ -10,7 +10,6 @@ import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.LinearLayout
-import butterknife.ButterKnife
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.kimlic.BackupUpdatingFragment
 import com.kimlic.BaseActivity
@@ -23,6 +22,7 @@ import com.kimlic.preferences.Prefs
 import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.recovery.RecoveryViewModel
 import com.kimlic.utils.AppConstants
+import com.kimlic.utils.BaseCallback
 import kotlinx.android.synthetic.main.activity_settings.*
 
 class SettingsActivity : BaseActivity() {
@@ -42,6 +42,7 @@ class SettingsActivity : BaseActivity() {
     private lateinit var recoveryModel: RecoveryViewModel
     private var timer: CountDownTimer? = null
     private var backupUpdatingFragment: BackupUpdatingFragment? = null
+    private var deleteWarningFragment: DeleteWarningFragment? = null
 
     // Life
 
@@ -51,7 +52,6 @@ class SettingsActivity : BaseActivity() {
 
         model = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         recoveryModel = ViewModelProviders.of(this).get(RecoveryViewModel::class.java)
-        ButterKnife.bind(this)
         setupUI()
     }
 
@@ -79,8 +79,17 @@ class SettingsActivity : BaseActivity() {
 
     private fun setupUI() {
         setupAdapter()
-        signoutBt.setOnClickListener { signOut() }
         backBt.setOnClickListener { finish() }
+
+        deleteBt.setOnClickListener {
+            deleteWarningFragment = DeleteWarningFragment.newInstance()
+            deleteWarningFragment!!.setCallback(object : BaseCallback {
+                override fun callback() {
+                    signOut()
+                }
+            })
+            deleteWarningFragment!!.show(supportFragmentManager, DeleteWarningFragment.FRAGMENT_KEY)
+        }
     }
 
     private fun setupAdapter() {
