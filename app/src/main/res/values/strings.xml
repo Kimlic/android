@@ -295,4 +295,8 @@
   <string name="use_fingerprint">Use Fingerprint</string>
   <string name="to_securely_unlock_kimlic">to securely unlock Kimlic</string>
   <string name="use_passcode_instead">Use passcode instead</string>
+
+  <string name="delete_from_device">Delete From Device ?</string>
+  <string name="deletion_of_account_data_will_require_mnemonic_phrase_and_google_drive_backup_to_restore">Deletion of account data will \n require mnemonic phrase and \n Google Drive backup to restore.</string>
+  <string name="delete_from_device_">Delete from device</string>
 </resources>
