@@ -39,12 +39,12 @@
     app:layout_constraintTop_toTopOf="parent"/>
 
   <Button
-    android:id="@+id/signoutBt"
+    android:id="@+id/deleteBt"
     android:layout_width="@dimen/content_width"
     android:layout_height="@dimen/button_height"
     android:layout_marginBottom="32dp"
-    android:background="@drawable/button_rounded_blue"
-    android:text="@string/sign_out"
+    android:background="@drawable/button_rounded_red"
+    android:text="@string/delete_from_device_"
     android:textAllCaps="false"
     android:textColor="@android:color/white"
     android:textSize="@dimen/button_text_size"
