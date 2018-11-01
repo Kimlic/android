@@ -125,7 +125,7 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
     // Volley
-    implementation 'com.android.volley:volley:1.1.0'
+    implementation 'com.android.volley:volley:1.1.1'
     implementation 'com.google.code.gson:gson:2.8.2'
 
     // web3j
