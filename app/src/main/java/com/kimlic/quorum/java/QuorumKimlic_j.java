@@ -1,8 +1,9 @@
-package com.kimlic.quorum;
+package com.kimlic.quorum.java;
 
 import android.content.Context;
 import android.util.Log;
 import com.kimlic.BuildConfig;
+import com.kimlic.quorum.Web3;
 import com.kimlic.quorum.bip44.HdKeyNode;
 import com.kimlic.quorum.bip44.hdpath.HdKeyPath;
 import com.kimlic.quorum.contracts.AccountStorageAdapter;
@@ -20,7 +21,7 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.utils.Numeric;
 
-public class QuorumKimlic {
+public class QuorumKimlic_j {
 
   // Constants
 
@@ -28,7 +29,7 @@ public class QuorumKimlic {
 
   // Variables
 
-  private static QuorumKimlic sInstance;
+  private static QuorumKimlic_j sInstance;
 
   private Web3j mWeb3;
   private String mWalletAddress;
@@ -40,7 +41,7 @@ public class QuorumKimlic {
 
   // Public
 
-  public static QuorumKimlic createInstance(String mnemonic, Context context) throws Exception {
+  public static QuorumKimlic_j createInstance(String mnemonic, Context context) throws Exception {
     if (sInstance != null) {
       throw new Exception("createInstance should be called once");
     }
@@ -53,7 +54,7 @@ public class QuorumKimlic {
       mnemonic = generateMnemonic(context);
     }
 
-    return new QuorumKimlic(mnemonic, context);
+    return new QuorumKimlic_j(mnemonic, context);
   }
 
   public static void destroyInstance() {
@@ -86,10 +87,10 @@ public class QuorumKimlic {
 
   // Accessors
 
-  public static QuorumKimlic getInstance(String mnemonic, Context context) { //  throws Exception
+  public static QuorumKimlic_j getInstance(String mnemonic, Context context) { //  throws Exception
     if (sInstance == null) {
       Log.d("TAGQUORUM", "quorun create new instance");
-      sInstance = new QuorumKimlic(mnemonic, context);
+      sInstance = new QuorumKimlic_j(mnemonic, context);
 //      throw new Exception("Call createInstance to generate instance");
     }
 
@@ -138,11 +139,11 @@ public class QuorumKimlic {
 
   // Private
 
-  private QuorumKimlic(String mnemonic, Context context) {
+  private QuorumKimlic_j(String mnemonic, Context context) {
     sInstance = this;
     mMnemonic = mnemonic;
     Log.d("TAGWEB3J", "web3j url =" + QUORUM_URL);
-    mWeb3 = Web3.getInstance(QUORUM_URL, context).getWeb3();
+    mWeb3 = Web3.Companion.getInstance(QUORUM_URL, context).getWeb3();
 
     ECKeyPair keyPair = generateKeyPair(mMnemonic);
     mWalletAddress = generateAddress(keyPair);

@@ -1,17 +1,9 @@
-package com.kimlic.quorum;
+package com.kimlic.quorum.java;
 
 import android.content.Context;
 import android.util.Log;
-
 import com.kimlic.R;
-import com.kimlic.TrustAllCerts;
 import com.kimlic.TrustAllHostnameVerifier;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.web3j.protocol.Service;
-import org.web3j.protocol.exceptions.ClientConnectionException;
-
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,14 +11,12 @@ import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -35,7 +25,6 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
-
 import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -44,8 +33,12 @@ import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import okio.Buffer;
 import okio.BufferedSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.web3j.protocol.Service;
+import org.web3j.protocol.exceptions.ClientConnectionException;
 
-public class QuorumHttpClient extends Service {
+public class QuorumHttpClient_j extends Service {
 
   public static final MediaType JSON_MEDIA_TYPE
       = MediaType.parse("application/json; charset=utf-8");
@@ -63,7 +56,7 @@ public class QuorumHttpClient extends Service {
   private HashMap<String, String> headers = new HashMap<String, String>();
   private SSLSocketFactory mSocketFactory;
 
-  public QuorumHttpClient(Context context, String url, OkHttpClient httpClient, boolean includeRawResponses) {
+  public QuorumHttpClient_j(Context context, String url, OkHttpClient httpClient, boolean includeRawResponses) {
     super(includeRawResponses);
     this.url = url;
     this.httpClient = httpClient;
@@ -83,31 +76,31 @@ public class QuorumHttpClient extends Service {
     }
   }
 
-  public QuorumHttpClient(Context context, OkHttpClient httpClient, boolean includeRawResponses) {
+  public QuorumHttpClient_j(Context context, OkHttpClient httpClient, boolean includeRawResponses) {
     this(context, DEFAULT_URL, httpClient, includeRawResponses);
   }
 
-  private QuorumHttpClient(Context context, String url, OkHttpClient httpClient) {
+  private QuorumHttpClient_j(Context context, String url, OkHttpClient httpClient) {
     this(context, url, httpClient, false);
   }
 
-  public QuorumHttpClient(Context context, String url) {
+  public QuorumHttpClient_j(Context context, String url) {
     this(context, url, createOkHttpClient(context));
   }
 
-  public QuorumHttpClient(Context context, String url, boolean includeRawResponse) {
+  public QuorumHttpClient_j(Context context, String url, boolean includeRawResponse) {
     this(context, url, createOkHttpClient(context), includeRawResponse);
   }
 
-  public QuorumHttpClient(Context context, OkHttpClient httpClient) {
+  public QuorumHttpClient_j(Context context, OkHttpClient httpClient) {
     this(context, DEFAULT_URL, httpClient);
   }
 
-  public  QuorumHttpClient(Context context, boolean includeRawResponse) {
+  public QuorumHttpClient_j(Context context, boolean includeRawResponse) {
     this(context, DEFAULT_URL, includeRawResponse);
   }
 
-  public QuorumHttpClient(Context context) {
+  public QuorumHttpClient_j(Context context) {
     this(context, DEFAULT_URL);
   }
 
