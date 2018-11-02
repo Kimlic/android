@@ -27,8 +27,8 @@ android {
         applicationId 'com.kimlic'
         minSdkVersion 24
         targetSdkVersion 27
-        versionCode 26
-        versionName "1.0.26"
+        versionCode 27
+        versionName "1.0.27"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -58,7 +58,7 @@ android {
         }
         stage {
             buildConfigField("boolean", "RECOVERY_FOLDER", "false")
-            buildConfigField("String", "QUORUM_URL", "\"http://23.96.119.190:22000\"")// quorum
+            buildConfigField("String", "QUORUM_URL", "\"http://first-blockchain-kimcore-stage.eastus.cloudapp.azure.com:22000\"")// quorum
             buildConfigField("String", "API_CORE_URL", "\"http://first-kimcore-stage.eastus.cloudapp.azure.com:4000\"") // elixir
             buildConfigField("String", "KIMLIC_EXPLORER_URI", "\"http://rp-dashboard-stage.eastus.cloudapp.azure.com\"")
         }
