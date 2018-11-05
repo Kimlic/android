@@ -17,7 +17,6 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"/>
 
-
   <LinearLayout
     android:id="@+id/rootMiddleLl"
     android:layout_width="@dimen/content_width"
@@ -48,6 +47,7 @@
   </LinearLayout>
 
   <FrameLayout
+    android:id="@+id/tooltipFl"
     android:layout_width="@dimen/content_width"
     android:layout_height="80dp"
     android:layout_marginBottom="@dimen/tooltip_margin_bottom"
@@ -72,15 +72,22 @@
       android:textSize="@dimen/text_size_medium_18"/>
   </FrameLayout>
 
-
-  <android.support.v7.widget.RecyclerView
-    android:id="@+id/recycler"
-    android:layout_width="310dp"
-    android:layout_height="432dp"
-    android:layout_marginTop="76dp"
-    android:overScrollMode="never"
+  <RelativeLayout
+    android:id="@+id/recyclerWrapperRl"
+    android:layout_width="@dimen/content_width"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:layout_gravity="top"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/titleTv"/>
+    app:layout_constraintTop_toBottomOf="@+id/titleTv">
+
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/recycler"
+      android:layout_width="@dimen/content_width"
+      android:layout_height="wrap_content"
+      android:overScrollMode="never"/>
+
+  </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>
