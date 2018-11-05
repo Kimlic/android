@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <item>
+    <layer-list>
+      <item android:gravity="center" android:height="@dimen/circle_one_accounts" android:width="@dimen/circle_one_accounts">
+        <shape android:shape="oval">
+          <solid android:color="@color/lightBlueRounded"/>
+        </shape>
+      </item>
+
+      <item android:gravity="center" android:height="@dimen/circle_two_accounts" android:width="@dimen/circle_two_accounts">
+        <shape android:shape="oval">
+          <solid android:color="@color/lightBlueRounded"/>
+        </shape>
+      </item>
+
+      <item android:gravity="center" android:height="@dimen/circle_three_accounts" android:width="@dimen/circle_three_accounts">
+        <shape android:shape="oval">
+          <solid android:color="@color/lightBlueRounded"/>
+        </shape>
+      </item>
+
+      <item android:gravity="center" android:height="@dimen/circle_four_accounts" android:width="@dimen/circle_four_accounts">
+        <shape android:shape="oval">
+          <solid android:color="@color/lightBlueRounded"/>
+        </shape>
+      </item>
+
+      <item
+        android:drawable="@drawable/ic_white_accounts_icon_large"
+        android:gravity="center"
+        android:height="@dimen/accounts_logo"
+        android:width="@dimen/accounts_logo">
+      </item>
+
+    </layer-list>
+  </item>
+
+
+</selector>
