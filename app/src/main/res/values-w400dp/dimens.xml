@@ -13,6 +13,11 @@
   <dimen name="button_scan_height">120dp</dimen>
   <dimen name="stage_lower_buttons_height">72dp</dimen>
 
+
+  <dimen name="tooltip_margin_bottom">110dp</dimen>
+  <dimen name="tooltip_text_margin_bottom">10dp</dimen>
+  <dimen name="accounts_root_middlell_margin_top">80dp</dimen>
+
   <!--Adapter items-->
 
   <dimen name="item_user_stage_height">72dp</dimen>
@@ -59,6 +64,13 @@
   <dimen name="circle_one_success">296dp</dimen>
   <dimen name="circle_two_success">192dp</dimen>
   <dimen name="logo_size_success">148dp</dimen>
+
+  <dimen name="circle_one_accounts">280dp</dimen>
+  <dimen name="circle_two_accounts">236dp</dimen>
+  <dimen name="circle_three_accounts">196dp</dimen>
+  <dimen name="circle_four_accounts">160dp</dimen>
+  <dimen name="accounts_logo">164dp</dimen>
+
 
   <!--Rounded logo medium popup-->
   <dimen name="circle_one_medium">192dp</dimen>
