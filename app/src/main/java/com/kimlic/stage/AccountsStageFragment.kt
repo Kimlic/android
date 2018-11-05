@@ -78,6 +78,10 @@ class AccountsStageFragment : BaseFragment() {
 
         companyModel.companiesLive().observe(this, Observer<List<Company>> { companyList ->
             companiesList = companyList.orEmpty()
+            if(companiesList.isNotEmpty()){
+                rootMiddleLl.visibility = View.GONE
+                tooltipFl.visibility = View.GONE
+            }
             adapter.setAccountsList(companiesList)
         })
     }
