@@ -60,7 +60,7 @@ class FingerprintProposeFragment : BasePopupFragment() {
         fingerprintService = FingerprintService(activity!!, onSuccess = {
             callback.callback("success")
         }, onFail = {
-            dismiss()
+            this?.dismiss()// TODO bug in fingerPrint!!!
             callback.callback("error")
         })
 
