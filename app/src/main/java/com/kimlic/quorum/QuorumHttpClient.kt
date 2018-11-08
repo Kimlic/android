@@ -154,7 +154,8 @@ class QuorumHttpClient(context: Context, private val url: String, private val ht
         @Throws(CertificateException::class, KeyStoreException::class, IOException::class, NoSuchAlgorithmException::class, KeyManagementException::class)
         private fun createSSLSocketFactory(context: Context): SSLSocketFactory {
             val cf = CertificateFactory.getInstance("X.509")
-            val caInput = context.resources.openRawResource(R.raw.kimlic_com) // this cert file stored in \app\src\main\res\raw folder path
+//          val caInput = context.resources.openRawResource(R.raw.kimlic_com) // this cert file stored in \app\src\main\res\raw folder path
+            val caInput = getCaInput(context)
 
             val ca = cf.generateCertificate(caInput)
             caInput.close()
@@ -173,6 +174,10 @@ class QuorumHttpClient(context: Context, private val url: String, private val ht
             sslContext.init(null, wrappedTrustManagers, null)
 
             return sslContext.socketFactory
+        }
+
+        fun getCaInput(context: Context): InputStream {
+            return context.resources.openRawResource(R.raw.kimlic_com) // this cert file stored in \app\src\main\res\raw folder path
         }
     }
 
