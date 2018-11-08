@@ -9,8 +9,7 @@ class MainActivityTest {
 
     // Rule
 
-    @get:Rule // - works for Kotlin
-//    @Rule @JvmField //
+    @Rule @JvmField //
     val activityTestRule = ActivityTestRule<MainActivity>(MainActivity::class.java)
 
     private var activity: MainActivity? = null
