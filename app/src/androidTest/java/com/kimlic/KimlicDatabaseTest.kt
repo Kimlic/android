@@ -9,7 +9,6 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 
-
 class KimlicDatabaseTest {
 
     private var database: KimlicDB? = null
@@ -88,10 +87,13 @@ class KimlicDatabaseTest {
         val vendorDocument0 = VendorDocument(contexts = listOf("AA", "BB", "CC", "DD"), countries = listOf("UA", "EN", "TR"))
         val vendorDocument1 = VendorDocument(contexts = listOf("EE", "DD", "EE", "HH"), countries = listOf("US", "FR", "GE"))
 
-        val ids = database!!.vendorDao().insertDocs(listOf(vendorDocument0, vendorDocument1))
+        database!!.vendorDao().insertDocs(listOf(vendorDocument0, vendorDocument1))
 
-        //val vendorDocFromDB = database.vendorDao().select()
-
+        val vendorDocsFromDB = database!!.vendorDao().select()
+        assertTrue(vendorDocsFromDB.isNotEmpty())
+        database!!.vendorDao().deleteAll()
+        val nullVendorsDocs = database!!.vendorDao().select()
+        assertTrue(nullVendorsDocs.isEmpty())
 
         database!!.userDao().delete(USER_ID!!)
 
