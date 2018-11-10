@@ -1,11 +1,9 @@
 package com.kimlic
 
 import com.kimlic.db.KimlicDB
-import org.junit.Assert.assertNotNull
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito.mock
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnit
 
