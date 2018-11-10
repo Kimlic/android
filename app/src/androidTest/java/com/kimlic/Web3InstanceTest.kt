@@ -1,28 +1,44 @@
 package com.kimlic
 
-//import org.mockito.Mock
-//import org.mockito.Mockito
-//import org.mockito.MockitoAnnotations
+import android.content.Context
+import android.support.test.InstrumentationRegistry.getInstrumentation
+import com.kimlic.BuildConfig.QUORUM_URL
+import com.kimlic.quorum.QuorumHttpClient
+import com.kimlic.quorum.Web3
+import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.powermock.api.mockito.PowerMockito.mock
+
+
+import org.mockito.junit.MockitoJUnitRunner
+
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 
+@RunWith(MockitoJUnitRunner::class)
 class Web3InstanceTest {
 
     // Variables
 
-//    @Mock
-//    private lateinit var context: Context
-//
-//    @Mock
-//    lateinit var resouces: Resources
+    private var context: Context? = null
+
+    @Before
+    fun setup() {
+        context = getInstrumentation().context
+    }
 
     @Test
     fun testWeb3instanceTest() {
         print("testWeb3 instance test")
-//        MockitoAnnotations.initMocks(this)
+        //MockitoAnnotations.initMocks(this)
 
-        //val web3 = Web3.getInstance(QUORUM_URL, context)
+        val veb3_ = mock(Web3::class.java)
+
+
+        val web3 = Web3.getInstance(QUORUM_URL, context!!)
+        val quorumHttpClientMock = mock(QuorumHttpClient::class.java)
+
 
 //        Mockito.`when`(QuorumHttpClient.getCaInput(context)).thenReturn(getManualInputStram())
 
