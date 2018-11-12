@@ -3,6 +3,7 @@ package com.kimlic
 
 import android.content.Context
 import android.support.test.InstrumentationRegistry.getInstrumentation
+import android.support.test.filters.LargeTest
 import android.support.test.runner.AndroidJUnit4
 import com.kimlic.quorum.QuorumHttpClient
 import com.kimlic.quorum.QuorumKimlic
@@ -13,6 +14,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
+@LargeTest
 class QuorumCompleteTest {
 
     // Variables
@@ -23,6 +25,7 @@ class QuorumCompleteTest {
     @Before
     fun setupContext() {
         targetContext = getInstrumentation().targetContext
+        QuorumKimlic.destroyInstance()
     }
 
     @Test
