@@ -2,6 +2,7 @@ package com.kimlic
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
+import android.util.Log
 import com.kimlic.utils.allopen.TestOpen
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -21,7 +22,8 @@ class ExampleInstrumentedTest {
         val appContext = InstrumentationRegistry.getTargetContext()
         assertEquals("com.kimlic", appContext.packageName)
 
-        //val aMock = mock(A::class.java)
+        val aMock = mock(A::class.java)
+        Log.d("MOCK", "final class is mocked!!!")
     }
 
     @TestOpen
