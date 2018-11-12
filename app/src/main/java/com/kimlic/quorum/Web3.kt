@@ -1,16 +1,13 @@
 package com.kimlic.quorum
 
 import android.content.Context
+import com.kimlic.utils.allopen.TestOpen
 import org.web3j.protocol.Web3j
 import org.web3j.protocol.Web3jFactory
 
-class Web3
+@TestOpen
+class Web3 private constructor(context: Context, URL: String) {
 
-// Private
-
-private constructor(context: Context, URL: String) {
-
-    // Accessors
 
     val web3: Web3j = Web3jFactory.build(QuorumHttpClient(context, URL))
 
