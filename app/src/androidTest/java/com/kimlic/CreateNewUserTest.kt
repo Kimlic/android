@@ -38,6 +38,7 @@ class CreateNewUserTest {
     @Before
     fun setupContext() {
         targetContext = getInstrumentation().targetContext
+        QuorumKimlic.destroyInstance()
     }
 
     @Test
@@ -83,7 +84,6 @@ class CreateNewUserTest {
                     }
                     val contextContractAddress = it.getJSONObject("data").optString("context_contract")
                     onSuccess(contextContractAddress)
-                    Log.d("INSTRUMENTED", "contextContractAddress  - $contextContractAddress")
                 },
                 Response.ErrorListener { onError() })
         VolleySingleton.getInstance(targetContext!!).addToRequestQueue(addressRequest)
