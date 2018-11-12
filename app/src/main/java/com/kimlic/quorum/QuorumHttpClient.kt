@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.kimlic.R
 import com.kimlic.TrustAllHostnameVerifier
+import com.kimlic.utils.allopen.TestOpen
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import org.slf4j.LoggerFactory
@@ -22,6 +23,7 @@ import java.security.cert.X509Certificate
 import java.util.*
 import javax.net.ssl.*
 
+@TestOpen
 class QuorumHttpClient(context: Context, private val url: String, private val httpClient: OkHttpClient, private val includeRawResponse: Boolean) : Service(includeRawResponse) {
 
     private val headers = HashMap<String, String>()
