@@ -10,6 +10,7 @@ import com.kimlic.quorum.contracts.KimlicContractsContext
 import com.kimlic.quorum.contracts.KimlicToken
 import com.kimlic.quorum.crypto.MnemonicUtils
 import com.kimlic.quorum.crypto.SecureRandomTools
+import com.kimlic.utils.allopen.TestOpen
 import org.web3j.crypto.Credentials
 import org.web3j.crypto.ECKeyPair
 import org.web3j.crypto.Keys
@@ -19,6 +20,7 @@ import org.web3j.utils.Numeric
 import java.math.BigInteger
 import java.util.concurrent.ExecutionException
 
+@TestOpen
 class QuorumKimlic private constructor(val mnemonic: String, context: Context) {
 
     // Variables
