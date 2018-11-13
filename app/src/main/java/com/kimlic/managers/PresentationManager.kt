@@ -67,6 +67,7 @@ object PresentationManager {
         params["action"] = "change"
         present(presenter = presenter, className = PasscodeActivity::class.java, isStarting = false, params = params)
     }
+
     // unused
     fun login(presenter: BaseActivity) {
         val params = HashMap<String, String>()
@@ -87,6 +88,7 @@ object PresentationManager {
         params["action"] = "disable"
         present(presenter = presenter, className = TouchIdActivity::class.java, isStarting = false, params = params)
     }
+
     // unused
     fun touchFinish(presenter: BaseActivity) {
         val params = HashMap<String, String>()
@@ -196,29 +198,29 @@ object PresentationManager {
 
     fun termsReview(presenter: BaseActivity) {
         val params = HashMap<String, String>()
-        params["action"] = "review"
-        params["content"] = AppConstants.TERMS.key
+        params[AppConstants.ACTION.key] = AppConstants.REVIEW.key
+        params[AppConstants.CONTENT.key] = AppConstants.TERMS.key
         present(presenter = presenter, className = TermsActivity::class.java, isStarting = false, params = params)
     }
 
     fun termsAccept(presenter: BaseActivity, requestCode: Int) {
         val params = HashMap<String, String>()
-        params["action"] = "accept"
-        params["content"] = AppConstants.TERMS.key
+        params[AppConstants.ACTION.key] = AppConstants.ACCEPT.key
+        params[AppConstants.CONTENT.key] = AppConstants.TERMS.key
         present(presenter = presenter, className = TermsActivity::class.java, isStarting = false, params = params, requestCode = requestCode)
     }
 
     fun privacyReview(presenter: BaseActivity) {
         val params = HashMap<String, String>()
-        params["action"] = "review"
-        params["content"] = AppConstants.PRIVACY.key
+        params[AppConstants.ACTION.key] = AppConstants.REVIEW.key
+        params[AppConstants.CONTENT.key] = AppConstants.PRIVACY.key
         present(presenter = presenter, className = TermsActivity::class.java, isStarting = false, params = params)
     }
 
     fun privacyAccept(presenter: BaseActivity, requestCode: Int) {
         val params = HashMap<String, String>()
-        params["action"] = "accept"
-        params["content"] = AppConstants.PRIVACY.key
+        params[AppConstants.ACTION.key] = AppConstants.ACCEPT.key
+        params[AppConstants.CONTENT.key] = AppConstants.PRIVACY.key
         present(presenter = presenter, className = TermsActivity::class.java, isStarting = false, params = params, requestCode = requestCode)
     }
 
