@@ -48,9 +48,9 @@ class MainActivity : BaseActivity() {
         splashFragment = SplashScreenFragment.newInstance()
     }
 
-    private fun splashScreenHide() = splashFragment.dismiss()
+    private fun splashScreenHide() = splashFragment?.let { it.dismiss() }
 
-    private fun splashScreenShow() = splashFragment.show(supportFragmentManager, SplashScreenFragment.FRAGMENT_KEY)
+    private fun splashScreenShow() = splashFragment.show(this.supportFragmentManager, SplashScreenFragment.FRAGMENT_KEY)
 
     private fun syncProfile() = model.syncProfile()
 
