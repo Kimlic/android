@@ -45,10 +45,10 @@ class TermsActivity : BaseActivity() {
     }
 
     private fun assignButtonState() {
-        val action = intent.extras.getString("action", "accept")
+        val action = intent?.extras?.getString(AppConstants.ACTION.key, AppConstants.ACCEPT.key).orEmpty()
 
         when (action) {
-            "accept" -> {
+            AppConstants.ACCEPT.key -> {
                 confirmBt.text = getString(R.string.accept_)
                 confirmBt.setOnClickListener {
                     setResult(Activity.RESULT_OK)
@@ -57,7 +57,7 @@ class TermsActivity : BaseActivity() {
                 changeTv.visibility = View.VISIBLE
                 changeTv.setOnClickListener { setResult(Activity.RESULT_CANCELED); finish() }
             }
-            "review" -> {
+            AppConstants.REVIEW.key -> {
                 confirmBt.text = getString(R.string.close)
                 confirmBt.setOnClickListener { finish() }
             }
@@ -82,15 +82,15 @@ class TermsActivity : BaseActivity() {
         }
         webView.setBackgroundColor(Color.TRANSPARENT)
 
-        val content = intent.extras.getString("content", AppConstants.TERMS.key)
+        val content = intent?.extras?.getString(AppConstants.CONTENT.key, AppConstants.TERMS.key).orEmpty()
 
         when (content) {
-            "TERMS" -> {
+            AppConstants.TERMS.key -> {
                 titleTv.text = getString(R.string.terms_amp_conditions)
                 subtitleTv.text = getString(R.string.last_modified_24_october_2018)
                 webView.loadUrl(TERMS_FILE_PATH_URL)
             }
-            "PRIVACY" -> {
+            AppConstants.PRIVACY.key -> {
                 titleTv.text = getString(R.string.privacy_policy)
                 subtitleTv.text = getString(R.string.last_modified_24_october_2018)
                 webView.loadUrl(PRIVACY_FILE_PATH_URL)
