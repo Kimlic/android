@@ -24,8 +24,14 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
     IS_GOOGLE_SIGNE_IN("IS_GOOGLE_SIGNE_IN"),
     IS_DRIVE_ACTIVE("IS_GOOGLE_DRIVE_ACTIVE"),
 
+    // Terms constants
+
+    CONTENT("content"),
     TERMS("TERMS"),
     PRIVACY("PRIVACY"),
+    ACTION("action"),
+    ACCEPT("accept"),
+    REVIEW("review"),
 
     // Action
 
