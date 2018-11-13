@@ -54,8 +54,8 @@ class TermsActivity : BaseActivity() {
                     setResult(Activity.RESULT_OK)
                     finish()
                 }
-                changeTv.visibility = View.VISIBLE
-                changeTv.setOnClickListener { setResult(Activity.RESULT_CANCELED); finish() }
+                cancelTv.visibility = View.VISIBLE
+                cancelTv.setOnClickListener { setResult(Activity.RESULT_CANCELED); finish() }
             }
             AppConstants.REVIEW.key -> {
                 confirmBt.text = getString(R.string.close)
