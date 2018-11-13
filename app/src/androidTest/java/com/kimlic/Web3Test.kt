@@ -2,7 +2,7 @@ package com.kimlic
 
 import android.content.Context
 import android.support.test.InstrumentationRegistry.getInstrumentation
-import android.support.test.filters.LargeTest
+import android.support.test.filters.MediumTest
 import android.support.test.runner.AndroidJUnit4
 import com.kimlic.quorum.Web3
 import org.junit.After
@@ -12,7 +12,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-@LargeTest
+@MediumTest
 class Web3Test {
 
     // Variables
