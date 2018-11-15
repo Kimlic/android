@@ -48,7 +48,7 @@ class MainActivity : BaseActivity() {
         splashFragment = SplashScreenFragment.newInstance()
     }
 
-    private fun splashScreenHide() = splashFragment?.let { it.dismiss() }
+    private fun splashScreenHide() = splashFragment?.let { it?.dismiss() }
 
     private fun splashScreenShow() = splashFragment.show(this.supportFragmentManager, SplashScreenFragment.FRAGMENT_KEY)
 
