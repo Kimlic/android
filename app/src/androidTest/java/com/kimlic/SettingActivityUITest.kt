@@ -86,8 +86,8 @@ class SettingActivityUITest {
             getRecyclerPerformClick(1)
             onView(withId(R.id.titleTs)).check(matches(isDisplayed()))
 
-            Thread.sleep(2000)
             settingsActivity?.finish()
+            Thread.sleep(2000)
             checkIfFinished()
         }
     }
