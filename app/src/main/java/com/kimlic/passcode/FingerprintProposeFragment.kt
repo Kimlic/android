@@ -43,7 +43,7 @@ class FingerprintProposeFragment : BasePopupFragment() {
 
     override fun onResume() {
         super.onResume()
-        dialog.window.setBackgroundDrawableResource(R.drawable.rounded_background_fragment)
+        dialog?.window?.setBackgroundDrawableResource(R.drawable.rounded_background_fragment)
     }
 
     // Public
