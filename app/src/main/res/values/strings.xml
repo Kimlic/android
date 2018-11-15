@@ -111,8 +111,8 @@
   <string name="passcode">Passcode</string>
   <string name="protect_my_id">Protect my ID with Passcode</string>
   <string name="account_recovery">Account Recovery</string>
-  <string name="use_my_touch_id">Use my Touch ID to acces kimlic</string>
-  <string name="enable_touch_id">Enable Touch ID</string>
+  <string name="use_my_fingerprint_to_access_kimlic">Use my fingerprint to access Kimlic</string>
+  <string name="enable_fingerprint">Enable Fingerprint</string>
   <string name="back_up_your_credentials">Back up your credentials</string>
   <string name="terms_and_conditions"><![CDATA[Terms & Conditions]]></string>
   <string name="accept_">Accept</string>
@@ -120,7 +120,7 @@
   <string name="privacy_policy">Privacy Policy</string>
   <string name="change_passcode">Change passcode</string>
   <string name="touch_id">Touch ID</string>
-  <string name="your_touch_id_enabled">Your Touch ID is Enabled</string>
+  <string name="your_fingerprint_is_enabled">Your Fingerprint is Enabled</string>
   <string name="your_mnemonic_passphrase_matched">Your mnemonic passphrase matched</string>
   <string name="go_back">Go Back</string>
   <string name="copy_to_buffer">Copy to buffer</string>
@@ -187,7 +187,7 @@
   <string name="rounded_logo">Rounded logo</string>
   <string name="your_identity_is_secured">Your Identity is Secured!</string>
   <string name="mnemonic_passphrase_created">Mnemonic Passphrase created.</string>
-  <string name="now_you_can_use_your_touchid_to_open_kimlic_app">Now, You can use your touchID \n to open Kimlic app</string>
+  <string name="now_you_can_use_your_fingerprint_to_open_kimlic_app">Now, You can use your fingerprint \n to open Kimlic app</string>
   <string name="full_name_added_to_your_identity_successfully">Full name added to your \n Identity successfully</string>
   <string name="logo">Logo</string>
   <string name="your_address_added_successfully">Your address added successfully</string>
