@@ -5,8 +5,8 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.PersistableBundle
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.LinearLayout
@@ -23,6 +23,7 @@ import com.kimlic.quorum.QuorumKimlic
 import com.kimlic.recovery.RecoveryViewModel
 import com.kimlic.utils.AppConstants
 import com.kimlic.utils.BaseCallback
+import com.kimlic.utils.Settings
 import kotlinx.android.synthetic.main.activity_settings.*
 
 class SettingsActivity : BaseActivity() {
@@ -59,6 +60,10 @@ class SettingsActivity : BaseActivity() {
         super.onResume()
         initSettingsList()
         adapter.setSettingsList(settingsList)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
+        //super.onSaveInstanceState(outState, outPersistentState)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -100,10 +105,10 @@ class SettingsActivity : BaseActivity() {
         adapter.onItemClick = object : OnItemClick {
             override fun onClick(view: View, position: Int) {
                 when (view.tag) {
-                    "passcode" ->
+                    Settings.PASSCODE.tag ->
                         if (Prefs.isPasscodeEnabled) PresentationManager.passcodeDisable(this@SettingsActivity)
                         else PresentationManager.passcode(this@SettingsActivity, 45)// unused request code
-                    "touch" -> {
+                    Settings.FINGERPRINT.tag -> {
                         if (!Prefs.isPasscodeEnabled) {
                             passcodeForResult(); return
                         }
@@ -111,7 +116,7 @@ class SettingsActivity : BaseActivity() {
                         if (Prefs.isTouchEnabled) PresentationManager.touchDisable(this@SettingsActivity)
                         else PresentationManager.touchCreate(this@SettingsActivity)
                     }
-                    "drive" -> {
+                    Settings.DRIVE.tag -> {
                         when (Prefs.isDriveActive) {
                             true -> gDriveWarningPopupImmersive()
                             false -> {
@@ -121,11 +126,11 @@ class SettingsActivity : BaseActivity() {
                             }
                         }
                     }
-                    "recovery" -> PresentationManager.recoveryEnable(this@SettingsActivity)
-                    "terms" -> PresentationManager.termsReview(this@SettingsActivity)
-                    "privacy" -> PresentationManager.privacyReview(this@SettingsActivity)
-                    "about" -> PresentationManager.about(this@SettingsActivity)
-                    "change" -> PresentationManager.passcodeChange(this@SettingsActivity)
+                    Settings.RECOVERY.tag -> PresentationManager.recoveryEnable(this@SettingsActivity)
+                    Settings.TERMS.tag -> PresentationManager.termsReview(this@SettingsActivity)
+                    Settings.PRIVACY.tag -> PresentationManager.privacyReview(this@SettingsActivity)
+                    Settings.ABOUT.tag -> PresentationManager.about(this@SettingsActivity)
+                    Settings.CHANGE.tag -> PresentationManager.passcodeChange(this@SettingsActivity)
                 }
             }
         }
@@ -140,20 +145,20 @@ class SettingsActivity : BaseActivity() {
 
     private fun initSettingsList() {
         settingsList = mutableListOf(
-                SwitchSetting(getString(R.string.passcode), getString(R.string.protect_my_id), "passcode", Prefs.isPasscodeEnabled),
-                SwitchSetting(getString(R.string.enable_touch_id), getString(R.string.use_my_touch_id), "touch", Prefs.isTouchEnabled),
-                SwitchSetting(getString(R.string.google_drive_sync), getString(R.string.backup_profile_to_google_drive), "drive", Prefs.isDriveActive),
-                IntentSetting(getString(R.string.account_recovery), getString(R.string.back_up_your_credentials), "recovery"),
-                IntentSetting(getString(R.string.terms_and_conditions), getString(R.string.last_modified_23_july_2017), "terms"),
-                IntentSetting(getString(R.string.privacy_policy), getString(R.string.last_modified_23_july_2017), "privacy"),
-                IntentSetting(getString(R.string.about_kimlic), "", "about"))
+                SwitchSetting(getString(R.string.passcode), getString(R.string.protect_my_id), Settings.PASSCODE.tag, Prefs.isPasscodeEnabled),
+                SwitchSetting(getString(R.string.enable_fingerprint), getString(R.string.use_my_fingerprint_to_access_kimlic), Settings.FINGERPRINT.tag, Prefs.isTouchEnabled),
+                SwitchSetting(getString(R.string.google_drive_sync), getString(R.string.backup_profile_to_google_drive), Settings.DRIVE.tag, Prefs.isDriveActive),
+                IntentSetting(getString(R.string.account_recovery), getString(R.string.back_up_your_credentials), Settings.RECOVERY.tag),
+                IntentSetting(getString(R.string.terms_and_conditions), getString(R.string.last_modified_23_july_2017), Settings.TERMS.tag),
+                IntentSetting(getString(R.string.privacy_policy), getString(R.string.last_modified_23_july_2017), Settings.PRIVACY.tag),
+                IntentSetting(getString(R.string.about_kimlic), "", Settings.ABOUT.tag))
 
-        val passcodeChange = IntentSetting(getStringValue(R.string.change_passcode), "", "change")
+        val passcodeChange = IntentSetting(getStringValue(R.string.change_passcode), "", Settings.CHANGE.tag)
 
-        if (!Prefs.isPasscodeEnabled && settingsList.elementAt(1).tag == "change")
+        if (!Prefs.isPasscodeEnabled && settingsList.elementAt(1).tag == Settings.CHANGE.tag)
             settingsList.removeAt(1)
 
-        if (Prefs.isPasscodeEnabled && settingsList.elementAt(1).tag != "change")
+        if (Prefs.isPasscodeEnabled && settingsList.elementAt(1).tag != Settings.CHANGE.tag)
             settingsList.add(1, passcodeChange)
     }
 
@@ -224,8 +229,7 @@ class SettingsActivity : BaseActivity() {
                                 refreshSettingsList()
                             },
                             onError = {
-                                Prefs.isDriveActive = false// ???
-                                Log.d("TAGBACKUP", "error")
+                                Prefs.isDriveActive = false
                             }
                     )
                     dialog?.dismiss()
@@ -238,6 +242,6 @@ class SettingsActivity : BaseActivity() {
 
         val dialog = builder.create()
         dialog.show()
-        dialog.window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
+        dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
     }
 }
