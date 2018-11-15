@@ -2,8 +2,7 @@ package com.kimlic.db.entity
 
 import android.arch.persistence.room.*
 
-@Entity(tableName = "user",
-        indices = [Index(value = arrayOf("account_address"), unique = true )])
+@Entity(tableName = "user")
 
 
 data class User(
@@ -18,6 +17,5 @@ data class User(
         @ColumnInfo(name = "account_address") var accountAddress: String = "",
         @ColumnInfo(name = "inserted_at") var insertedAt: Long = System.currentTimeMillis()
 ) {
-    @Ignore
-    constructor() : this(id = 0)
+    @Ignore constructor() : this(id = 0)
 }
