@@ -5,7 +5,7 @@ import android.content.Intent
 import com.kimlic.BaseActivity
 import com.kimlic.account.AccountActivity
 import com.kimlic.address.AddressActivity
-import com.kimlic.auth.TouchIdActivity
+import com.kimlic.auth.FingerprintActivity
 import com.kimlic.documents.DocumentChoiceActivity
 import com.kimlic.documents.DocumentDetails
 import com.kimlic.documents.DocumentVerifyActivity
@@ -72,7 +72,7 @@ object PresentationManager {
     fun login(presenter: BaseActivity) {
         val params = HashMap<String, String>()
         params["action"] = "unlock"
-        present(presenter = presenter, className = TouchIdActivity::class.java, isStarting = true, params = params)
+        present(presenter = presenter, className = FingerprintActivity::class.java, isStarting = true, params = params)
     }
 
     // Touch
@@ -80,20 +80,20 @@ object PresentationManager {
     fun touchCreate(presenter: BaseActivity) {
         val params = HashMap<String, String>()
         params["action"] = "create"
-        present(presenter = presenter, className = TouchIdActivity::class.java, isStarting = false, params = params)
+        present(presenter = presenter, className = FingerprintActivity::class.java, isStarting = false, params = params)
     }
 
     fun touchDisable(presenter: BaseActivity) {
         val params = HashMap<String, String>()
         params["action"] = "disable"
-        present(presenter = presenter, className = TouchIdActivity::class.java, isStarting = false, params = params)
+        present(presenter = presenter, className = FingerprintActivity::class.java, isStarting = false, params = params)
     }
 
     // unused
     fun touchFinish(presenter: BaseActivity) {
         val params = HashMap<String, String>()
         params["action"] = "unlock_finish"
-        present(presenter = presenter, className = TouchIdActivity::class.java, isStarting = false, params = params)
+        present(presenter = presenter, className = FingerprintActivity::class.java, isStarting = false, params = params)
     }
 
     fun phraseVerify(presenter: BaseActivity) {
