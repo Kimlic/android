@@ -85,8 +85,8 @@
       android:screenOrientation="portrait"/>
 
     <activity
-      android:label="Touch ID"
-      android:name=".auth.TouchIdActivity"
+      android:label="Fingerprint"
+      android:name=".auth.FingerprintActivity"
       android:screenOrientation="portrait"/>
 
     <activity
