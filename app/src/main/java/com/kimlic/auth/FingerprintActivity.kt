@@ -11,20 +11,20 @@ import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
 import com.kimlic.utils.AppDuration
 import com.kimlic.utils.BaseCallback
-import kotlinx.android.synthetic.main.activity_touch_id.*
+import kotlinx.android.synthetic.main.activity_fingerprint.*
 
-class TouchIdActivity : BaseActivity() {
+class FingerprintActivity : BaseActivity() {
 
     // Variables
 
-    var fingerprintService: FingerprintService? = null
+    private var fingerprintService: FingerprintService? = null
     private lateinit var action: String
 
     // Life
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_touch_id)
+        setContentView(R.layout.activity_fingerprint)
 
         setupUI()
     }
@@ -39,15 +39,15 @@ class TouchIdActivity : BaseActivity() {
 
     private fun setupUI() {
         animation()
-        action = intent.extras.getString("action", "unlock")
+        action = intent?.extras!!.getString("action", "unlock")
 
         cancelTv.setOnClickListener { finish() }
-        when (action) {
+        fingerprintService = when (action) {
             "create" -> {
-                fingerprintService = FingerprintService(this, { create() }, { showToast(it); finish() })
+                FingerprintService(this, { create() }, { showToast(it); finish() })
             }
             "disable" -> {
-                fingerprintService = FingerprintService(this, { disable() }, { showToast(it); finish() })
+                FingerprintService(this, { disable() }, { showToast(it); finish() })
             }
             // unused. remove after testing
 //            "unlock" -> {
@@ -106,12 +106,12 @@ class TouchIdActivity : BaseActivity() {
     }
 
     private fun successful() {
-        val fragment = TouchSuccessfulFragment.newInstance()
+        val fragment = FingerprintSuccessfulFragment.newInstance()
         fragment.setCallback(object : BaseCallback {
             override fun callback() {
-                PresentationManager.stage(this@TouchIdActivity)
+                PresentationManager.stage(this@FingerprintActivity)
             }
         })
-        fragment.show(supportFragmentManager, TouchSuccessfulFragment.FRAGMENT_KEY)
+        fragment.show(supportFragmentManager, FingerprintSuccessfulFragment.FRAGMENT_KEY)
     }
 }
