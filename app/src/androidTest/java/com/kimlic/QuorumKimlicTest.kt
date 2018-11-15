@@ -31,6 +31,7 @@ class QuorumKimlicTest {
     @Before
     fun setupContext() {
         targetContext = getInstrumentation().targetContext
+        QuorumKimlic.destroyInstance()
     }
 
     @Test
