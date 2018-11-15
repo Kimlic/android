@@ -1,8 +1,10 @@
 package com.kimlic.db
 
+import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
+import android.arch.persistence.room.migration.Migration
 import com.kimlic.KimlicApp
 import com.kimlic.db.dao.*
 import com.kimlic.db.entity.*
@@ -20,7 +22,7 @@ abstract class KimlicDB : RoomDatabase() {
             if (INSTANCE == null) {
                 synchronized(KimlicDB::class) {
                     INSTANCE = Room.databaseBuilder(KimlicApp.applicationContext(), KimlicDB::class.java, "kimlic.db")
-                            .allowMainThreadQueries()
+                            .allowMainThreadQueries().addMigrations(MIGRATION_1_2)
                             .build()
 
                     INSTANCE!!.openHelper.setWriteAheadLoggingEnabled(false)
@@ -28,6 +30,13 @@ abstract class KimlicDB : RoomDatabase() {
                 }
             }
             return INSTANCE
+        }
+
+        private val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                //database.execSQL("")
+            }
+
         }
     }
 
