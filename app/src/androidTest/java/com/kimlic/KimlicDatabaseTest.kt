@@ -1,5 +1,8 @@
 package com.kimlic
 
+import android.arch.persistence.room.Room
+import android.content.Context
+import android.support.test.InstrumentationRegistry
 import com.kimlic.db.KimlicDB
 import com.kimlic.db.entity.*
 import com.kimlic.utils.AppDoc
@@ -11,17 +14,25 @@ import org.junit.Test
 
 class KimlicDatabaseTest {
 
+    // Constants
+
+    companion object {
+        private const val DEFAULT_ACCOUNT_ADDRESS = "account_address"
+        private const val DEFAULT_DOCUMENT_TYPE = "PASSPORT"
+        private const val DEFAULT_CONTACT_TYPE = "PHONE"
+    }
+
+    // Variables
+
     private var database: KimlicDB? = null
     private var USER_ID: Long? = null
     private var DOCUMET_ID: Long? = null
-
-    private val DEFAULT_ACCOUNT_ADDRESS = "account_address"
-    private val DEFAULT_DOCUMENT_TYPE = "PASSPORT"
-    private val DEFAULT_CONTACT_TYPE = "PHONE"
+    private var context: Context? = null
 
     @Before
     fun setup() {
-        database = KimlicDB.getInstance()
+        context = InstrumentationRegistry.getContext()
+        database = Room.inMemoryDatabaseBuilder(context!!, KimlicDB::class.java).build()
     }
 
     @Test
@@ -114,5 +125,6 @@ class KimlicDatabaseTest {
     @After
     fun cleanResources() {
         database = null
+        context = null
     }
 }
