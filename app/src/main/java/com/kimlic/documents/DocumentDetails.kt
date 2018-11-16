@@ -63,9 +63,9 @@ class DocumentDetails : BaseActivity() {
     // Private
 
     private fun setupUI() {
-        documentType = intent.extras.getString(AppConstants.DOCUMENT_TYPE.key, "")
-        country = intent.extras.getString("country", "")
-        action = intent.extras.getString("action", "preview")
+        documentType = intent?.extras?.getString(AppConstants.DOCUMENT_TYPE.key, "").orEmpty()
+        country = intent?.extras?.getString("country", "").orEmpty()
+        action = intent?.extras?.getString("action", "preview").orEmpty()
 
         when (action) {
             "preview" -> setupPreview()
@@ -104,7 +104,7 @@ class DocumentDetails : BaseActivity() {
                 spannedStatus(getString(R.string.verification, "Verified"))
             }
             Status.UNVERIFIED.state -> {
-                statusIv.visibility = View.VISIBLE;
+                statusIv.visibility = View.VISIBLE
                 spannedStatus(getString(R.string.verification, "Unverified"))
                 saveBt.text = getString(R.string.add_new_id)
                 saveBt.setOnClickListener {
@@ -228,10 +228,10 @@ class DocumentDetails : BaseActivity() {
         val day = c.get(Calendar.DAY_OF_MONTH)
 
         val dialog = DatePickerDialog(this, R.style.DatePickerStyle, DatePickerDialog.OnDateSetListener { _, year_, monthOfYear, dayOfMonth ->
-            expireDateEt.text = Editable.Factory.getInstance().newEditable("$dayOfMonth - $monthOfYear - $year_")
+            expireDateEt.text = Editable.Factory.getInstance().newEditable("$dayOfMonth - ${monthOfYear+1} - $year_")
         }, year, month, day)
         dialog.datePicker.minDate = Date().time
-        dialog.window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
+        dialog.window?.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
         dialog.show()
     }
 
