@@ -4,8 +4,14 @@ import android.content.Context
 import android.support.test.InstrumentationRegistry.getInstrumentation
 import android.support.test.filters.LargeTest
 import android.support.test.runner.AndroidJUnit4
+import com.android.volley.Request.Method.GET
+import com.android.volley.Response
+import com.kimlic.API.KimlicApi
+import com.kimlic.API.KimlicJSONRequest
+import com.kimlic.API.VolleySingleton
 import com.kimlic.quorum.EthereumAddressValidator
 import com.kimlic.quorum.QuorumKimlic
+import org.json.JSONObject
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -73,8 +79,69 @@ class QuorumKimlicTest {
         assertTrue(EthereumAddressValidator.isValidAddress(walletAddress!!))
     }
 
+    @Test(expected = InterruptedException::class)
+    fun getAccountStorageAdapter_emptyContractAddress() {
+        val quorumInstance = QuorumKimlic.createInstance(mnemonic_ = null, context = targetContext)
+        quorumInstance.accountStorageAdapter
+    }
+
+    @Test(expected = Exception::class)
+    fun callQuorumCreateInstanceTwice() {
+        QuorumKimlic.createInstance(null, targetContext)
+        QuorumKimlic.createInstance(null, targetContext)
+    }
+
+    @Test
+    fun getAccountStorageAdapter_ContractAddressPresent() {
+        val url = BuildConfig.API_CORE_URL + KimlicApi.CONFIG.path
+
+        val quorumInstance = QuorumKimlic.createInstance(null, targetContext)
+        val walletAddress = quorumInstance.walletAddress
+
+        configRequest(walletAddress = walletAddress, onSuccess = { a -> }, onError = {})
+
+        val headers = mapOf(Pair("account-address", walletAddress))
+        val addressRequest = KimlicJSONRequest(GET, url, headers, JSONObject(), Response.Listener {
+            if (!it.getJSONObject("headers").optString("statusCode").toString().startsWith("2")) {
+                assertTrue(false)
+                return@Listener
+            }
+
+            val contextContractAddress = it.getJSONObject("data").optString("context_contract")
+            quorumInstance.setKimlicContractsContextAddress(contextContractAddress)
+
+            val accountStorageAdapterAddress = quorumInstance.accountStorageAdapter
+            quorumInstance.setAccountStorageAdapterAddress(accountStorageAdapterAddress)
+
+        }, Response.ErrorListener {
+            assertTrue(false)
+        })
+
+        VolleySingleton.getInstance(targetContext!!).addToRequestQueue(addressRequest)
+    }
+
     @After
     fun clearResources() {
         QuorumKimlic.destroyInstance()
+    }
+
+    private fun configRequest(walletAddress: String, onSuccess: (contextContractAddress: String) -> Unit, onError: () -> Unit) {
+        val url = BuildConfig.API_CORE_URL + KimlicApi.CONFIG.path
+
+        val headers = mapOf(Pair("account-address", walletAddress))
+        val addressRequest = KimlicJSONRequest(GET, url, headers, JSONObject(), Response.Listener {
+            if (!it.getJSONObject("headers").optString("statusCode").toString().startsWith("2")) {
+                assertTrue(false)
+                return@Listener
+            }
+            val contextContractAddress = it.getJSONObject("data").optString("context_contract")
+            onSuccess(contextContractAddress)
+
+        }, Response.ErrorListener {
+            assertTrue(false)
+        })
+
+        VolleySingleton.getInstance(targetContext!!).addToRequestQueue(addressRequest)
+
     }
 }
