@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.support.design.widget.TextInputLayout
-import android.text.InputFilter
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
@@ -97,7 +96,6 @@ class MnemonicVerifyActivity : BaseActivity() {
                 false
             })
 
-            it.filters = arrayOf(filter())
         }
     }
 
@@ -119,7 +117,7 @@ class MnemonicVerifyActivity : BaseActivity() {
         var noError = true
         val mnemonicList = model.user().mnemonic.split(" ")
 
-        for (i in 0 until hintList.size) noError = mnemonicList[hintList[i] - 1] == editTextList[i].text.toString()
+        for (i in 0 until hintList.size) noError = mnemonicList[hintList[i] - 1] == editTextList[i].text.toString().toLowerCase()
 
         return noError
     }
@@ -171,12 +169,4 @@ class MnemonicVerifyActivity : BaseActivity() {
         if (backupUpdatingFragment != null) backupUpdatingFragment?.dismiss(); timer?.cancel()
     }
 
-    // Private helpers
-
-    private fun filter(): InputFilter {
-        return InputFilter { src, _, _, _, _, _ ->
-            if (src == "") return@InputFilter src
-            if (Character.isLetter(src.last()) && !Character.isWhitespace(src.last())) return@InputFilter src else ""
-        }
-    }
 }
