@@ -63,12 +63,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/lightBlue"
+        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        android:imeOptions="actionNext"
         android:inputType="text"
         android:maxLength="30"
+        android:singleLine="true"
         android:textColor="@android:color/white"
         android:textSize="@dimen/text_size_large_24"
         android:theme="@style/WhiteUnderlineTheme"
-        tools:hint="5th word"/>
+        tools:hint="5th word"
+        tools:ignore="Autofill"/>
 
     </android.support.design.widget.TextInputLayout>
 
@@ -85,12 +89,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/lightBlue"
+        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        android:imeOptions="actionNext"
         android:inputType="text"
         android:maxLength="30"
+        android:singleLine="true"
         android:textColor="@android:color/white"
         android:textSize="@dimen/text_size_large_24"
         android:theme="@style/WhiteUnderlineTheme"
-        tools:hint="7th word"/>
+        tools:hint="7th word"
+        tools:ignore="Autofill"/>
 
     </android.support.design.widget.TextInputLayout>
 
@@ -107,12 +115,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/lightBlue"
+        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        android:imeOptions="actionNext"
         android:inputType="text"
         android:maxLength="30"
+        android:singleLine="true"
         android:textColor="@android:color/white"
         android:textSize="@dimen/text_size_large_24"
         android:theme="@style/WhiteUnderlineTheme"
-        tools:hint="2th word"/>
+        tools:hint="2th word"
+        tools:ignore="Autofill"/>
 
     </android.support.design.widget.TextInputLayout>
 
@@ -129,13 +141,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/lightBlue"
+        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         android:imeOptions="actionDone"
         android:inputType="text"
         android:maxLength="30"
+        android:singleLine="true"
         android:textColor="@android:color/white"
         android:textSize="@dimen/text_size_large_26"
         android:theme="@style/WhiteUnderlineTheme"
-        tools:hint="5th word"/>
+        tools:hint="5th word"
+        tools:ignore="Autofill"/>
 
     </android.support.design.widget.TextInputLayout>
 
