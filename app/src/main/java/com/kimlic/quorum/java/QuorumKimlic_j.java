@@ -8,7 +8,7 @@ import com.kimlic.quorum.bip44.HdKeyNode;
 import com.kimlic.quorum.bip44.hdpath.HdKeyPath;
 import com.kimlic.quorum.contracts.AccountStorageAdapter;
 import com.kimlic.quorum.contracts.KimlicContractsContext;
-import com.kimlic.quorum.contracts.KimlicToken;
+import com.kimlic.quorum.contracts.KimlicTokenContract;
 import com.kimlic.quorum.crypto.MnemonicUtils;
 import com.kimlic.quorum.crypto.SecureRandomTools;
 import java.math.BigInteger;
@@ -37,7 +37,7 @@ public class QuorumKimlic_j {
   private String mMnemonic;
   private AccountStorageAdapter mAccountStorageAdapter;
   private KimlicContractsContext mKimlicContractsContext;
-  private KimlicToken mKimlicToken;
+  private KimlicTokenContract mKimlicTokenContract;
 
   // Public
 
@@ -126,7 +126,7 @@ public class QuorumKimlic_j {
    * */
 
   public void setKimlicToken(String address) {
-    mKimlicToken = KimlicToken.load(address, mWeb3, mCredentials, BigInteger.ZERO, BigInteger.valueOf(4612388));
+    mKimlicTokenContract = KimlicTokenContract.load(address, mWeb3, mCredentials, BigInteger.ZERO, BigInteger.valueOf(4612388));
   }
 
   /*
@@ -134,7 +134,7 @@ public class QuorumKimlic_j {
    * */
 
   public BigInteger getTokenBalance(String owner) throws Exception {
-    return mKimlicToken.balanceOf(owner).sendAsync().get();
+    return mKimlicTokenContract.balanceOf(owner).sendAsync().get();
   }
 
   // Private
