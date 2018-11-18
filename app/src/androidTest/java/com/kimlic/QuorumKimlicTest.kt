@@ -11,12 +11,14 @@ import com.kimlic.API.KimlicJSONRequest
 import com.kimlic.API.VolleySingleton
 import com.kimlic.quorum.EthereumAddressValidator
 import com.kimlic.quorum.QuorumKimlic
+import com.kimlic.quorum.crypto.Sha
 import org.json.JSONObject
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.web3j.utils.Convert
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
@@ -27,6 +29,8 @@ class QuorumKimlicTest {
     companion object {
         private const val MNEMONIC_PHRASES_QUANTITY = 12
         private const val MNEMONIC_GENERATED = "kimlic kimlic kimlic kimlic kimlic kimlic kimlic kimlic kimlic kimlic kimlic kimlic"
+        private const val MNEMONIC_25_KIMTOKENS = "tobacco world truly mushroom bike basic pioneer nurse please bar enrich fatal"
+        private const val PHONE_NUMBER = "+38050505050"
         private const val INVALID_ETHEREUM_WALLET_ADDRESS_0 = "1x2507711ca1e38525b01096c6d2ac35a815d33e6d"
         private const val INVALID_ETHEREUM_WALLET_ADDRESS_1 = "0x2507711ca138525b01096c6d2ac35a815d33e6d"
     }
@@ -79,6 +83,9 @@ class QuorumKimlicTest {
         assertTrue(EthereumAddressValidator.isValidAddress(walletAddress!!))
     }
 
+    /*
+    * Try to get accountStorageAdapter without setKimlicContractsContextAddress(address: String)
+    * */
     @Test(expected = InterruptedException::class)
     fun getAccountStorageAdapter_emptyContractAddress() {
         val quorumInstance = QuorumKimlic.createInstance(mnemonic_ = null, context = targetContext)
@@ -91,39 +98,78 @@ class QuorumKimlicTest {
         QuorumKimlic.createInstance(null, targetContext)
     }
 
+    /*
+    * Try to get accountStorageAdapter with setting ContractsContextAddress
+    * */
+
     @Test
     fun getAccountStorageAdapter_ContractAddressPresent() {
-        val url = BuildConfig.API_CORE_URL + KimlicApi.CONFIG.path
-
         val quorumInstance = QuorumKimlic.createInstance(null, targetContext)
-        val walletAddress = quorumInstance.walletAddress
+        walletAddress = quorumInstance.walletAddress
 
-        configRequest(walletAddress = walletAddress, onSuccess = { a -> }, onError = {})
+        configRequest(walletAddress = walletAddress!!,
+                onSuccess = { accountStorageAdapter ->
+                    quorumInstance.setAccountStorageAdapterAddress(accountStorageAdapter)
+                },
+                onError = { assertTrue(false) })
+    }
 
-        val headers = mapOf(Pair("account-address", walletAddress))
-        val addressRequest = KimlicJSONRequest(GET, url, headers, JSONObject(), Response.Listener {
-            if (!it.getJSONObject("headers").optString("statusCode").toString().startsWith("2")) {
-                assertTrue(false)
-                return@Listener
-            }
+    @Test(expected = InterruptedException::class)
+    fun setFieldMainData_NoAccountStorageAdapter() {
+        val quorumInstance = QuorumKimlic.createInstance(null, targetContext)
 
-            val contextContractAddress = it.getJSONObject("data").optString("context_contract")
-            quorumInstance.setKimlicContractsContextAddress(contextContractAddress)
+        quorumInstance.setFieldMainData(Sha.sha256(PHONE_NUMBER), "phone")
+    }
 
-            val accountStorageAdapterAddress = quorumInstance.accountStorageAdapter
-            quorumInstance.setAccountStorageAdapterAddress(accountStorageAdapterAddress)
+    @Test
+    fun setMainFieldData_AccountStorageAdapterPresent() {
+        val quorumInstance = QuorumKimlic.createInstance(null, targetContext)
+        walletAddress = quorumInstance.walletAddress
+        configRequest(walletAddress = walletAddress!!,
+                onSuccess = { contextContractAddress ->
+                    quorumInstance.setAccountStorageAdapterAddress(contextContractAddress)
+                    val transactionReceipt = quorumInstance.setFieldMainData("phone", PHONE_NUMBER)
+                    assertNotNull(transactionReceipt)
+                    assertNotNull(transactionReceipt.transactionHash)
+                },
+                onError = {
+                    assertTrue(false)
+                })
+    }
 
-        }, Response.ErrorListener {
-            assertTrue(false)
-        })
+    @Test(expected = KotlinNullPointerException::class)
+    fun getKimlicTokenContractAddress_emptyContextsContract() {
+        val quorumInstance = QuorumKimlic.createInstance(null, targetContext)
+        val kimlicTokenContractAddress = quorumInstance.kimlicTokenAddress
+    }
 
-        VolleySingleton.getInstance(targetContext!!).addToRequestQueue(addressRequest)
+    fun getKimlicTokenContractAddress_AccountStorageAdapterPresent() {
+        val quorumInstance = QuorumKimlic.createInstance(MNEMONIC_25_KIMTOKENS, targetContext)
+        walletAddress = quorumInstance.walletAddress
+
+        configRequest(walletAddress!!,
+                onSuccess = { contextContractAddress ->
+                    quorumInstance.setAccountStorageAdapterAddress(contextContractAddress)
+
+                    val kimlicTokenContractAddress = quorumInstance.kimlicTokenAddress
+                    quorumInstance.setKimlicToken(kimlicTokenContractAddress)
+                    val wei = quorumInstance.getTokenBalance(walletAddress!!)
+                    val token = Convert.fromWei(wei.toString(), Convert.Unit.ETHER)
+
+                    assertEquals(token.toInt(), 25)
+                },
+                onError = {
+                    throw Exception("Quorun context_contract address error")
+                })
     }
 
     @After
     fun clearResources() {
         QuorumKimlic.destroyInstance()
+        walletAddress = null
     }
+
+    // Private helpers
 
     private fun configRequest(walletAddress: String, onSuccess: (contextContractAddress: String) -> Unit, onError: () -> Unit) {
         val url = BuildConfig.API_CORE_URL + KimlicApi.CONFIG.path
@@ -142,6 +188,5 @@ class QuorumKimlicTest {
         })
 
         VolleySingleton.getInstance(targetContext!!).addToRequestQueue(addressRequest)
-
     }
 }
