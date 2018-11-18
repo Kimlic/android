@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.PersistableBundle
 import android.support.design.widget.TextInputLayout
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -69,6 +70,10 @@ class MnemonicVerifyActivity : BaseActivity() {
                 backupProfile()
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
+        //super.onSaveInstanceState(outState, outPersistentState)
     }
 
     // Private
