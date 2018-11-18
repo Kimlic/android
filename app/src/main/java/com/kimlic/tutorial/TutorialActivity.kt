@@ -3,7 +3,6 @@ package com.kimlic.tutorial
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
 import com.kimlic.BaseActivity
 import com.kimlic.R
@@ -22,8 +21,6 @@ class TutorialActivity : BaseActivity() {
 
     // Variables
 
-    private lateinit var pager: ViewPager
-    private lateinit var tabLayout: TabLayout
     private var adapter: TutorialPagerAdapter = TutorialPagerAdapter(supportFragmentManager)
     private val content: List<Int> = listOf(R.layout.fragment_tutorial1, R.layout.fragment_tutorial2, R.layout.fragment_tutorial3)
 
@@ -56,23 +53,20 @@ class TutorialActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-        if (pager.currentItem == 0)
+        if (pagerVp.currentItem == 0)
             super.onBackPressed()
         else
-            pager.currentItem = pager.currentItem - 1
+            pagerVp.currentItem = pagerVp.currentItem - 1
     }
 
     // Private
 
     private fun setupUI() {
-        pager = pagerVp
-        tabLayout = tabsTL
-
-        pager.adapter = adapter
+        pagerVp.adapter = adapter
         adapter.setContent(content)
 
-        tabLayout.setupWithViewPager(pager, true)
-        setupPageChangeListener(pager)
+        tabsTL.setupWithViewPager(pagerVp, true)
+        setupPageChangeListener(pagerVp)
 
         skipTv.setOnClickListener { PresentationManager.termsAccept(this, TERMS_ACCEPT_REQUEST_CODE) }
     }
