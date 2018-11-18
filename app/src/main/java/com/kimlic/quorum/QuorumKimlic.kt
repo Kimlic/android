@@ -7,7 +7,7 @@ import com.kimlic.quorum.bip44.HdKeyNode
 import com.kimlic.quorum.bip44.hdpath.HdKeyPath
 import com.kimlic.quorum.contracts.AccountStorageAdapter
 import com.kimlic.quorum.contracts.KimlicContractsContext
-import com.kimlic.quorum.contracts.KimlicToken
+import com.kimlic.quorum.contracts.KimlicTokenContract
 import com.kimlic.quorum.crypto.MnemonicUtils
 import com.kimlic.quorum.crypto.SecureRandomTools
 import com.kimlic.utils.allopen.TestOpen
@@ -30,7 +30,7 @@ class QuorumKimlic private constructor(val mnemonic: String, context: Context) {
     private val mCredentials: Credentials
     private var mAccountStorageAdapter: AccountStorageAdapter? = null
     private var mKimlicContractsContext: KimlicContractsContext? = null
-    private var mKimlicToken: KimlicToken? = null
+    private var mKimlicTokenContract: KimlicTokenContract? = null
 
     // Init
 
@@ -137,7 +137,7 @@ class QuorumKimlic private constructor(val mnemonic: String, context: Context) {
    * */
 
     fun setKimlicToken(address: String) {
-        mKimlicToken = KimlicToken.load(address, mWeb3, mCredentials, BigInteger.ZERO, BigInteger.valueOf(4612388))
+        mKimlicTokenContract = KimlicTokenContract.load(address, mWeb3, mCredentials, BigInteger.ZERO, BigInteger.valueOf(4612388))
     }
 
     /*
@@ -146,7 +146,7 @@ class QuorumKimlic private constructor(val mnemonic: String, context: Context) {
 
     @Throws(Exception::class)
     fun getTokenBalance(owner: String): BigInteger {
-        return mKimlicToken!!.balanceOf(owner).sendAsync().get()
+        return mKimlicTokenContract!!.balanceOf(owner).sendAsync().get()
     }
 
 
