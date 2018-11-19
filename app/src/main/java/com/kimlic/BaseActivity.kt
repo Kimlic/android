@@ -3,10 +3,10 @@ package com.kimlic
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
@@ -62,6 +62,10 @@ abstract class BaseActivity : AppCompatActivity(), View.OnSystemUiVisibilityChan
         if (hasFocus) {
             hideSystemUI()
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
+        //super.onSaveInstanceState(outState, outPersistentState)
     }
 
     override fun onSystemUiVisibilityChange(visibility: Int) {
