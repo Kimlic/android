@@ -1,9 +1,8 @@
-package com.kimlic
+package com.kimlic.db
 
 import android.arch.persistence.room.Room
 import android.content.Context
 import android.support.test.InstrumentationRegistry
-import com.kimlic.db.KimlicDB
 import com.kimlic.db.entity.*
 import com.kimlic.utils.AppDoc
 import org.junit.After
@@ -93,18 +92,6 @@ class KimlicDatabaseTest {
         val photoFromDB = database!!.photoDao().selectUserPhotosByDocument(accountAddress = DEFAULT_ACCOUNT_ADDRESS, documentType = AppDoc.PASSPORT.type)
         assertNotNull(photoFromDB)
 
-        // Vendor test
-
-        val vendorDocument0 = VendorDocument(contexts = listOf("AA", "BB", "CC", "DD"), countries = listOf("UA", "EN", "TR"))
-        val vendorDocument1 = VendorDocument(contexts = listOf("EE", "DD", "EE", "HH"), countries = listOf("US", "FR", "GE"))
-
-        database!!.vendorDao().insertDocs(listOf(vendorDocument0, vendorDocument1))
-
-        val vendorDocsFromDB = database!!.vendorDao().select()
-        assertTrue(vendorDocsFromDB.isNotEmpty())
-        database!!.vendorDao().deleteAll()
-        val nullVendorsDocs = database!!.vendorDao().select()
-        assertTrue(nullVendorsDocs.isEmpty())
 
         database!!.userDao().delete(USER_ID!!)
 
