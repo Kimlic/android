@@ -1,4 +1,4 @@
-package com.kimlic
+package com.kimlic.quorum
 
 import android.content.Context
 import android.support.test.InstrumentationRegistry.getInstrumentation
@@ -9,8 +9,7 @@ import com.android.volley.Response
 import com.kimlic.API.KimlicApi
 import com.kimlic.API.KimlicJSONRequest
 import com.kimlic.API.VolleySingleton
-import com.kimlic.quorum.EthereumAddressValidator
-import com.kimlic.quorum.QuorumKimlic
+import com.kimlic.BuildConfig
 import com.kimlic.quorum.crypto.Sha
 import org.json.JSONObject
 import org.junit.After

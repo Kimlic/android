@@ -1,10 +1,10 @@
-package com.kimlic
+package com.kimlic.quorum
 
 import android.content.Context
 import android.support.test.InstrumentationRegistry.getInstrumentation
-import android.support.test.filters.MediumTest
+import android.support.test.filters.LargeTest
 import android.support.test.runner.AndroidJUnit4
-import com.kimlic.quorum.Web3
+import com.kimlic.BuildConfig
 import org.junit.After
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -12,8 +12,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-@MediumTest
-class Web3Test {
+@LargeTest
+class QuorumHttpClientTest {
 
     // Variables
 
@@ -27,15 +27,15 @@ class Web3Test {
 
     @Test
     fun instanceNotNull() {
-        val web3Instance = Web3.getInstance(url, targetContext!!).web3
-        assertNotNull(web3Instance)
+        val quorumHttpClientInstance = QuorumHttpClient(context = targetContext!!, url = url)
+        assertNotNull(quorumHttpClientInstance)
     }
 
     @Test(expected = KotlinNullPointerException::class)
-    fun instanceNullContext() {
+    fun quorumHttpClientInstanceNullContext() {
         targetContext = null
-        val web3Instance = Web3.getInstance(URL = url, context = targetContext!!).web3
-        assertNotNull(web3Instance)
+        val quorumHttpClientInstance = QuorumHttpClient(context = targetContext!!, url = url)
+        assertNotNull(quorumHttpClientInstance)
     }
 
     @After
