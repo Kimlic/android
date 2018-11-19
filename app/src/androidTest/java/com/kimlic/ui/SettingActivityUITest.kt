@@ -1,4 +1,4 @@
-package com.kimlic
+package com.kimlic.ui
 
 import android.content.Context
 import android.os.Build
@@ -16,6 +16,7 @@ import android.support.test.runner.AndroidJUnit4
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
+import com.kimlic.R
 import com.kimlic.preferences.Prefs
 import com.kimlic.settings.SettingsActivity
 import junit.framework.TestCase.assertTrue

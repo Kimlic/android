@@ -1,4 +1,4 @@
-package com.kimlic
+package com.kimlic.ui
 
 import android.os.Build
 import android.support.test.espresso.Espresso.onView
@@ -8,6 +8,7 @@ import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
+import com.kimlic.R
 import com.kimlic.recovery.SignUpRecoveryActivity
 import org.junit.After
 import org.junit.Assert.assertTrue

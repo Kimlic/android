@@ -1,4 +1,4 @@
-package com.kimlic
+package com.kimlic.ui
 
 import android.content.Intent
 import android.os.Build
@@ -12,6 +12,7 @@ import android.support.test.filters.SmallTest
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import android.webkit.WebView
+import com.kimlic.R
 import com.kimlic.terms.TermsActivity
 import com.kimlic.utils.AppConstants
 import org.junit.*
