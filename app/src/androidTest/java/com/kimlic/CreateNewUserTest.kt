@@ -3,7 +3,6 @@ package com.kimlic
 import android.content.Context
 import android.support.test.InstrumentationRegistry.getInstrumentation
 import android.support.test.runner.AndroidJUnit4
-import android.util.Log
 import com.android.volley.Request
 import com.android.volley.Response
 import com.kimlic.API.KimlicApi
