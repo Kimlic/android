@@ -17,19 +17,25 @@ class TimeZoneConverterUnitTest {
     }
 
     @Test
-    fun convertToMillisTest() {
+    fun convertMillisToDateTest() {
         val convertedDate = TimeZoneConverter().convertMillisToDateString(millis = MILLIS_TEST_DATE)
         Assert.assertEquals(convertedDate, STRING_TEST_DATE)
     }
 
     @Test
-    fun convertTimeStampToSeconds() {
+    fun convertSecondsToDateTest() {
+        val convertedDate = TimeZoneConverter().convertSecondsToDateString(seconds = MILLIS_TEST_DATE / 1000)
+        Assert.assertEquals(convertedDate, STRING_TEST_DATE)
+    }
+
+    @Test
+    fun convertTimeStampToSecondsTest() {
         val convertedSeconds = TimeZoneConverter().convertToSeconds(timeDate = STRING_UNIX_STAMP)
         assertEquals(convertedSeconds, LONG_FROM_UNIX_STAMP_SECONDS)
     }
 
     @Test
-    fun convertTimeStampToMillis() {
+    fun convertTimeStampToMillisTest() {
         val convertedMillis = TimeZoneConverter().convertToMillis(timeDate = STRING_UNIX_STAMP)
         assertEquals(convertedMillis, LONG_FROM_UNIX_STAMP_SECONDS * 1000)
     }
