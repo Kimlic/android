@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.kimlic.R
 import com.kimlic.stage.DetailsItem
+import com.kimlic.utils.time_converter.TimeZoneConverter
 import kotlinx.android.synthetic.main.item_account_document.view.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 class CompanyDetailsAdapter : RecyclerView.Adapter<CompanyDetailsAdapter.ContactViewHolder>() {
@@ -63,9 +63,7 @@ class CompanyDetailsAdapter : RecyclerView.Adapter<CompanyDetailsAdapter.Contact
 
                 when (item.type) {
                     "date" -> {
-                        val date = Date(item.value.toLong() * 1000)
-                        val sdf = SimpleDateFormat("dd MMM YYYY", Locale("en", "US"))
-                        val dateString = sdf.format(date)
+                        val dateString = TimeZoneConverter().convertSecondsToDateString(item.value.toLong())
                         contentTv.text = context.getString(R.string.application, dateString)
                         iconIv.background = icon(Icons_.DATE_WHITE.icon)
                     }
