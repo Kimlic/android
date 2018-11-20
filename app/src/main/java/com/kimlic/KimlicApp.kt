@@ -9,22 +9,24 @@ import java.util.*
 
 class KimlicApp : Application() {
 
+    // Companion
+
+    companion object {
+        private const val MAX_ACTIVITY_TRANSITION_TIME_MS = 40000L // App background delay
+
+        private var instance: KimlicApp? = null
+        fun applicationContext(): Context = instance!!.applicationContext
+    }
+
     // Variables
 
     private var activityTransitionTimer: Timer? = null
     private var activityTransitionTimeTask: TimerTask? = null
-    private val MAX_ACTIVITY_TRANSITION_TIME_MS = 5000L // App background delay
+
     @Volatile
     var wasInBackground = false
     @Volatile
     var isFirstTime: Boolean = true
-
-    // Companion
-
-    companion object {
-        private var instance: KimlicApp? = null
-        fun applicationContext(): Context = instance!!.applicationContext
-    }
 
     // Life
 
