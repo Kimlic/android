@@ -24,4 +24,10 @@ class TimeZoneConverter {
         val sdf = SimpleDateFormat("dd MMM YYYY", Locale("en", "US"))
         return sdf.format(date)
     }
+
+    fun convertSecondsToDateString(seconds: Long): String {
+        val date = Date(seconds * 1000)
+        val sdf = SimpleDateFormat("dd MMM YYYY", Locale("en", "US"))
+        return sdf.format(date)
+    }
 }
