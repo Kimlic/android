@@ -152,15 +152,17 @@ class UserStageFragment : BaseFragment(), LifecycleObserver {
     private fun setupListeners() {
         settingsBt.setOnClickListener { PresentationManager.settings(activity!!) }
         val parent = settingsBt.parent as View
-        parent.post {
-            val rect = Rect()
-            settingsBt.getHitRect(rect)
-            rect.top -= 50  // increase top hit area
-            rect.left -= 50   // increase left hit area
-            rect.bottom += 50 // increase bottom hit area
-            rect.right += 50  // increase right hit area
-            parent.touchDelegate = TouchDelegate(rect, settingsBt)
-        }
+        try{
+            parent.post {
+                val rect = Rect()
+                settingsBt.getHitRect(rect)
+                rect.top -= 50  // increase top hit area
+                rect.left -= 50   // increase left hit area
+                rect.bottom += 50 // increase bottom hit area
+                rect.right += 50  // increase right hit area
+                parent.touchDelegate = TouchDelegate(rect, settingsBt)
+            }
+        } catch (e: Exception){}
 
         takePhotoLl.setOnClickListener { PresentationManager.portraitPhoto(activity!!) }
 
