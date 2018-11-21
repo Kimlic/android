@@ -1,11 +1,11 @@
 package com.kimlic.utils.mappers
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Base64
 import android.util.Log
-import com.kimlic.KimlicApp
 import java.io.File
 import java.io.IOException
 
@@ -13,12 +13,12 @@ import java.io.IOException
 * This util class gets file name from app folder directory
  * */
 
-class FileNameTxtBase64ToBitmap : BaseMapper<String, Bitmap?> {
+class FileNameTxtBase64ToBitmap(private val context: Context) : BaseMapper<String, Bitmap?> {
 
     // life
 
     override fun transform(input: String): Bitmap? {
-        val fileByteArrayBase64Uri = Uri.parse(KimlicApp.applicationContext().filesDir.toString() + "/" + input)
+        val fileByteArrayBase64Uri = Uri.parse(context.filesDir.toString() + "/" + input)
         return transformByUri(fileByteArrayBase64Uri)
     }
 
