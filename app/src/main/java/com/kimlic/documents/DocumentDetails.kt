@@ -137,7 +137,7 @@ class DocumentDetails : BaseActivity() {
     }
 
     private fun fillPhotoFramesFromCache() {
-        portraitIv.setImageBitmap(BitmapUtils.rotateBitmap(FileNameTxtBase64ToBitmap().transform(Cache.PORTRAIT.file)!!, 0f))//-90f Previous value with old camera
+        portraitIv.setImageBitmap(BitmapUtils.rotateBitmap(FileNameTxtBase64ToBitmap(this).transform(Cache.PORTRAIT.file)!!, 0f))//-90f Previous value with old camera
         frontIv.setImageBitmap(cropped(Cache.FRONT.file))
         if (documentType != AppDoc.PASSPORT.type) {
             backIv.setImageBitmap(cropped(Cache.BACK.file))
@@ -149,7 +149,7 @@ class DocumentDetails : BaseActivity() {
     }
 
     private fun filPhotoFramesPreview(photos: Map<String, String>) {
-        portraitIv.setImageBitmap(BitmapUtils.rotateBitmap(FileNameTxtBase64ToBitmap().transform(photos[AppConstants.PHOTO_FACE_TYPE.key]!!)!!, 0f))//-90f Previous value with old camera
+        portraitIv.setImageBitmap(BitmapUtils.rotateBitmap(FileNameTxtBase64ToBitmap(this).transform(photos[AppConstants.PHOTO_FACE_TYPE.key]!!)!!, 0f))//-90f Previous value with old camera
         frontIv.setImageBitmap(cropped(photos[AppConstants.PHOTO_FRONT_TYPE.key]!!))
         if (currentDocument.type != AppDoc.PASSPORT.type) {
             backIv.setImageBitmap(cropped(photos[AppConstants.PHOTO_BACK_TYPE.key]!!))
@@ -214,7 +214,7 @@ class DocumentDetails : BaseActivity() {
     }
 
     private fun cropped(fileName: String): Bitmap {
-        val bitmap = FileNameTxtBase64ToBitmap().transform(fileName)
+        val bitmap = FileNameTxtBase64ToBitmap(this).transform(fileName)
         val originalBitmap = BitmapUtils.rotateBitmap(bitmap!!, 0f)//-90f Previous value with old camera
         val width = originalBitmap.width
         val height = originalBitmap.height
@@ -228,7 +228,7 @@ class DocumentDetails : BaseActivity() {
         val day = c.get(Calendar.DAY_OF_MONTH)
 
         val dialog = DatePickerDialog(this, R.style.DatePickerStyle, DatePickerDialog.OnDateSetListener { _, year_, monthOfYear, dayOfMonth ->
-            expireDateEt.text = Editable.Factory.getInstance().newEditable("$dayOfMonth - ${monthOfYear+1} - $year_")
+            expireDateEt.text = Editable.Factory.getInstance().newEditable("$dayOfMonth - ${monthOfYear + 1} - $year_")
         }, year, month, day)
         dialog.datePicker.minDate = Date().time
         dialog.window?.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
