@@ -2,7 +2,8 @@ package com.kimlic.db.entity
 
 import android.arch.persistence.room.*
 
-@Entity(tableName = "user")
+@Entity(tableName = "user"
+        ,indices = [Index(value = arrayOf("account_address"), unique = true)])
 
 
 data class User(
