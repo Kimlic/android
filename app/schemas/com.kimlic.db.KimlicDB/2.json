@@ -1,0 +1,712 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "72bfbc7b1f50ccfef466aa7d08caf070",
+    "entities": [
+      {
+        "tableName": "user",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `first_name` TEXT NOT NULL, `last_name` TEXT NOT NULL, `kim_quantity` INTEGER NOT NULL, `mnemonic` TEXT NOT NULL, `portrait_file` TEXT NOT NULL, `portrait_preview_file` TEXT NOT NULL, `account_address` TEXT NOT NULL, `inserted_at` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "firstName",
+            "columnName": "first_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastName",
+            "columnName": "last_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "kimQuantity",
+            "columnName": "kim_quantity",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mnemonic",
+            "columnName": "mnemonic",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "portraitFile",
+            "columnName": "portrait_file",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "portraitPreviewFile",
+            "columnName": "portrait_preview_file",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "accountAddress",
+            "columnName": "account_address",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "insertedAt",
+            "columnName": "inserted_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_user_account_address",
+            "unique": true,
+            "columnNames": [
+              "account_address"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `index_user_account_address` ON `${TABLE_NAME}` (`account_address`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "company",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `address` TEXT NOT NULL, `details` TEXT NOT NULL, `email` TEXT NOT NULL, `logo` TEXT NOT NULL, `name` TEXT NOT NULL, `phone` TEXT NOT NULL, `website` TEXT NOT NULL, `verified_at` INTEGER NOT NULL, `url` TEXT NOT NULL, `user_id` INTEGER NOT NULL, `status` TEXT NOT NULL, `inserted_at` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`user_id`) REFERENCES `user`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "address",
+            "columnName": "address",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "details",
+            "columnName": "details",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "logo",
+            "columnName": "logo",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "phone",
+            "columnName": "phone",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "website",
+            "columnName": "website",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "verifiedAt",
+            "columnName": "verified_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "url",
+            "columnName": "url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "user_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "insertedAt",
+            "columnName": "inserted_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_company_user_id",
+            "unique": false,
+            "columnNames": [
+              "user_id"
+            ],
+            "createSql": "CREATE  INDEX `index_company_user_id` ON `${TABLE_NAME}` (`user_id`)"
+          },
+          {
+            "name": "index_company_id",
+            "unique": true,
+            "columnNames": [
+              "id"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `index_company_id` ON `${TABLE_NAME}` (`id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "user",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "user_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "contact",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `user_id` INTEGER NOT NULL, `type` TEXT NOT NULL, `value` TEXT NOT NULL, `approved` INTEGER NOT NULL, `inserted_at` INTEGER NOT NULL, FOREIGN KEY(`user_id`) REFERENCES `user`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "user_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "value",
+            "columnName": "value",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "approved",
+            "columnName": "approved",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "insertedAt",
+            "columnName": "inserted_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_contact_type",
+            "unique": true,
+            "columnNames": [
+              "type"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `index_contact_type` ON `${TABLE_NAME}` (`type`)"
+          },
+          {
+            "name": "index_contact_user_id",
+            "unique": false,
+            "columnNames": [
+              "user_id"
+            ],
+            "createSql": "CREATE  INDEX `index_contact_user_id` ON `${TABLE_NAME}` (`user_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "user",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "user_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "document",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `user_id` INTEGER NOT NULL, `document_number` TEXT NOT NULL, `expire_date` TEXT NOT NULL, `country` TEXT NOT NULL, `country_iso` TEXT NOT NULL, `value` TEXT NOT NULL, `state` TEXT NOT NULL, `type` TEXT NOT NULL, `inserted_at` INTEGER NOT NULL, FOREIGN KEY(`user_id`) REFERENCES `user`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "user_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "number",
+            "columnName": "document_number",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "expireDate",
+            "columnName": "expire_date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "country",
+            "columnName": "country",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "countryIso",
+            "columnName": "country_iso",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "value",
+            "columnName": "value",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "insertedAt",
+            "columnName": "inserted_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_document_type",
+            "unique": true,
+            "columnNames": [
+              "type"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `index_document_type` ON `${TABLE_NAME}` (`type`)"
+          },
+          {
+            "name": "index_document_user_id",
+            "unique": false,
+            "columnNames": [
+              "user_id"
+            ],
+            "createSql": "CREATE  INDEX `index_document_user_id` ON `${TABLE_NAME}` (`user_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "user",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "user_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "address",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `user_id` INTEGER NOT NULL, `value` TEXT NOT NULL, `state` TEXT NOT NULL, `inserted_at` INTEGER NOT NULL, FOREIGN KEY(`user_id`) REFERENCES `user`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "user_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "value",
+            "columnName": "value",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "insertedAt",
+            "columnName": "inserted_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_address_user_id",
+            "unique": true,
+            "columnNames": [
+              "user_id"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `index_address_user_id` ON `${TABLE_NAME}` (`user_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "user",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "user_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "photo",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `document_id` INTEGER, `address_id` INTEGER, `user_id` INTEGER, `file` TEXT NOT NULL, `type` TEXT NOT NULL, `inserted_at` INTEGER NOT NULL, `synced` INTEGER NOT NULL, FOREIGN KEY(`document_id`) REFERENCES `document`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`address_id`) REFERENCES `address`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`user_id`) REFERENCES `user`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "documentId",
+            "columnName": "document_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "addressId",
+            "columnName": "address_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "user_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "file",
+            "columnName": "file",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "insertedAt",
+            "columnName": "inserted_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "synced",
+            "columnName": "synced",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_photo_id",
+            "unique": true,
+            "columnNames": [
+              "id"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `index_photo_id` ON `${TABLE_NAME}` (`id`)"
+          },
+          {
+            "name": "index_photo_document_id",
+            "unique": false,
+            "columnNames": [
+              "document_id"
+            ],
+            "createSql": "CREATE  INDEX `index_photo_document_id` ON `${TABLE_NAME}` (`document_id`)"
+          },
+          {
+            "name": "index_photo_address_id",
+            "unique": false,
+            "columnNames": [
+              "address_id"
+            ],
+            "createSql": "CREATE  INDEX `index_photo_address_id` ON `${TABLE_NAME}` (`address_id`)"
+          },
+          {
+            "name": "index_photo_user_id",
+            "unique": false,
+            "columnNames": [
+              "user_id"
+            ],
+            "createSql": "CREATE  INDEX `index_photo_user_id` ON `${TABLE_NAME}` (`user_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "document",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "document_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "address",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "address_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "user",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "user_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "vendor_document",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `contexts` TEXT NOT NULL, `countries` TEXT NOT NULL, `description` TEXT NOT NULL, `type` TEXT NOT NULL, `inserted_at` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contexts",
+            "columnName": "contexts",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "countries",
+            "columnName": "countries",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "insertedAt",
+            "columnName": "inserted_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_vendor_document_type",
+            "unique": true,
+            "columnNames": [
+              "type"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `index_vendor_document_type` ON `${TABLE_NAME}` (`type`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "company_document_join",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`company_id` TEXT NOT NULL, `document_id` INTEGER NOT NULL, `verified_at` INTEGER NOT NULL, PRIMARY KEY(`company_id`, `document_id`), FOREIGN KEY(`company_id`) REFERENCES `company`(`id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`document_id`) REFERENCES `document`(`id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "companyId",
+            "columnName": "company_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "documentId",
+            "columnName": "document_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "verified_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "company_id",
+            "document_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_company_document_join_company_id_document_id",
+            "unique": false,
+            "columnNames": [
+              "company_id",
+              "document_id"
+            ],
+            "createSql": "CREATE  INDEX `index_company_document_join_company_id_document_id` ON `${TABLE_NAME}` (`company_id`, `document_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "company",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "company_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "document",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "document_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"72bfbc7b1f50ccfef466aa7d08caf070\")"
+    ]
+  }
+}
