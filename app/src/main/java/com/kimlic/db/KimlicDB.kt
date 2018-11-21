@@ -8,7 +8,7 @@ import com.kimlic.db.dao.*
 import com.kimlic.db.entity.*
 import com.kimlic.db.migration.MIGRATION_1_2
 
-@Database(entities = [User::class, Company::class, Contact::class, Document::class, Address::class, Photo::class, VendorDocument::class, CompanyDocumentJoin::class], version = 1, exportSchema = true)
+@Database(entities = [User::class, Company::class, Contact::class, Document::class, Address::class, Photo::class, VendorDocument::class, CompanyDocumentJoin::class], version = 2, exportSchema = true)
 
 abstract class KimlicDB : RoomDatabase() {
 
