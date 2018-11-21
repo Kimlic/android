@@ -117,7 +117,7 @@ class UserPhotoView : View {
     /*
     * input -  byte64Format
     * */
-    private fun getUserPhotoBitmap(fileName: String): Bitmap? = FileNameTxtBase64ToBitmap().transform(fileName)
+    private fun getUserPhotoBitmap(fileName: String): Bitmap? = FileNameTxtBase64ToBitmap(context).transform(fileName)
 
     private fun hexagonPath(cornerWidth: Float = 0f): Path {
         val centerX = width / 2
