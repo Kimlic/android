@@ -24,7 +24,7 @@ class FileNameTxtBase64ToBitmap(private val context: Context) : BaseMapper<Strin
 
     fun transformByUri(uri: Uri): Bitmap? {
         return try {
-            val fileByteArrayBase64 = File(uri.path).readBytes()
+            val fileByteArrayBase64 = getBytes(uri)
             val decodedString = Base64.decode(fileByteArrayBase64, Base64.DEFAULT)
             BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
         } catch (e: IOException) {
@@ -32,4 +32,9 @@ class FileNameTxtBase64ToBitmap(private val context: Context) : BaseMapper<Strin
             null
         }
     }
+
+    // Private
+
+    @Throws(IOException::class)
+    private fun getBytes(uri: Uri) = File(uri.path).readBytes()
 }
