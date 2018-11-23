@@ -29,7 +29,7 @@ class QuorumKimlic private constructor(val mnemonic: String, context: Context) {
     val walletAddress: String
     private val mCredentials: Credentials
     private var mAccountStorageAdapter: AccountStorageAdapter? = null
-    private var mKimlicContractsContext: KimlicContractsContext? = null
+    var mKimlicContractsContext: KimlicContractsContext? = null // is made public to chech if equals null
     private var mKimlicTokenContract: KimlicTokenContract? = null
 
     // Init
