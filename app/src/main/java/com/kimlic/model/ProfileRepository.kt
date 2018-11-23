@@ -43,7 +43,7 @@ import java.io.IOException
 import java.io.OutputStreamWriter
 import java.nio.charset.Charset
 import java.util.*
-import java.util.concurrent.ExecutionException
+import java.util.concurrent.*
 
 class ProfileRepository private constructor() {
 
@@ -612,14 +612,28 @@ class ProfileRepository private constructor() {
 
         dataValue = "{" + shas.joinToString(",") + "}"
 
-        val receipt = quorumInstance().setFieldMainData(dataValue, dataType)
-        if (receipt.status == "0x0") {
-            Log.e("RECEIPT ERROR", receipt.toString())
-            onError()
-            return
+        if (quorumInstance().mKimlicContractsContext == null) {
+            quorumRequest(Prefs.currentAccountAddress,
+                    onSuccess = {
+                        Log.d("QUORUM", "lost addresses are restored!!!!!")
+                        val receipt = quorumInstance().setFieldMainData(dataValue, dataType)
+                        if (receipt.status == "0x0") {
+                            Log.e("RECEIPT ERROR", receipt.toString())
+                            onError()
+                            return@quorumRequest
+                        }
+                        VolleySingleton.getInstance(context).addToRequestQueue(faceRequest!!)
+                    }, onError = {}
+            )
+        } else {
+            val receipt = quorumInstance().setFieldMainData(dataValue, dataType)
+            if (receipt.status == "0x0") {
+                Log.e("RECEIPT ERROR", receipt.toString())
+                onError()
+                return
+            }
+            VolleySingleton.getInstance(context).addToRequestQueue(faceRequest!!)
         }
-
-        VolleySingleton.getInstance(context).addToRequestQueue(faceRequest!!)
     }
 
     private fun nextRequest(queue: Queue<JsonObjectRequest>, onSuccess: () -> Unit) {
