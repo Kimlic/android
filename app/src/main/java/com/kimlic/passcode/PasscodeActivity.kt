@@ -5,7 +5,6 @@ import android.graphics.drawable.Animatable
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
-import android.util.Log
 import android.view.ContextThemeWrapper
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -30,7 +29,7 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
     @BindViews(R.id.passcode0Bt, R.id.passcodeBt1, R.id.passcodeBt2, R.id.passcodeBt3, R.id.passcodeBt4, R.id.passcodeBt5, R.id.passcodeBt6, R.id.passcodeBt7, R.id.passcodeBt8, R.id.passcodeBt9)
     lateinit var mBtnList: List<@JvmSuppressWildcards Button>
 
-    @BindViews(R.id.dot1Bt, R.id.dot2Bt, R.id.dot3Bt, R.id.dot4Bt)
+    @BindViews(R.id.dot1Bt, R.id.dot2Bt, R.id.dot3Bt, R.id.dot4Bt, R.id.dot5Bt, R.id.dot6Bt)
     lateinit var mDotList: List<@JvmSuppressWildcards Button>
 
     // Variables
@@ -54,7 +53,6 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_passcode)
         ButterKnife.bind(this)
-        Log.d("TAGWAS", "passcode activity on create!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
         setupDefaults()
         setupUI()
@@ -82,7 +80,7 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         val digit: String = (v as Button).text.toString()
 
-        if (passcode.length < 4) passcode = passcode.plus(digit)
+        if (passcode.length < mDotList.size) passcode = passcode.plus(digit)
 
         showDots(passcode)
     }
@@ -93,10 +91,10 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
         mBtnList.forEach { it.setOnClickListener(this) }
         setupTextSwitcher()
 
-        action = intent.extras.getString("action")
+        action = intent?.extras?.getString("action", "").orEmpty()
 
 
-        if (intent.extras.containsKey("mode")) mode = intent.extras.getString("mode", "finish")
+        if (intent?.extras?.containsKey("mode")!!) mode = intent!!.extras!!.getString("mode", "finish")
 
         when (action) {
             "unlock" -> {
@@ -108,6 +106,7 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
             "set" -> setupUIPasscode()
             "change" -> setupUIChange()
             "disable" -> setupUIDisable()
+            "" -> throw Exception("Wrong passcode action")
         }
 
         passcodeDeleteBt.setOnClickListener { deletePasscode() }
@@ -276,7 +275,7 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
         passcodeDeleteBt.visibility = if (passLength > 0) View.VISIBLE else View.INVISIBLE
         //passcodeOkBt.isEnabled = this.passcode.length == 4
 
-        if (this.passcode.length == 4)
+        if (this.passcode.length == mDotList.size)
             object : CountDownTimer(250, 250) {
                 override fun onFinish() {
                     usePasscode(action)
