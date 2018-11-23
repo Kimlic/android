@@ -71,6 +71,16 @@
         style="@style/PasscodeDot"
         android:tag="4"/>
 
+      <Button
+        android:id="@+id/dot5Bt"
+        style="@style/PasscodeDot"
+        android:tag="5"/>
+
+      <Button
+        android:id="@+id/dot6Bt"
+        style="@style/PasscodeDot"
+        android:tag="6"/>
+
     </LinearLayout>
 
     <GridLayout
@@ -162,12 +172,12 @@
         android:text="@string/_0"/>
 
       <!--<Button-->
-        <!--android:id="@+id/passcodeOkBt"-->
-        <!--style="@style/PasscodeCircleButtonOk"-->
-        <!--android:layout_column="2"-->
-        <!--android:layout_row="3"-->
-        <!--android:enabled="false"-->
-        <!--android:text="@string/ok"/>-->
+      <!--android:id="@+id/passcodeOkBt"-->
+      <!--style="@style/PasscodeCircleButtonOk"-->
+      <!--android:layout_column="2"-->
+      <!--android:layout_row="3"-->
+      <!--android:enabled="false"-->
+      <!--android:text="@string/ok"/>-->
 
     </GridLayout>
 
