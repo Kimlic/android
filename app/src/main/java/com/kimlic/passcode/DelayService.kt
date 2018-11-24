@@ -7,6 +7,7 @@ import android.util.Log
 
 class DelayService : Service() {
 
+    private var count: Int = 1
 
     override fun onStart(intent: Intent?, startId: Int) {
         super.onStart(intent, startId)
@@ -24,13 +25,10 @@ class DelayService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.d("TAGSERVICE", "onStart")
+        Log.d("TAGSERVICE", "onStartCommand startId = $startId")
+        Log.d("TAGSERVICE", "onStartCommand countValue = ${count++}")
 
 
-        return super.onStartCommand(intent, flags, startId)
+        return START_STICKY
     }
-
-
-
-
 }
