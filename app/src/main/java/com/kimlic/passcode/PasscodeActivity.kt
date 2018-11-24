@@ -1,10 +1,15 @@
 package com.kimlic.passcode
 
 import android.app.Activity
+import android.content.ComponentName
+import android.content.Intent
+import android.content.ServiceConnection
 import android.graphics.drawable.Animatable
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
+import android.os.IBinder
+import android.util.Log
 import android.view.ContextThemeWrapper
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -40,6 +45,9 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
     private lateinit var action: String
     private var firstInput: Boolean
 
+    private var serviceConnection: ServiceConnection? = null
+    private var bound = false
+
     // Init
 
     init {
@@ -56,10 +64,33 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
 
         setupDefaults()
         setupUI()
+
+        serviceConnection = object : ServiceConnection {
+            override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+                Log.d("TAGSERVICE", "passcode activity connected")
+                bound = true
+            }
+
+            override fun onServiceDisconnected(name: ComponentName?) {
+                Log.d("TAGSERVICE", "passcode activity DISconnected")
+                bound = false
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+//        bindService(Intent(this, DelayService::class.java), serviceConnection!!, Context.BIND_AUTO_CREATE)
+        startService(Intent(this, DelayService::class.java))
     }
 
     override fun onResume() {
         super.onResume()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // unbindService(serviceConnection)
     }
 
     override fun onBackPressed() {
