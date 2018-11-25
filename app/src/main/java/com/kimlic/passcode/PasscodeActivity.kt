@@ -1,14 +1,10 @@
 package com.kimlic.passcode
 
 import android.app.Activity
-import android.content.ComponentName
-import android.content.Intent
-import android.content.ServiceConnection
 import android.graphics.drawable.Animatable
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
-import android.os.IBinder
 import android.util.Log
 import android.view.ContextThemeWrapper
 import android.view.View
@@ -22,6 +18,7 @@ import com.kimlic.KimlicApp
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
 import com.kimlic.preferences.Prefs
+import com.kimlic.utils.AppConstants
 import com.kimlic.utils.BaseCallback
 import com.kimlic.utils.MessageCallback
 import kotlinx.android.synthetic.main.activity_passcode.*
@@ -40,13 +37,12 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
     // Variables
 
     private var passcode: String
-    private lateinit var passcodeConfirm: String
     private var mode = ""
-    private lateinit var action: String
     private var firstInput: Boolean
+    private lateinit var passcodeConfirm: String
+    private lateinit var action: String
 
-    private var serviceConnection: ServiceConnection? = null
-    private var bound = false
+    private var intervals = arrayOf(30, 60, 300, 900, 1800, 3600, 216000)// 0.5m, 1m, 5m, 15m, 30m, 1 hour, 6 hours
 
     // Init
 
@@ -65,45 +61,14 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
         setupDefaults()
         setupUI()
 
-        serviceConnection = object : ServiceConnection {
-            override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-                Log.d("TAGSERVICE", "passcode activity connected")
-                bound = true
-            }
-
-            override fun onServiceDisconnected(name: ComponentName?) {
-                Log.d("TAGSERVICE", "passcode activity DISconnected")
-                bound = false
-            }
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-//        bindService(Intent(this, DelayService::class.java), serviceConnection!!, Context.BIND_AUTO_CREATE)
-        startService(Intent(this, DelayService::class.java))
-    }
-
-    override fun onResume() {
-        super.onResume()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        // unbindService(serviceConnection)
     }
 
     override fun onBackPressed() {
-        if (passcode.isNotEmpty()) deletePasscode()
-        else
-            moveTaskToBack(true)
-//            if (mode.equals("finish")) {
-//                moveTaskToBack(true)
-//            } else {
-//                super.onBackPressed()
-//            }
-
-        // moveTaskToBack(true)
+        when {
+            passcode.isNotEmpty() -> deletePasscode()
+            mode == "unlock" -> moveTaskToBack(true)
+            else -> super.onBackPressed()
+        }
     }
 
     // OnClick
@@ -124,15 +89,18 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
 
         action = intent?.extras?.getString("action", "").orEmpty()
 
-
         if (intent?.extras?.containsKey("mode")!!) mode = intent!!.extras!!.getString("mode", "finish")
 
         when (action) {
             "unlock" -> {
-                if (Prefs.isTouchEnabled) {
-                    proposeFingerprintPopup()
-                }
                 setupUIUnlock()
+
+                if (Prefs.timeToUnlock > System.currentTimeMillis())
+                    lockedInfoFragment(Prefs.timeToUnlock)
+                else
+                    if (Prefs.isTouchEnabled)
+                        proposeFingerprintPopup()
+
             }
             "set" -> setupUIPasscode()
             "change" -> setupUIChange()
@@ -142,12 +110,10 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
 
         passcodeDeleteBt.setOnClickListener { deletePasscode() }
         cancelTv.setOnClickListener {
-            if (mode == "finish") {
+            if (action == "unlock")
                 moveTaskToBack(true)
-            } else {
-                moveTaskToBack(true)
-
-            }
+            else
+                finish()
         }
         //passcodeOkBt.setOnClickListener { usePasscode(action) }
     }
@@ -161,7 +127,7 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
                         if (mode == "unlock_finish") {
                             (application as KimlicApp).wasInBackground = false
                             (application as KimlicApp).isFirstTime = false
-                            finish()
+                            fragment.dismissAllowingStateLoss()
                         } else PresentationManager.stage(this@PasscodeActivity)
                     }
                     "error" -> {
@@ -172,6 +138,25 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
         fragment.show(supportFragmentManager, FingerprintProposeFragment.FRAGMENT_KEY)
     }
 
+    private fun lockedInfoFragment(unlockTime: Long) {
+        val fragment = LockedInfoFragment.newInstance(Bundle().apply { this.putLong(AppConstants.UNLOCK_TIME.key, unlockTime) })
+
+        fragment.setCallback(object : MessageCallback {
+            override fun callback(message: String) {
+                when (message) {
+                    AppConstants.LATER.key -> {
+                        moveTaskToBack(true)
+                    }
+                    AppConstants.TIME.key -> {
+                        Prefs.tryCount = 0
+                        fragment.dismissAllowingStateLoss()
+                        if (Prefs.isTouchEnabled) proposeFingerprintPopup()
+                    }
+                }
+            }
+        })
+        fragment.show(supportFragmentManager, LockedInfoFragment.FRAGMENT_KEY)
+    }
 
     private fun deletePasscode() {
         if (passcode.isEmpty()) return
@@ -187,30 +172,35 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
     // Setup UI
 
     private fun setupUIPasscode() {
+        mBtnList.forEach { it.isClickable = true }
         titleTs.setText(getString(R.string.create_your_passcode))
         subtitleTs.setText(getString(R.string.You_have_to_enter_passcode_every_time_you_want_to_open))
         showDots()
     }
 
     private fun setupUIChange() {
+        mBtnList.forEach { it.isClickable = true }
         titleTs.setText(getString(R.string.enter_old_passcode))
         subtitleTs.setText(getString(R.string.enter_your_old_passcode))
         showDots()
     }
 
-    private fun setupUISeconPasscode() {
+    private fun setupUISecondPasscode() {
+        mBtnList.forEach { it.isClickable = true }
         titleTs.setText(getString(R.string.confirm_passcode))
         subtitleTs.setText(getString(R.string.enter_the_passcode_againe))
         showDots()
     }
 
     private fun setupUIUnlock() {
+        mBtnList.forEach { it.isClickable = true }
         titleTs.setText(getString(R.string.enter_passcode))
         subtitleTs.setText(getString(R.string.enter_your_passcode_to_proceed))
         showDots()
     }
 
     private fun setupUITryAgain() {
+        mBtnList.forEach { it.isClickable = true }
         titleTs.setText(getString(R.string.passcode_didnt_match))
         //passcodeOkBt.isEnabled = false
         firstInput = false
@@ -218,6 +208,7 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun setupUIDisable() {
+        mBtnList.forEach { it.isClickable = true }
         titleTs.setText(getString(R.string.enter_passcode))
         subtitleTs.setText(getString(R.string.enter_your_passcode_to_proceed))
         showDots()
@@ -236,6 +227,8 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
 
     private fun unlock() {
         if (Prefs.passcode == passcode) {
+            Prefs.currentLockInterval = 0
+            Prefs.tryCount = 0
             if (mode == "unlock_finish") {
                 (application as KimlicApp).wasInBackground = false
                 (application as KimlicApp).isFirstTime = false
@@ -246,15 +239,23 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
                 PresentationManager.stage(this@PasscodeActivity)
                 finish()
             }
-        } else
+        } else {
+            Prefs.tryCount += 1
+            Log.d("LOGTRY", "tryCount = ${Prefs.tryCount}")
+            if (Prefs.tryCount > 3) {
+                Prefs.timeToUnlock = System.currentTimeMillis() + intervals[Prefs.currentLockInterval] * 1000
+                if (Prefs.currentLockInterval < intervals.size - 1) Prefs.currentLockInterval++
+                lockedInfoFragment(Prefs.timeToUnlock)
+            }
             setupUIUnlock()
+        }
     }
 
     private fun set() {
         if (!firstInput) {
             firstInput = true
             passcodeConfirm = passcode
-            setupUISeconPasscode()
+            setupUISecondPasscode()
         } else if (passcodeConfirm == passcode) {
             Prefs.passcode = passcode
             Prefs.isPasscodeEnabled = true
@@ -306,15 +307,17 @@ class PasscodeActivity : BaseActivity(), View.OnClickListener {
         passcodeDeleteBt.visibility = if (passLength > 0) View.VISIBLE else View.INVISIBLE
         //passcodeOkBt.isEnabled = this.passcode.length == 4
 
-        if (this.passcode.length == mDotList.size)
+        if (this.passcode.length == mDotList.size) {
+            mBtnList.forEach { it.isClickable = false }
+
             object : CountDownTimer(250, 250) {
                 override fun onFinish() {
                     usePasscode(action)
                 }
 
                 override fun onTick(millisUntilFinished: Long) {}
-            }
-                    .start()
+            }.start()
+        }
     }
 
     // Text switcher
