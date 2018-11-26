@@ -51,7 +51,7 @@ class RisksFragment : BasePopupFragment() {
 
     private fun setupUI() {
         isCancelable = true
-        dismissBt.setOnClickListener { dismiss() }
+        dismissBt.setOnClickListener { dismissAllowingStateLoss() }
 
         val recoveryEnabled = arguments?.getBoolean("recovery", true)!!
         val passcodeEnabled = arguments?.getBoolean("passcode", true)!!
