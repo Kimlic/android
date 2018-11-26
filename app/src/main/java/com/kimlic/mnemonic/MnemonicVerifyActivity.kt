@@ -171,7 +171,7 @@ class MnemonicVerifyActivity : BaseActivity() {
     }
 
     private fun hideProgress() = runOnUiThread {
-        if (backupUpdatingFragment != null) backupUpdatingFragment?.dismiss(); timer?.cancel()
+        if (backupUpdatingFragment != null) backupUpdatingFragment?.dismissAllowingStateLoss(); timer?.cancel()
     }
 
 }
