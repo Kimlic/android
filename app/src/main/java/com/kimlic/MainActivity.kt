@@ -50,7 +50,7 @@ class MainActivity : BaseActivity() {
 
     private fun splashScreenHide() {
         try {
-            splashFragment.dismiss()
+            splashFragment.dismissAllowingStateLoss()
         } catch (e: Exception) {
         }
     }
