@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content">
+
+  <ImageView
+    android:id="@+id/imageView2"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:background="@drawable/rounded_logo_fingerprint"
+    android:contentDescription="@string/secureid"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
+
+  <Button
+    android:id="@+id/dismissBt"
+    android:layout_width="@dimen/menu_element_square_size"
+    android:layout_height="@dimen/menu_element_square_size"
+    android:layout_marginTop="16dp"
+    android:layout_marginEnd="16dp"
+    android:background="@drawable/ic_popup_close_button"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"/>
+
+  <TextView
+    android:id="@+id/titleTv"
+    android:layout_width="wrap_content"
+    android:layout_height="31dp"
+    android:layout_marginTop="16dp"
+    android:text="@string/next_try_in"
+    android:textColor="@color/grayDark"
+    android:textSize="@dimen/text_size_medium_18"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/imageView2"/>
+
+  <TextView
+    android:id="@+id/subtitleTv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    android:textColor="@color/grayDark"
+    android:textSize="@dimen/text_size_large_26"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/titleTv"
+    tools:text="00:00:30"/>
+
+  <LinearLayout
+    android:id="@+id/rootLower"
+    android:layout_width="@dimen/popup_fragment_width"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="24dp"
+    android:orientation="vertical"
+    app:layout_constraintTop_toBottomOf="@id/subtitleTv">
+
+    <LinearLayout
+      android:id="@+id/lowerView"
+      android:layout_width="@dimen/popup_fragment_width"
+      android:layout_height="48dp"
+      android:background="@drawable/rounded_lower_corners_gradient">
+
+      <Button
+        android:id="@+id/laterBt"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:text="@string/try_later"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_size_medium_18"/>
+    </LinearLayout>
+
+  </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

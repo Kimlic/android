@@ -27,6 +27,10 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
         currentMnemonic = ""
         newCompanyAccepted = false
         needCompanySyncCount = 0
+
+        tryCount = 0
+        currentLockInterval = 0
+        timeToUnlock = 0
     }
 
     // Preferences
@@ -102,4 +106,16 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
     var needDocumentSyncCount: Int
         get() = getInt(AppConstants.NEED_DOCUMENT_SYNC.key)
         set(value) = setInt(AppConstants.NEED_DOCUMENT_SYNC.key, value)
+
+    var currentLockInterval: Int
+        get() = getInt(AppConstants.INTERVAL.key)
+        set(value) = setInt(AppConstants.INTERVAL.key, value)
+
+    var timeToUnlock: Long
+        get() = getLong(AppConstants.UNLOCK_TIME.key)
+        set(value) = setLong(AppConstants.UNLOCK_TIME.key, value)
+
+    var tryCount: Int
+        get() = getInt(AppConstants.TRY_COUNT.key)
+        set(value) = setInt(AppConstants.TRY_COUNT.key, value)
 }

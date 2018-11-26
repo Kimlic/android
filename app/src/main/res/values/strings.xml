@@ -304,4 +304,7 @@
   <string name="scan_qr_code_to_add_account">Scan QR code to add account</string>
   <string name="accounts_logo">Accounts Logo</string>
   <string name="looks_like_you_haven_t_connect_any_accounts_to_your_id">Looks like you haven\'t connect  \n any accounts to your ID</string>
+
+  <string name="next_try_in">Next try in</string>
+  <string name="try_later">Try later</string>
 </resources>

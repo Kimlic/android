@@ -3,9 +3,13 @@ package com.kimlic
 import android.app.Application
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
 import java.util.*
+import com.crashlytics.android.core.CrashlyticsCore
+
+
 
 class KimlicApp : Application() {
 
@@ -36,13 +40,21 @@ class KimlicApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Fabric.with(this@KimlicApp, Crashlytics())
+
+        configureCrashReporting()
     }
 
     fun registerReceiver() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //            val intentFilter = IntentFilter()
         }
+    }
+
+    private fun configureCrashReporting() {
+        val crashlyticsCore = CrashlyticsCore.Builder()
+                .disabled(BuildConfig.DEBUG)
+                .build()
+        Fabric.with(this@KimlicApp, Crashlytics.Builder().core(crashlyticsCore).build())
     }
 
     // Public

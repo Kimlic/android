@@ -88,5 +88,13 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
 
     // Firebase token
 
-    FIREBASE_TOKEN("FIREBASE_TOKEN")
+    FIREBASE_TOKEN("FIREBASE_TOKEN"),
+
+    // Pin brute force protection
+
+    UNLOCK_TIME("UNLOCK_TIME"),
+    LATER("LATER"),
+    TIME("TIME"),
+    TRY_COUNT("TRY_COUNT"),
+    INTERVAL("INTERVAL")
 }
