@@ -485,7 +485,7 @@ class AccountActivity : BaseActivity() {
     }
 
     private fun hideProgress() {
-        if (blockchainUpdatingFragment != null) blockchainUpdatingFragment?.dismiss()
+        if (blockchainUpdatingFragment != null) blockchainUpdatingFragment?.dismissAllowingStateLoss()
 
         timer?.cancel()
     }
