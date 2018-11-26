@@ -88,7 +88,7 @@ class EmailActivity : BaseActivity() {
     }
 
     private fun hideProgress() {
-        if (blockchainUpdatingFragment != null) blockchainUpdatingFragment?.dismiss(); timer?.cancel()
+        if (blockchainUpdatingFragment != null) blockchainUpdatingFragment?.dismissAllowingStateLoss(); timer?.cancel()
         nextBt.isClickable = true
     }
 
