@@ -27,6 +27,7 @@ class StageActivity : BaseActivity() {
 
     companion object {
         private const val SCAN_REQUEST_CODE = 1100
+        private const val MILLISECONDS_DAY = 86400000L
         const val SECURITY_REQUEST_CODE = 151
     }
 
@@ -130,16 +131,17 @@ class StageActivity : BaseActivity() {
     }
 
     fun risks() {
-        if (!Prefs.isPasscodeEnabled || !Prefs.isRecoveryEnabled) {
+        if ((Prefs.risksTime + MILLISECONDS_DAY < System.currentTimeMillis()))
+            if (!Prefs.isPasscodeEnabled || !Prefs.isRecoveryEnabled) { // 86400000
 
-            if (supportFragmentManager.findFragmentByTag("risks") != null) return
+                if (supportFragmentManager.findFragmentByTag("risks") != null) return
 
-            val bundle = Bundle()
-            val risksFragment = RisksFragment.newInstance(bundle)
-            bundle.putBoolean("passcode", Prefs.isPasscodeEnabled)
-            bundle.putBoolean("recovery", Prefs.isRecoveryEnabled)
-            risksFragment.show(supportFragmentManager, "risks")
-        }
+                val bundle = Bundle()
+                val risksFragment = RisksFragment.newInstance(bundle)
+                bundle.putBoolean("passcode", Prefs.isPasscodeEnabled)
+                bundle.putBoolean("recovery", Prefs.isRecoveryEnabled)
+                risksFragment.show(supportFragmentManager, "risks")
+            }
     }
 
     // Helpers
