@@ -31,6 +31,7 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
         tryCount = 0
         currentLockInterval = 0
         timeToUnlock = 0
+        risksTime = 0
     }
 
     // Preferences
@@ -118,4 +119,8 @@ object Prefs : BasePreferences(KimlicApp.applicationContext()) {
     var tryCount: Int
         get() = getInt(AppConstants.TRY_COUNT.key)
         set(value) = setInt(AppConstants.TRY_COUNT.key, value)
+
+    var risksTime: Long
+        get() = getLong(AppConstants.RISKS_TIME.key)
+        set(value) = setLong(AppConstants.RISKS_TIME.key, value)
 }
