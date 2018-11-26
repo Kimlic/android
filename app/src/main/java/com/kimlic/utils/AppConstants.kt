@@ -96,5 +96,9 @@ enum class AppConstants(val key: String, val intKey: Int = -1) {
     LATER("LATER"),
     TIME("TIME"),
     TRY_COUNT("TRY_COUNT"),
-    INTERVAL("INTERVAL")
+    INTERVAL("INTERVAL"),
+
+    // Risks delay
+
+    RISKS_TIME("RISKS_TIME")
 }
