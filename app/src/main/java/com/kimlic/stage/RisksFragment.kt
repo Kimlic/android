@@ -1,5 +1,6 @@
 package com.kimlic.stage
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import butterknife.ButterKnife
 import com.kimlic.BasePopupFragment
 import com.kimlic.R
 import com.kimlic.managers.PresentationManager
+import com.kimlic.preferences.Prefs
 import kotlinx.android.synthetic.main.fragment_risks.*
 
 class RisksFragment : BasePopupFragment() {
@@ -47,11 +49,19 @@ class RisksFragment : BasePopupFragment() {
         setupUI()
     }
 
+    override fun onDismiss(dialog: DialogInterface?) {
+        Prefs.risksTime = System.currentTimeMillis()
+        super.onDismiss(dialog)
+    }
+
     // private
 
     private fun setupUI() {
         isCancelable = true
-        dismissBt.setOnClickListener { dismissAllowingStateLoss() }
+        dismissBt.setOnClickListener {
+            Prefs.risksTime = System.currentTimeMillis()
+            dismissAllowingStateLoss()
+        }
 
         val recoveryEnabled = arguments?.getBoolean("recovery", true)!!
         val passcodeEnabled = arguments?.getBoolean("passcode", true)!!
