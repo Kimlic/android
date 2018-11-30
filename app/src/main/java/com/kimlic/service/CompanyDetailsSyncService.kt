@@ -18,7 +18,6 @@ import com.kimlic.db.dao.CompanyDao
 import com.kimlic.db.dao.CompanyDocumentDao
 import com.kimlic.db.dao.DocumentDao
 import com.kimlic.db.entity.Company
-import com.kimlic.db.entity.CompanyDocumentJoin
 import com.kimlic.documents.Status
 import com.kimlic.preferences.Prefs
 import com.kimlic.service.entity.CompanyDocumentsEntity
@@ -90,22 +89,27 @@ class CompanyDetailsSyncService : IntentService(CompanyDetailsSyncService::class
         val documentId = document?.id!!
         val companyId = company.id
 
+        val companyDocumentJoin = companyDocumentDao.selectCompanyDocumentJoin(Prefs.currentAccountAddress, companyId)
+
         companyWrapperEntity.let {
             when (it.document.status) {
                 // Pending status
                 "" -> {
                     val verifiedAt = 0L
-                    val companyDocumentJoin = CompanyDocumentJoin(documentId = documentId, companyId = companyId, date = verifiedAt)
-
+                    companyDocumentJoin.apply { date = verifiedAt }
                     company.status = Status.PENDING.state
                     companyDao.update(company)
                     companyDocumentDao.insert(companyDocumentJoin)
                 }
                 "declined" -> {
+                    companyDocumentJoin.apply { date = -1L }
+                    company.status = Status.UNVERIFIED.state
+                    companyDao.update(company)
+                    companyDocumentDao.insert(companyDocumentJoin)
                 }
                 "approved" -> {
                     val verifiedAt = if (it.document.verifiedAt != "") TimeZoneConverter().convertToSeconds(timeDate = it.document.verifiedAt!!) else 0
-                    val companyDocumentJoin = CompanyDocumentJoin(documentId = documentId, companyId = companyId, date = verifiedAt)
+                    companyDocumentJoin.apply { date = verifiedAt }
 
                     updateUserName(it.document.firstName!!, it.document.lastName!!)
                     company.status = Status.VERIFIED.state
