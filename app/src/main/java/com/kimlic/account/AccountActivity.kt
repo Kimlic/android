@@ -81,6 +81,7 @@ class AccountActivity : BaseActivity() {
     private var adapter: RPAdapter? = null
     private lateinit var vendorsDocs: MutableMap<String, VendorDocument>
     private var currentCompany: Company? = null
+    private var currentDocument: Document? = null
 
     private lateinit var selectCountryFragment: SelectCountryFragment
     private lateinit var selectAccountDocumentFragment_: SelectDocumentValidFragment
@@ -170,7 +171,6 @@ class AccountActivity : BaseActivity() {
                     url = urlNew
                     continueActivity()
                 }
-
             }
             ACTION_VIEW -> {
                 val data = intent.data.toString()
@@ -223,7 +223,8 @@ class AccountActivity : BaseActivity() {
         val spanStart = words[0].length + words[1].length + words[2].length + 3
         val spannableBuilder = SpannableStringBuilder(spanText)
         val boldStyle = StyleSpan(Typeface.BOLD)
-        spannableBuilder.setSpan(boldStyle, spanStart, spanText.length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+        spannableBuilder.setSpan(boldStyle, spanStart, spanText.length,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE)
         subtitle1Tv.text = spannableBuilder
     }
 
@@ -331,7 +332,6 @@ class AccountActivity : BaseActivity() {
                 }
             }
         })
-
     }
 
     private fun setupName() {
@@ -356,16 +356,17 @@ class AccountActivity : BaseActivity() {
     private fun setupContacts() {
         model.userContactsLive().observe(this, Observer<List<Contact>> {
             val userContact = it?.orEmpty()
-            val tempList = mutableListOf(ContactItem(Contact(type = "phone")))//, ContactItem(Contact(type = "email")))
+            val tempList = mutableListOf(
+                    ContactItem(Contact(type = "phone"))) //, ContactItem(Contact(type = "email")))
 
             userContact!!.forEach { contact ->
-                if (contact.type == "phone") tempList[0] = ContactItem(contact)
-//                if (contact.type == "email") {
-//                    tempList[1] = ContactItem(contact); count++
-//                }
+                if (contact.type == "phone") tempList[0] =
+                        ContactItem(contact) //                if (contact.type == "email") {
+                //                    tempList[1] = ContactItem(contact); count++
+                //                }
             }
 
-            missedContacts = false//count != 1
+            missedContacts = false //count != 1
             contactList = tempList
             setupAdapterList()
             setupNextButton()
@@ -387,11 +388,11 @@ class AccountActivity : BaseActivity() {
                     if (userDocumentsMap[it]!!.type in vendorTypes) {
                         if (model.userDocument(it)!!.countryIso.toUpperCase() in vendorTypeCountries[it]!!) {
                             if (documentList.isEmpty()) {
-                                documentList = listOf(DocumentItem(userDocumentsMap[it]!!))
+                                currentDocument = userDocumentsMap[it]!!
+                                documentList = listOf(DocumentItem(currentDocument!!))
                                 missedDocuments = false
                                 setupAdapterList()
                                 setupNextButton()
-
                             }
                         }
                     }
@@ -448,18 +449,19 @@ class AccountActivity : BaseActivity() {
                     showProgress()
                     documentQueue = LinkedList(documentList)
 
-                    sendFromQueue(
-                            onSuccess = {
-                                currentCompany!!.status = Status.UNVERIFIED.state
-                                currentCompany!!.url = url
-                                companyModel.saveCompany(currentCompany!!)
-                                Prefs.needCompanySyncCount = Prefs.needCompanySyncCount + 1
-                                hideProgress()
-                                successful()
-                            },
-                            onError = {
-                                hideProgress(); errorShowPopupImmersive(getString(R.string.error), getString(R.string.documents_sending_error))
-                            })
+                    sendFromQueue(onSuccess = {
+                        val companyDocumentJoin = CompanyDocumentJoin(companyId = currentCompany!!.id, documentId = currentDocument!!.id, date = 0L)
+                        currentCompany!!.status = Status.PENDING.state
+                        currentCompany!!.url = url
+                        companyModel.saveCompany(currentCompany!!)
+                        companyModel.saveCompanyDocumentJoin(companyDocumentJoin)
+                        Log.d("TAGSAVEDOC", "in saveDoc!!!")
+                        Prefs.needCompanySyncCount = Prefs.needCompanySyncCount + 1
+                        hideProgress()
+                        successful()
+                    }, onError = {
+                        hideProgress(); errorShowPopupImmersive(getString(R.string.error), getString(R.string.documents_sending_error))
+                    })
                 }
             }
         }
