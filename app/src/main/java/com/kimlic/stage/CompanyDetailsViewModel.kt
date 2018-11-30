@@ -2,18 +2,13 @@ package com.kimlic.stage
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleObserver
-import android.arch.lifecycle.OnLifecycleEvent
-import android.content.Intent
-import com.kimlic.KimlicApp
 import com.kimlic.account.CompanyRepository
 import com.kimlic.db.entity.Company
+import com.kimlic.db.entity.CompanyDocumentJoin
 import com.kimlic.model.ProfileRepository
 import com.kimlic.preferences.Prefs
-import com.kimlic.service.CompanyDetailsSyncService
 
-class CompanyDetailsViewModel(application: Application) : AndroidViewModel(application){
+class CompanyDetailsViewModel(application: Application) : AndroidViewModel(application) {
 
     // Variables
 
@@ -27,6 +22,8 @@ class CompanyDetailsViewModel(application: Application) : AndroidViewModel(appli
         company.userId = userId
         companyRepository.saveCompany(company)
     }
+
+    fun saveCompanyDocumentJoin(companyDocumentJoin: CompanyDocumentJoin) = companyRepository.saveCompanyDocumentJoin(companyDocumentJoin)
 
     fun companiesLive() = companyRepository.companiesLive(Prefs.currentAccountAddress)
 
