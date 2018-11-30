@@ -63,7 +63,14 @@ class CompanyDetailsAdapter : RecyclerView.Adapter<CompanyDetailsAdapter.Contact
 
                 when (item.type) {
                     "date" -> {
-                        val dateString = TimeZoneConverter().convertSecondsToDateString(item.value.toLong())
+                        val dateString =
+                                when (item.value.toLong()) {
+                                    0L -> "pending"
+                                    -1L -> "unverified"
+                                    else -> TimeZoneConverter().convertSecondsToDateString(item.value.toLong())
+
+                                }
+                        //TimeZoneConverter().convertSecondsToDateString(item.value.toLong())
                         contentTv.text = context.getString(R.string.application, dateString)
                         iconIv.background = icon(Icons_.DATE_WHITE.icon)
                     }
