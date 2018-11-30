@@ -5,6 +5,7 @@ import com.kimlic.db.KimlicDB
 import com.kimlic.db.dao.CompanyDao
 import com.kimlic.db.dao.CompanyDocumentDao
 import com.kimlic.db.entity.Company
+import com.kimlic.db.entity.CompanyDocumentJoin
 
 class CompanyRepository {
 
@@ -46,6 +47,8 @@ class CompanyRepository {
     fun companyLive(id: String) = companyDao.companyLive(id)
 
     // Company verified document
+
+    fun saveCompanyDocumentJoin(companyDocumentJoin: CompanyDocumentJoin) = companyDocumentDao.insert(companyDocumentJoin)
 
     fun companyVerifiedDocumentLive(accountAddress: String, companyId: String) = companyDocumentDao.selectCompanyDocumentJoinLive(accountAddress, companyId)
 
