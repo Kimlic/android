@@ -121,6 +121,7 @@ abstract class BaseActivity : AppCompatActivity(), View.OnSystemUiVisibilityChan
         val bundle = Bundle()
         bundle.putString(AppConstants.ERROR_DESCRIPTION.key, error)
         val errorFragment = ErrorPopupFragment.newInstance(bundle)
+        errorFragment.dismissAllowingStateLoss()
         errorFragment.show(this.supportFragmentManager, ErrorPopupFragment.FRAGMENT_KEY)
     }
 
